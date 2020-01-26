@@ -1,0 +1,12 @@
+openssl
+libuuid
+libatomic_ops
+libmaxminddb
+libaio
+pcre
+openssl
+libxml2
+libxslt
+gd
+geoip
+gperftools

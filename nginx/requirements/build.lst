@@ -1,0 +1,17 @@
+gcc
+g++
+make
+bash
+openssl
+httpd-tools
+libuuid-devel
+libatomic_ops-devel
+libmaxminddb-devel
+libaio-devel
+pcre-devel
+openssl-devel
+libxml2-devel
+libxslt-devel
+gd-devel
+geoip-devel
+gperftools-devel
