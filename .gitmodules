@@ -54,3 +54,6 @@
 	path = nginx/source/modules/ngx_http_geoip2_module
 	url = git@github.com:leev/ngx_http_geoip2_module.git
 	
+[submodule "powerdns/powerdns-webui"]
+	path = powerdns/powerdns-webui
+	url = git@github.com:james-stevens/powerdns-webui.git

@@ -1,0 +1,7 @@
+[pdns]
+arg[]:/opt/start-server.sh
+signal:int
+
+[nginx]
+arg[]:/opt/start-web.sh
+signal:int
