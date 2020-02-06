@@ -1,4 +1,7 @@
 {
 	"git.detectSubmodules": false,
-	"quicktask.enableShell": true
+	"quicktask.enableShell": true,
+	"files.associations": {
+		"*.conflist": "json"
+	}
 }
