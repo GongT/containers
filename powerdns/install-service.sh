@@ -5,6 +5,11 @@ set -Eeuo pipefail
 cd "$(dirname "$(realpath "${BASH_SOURCE[0]}")")"
 source ../common/functions-install.sh
 
+arg_string _PUBPORT p/port "public port of this server (defaults to 53)"
+arg_finish "$@"
+
+PUBPORT=${_PUBPORT-53}
+
 cat << EOF > /usr/lib/systemd/system/powerdns.service
 [Unit]
 Description=home dns server
@@ -20,8 +25,7 @@ Type=simple
 PIDFile=/run/powerdns.pid
 ExecStart=/usr/bin/podman run --conmon-pidfile=/run/powerdns.pid \\
 	--hostname=homedns --name=powerdns \\
-	-p 53:53 -p 53:53/udp -p 127.0.0.1:53000:53000 \\
-	--net=my \\
+	$NETWORK_TYPE \\
 	--systemd=false --log-opt=path=/dev/null \\
 	--mount=type=bind,ro,src=/data/AppData/config/nginx,dst=/config \\
 	--mount=type=tmpfs,tmpfs-size=1M,destination=/run \\
@@ -36,7 +40,7 @@ Restart=always
 RestartSec=5
 
 [Install]
-WantedBy=multi-user.target
+WantedBy=machines.target
 
 EOF
 

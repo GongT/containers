@@ -51,7 +51,7 @@ function arg_flag() {
 }
 function arg_finish() {
 	local ARGS=(--name "$0")
-	if [[ ${#_ARG_GETOPT_LONG} -gt 0 ]]; then
+	if [[ -n "${_ARG_GETOPT_LONG[*]}" ]]; then
 		local S=''
 		for I in "${_ARG_GETOPT_LONG[@]}" ; do
 			S+=",$I"
@@ -59,16 +59,32 @@ function arg_finish() {
 		S=${S:1}
 		ARGS+=(--longoptions "$S")
 	fi
-	if [[ ${#_ARG_GETOPT_SHORT} -gt 0 ]]; then
+	if [[ -n "${_ARG_GETOPT_SHORT[*]}" ]]; then
 		local S='+'
 		for I in "${_ARG_GETOPT_SHORT[@]}" ; do
 			S+="$I"
 		done
 		ARGS+=(--options "$S")
+	else
+		ARGS+=(--options "")
 	fi
 	# echo "${ARGS[@]} -- $@"
-	getopt "${ARGS[@]}" -- "$@" >/dev/null || arg_usage
-	eval "_arg_set $(getopt "${ARGS[@]}" -- "$@")"
+
+	if [[ $# -eq 0 ]] && [[ -e "$MONO_ROOT_DIR/environment" ]]; then
+		local _PROGRAM_ARGS=($(\
+			cat "$MONO_ROOT_DIR/environment" | \
+			grep -E "^$PROJECT_NAME" | \
+			grep -E "$CURRENT_ACTION" | \
+			sed -E 's/^[^:]+:\s*\S+\s*//g'
+		))
+	else
+		local _PROGRAM_ARGS=("$@")
+	fi
+	# if [[ ${#_PROGRAM_ARGS[@]} -eq 0 ]]; then
+	# 	_PROGRAM_ARGS=()
+	# fi
+	getopt "${ARGS[@]}" -- "${_PROGRAM_ARGS[@]}" >/dev/null || arg_usage
+	eval "_arg_set $(getopt "${ARGS[@]}" -- "${_PROGRAM_ARGS[@]}")"
 }
 function arg_usage() {
 	echo -e "\e[38;5;14mUsage: $0 <options>\e[0m" >&2
@@ -124,7 +140,7 @@ function _arg_set() {
 	shift
 	
 	if [[ $# -gt 0 ]]; then
-		die "Unknown argument $1"
+		die "Unknown argument '$1'"
 	fi
 
 	for VAR_NAME in "${!_ARG_RESULT[@]}" ; do

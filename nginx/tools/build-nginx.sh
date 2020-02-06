@@ -83,15 +83,16 @@ make DESTDIR=$DST install
 rm -rf $DST/etc
 mkdir -p $DST/etc/nginx
 
-####### 
+#######
 function copy_binary() {
+	echo "copy binary $1"
 	for i in $(ldd "$1" | grep '=>' | awk '{print $3}') ; do
 		if [[ "$i" == not ]]; then
 			echo 'Failed to resolve some dependencies of nginx.' >&2 ; exit 1
 		fi
 
 		mkdir -p "$(dirname "$DST/$i")"
-		cp -v "$i" "$DST/$i"
+		cp -u "$i" "$DST/$i"
 	done
 
 	for i in $(ldd "$1" | grep -v '=>' | awk '{print $1}') ; do
@@ -99,17 +100,18 @@ function copy_binary() {
 			continue
 		fi
 		mkdir -p "$(dirname "$DST/$i")"
-		cp -v "$i" "$DST/$i"
-	done
-
-	for i in /lib64/libnss_{compat*,dns*,files*,myhostname*,resolve*} ; do
-		cp -v "$i" "$DST/$i"
+		cp -u "$i" "$DST/$i"
 	done
 }
+
 copy_binary /opt/dist/usr/sbin/nginx
 copy_binary /usr/bin/htpasswd
 copy_binary /bin/bash
 copy_binary /bin/mkdir
+
+for i in /lib64/libnss_{compat*,dns*,files*,myhostname*,resolve*} ; do
+	cp -uv "$i" "$DST/$i"
+done
 
 mkdir -p "$DST/usr/bin"
 cp /bin/bash /bin/mkdir /bin/rm /usr/bin/htpasswd "$DST/usr/bin"
@@ -118,14 +120,6 @@ mkdir -p "$DST/etc"
 echo "nameserver 8.8.8.8
 nameserver 1.1.1.1
 " > "$DST/etc/resolv.conf"
-
-####### 
-if [[ "$(id -u nginx 2>/dev/null)" -eq 0 ]]; then
-	echo "create user nginx..."
-	groupadd nginx --gid 994
-	useradd nginx --home-dir /tmp --uid 998 --gid 994
-fi
-
 
 echo "create openssl cert..."
 openssl req -x509 -nodes -days 365 -newkey rsa:2048 -batch \
