@@ -1,0 +1,7 @@
+[WebService]
+AllowUnencrypted=true
+ProtocolHeader = X-Forwarded-Proto
+UrlRoot=/server/
+AllowUnencrypted=true
+Origins = http://control-panel.service.gongt.me https://control-panel.service.gongt.me ws://control-panel.service.gongt.me wss://control-panel.service.gongt.me htt
+p://127.0.0.1 ws://127.0.0.1

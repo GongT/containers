@@ -2,6 +2,12 @@
 
 set -Eeuo pipefail
 
+if ! [[ -e "/etc/letsencrypt/nginx/load.conf" ]]; then
+	mkdir -p /etc/letsencrypt/nginx
+	echo > "/etc/letsencrypt/nginx/load.conf"
+fi
+
+
 if [[ -e "/config/htpasswd" ]]; then
 	rm -f "/config/htpasswd"
 fi

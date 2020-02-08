@@ -116,7 +116,7 @@ function _arg_parse_name() {
 		LONG=
 	fi
 
-	if ! echo "$LONG$SHORT" | grep -qE "^[0-9a-z-]+$" ; then
+	if ! echo "$LONG$SHORT" | grep -qE "^[0-9a-z_-]+$" ; then
 		die "Invalid argument define: $NAME (LONG=$LONG, SHORT=$SHORT)"
 	fi
 

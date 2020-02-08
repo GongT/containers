@@ -84,3 +84,6 @@
 [submodule "nginx/source/lua/luaposix"]
 	path = nginx/source/lua/luaposix
 	url = git@github.com:luaposix/luaposix.git
+[submodule "certbot-dns/opt/acme.sh"]
+	path = certbot-dns/opt/acme.sh
+	url = git@github.com:Neilpang/acme.sh.git

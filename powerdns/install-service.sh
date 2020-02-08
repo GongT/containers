@@ -30,7 +30,6 @@ ExecStart=/usr/bin/podman run --conmon-pidfile=/run/powerdns.pid \\
 	--mount=type=bind,ro,src=/data/AppData/config/nginx,dst=/config \\
 	--mount=type=tmpfs,tmpfs-size=1M,destination=/run \\
 	--mount=type=tmpfs,tmpfs-size=512M,destination=/tmp \\
-	--volume=wellknown:/etc/wellknown \\
 	--volume=sockets:/var/run/sockets \\
 	--mount=type=bind,src=/data/AppData/data/powerdns,dst=/data \\
 	--pull=never --rm gongt/powerdns

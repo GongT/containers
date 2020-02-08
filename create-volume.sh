@@ -11,5 +11,4 @@ function bind_share() {
 	bind_mount $1 "share/$1"
 }
 bind_share sockets
-bind_share wellknown
 bind_share letsencrypt

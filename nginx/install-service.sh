@@ -35,7 +35,6 @@ ExecStart=/usr/bin/podman run --conmon-pidfile=/run/nginx.pid \\
 	--mount=type=tmpfs,tmpfs-size=1M,destination=/run \\
 	--mount=type=tmpfs,tmpfs-size=512M,destination=/tmp \\
 	--volume=letsencrypt:/etc/letsencrypt \\
-	--volume=wellknown:/etc/wellknown \\
 	--volume=sockets:/var/run/sockets \\
 	--env="USERNAME=${USERNAME}" --env="PASSWORD=${PASSWORD}" \\
 	--pull=never --rm gongt/nginx

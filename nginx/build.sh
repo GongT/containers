@@ -43,7 +43,7 @@ buildah umount "$BUILDER" "$RESULT"
 
 buildah config --entrypoint '["/bin/bash"]' --cmd '/usr/sbin/nginx.sh' --env PATH="/bin:/usr/bin:/usr/sbin" \
 	--port 80 --port 443 --port 80/udp --port 443/udp "$RESULT"
-buildah config --volume /config --volume /etc/letsencrypt --volume /wellknown "$RESULT"
+buildah config --volume /config --volume /etc/letsencrypt "$RESULT"
 buildah config --author "GongT <admin@gongt.me>" --created-by "GongT" --label name=gongt/nginx "$RESULT"
 info "settings update..."
 
