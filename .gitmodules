@@ -57,3 +57,30 @@
 [submodule "powerdns/powerdns-webui"]
 	path = powerdns/powerdns-webui
 	url = git@github.com:james-stevens/powerdns-webui.git
+	
+[submodule "nginx/source/modules/njs"]
+	path = nginx/source/modules/njs
+	url = git@github.com:nginx/njs.git
+
+[submodule "nginx/source/special-modules/njs"]
+	path = nginx/source/special-modules/njs
+	url = git@github.com:nginx/njs.git
+	
+[submodule "nginx/source/modules/lua-nginx-module"]
+	path = nginx/source/modules/lua-nginx-module
+	url = git@github.com:openresty/lua-nginx-module.git
+	
+[submodule "nginx/source/luajit2"]
+	path = nginx/source/luajit2
+	url = git@github.com:openresty/luajit2.git
+
+[submodule "nginx/source/resty/lua-resty-lrucache"]
+	path = nginx/source/resty/lua-resty-lrucache
+	url = git@github.com:openresty/lua-resty-lrucache.git
+
+[submodule "nginx/source/resty/lua-resty-core"]
+	path = nginx/source/resty/lua-resty-core
+	url = git@github.com:openresty/lua-resty-core.git
+[submodule "nginx/source/lua/luaposix"]
+	path = nginx/source/lua/luaposix
+	url = git@github.com:luaposix/luaposix.git

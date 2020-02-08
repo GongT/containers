@@ -31,7 +31,7 @@ ExecStart=/usr/bin/podman run --conmon-pidfile=/run/nginx.pid \\
 	$NETWORK_TYPE \\
 	--systemd=false --log-opt=path=/dev/null \\
 	--mount=type=bind,src=/data/AppData/config/nginx,dst=/config \\
-	--mount=type=bind,src=/data/AppData/logs/nginx,dst=/var/log \\
+	--mount=type=bind,src=/data/AppData/logs/nginx,dst=/var/log/nginx \\
 	--mount=type=tmpfs,tmpfs-size=1M,destination=/run \\
 	--mount=type=tmpfs,tmpfs-size=512M,destination=/tmp \\
 	--volume=letsencrypt:/etc/letsencrypt \\
@@ -41,7 +41,7 @@ ExecStart=/usr/bin/podman run --conmon-pidfile=/run/nginx.pid \\
 	--pull=never --rm gongt/nginx
 RestartPreventExitStatus=125 126 127
 ExecReload=/usr/bin/podman exec nginx nginx -s reload
-ExecStop=-/usr/bin/podman stop -t 10 nginx
+ExecStop=/usr/bin/podman stop -t 10 nginx
 Restart=always
 RestartSec=5
 

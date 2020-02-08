@@ -10,4 +10,6 @@ cd ..
 
 USER=$(dirname "$1")
 REPO=$(basename "$1" .git)
-git submodule add "git@github.com:$USER/$REPO.git" source/modules/$REPO
+
+set -x
+git submodule add --force "git@github.com:$USER/$REPO.git" source/modules/$REPO

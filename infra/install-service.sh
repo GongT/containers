@@ -7,12 +7,12 @@ source ../common/functions-install.sh
 
 VOL=$(use_volume virtual-gateway)
 if ! [[ -e "$VOL/wg0.conf" ]] ; then
-	if ! ssh services.gongt.me echo -e "remote login ok" ; then
-		die "Failed SSH login to services.gongt.me, check ssh key files."
-	fi
-
-	ssh services.gongt.me /usr/bin/env bash < init-script.sh > "$VOL/wg0.conf" ||
-		die "Failed to run init script on remote host, check output and try again."
+    if ! ssh services.gongt.me echo -e "remote login ok" ; then
+        die "Failed SSH login to services.gongt.me, check ssh key files."
+    fi
+    
+    ssh services.gongt.me /usr/bin/env bash < init-script.sh > "$VOL/wg0.conf" ||
+    die "Failed to run init script on remote host, check output and try again."
 fi
 
 arg_string + DDNS_HOST h/host "ddns host FQDN"
@@ -30,7 +30,6 @@ Wants=network-online.target
 [Service]
 Type=simple
 PIDFile=/run/virtual-gateway.pid
-# Environment=DSNS_KEY="${DSNS_KEY}" DDNS_HOST="${DDNS_HOST}"
 ExecStartPre=-/usr/bin/podman rm --ignore --force virtual-gateway
 ExecStart=/usr/bin/podman run --conmon-pidfile=/run/virtual-gateway.pid \\
 	--hostname=virtual-gateway --name=virtual-gateway \\
@@ -51,4 +50,12 @@ EOF
 
 info "virtual-gateway.service created"
 
+mkdir -p /etc/systemd/system/cockpit.socket.d
+echo '[Socket]
+ListenStream=/data/AppData/share/sockets/cockpit.sock
+ExecStartPost=
+ExecStopPost=
+' > /etc/systemd/system/cockpit.socket.d/virtual-gateway.conf
+
 systemctl daemon-reload
+systemctl enable virtual-gateway.service

@@ -2,6 +2,7 @@ gcc
 g++
 make
 bash
+which
 openssl
 httpd-tools
 libuuid-devel
