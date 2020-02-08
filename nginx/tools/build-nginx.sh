@@ -130,6 +130,7 @@ copy_binary /opt/dist/usr/sbin/nginx
 copy_binary /usr/bin/htpasswd
 copy_binary /bin/bash
 copy_binary /bin/mkdir
+copy_binary /usr/bin/sed
 
 for i in /lib64/libnss_{compat*,dns*,files*,myhostname*,resolve*} ; do
 	cp -uv "$i" "$DST/$i"
@@ -138,7 +139,7 @@ done
 mkdir -p "$DST/bin" "$DST/usr/bin"
 
 cp /bin/bash /bin/mkdir /bin/rm "$DST/bin"
-cp /usr/bin/htpasswd "$DST/usr/bin"
+cp /usr/bin/htpasswd /usr/bin/sed "$DST/usr/bin"
 
 mkdir -p "$DST/etc"
 echo "nameserver 8.8.8.8

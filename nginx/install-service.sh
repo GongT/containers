@@ -7,9 +7,16 @@ source ../common/functions-install.sh
 
 arg_string + USERNAME u/user "basic auth username (*)"
 arg_string + PASSWORD p/pass "basic auth password (*)"
+arg_flag     CENSORSHIP censorship "is http/s port unavailable"
 arg_finish "$@"
 
-ENV_FIELDS=""
+
+ENV_PASS=$(
+	safe_environment \
+		"USERNAME=$USERNAME" \
+		"PASSWORD=$PASSWORD" \
+		"CENSORSHIP=$CENSORSHIP"
+)
 
 cat << EOF > /usr/lib/systemd/system/nginx.service
 [Unit]
@@ -28,7 +35,7 @@ PIDFile=/run/nginx.pid
 ExecStartPre=-/usr/bin/podman rm --ignore --force nginx
 ExecStart=/usr/bin/podman run --conmon-pidfile=/run/nginx.pid \\
 	--hostname=webservice --name=nginx \\
-	$NETWORK_TYPE \\
+	$NETWORK_TYPE $ENV_PASS \\
 	--systemd=false --log-opt=path=/dev/null \\
 	--mount=type=bind,src=/data/AppData/config/nginx,dst=/config \\
 	--mount=type=bind,src=/data/AppData/logs/nginx,dst=/var/log/nginx \\
@@ -36,7 +43,6 @@ ExecStart=/usr/bin/podman run --conmon-pidfile=/run/nginx.pid \\
 	--mount=type=tmpfs,tmpfs-size=512M,destination=/tmp \\
 	--volume=letsencrypt:/etc/letsencrypt \\
 	--volume=sockets:/var/run/sockets \\
-	--env="USERNAME=${USERNAME}" --env="PASSWORD=${PASSWORD}" \\
 	--pull=never --rm gongt/nginx
 RestartPreventExitStatus=125 126 127
 ExecReload=/usr/bin/podman exec nginx nginx -s reload
