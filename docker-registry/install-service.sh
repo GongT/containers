@@ -37,3 +37,4 @@ EOF
 info "docker-registry.service created"
 
 systemctl daemon-reload
+systemctl enable docker-registry.service

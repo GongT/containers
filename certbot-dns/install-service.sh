@@ -50,7 +50,7 @@ ExecStart=/usr/bin/podman run --conmon-pidfile=/run/certbot.pid \\
 	$ENV_PASS \\
 	--systemd=false --log-opt=path=/dev/null \\
 	--volume=letsencrypt:/etc/letsencrypt \\
-	--volume=sockets:/var/run/sockets \\
+	--volume=sockets:/run/sockets \\
 	--pull=never --rm gongt/certbot
 RestartPreventExitStatus=125 126 127 66
 ExecStop=/usr/bin/podman stop -t 2 certbot

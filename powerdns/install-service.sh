@@ -23,6 +23,7 @@ Wants=network-online.target
 [Service]
 Type=simple
 PIDFile=/run/powerdns.pid
+ExecStartPre=-/usr/bin/podman rm --ignore --force powerdns
 ExecStart=/usr/bin/podman run --conmon-pidfile=/run/powerdns.pid \\
 	--hostname=homedns --name=powerdns \\
 	$NETWORK_TYPE \\
@@ -30,7 +31,7 @@ ExecStart=/usr/bin/podman run --conmon-pidfile=/run/powerdns.pid \\
 	--mount=type=bind,ro,src=/data/AppData/config/nginx,dst=/config \\
 	--mount=type=tmpfs,tmpfs-size=1M,destination=/run \\
 	--mount=type=tmpfs,tmpfs-size=512M,destination=/tmp \\
-	--volume=sockets:/var/run/sockets \\
+	--volume=sockets:/run/sockets \\
 	--mount=type=bind,src=/data/AppData/data/powerdns,dst=/data \\
 	--pull=never --rm gongt/powerdns
 RestartPreventExitStatus=125 126 127

@@ -2,7 +2,7 @@
 
 set -ex
 
-mkdir -p /var/run/sockets
-rm -f /var/run/sockets/powerdns.sock
+mkdir -p /run/sockets
+rm -f /run/sockets/powerdns.sock
 
 exec nginx

@@ -42,7 +42,7 @@ ExecStart=/usr/bin/podman run --conmon-pidfile=/run/nginx.pid \\
 	--mount=type=tmpfs,tmpfs-size=1M,destination=/run \\
 	--mount=type=tmpfs,tmpfs-size=512M,destination=/tmp \\
 	--volume=letsencrypt:/etc/letsencrypt \\
-	--volume=sockets:/var/run/sockets \\
+	--volume=sockets:/run/sockets \\
 	--pull=never --rm gongt/nginx
 RestartPreventExitStatus=125 126 127
 ExecReload=/usr/bin/podman exec nginx nginx -s reload
@@ -58,3 +58,4 @@ EOF
 info "nginx.service created"
 
 systemctl daemon-reload
+systemctl enable nginx.service

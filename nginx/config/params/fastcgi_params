@@ -27,7 +27,6 @@ fastcgi_param PHP_SELF $cgi_script_name;
 fastcgi_param REQUEST_URI $request_uri;
 fastcgi_param DOCUMENT_URI $document_uri;
 fastcgi_param DOCUMENT_ROOT $cgi_document_root;
-fastcgi_param DOCUMENT_ROOT $cgi_document_root;
 
 fastcgi_param SERVER_PROTOCOL $server_protocol;
 fastcgi_param SERVER_SOFTWARE nginx/$nginx_version;
