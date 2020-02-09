@@ -49,6 +49,9 @@ function arg_flag() {
 	_ARG_RESULT[$VAR_NAME]=""
 	_ARG_INPUT[$VAR_NAME]="${IN:1}"
 }
+function _check_arg() {
+	_PROGRAM_ARGS=("$@")
+}
 function arg_finish() {
 	local ARGS=(--name "$0")
 	if [[ -n "${_ARG_GETOPT_LONG[*]}" ]]; then
@@ -71,12 +74,13 @@ function arg_finish() {
 	# echo "${ARGS[@]} -- $@"
 
 	if [[ $# -eq 0 ]] && [[ -e "$MONO_ROOT_DIR/environment" ]]; then
-		local _PROGRAM_ARGS=($(\
+		local _PROGRAM_ARGS=()
+		eval _check_arg $(
 			cat "$MONO_ROOT_DIR/environment" | \
 			grep -E "^$PROJECT_NAME" | \
 			grep -E "$CURRENT_ACTION" | \
 			sed -E 's/^[^:]+:\s*\S+\s*//g'
-		))
+		)
 	else
 		local _PROGRAM_ARGS=("$@")
 	fi

@@ -1,0 +1,87 @@
+<?php
+
+return array(
+	'logfile' => '/proc/self/fd/2',
+	'logdateformat' => '',
+	'dbtableprefix' => '',
+	'mysql.utf8mb4' => true,
+	'default_language' => 'zh_CN',
+	'default_locale' => 'zh_CN',
+	'knowledgebaseenabled' => false,
+	'remember_login_cookie_lifetime' => 60 * 60 * 24 * 30,
+	'session_lifetime' => 60 * 60 * 24 * 30,
+	'session_keepalive' => false,
+	'token_auth_enforced' => false,
+	'apps_paths' => array(
+		// Read-only location for apps shipped with Nextcloud and installed by apk.
+		0 => array(
+			'path' => '/usr/share/webapps/nextcloud/apps',
+			'url' => '/apps',
+			'writable' => false,
+		),
+		// Writable location for apps installed from AppStore.
+		1 => array(
+			'path' => '/var/lib/nextcloud/apps',
+			'url' => '/apps-appstore',
+			'writable' => true,
+		),
+	),
+	'trashbin_retention_obligation' => '7,30',
+	'connectivity_check_domains' => array('google.com'),
+	'updatechecker' => false,
+	'check_for_working_htaccess' => false,
+	'enable_previews' => true,
+	'enabledPreviewProviders' => array(
+		'OC\Preview\Illustrator',
+		'OC\Preview\OpenDocument',
+		'OC\Preview\PDF',
+		'OC\Preview\SVG',
+		'OC\Preview\Font',
+		'OC\Preview\PNG',
+		'OC\Preview\JPEG',
+		'OC\Preview\GIF',
+		'OC\Preview\HEIC',
+		'OC\Preview\BMP',
+		'OC\Preview\XBitmap',
+		'OC\Preview\MP3',
+		'OC\Preview\TXT',
+		'OC\Preview\MarkDown'
+	),
+	'memcache.local' => '\OC\Memcache\APCu',
+	'memcache.locking' => '\OC\Memcache\Redis',
+	'redis' => array(
+		'host' => '/tmp/redis.sock',
+		'port' => 0,
+		'dbindex' => 0,
+		'timeout' => 1.5,
+	),
+	'blacklisted_files' => array(
+		'.htaccess',
+		'.recycle',
+		'$RECYCLE.BIN',
+		'found.000',
+		'System Volume Information',
+		'OneDriveTemp',
+		'thumbs.db'
+	),
+	'config_is_read_only' => false,
+	'mail_domain' => 'gongt.me',
+	'mail_smtpmode' => 'smtp',
+	'mail_smtpname' => 'NextCloud Notify',
+	'mail_from_address' => 'nextcloud@gongt.me',
+	'mail_smtphost' => 'smtp.mailgun.org',
+	'mail_smtpsecure' => 'tls',
+	'mail_smtpport' => 587,
+	'mail_smtptimeout' => 30,
+	'mail_smtpauth' => true,
+	'mail_smtpauthtype' => 'LOGIN',
+	'debug' => true,
+	'trusted_domains' =>
+	array(
+		 'localhost',
+		 'nextcloud.service.gongt.me',
+		 'nextcloud.service.gongt.me:59443',
+		 'nextcloud.services.gongt.me',
+		 'nextcloud.gongt.net',
+	),
+);

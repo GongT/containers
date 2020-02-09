@@ -32,16 +32,17 @@ fastcgi_param SERVER_PROTOCOL $server_protocol;
 fastcgi_param SERVER_SOFTWARE nginx/$nginx_version;
 fastcgi_param GATEWAY_INTERFACE CGI/1.1;
 
-fastcgi_param REMOTE_ADDR $realip_remote_addr;
-fastcgi_param REMOTE_PORT $realip_remote_port;
-fastcgi_param SERVER_ADDR $rproxy_server_addr;
-fastcgi_param SERVER_PORT $rproxy_server_port;
+fastcgi_param REMOTE_ADDR $http_x_real_ip;
+fastcgi_param REMOTE_PORT $http_x_remote_port;
+fastcgi_param SERVER_ADDR $http_x_server_addr;
+fastcgi_param SERVER_PORT $http_x_server_port;
 fastcgi_param SERVER_NAME $server_name;
-fastcgi_param HTTP2 $rproxy_http2;
+fastcgi_param HTTP2 $http_x_h2;
+fastcgi_param HTTPS on;
 fastcgi_hide_header X-H2;
 
 proxy_set_header X-Forwarded-For      $proxy_add_x_forwarded_for;
-proxy_set_header X-Forwarded-Proto    $rproxy_protocol;
+proxy_set_header X-Forwarded-Proto    $http_x_forwarded_proto;
 
 # PHP only, required if PHP was built with --enable-force-cgi-redirect
 fastcgi_param REDIRECT_STATUS 200;

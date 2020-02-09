@@ -16,7 +16,7 @@ else
 fi
 cd /etc/nginx/basic
 for i in *.conf ; do
-    sed -i "s#\$out_port_http#$out_port_http#g; s#\$out_port_https#$out_port_https#g" "$i"
+    sed -i "s#\$out_port_https#$out_port_https#g; s#\$out_port_http#$out_port_http#g" "$i"
 done
 
 if [[ -e "/config/htpasswd" ]]; then
@@ -34,4 +34,5 @@ done
 
 echo "[***] running nginx." >&2
 
+rm -f /run/sockets/nginx.reload.sock
 exec /usr/sbin/nginx

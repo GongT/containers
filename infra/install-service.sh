@@ -19,18 +19,22 @@ arg_string + DDNS_HOST h/host "ddns host FQDN"
 arg_string + DSNS_KEY k/key "ddns api key"
 arg_finish "$@"
 
+mkdir -p /usr/share/scripts
+cp infra-remove-all.sh /usr/share/scripts/infra-remove-all.sh
+
 cat << EOF > /usr/lib/systemd/system/virtual-gateway.service
 [Unit]
 Description=virtual machine gateway
 StartLimitInterval=11
 StartLimitBurst=2
-After=network-online.target
+After=network-online.target wait-mount.service
+Requires=wait-mount.service
 Wants=network-online.target
 
 [Service]
 Type=simple
 PIDFile=/run/virtual-gateway.pid
-ExecStartPre=-/usr/bin/podman rm --ignore --force virtual-gateway
+ExecStartPre=-/usr/bin/env bash /usr/share/scripts/infra-remove-all.sh
 ExecStart=/usr/bin/podman run --conmon-pidfile=/run/virtual-gateway.pid \\
 	--hostname=virtual-gateway --name=virtual-gateway \\
 	--network=bridge0 --mac-address=86:13:02:8F:76:2A --dns=none --cap-add=NET_ADMIN \\
@@ -40,6 +44,7 @@ ExecStart=/usr/bin/podman run --conmon-pidfile=/run/virtual-gateway.pid \\
 	--pull=never --rm gongt/infra
 RestartPreventExitStatus=125 126 127
 ExecStop=-/usr/bin/podman stop -t 10 virtual-gateway
+ExecStop=-/usr/bin/env bash /usr/share/scripts/infra-remove-all.sh
 Restart=always
 RestartSec=5
 

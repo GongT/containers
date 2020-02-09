@@ -7,5 +7,5 @@ if [[ -n "$IS_NAT" ]] ; then
 else
 	IS_NAT=
 	NETWORK_TYPE="--network=host"
-	INFRA_DEP=
+	INFRA_DEP="wait-mount.service"
 fi

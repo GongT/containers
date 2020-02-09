@@ -16,3 +16,5 @@ function bind_data() {
 bind_share sockets
 bind_share letsencrypt
 bind_data mariadb
+bind_mount cloud /data/Volumes/AppData/NextCloud
+bind_mount volumes /data/Volumes

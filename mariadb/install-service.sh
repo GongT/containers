@@ -35,7 +35,7 @@ ExecStart=/usr/bin/podman run --conmon-pidfile=/run/mariadb.pid \\
 	$NETWORK_TYPE $ENV_PASS \\
 	--systemd=false --log-opt=path=/dev/null \\
 	--mount=type=bind,src=/data/AppData/logs/mariadb,dst=/var/log/mariadb \\
-	--mount=type=tmpfs,tmpfs-size=512M,destination=/run \\
+	--mount=type=tmpfs,tmpfs-size=512M,destination=/tmp \\
 	--volume=backup-mysql:/backup \\
 	--volume=mariadb:/var/lib/mysql \\
 	--volume=sockets:/run/sockets \\
