@@ -13,44 +13,19 @@ ENV_PASS=$(
 		"PROXY=$PROXY"
 )
 
-cat << EOF > /usr/lib/systemd/system/mariadb.service
-[Unit]
-Description=mysql server
-StartLimitInterval=11
-StartLimitBurst=2
-After=network-online.target $INFRA_DEP
-Requires=$INFRA_DEP
-Wants=network-online.target
+create_unit mariadb
+unit_podman_hostname mysql
+unit_data danger
+unit_depend $INFRA_DEP
+unit_podman_arguments "$ENV_PASS"
 
-[Service]
-OOMScoreAdjust=-600
-Environment="TZ=Asia/Shanghai"
-LimitNOFILE=16364
-Type=simple
-PIDFile=/run/mariadb.pid
-ExecStartPre=-/usr/bin/podman stop -t 120 mariadb
-ExecStartPre=-/usr/bin/podman rm --ignore --force mariadb
-ExecStart=/usr/bin/podman run --conmon-pidfile=/run/mariadb.pid \\
-	--hostname=mysql --name=mariadb \\
-	$NETWORK_TYPE $ENV_PASS \\
-	--systemd=false --log-opt=path=/dev/null \\
-	--mount=type=bind,src=/data/AppData/logs/mariadb,dst=/var/log/mariadb \\
-	--mount=type=tmpfs,tmpfs-size=512M,destination=/tmp \\
-	--volume=backup-mysql:/backup \\
-	--volume=mariadb:/var/lib/mysql \\
-	--volume=sockets:/run/sockets \\
-	--pull=never --rm gongt/mariadb
-RestartPreventExitStatus=125 126 127
-ExecStop=-/usr/bin/podman stop -t 120 mariadb
-Restart=always
-RestartSec=5
+unit_body OOMScoreAdjust -600
+unit_body Environment "TZ=Asia/Shanghai"
+unit_body LimitNOFILE 16364
 
-[Install]
-WantedBy=machines.target
-EOF
-
-
-info "mariadb.service created"
-
-systemctl daemon-reload
-systemctl enable mariadb.service
+unit_fs_bind logs/mariadb /var/log/mariadb
+unit_fs_tempfs 512M /tmp
+unit_fs_bind data/mariadb /var/lib/mysql
+unit_fs_bind backup/mariadb /backup
+unit_fs_bind share/sockets /run/sockets
+unit_finish

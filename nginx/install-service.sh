@@ -18,44 +18,15 @@ ENV_PASS=$(
 		"CENSORSHIP=$CENSORSHIP"
 )
 
-cat << EOF > /usr/lib/systemd/system/nginx.service
-[Unit]
-Description=nginx - high performance web server
-Documentation=http://nginx.org/en/docs/
-StartLimitInterval=11
-StartLimitBurst=2
-Wants=php-fpm.service
-After=network-online.target $INFRA_DEP
-Requires=$INFRA_DEP
-Wants=network-online.target
-
-[Service]
-Type=simple
-PIDFile=/run/nginx.pid
-ExecStartPre=-/usr/bin/podman rm --ignore --force nginx
-ExecStart=/usr/bin/podman run --conmon-pidfile=/run/nginx.pid \\
-	--hostname=webservice --name=nginx \\
-	$NETWORK_TYPE $ENV_PASS \\
-	--systemd=false --log-opt=path=/dev/null \\
-	--mount=type=bind,src=/data/AppData/config/nginx,dst=/config \\
-	--mount=type=bind,src=/data/AppData/logs/nginx,dst=/var/log/nginx \\
-	--mount=type=tmpfs,tmpfs-size=1M,destination=/run \\
-	--mount=type=tmpfs,tmpfs-size=512M,destination=/tmp \\
-	--volume=letsencrypt:/etc/letsencrypt \\
-	--volume=sockets:/run/sockets \\
-	--pull=never --rm gongt/nginx
-RestartPreventExitStatus=125 126 127
-ExecReload=/usr/bin/podman exec nginx nginx -s reload
-ExecStop=/usr/bin/podman stop -t 10 nginx
-Restart=always
-RestartSec=5
-
-[Install]
-WantedBy=machines.target
-
-EOF
-
-info "nginx.service created"
-
-systemctl daemon-reload
-systemctl enable nginx.service
+create_unit nginx
+unit_unit Description nginx - high performance web server
+unit_depend $INFRA_DEP
+unit_podman_arguments "$ENV_PASS"
+unit_fs_bind config/nginx /config
+unit_fs_bind logs/nginx /var/log/nginx
+unit_fs_tempfs 1M /run
+unit_fs_tempfs 512M /tmp
+unit_fs_bind share/letsencrypt /etc/letsencrypt
+unit_fs_bind share/sockets /run/sockets
+unit_reload_command '/usr/bin/podman exec nginx nginx -s reload'
+unit_finish

@@ -3,7 +3,7 @@
 set -e
 
 apk --no-cache add nginx redis nextcloud \
-	php-fpm php7-pdo_mysql php7-pecl-apcu \
+	php-fpm php7-pdo_mysql php7-pecl-apcu php7-exif php7-opcache php7-pecl-imagick \
 	nextcloud-activity \
 	nextcloud-admin_audit \
 	nextcloud-files_external \
@@ -17,6 +17,8 @@ apk --no-cache add nginx redis nextcloud \
 	nextcloud-sharebymail \
 	nextcloud-theming \
 	nextcloud-text \
+	nextcloud-cloud_federation_api \
+	nextcloud-federation \
 	nextcloud-viewer
 
 mkdir -p /var/lib/nginx/logs /run/nginx

@@ -8,6 +8,8 @@ buildah rmi gongt/nginx ; buildah pull oci-archive:/data/temp-images/nginx.oci
 
 
 ## normal
-# /etc/containers/registries.conf is required to edit
+# login
+buildah login docker-registry.service.gongt.me
+# /etc/containers/registries.conf is required to edit ( add to insecure registry )
 buildah push localhost/gongt/nginx docker://docker-registry.service.gongt.me/gongt/nginx:latest
 

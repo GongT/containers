@@ -5,8 +5,7 @@ set -Eeuo pipefail
 cd "$(dirname "$(realpath "${BASH_SOURCE[0]}")")"
 source ../common/functions-install.sh
 
-mkdir -p /usr/share/scripts
-cp wait-all-mount.sh /usr/share/scripts/wait-all-mount.sh
+SCRIPT=$(install_script wait-all-mount.sh)
 
 cat << EOF > /usr/lib/systemd/system/wait-mount.service
 [Unit]
@@ -16,7 +15,7 @@ Before=virtual-gateway.service
 
 [Service]
 Type=oneshot
-ExecStart=/usr/bin/env bash "/usr/share/scripts/wait-all-mount.sh"
+ExecStart=/usr/bin/env bash "$SCRIPT"
 Restart=no
 NotifyAccess=all
 

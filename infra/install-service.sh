@@ -5,7 +5,12 @@ set -Eeuo pipefail
 cd "$(dirname "$(realpath "${BASH_SOURCE[0]}")")"
 source ../common/functions-install.sh
 
-VOL=$(use_volume virtual-gateway)
+arg_string + DDNS_HOST h/host "ddns host FQDN"
+arg_string + DSNS_KEY k/key "ddns api key"
+arg_finish "$@"
+
+VOL=/data/AppData/data/infra
+mkdir -p "$VOL"
 if ! [[ -e "$VOL/wg0.conf" ]] ; then
     if ! ssh services.gongt.me echo -e "remote login ok" ; then
         die "Failed SSH login to services.gongt.me, check ssh key files."
@@ -15,52 +20,29 @@ if ! [[ -e "$VOL/wg0.conf" ]] ; then
     die "Failed to run init script on remote host, check output and try again."
 fi
 
-arg_string + DDNS_HOST h/host "ddns host FQDN"
-arg_string + DSNS_KEY k/key "ddns api key"
-arg_finish "$@"
+STOP_SCRIPT=$(install_script infra-remove-all.sh)
 
-mkdir -p /usr/share/scripts
-cp infra-remove-all.sh /usr/share/scripts/infra-remove-all.sh
+create_unit virtual-gateway
+unit_unit Description virtual machine gateway
+unit_depend network-online.target
+unit_unit WantedBy machines.target
+unit_body ExecStop "/usr/bin/env bash $STOP_SCRIPT"
+unit_podman_network --network=bridge0 --mac-address=86:13:02:8F:76:2A --dns=none
+unit_podman_arguments --cap-add=NET_ADMIN $(safe_environment \
+	"DSNS_KEY=${DSNS_KEY}" \
+	"DDNS_HOST=${DDNS_HOST}"
+)
+unit_fs_bind $VOL /storage
+unit_podman_image gongt/infra
+unit_finish
 
-cat << EOF > /usr/lib/systemd/system/virtual-gateway.service
-[Unit]
-Description=virtual machine gateway
-StartLimitInterval=11
-StartLimitBurst=2
-After=network-online.target wait-mount.service
-Requires=wait-mount.service
-Wants=network-online.target
-
-[Service]
-Type=simple
-PIDFile=/run/virtual-gateway.pid
-ExecStartPre=-/usr/bin/env bash /usr/share/scripts/infra-remove-all.sh
-ExecStart=/usr/bin/podman run --conmon-pidfile=/run/virtual-gateway.pid \\
-	--hostname=virtual-gateway --name=virtual-gateway \\
-	--network=bridge0 --mac-address=86:13:02:8F:76:2A --dns=none --cap-add=NET_ADMIN \\
-	--systemd=false --log-opt=path=/dev/null \\
-	--volume=virtual-gateway:/storage \\
-	--env="DSNS_KEY=${DSNS_KEY}" --env="DDNS_HOST=${DDNS_HOST}" \\
-	--pull=never --rm gongt/infra
-RestartPreventExitStatus=125 126 127
-ExecStop=-/usr/bin/podman stop -t 10 virtual-gateway
-ExecStop=-/usr/bin/env bash /usr/share/scripts/infra-remove-all.sh
-Restart=always
-RestartSec=5
-
-[Install]
-WantedBy=machines.target
-
-EOF
-
-info "virtual-gateway.service created"
-
-mkdir -p /etc/systemd/system/cockpit.socket.d
+T=$(mktemp)
 echo '[Socket]
 ListenStream=/data/AppData/share/sockets/cockpit.sock
 ExecStartPost=
 ExecStopPost=
-' > /etc/systemd/system/cockpit.socket.d/virtual-gateway.conf
+' > "$T"
+env SYSTEMD_EDITOR="cp $T" systemctl edit cockpit.socket
 
 systemctl daemon-reload
 systemctl enable virtual-gateway.service

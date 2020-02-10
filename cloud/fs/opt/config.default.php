@@ -1,7 +1,7 @@
 <?php
 
 return array(
-	'logfile' => '/proc/self/fd/2',
+	'logfile' => '/var/log/nextcloud/main.log',
 	'logdateformat' => '',
 	'dbtableprefix' => '',
 	'mysql.utf8mb4' => true,
