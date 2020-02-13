@@ -10,12 +10,13 @@ arg_finish "$@"
 
 ENV_PASS=$(
 	safe_environment \
-		"http_proxy=$PROXY" \
-		"https_proxy=$PROXY"
+		"http_proxy=http://$PROXY" \
+		"https_proxy=http://$PROXY"
 )
 
 create_unit wordpress
 unit_depend $INFRA_DEP mariadb.service
+unit_podman_arguments "$ENV_PASS"
 unit_fs_bind data/wordpress /data
 unit_fs_bind share/nginx /run/nginx
 unit_fs_bind share/sockets /run/sockets

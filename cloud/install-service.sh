@@ -17,6 +17,7 @@ ENV_PASS=$(safe_environment \
 create_unit cloud
 unit_depend $INFRA_DEP mariadb.service
 unit_data danger
+unit_podman_arguments "$ENV_PASS"
 
 unit_fs_bind data/cloud/apps /var/lib/nextcloud/apps
 unit_fs_bind config/cloud /usr/share/webapps/nextcloud/config
