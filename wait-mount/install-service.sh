@@ -18,6 +18,7 @@ Type=oneshot
 ExecStart=/usr/bin/env bash "$SCRIPT"
 Restart=no
 NotifyAccess=all
+RemainAfterExit=yes
 
 [Install]
 WantedBy=machines.target
