@@ -5,6 +5,7 @@ declare -A _S_BODY_CONFIG
 declare -a _S_EXEC_START_PRE
 declare -a _S_EXEC_STOP_POST
 declare -a _S_PODMAN_ARGS
+declare -a _S_COMMAND_LINE
 
 function _unit_init() {
 	_S_IMAGE=
@@ -24,6 +25,7 @@ function _unit_init() {
 	_S_EXEC_START_PRE=()
 	_S_EXEC_STOP_POST=()
 	_S_PODMAN_ARGS=()
+	_S_COMMAND_LINE=()
 	_S_BODY_CONFIG[RestartPreventExitStatus]="125 126 127"
 	_S_BODY_CONFIG[Restart]="always"
 	_S_BODY_CONFIG[RestartSec]="10"
@@ -90,15 +92,21 @@ PIDFile=/run/$NAME.pid"
 	echo "ExecStart=/usr/bin/podman run \\
 	--conmon-pidfile=/run/$NAME.conmon.pid \\
 	--hostname=${_S_HOST:-$NAME} --name=$NAME \\
-	--systemd=false --log-opt=path=/dev/null \\
-	${_S_NETWORK:-$NETWORK_TYPE} \\"
+	--systemd=false --log-opt=path=/dev/null \\"
+	if [[ -n "$_S_NETWORK" ]] ; then
+		echo "${_S_NETWORK} \\"
+	fi
 	for I in "${_S_PODMAN_ARGS[@]}" ; do
 		echo -e "\t$I \\"
 	done
 	for I in "${_S_VOLUME_ARG[@]}" ; do
 		echo -e "\t$I \\"
 	done
-	echo -e "\t--pull=never --rm ${_S_IMAGE:-"gongt/$NAME"}"
+	echo -ne "\t--pull=never --rm ${_S_IMAGE:-"gongt/$NAME"}"
+	for I in "${_S_COMMAND_LINE[@]}" ; do
+		echo -n " '$I'"
+	done
+	echo ""
 
 	if [[ -z "$_S_STOP_CMD" ]] ; then
 		echo "ExecStop=/usr/bin/podman stop -t $_S_KILL_TIMEOUT $NAME"
@@ -189,8 +197,11 @@ function unit_body() {
 		_S_BODY_CONFIG[$K]="$V"
 	fi
 }
-function unit_podman_network() {
+function _unit_podman_network_arg() {
 	_S_NETWORK="$*"
+}
+function unit_podman_network_publish() {
+	_S_NETWORK="$NETWORK_TYPE"
 }
 function unit_podman_arguments() {
 	_S_PODMAN_ARGS=("$@")
@@ -200,6 +211,8 @@ function unit_podman_hostname() {
 }
 function unit_podman_image() {
 	_S_IMAGE=$1
+	shift
+	_S_COMMAND_LINE=("$@")
 }
 function unit_hook_start() {
 	_S_EXEC_START_PRE+=("$*")

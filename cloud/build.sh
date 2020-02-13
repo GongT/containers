@@ -14,7 +14,6 @@ info "install complete..."
 buildah copy "$RESULT" fs /
 info "copy config files complete..."
 
-buildah config --entrypoint '["/bin/sh", "-c"]' --cmd '/sbin/init' --stop-signal=SIGINT "$RESULT"
 buildah config --author "GongT <admin@gongt.me>" --created-by "GongT" --label name=gongt/cloud "$RESULT"
 info "settings updated..."
 

@@ -16,7 +16,6 @@ ENV_PASS=$(
 create_unit mariadb
 unit_podman_hostname mysql
 unit_data danger
-unit_depend $INFRA_DEP
 unit_podman_arguments "$ENV_PASS"
 
 unit_body OOMScoreAdjust -600

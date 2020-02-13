@@ -3,5 +3,9 @@
 	"quicktask.enableShell": true,
 	"files.associations": {
 		"*.conflist": "json"
+	},
+	"files.watcherExclude": {
+		"**/nginx/source/**": true,
+		"**/wordpress/fs/project/**": true
 	}
 }

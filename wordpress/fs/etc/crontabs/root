@@ -1,0 +1,2 @@
+# min   hour    day     month   weekday command
+# */5     *       *       *       *       php -d memory_limit=2G /usr/share/webapps/nextcloud/cron.php

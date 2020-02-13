@@ -15,7 +15,6 @@ buildah run $RESULT apk --no-cache add bash curl wireguard-tools-wg
 buildah copy $RESULT etc /etc
 info "packages installed..."
 
-buildah config --cmd '/sbin/init' "$RESULT"
 buildah config --author "GongT <admin@gongt.me>" --created-by "GongT" --label name=gongt/infra "$RESULT"
 info "settings update..."
 

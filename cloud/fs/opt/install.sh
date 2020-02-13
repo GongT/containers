@@ -27,6 +27,8 @@ file_put_contents('config/config.php',
 
 " | php
 
+cp /opt/auto.config.php config/auto.config.php
+
 touch config/CAN_INSTALL 
 
 # echo "Run maintenance:install ..."

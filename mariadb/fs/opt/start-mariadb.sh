@@ -2,8 +2,6 @@
 
 set -Eeuo pipefail
 
-echo 'nameserver 10.0.0.1' > /etc/resolv.conf
-
 sleep 10 # wait for other processes
 
 if [[ "$(ls /var/lib/mysql | wc -l)" -eq 0 ]]; then

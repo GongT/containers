@@ -8,24 +8,27 @@ mkdir -p "$DST"
 
 ### TODO: 通过安装系统自带的nginx，运行nginx -V看原本的编译参数
 
-cd "/opt/source/luajit2"
+cd "/opt/source/luajit2" && echo "=== install '$(basename "$(pwd)")'..."
 export LUAJIT_LIB=/usr/lib64
 export LUAJIT_INC=/usr/include/luajit-2.1
 make clean
 make MULTILIB=lib64 PREFIX=/usr -j
 make MULTILIB=lib64 PREFIX=/usr "INSTALL_INC=$LUAJIT_INC" "INSTALL_JITLIB=$DST/usr/share/lua/5.1" install
+if ! [[ -e /usr/bin/lua ]]; then
+	ln -s luajit /usr/bin/lua
+fi
 
-cd "/opt/source/resty/lua-resty-core"
+cd "/opt/source/resty/lua-resty-core" && echo "=== install '$(basename "$(pwd)")'..."
 make "DESTDIR=$DST" LUA_LIB_DIR=/usr/share/lua/5.1 PREFIX=/usr install
-cd "/opt/source/resty/lua-resty-lrucache"
+cd "/opt/source/resty/lua-resty-lrucache" && echo "=== install '$(basename "$(pwd)")'..."
 make "DESTDIR=$DST" LUA_LIB_DIR=/usr/share/lua/5.1 PREFIX=/usr install
 
-cd "/opt/source/lua/luaposix"
+cd "/opt/source/lua/luaposix" && echo "=== install '$(basename "$(pwd)")'..."
 # LUA_LIBDIR
-./build-aux/luke "LUA_INCDIR=$LUAJIT_INC" "PREFIX=$DST/usr" LUAVERSION=5.1
-./build-aux/luke "LUA_INCDIR=$LUAJIT_INC" "PREFIX=$DST/usr" LUAVERSION=5.1 install
+./build-aux/luke "LUA_INCDIR=$LUAJIT_INC" "PREFIX=$DST/usr/local" LUAVERSION=5.1
+./build-aux/luke "LUA_INCDIR=$LUAJIT_INC" "PREFIX=$DST/usr/local" LUAVERSION=5.1 install
 
-cd "/opt/source/nginx"
+cd "/opt/source/nginx" && echo "=== install '$(basename "$(pwd)")'..."
 
 export CC_OPT='-O2 -g -pipe -Wall -Werror=format-security -Wp,-D_FORTIFY_SOURCE=2 -Wp,-D_GLIBCXX_ASSERTIONS -fexceptions -fstack-protector-strong -grecord-gcc-switches -m64 -mtune=generic -fasynchronous-unwind-tables -fstack-clash-protection -Wno-error'
 export LD_OPT='-Wl,-z,defs -Wl,-z,now -Wl,-z,relro -Wl,-E'

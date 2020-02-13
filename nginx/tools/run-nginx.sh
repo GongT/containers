@@ -27,8 +27,12 @@ htpasswd -bc "/config/htpasswd" "$USERNAME" "$PASSWORD"
 
 for i in vhost.d stream.d rtmp.d ; do
     if ! [[ -e "/config/$i" ]]; then
-        echo "create $i folder..." >&2
+        echo "create /config/$i folder..." >&2
         mkdir -p "/config/$i"
+    fi
+    if ! [[ -e "/config.auto/$i" ]]; then
+        echo "create /config.auto/$i folder..." >&2
+        mkdir -p "/config.auto/$i"
     fi
 done
 
