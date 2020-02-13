@@ -3,8 +3,6 @@
 set -eu
 cd /usr/share/webapps/nextcloud
 
-echo 'nameserver 10.0.0.1' > /resolv.conf
-
 echo_run() {
 	echo "$*"
 	"$@"
@@ -26,8 +24,6 @@ file_put_contents('config/config.php',
 ');
 
 " | php
-
-cp /opt/auto.config.php config/auto.config.php
 
 touch config/CAN_INSTALL 
 

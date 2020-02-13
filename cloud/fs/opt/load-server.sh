@@ -13,8 +13,8 @@ else
 	echo "Found nextcloud installed."
 fi
 
-chown -R media_rw:users config /var/lib/nextcloud/apps /var/log/nextcloud
+cp -vu /opt/auto.config.php config/auto.config.php
 
-echo 'nameserver 10.0.0.1' > /etc/resolv.conf
+chown -R media_rw:users config /var/lib/nextcloud/apps /var/log/nextcloud
 
 exec /usr/sbin/php-fpm7 --nodaemonize --force-stderr --allow-to-run-as-root

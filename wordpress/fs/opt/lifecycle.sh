@@ -12,12 +12,6 @@ apply_gateway() {
 	echo 'GET /' | nc local:/run/sockets/nginx.reload.sock
 }
 
-# if nslookup z.cn 127.0.0.53 &>/dev/null ; then
-# 	echo 'nameserver 127.0.0.53' > /etc/resolv.conf
-# else
-# 	echo 'nameserver 10.0.0.1' > /etc/resolv.conf
-# fi
-
 apply_gateway bridge
 
 trap 'echo "will shutdown"' INT

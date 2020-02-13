@@ -37,6 +37,8 @@ fastcgi_param REMOTE_PORT $http_x_remote_port;
 fastcgi_param SERVER_ADDR $http_x_server_addr;
 fastcgi_param SERVER_PORT $http_x_server_port;
 fastcgi_param SERVER_NAME $server_name;
+fastcgi_param HTTP_HOST $http_host;
+fastcgi_param HOST $host;
 fastcgi_param HTTP2 $http_x_h2;
 fastcgi_param HTTPS on;
 fastcgi_hide_header X-H2;

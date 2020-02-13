@@ -18,12 +18,6 @@ trap 'echo "got SIGINT"' INT
 
 echo "starting...."
 
-if nslookup z.cn 127.0.0.53 &>/dev/null ; then
-	echo 'nameserver 127.0.0.53' > /etc/resolv.conf
-else
-	echo 'nameserver 10.0.0.1' > /etc/resolv.conf
-fi
-
 if ! [ -e /etc/hexo/config.yml ]; then
 	echo " >> create /etc/hexo"
 	mkdir -p /etc/hexo
