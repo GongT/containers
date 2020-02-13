@@ -202,6 +202,7 @@ function _unit_podman_network_arg() {
 }
 function unit_podman_network_publish() {
 	_S_NETWORK="$NETWORK_TYPE"
+	unit_depend $INFRA_DEP
 }
 function unit_podman_arguments() {
 	_S_PODMAN_ARGS=("$@")

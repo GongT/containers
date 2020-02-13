@@ -12,15 +12,27 @@ apply_gateway() {
 	echo 'GET /' | nc local:/run/sockets/nginx.reload.sock
 }
 
-if nslookup z.cn 127.0.0.53 &>/dev/null ; then
-	echo 'nameserver 127.0.0.53' > /etc/resolv.conf
-else
-	echo 'nameserver 10.0.0.1' > /etc/resolv.conf
-fi
+# if nslookup z.cn 127.0.0.53 &>/dev/null ; then
+# 	echo 'nameserver 127.0.0.53' > /etc/resolv.conf
+# else
+# 	echo 'nameserver 10.0.0.1' > /etc/resolv.conf
+# fi
 
 apply_gateway bridge
 
 trap 'echo "will shutdown"' INT
+
+if ! [ -e /data/config/salt.php ] ; then
+	mkdir -p /data/config
+	sleep 3 # wait network
+	echo '<?php
+$salt = file_get_contents("https://api.wordpress.org/secret-key/1.1/salt/");
+echo("---------------------------\n");
+echo($salt);
+echo("---------------------------\n");
+file_put_contents("/data/config/salt.php", "<?php\n".$salt);
+' | php
+fi
 
 echo "sleep."
 sleep infinity &
@@ -30,6 +42,6 @@ echo "wakeup."
 
 rm -vf /run/sockets/word-press.sock
 
-apply_gateway
+apply_gateway down
 
 echo "byebye."

@@ -20,7 +20,7 @@ ENV_PASS=$(
 
 create_unit nginx
 unit_unit Description nginx - high performance web server
-unit_depend $INFRA_DEP
+unit_podman_network_publish
 unit_podman_arguments "$ENV_PASS"
 unit_fs_bind config/nginx /config
 unit_fs_bind logs/nginx /var/log/nginx
