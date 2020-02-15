@@ -7,7 +7,6 @@ source ../common/functions-install.sh
 
 create_unit hexo
 unit_podman_image gongt/hexo
-unit_depend $INFRA_DEP mariadb.service
 unit_fs_bind data/hexo/source /data/source
 unit_fs_bind data/hexo/images /data/images
 unit_fs_bind share/nginx /run/nginx

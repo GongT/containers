@@ -24,7 +24,6 @@ ENV_PASS=$(
 
 create_unit certbot-dns
 unit_podman_hostname certbot
-unit_depend $INFRA_DEP
 unit_podman_arguments "$ENV_PASS"
 unit_body Environment FROM_SERVICE=yes
 unit_fs_bind share/letsencrypt /etc/letsencrypt

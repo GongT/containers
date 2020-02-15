@@ -14,7 +14,6 @@ create_unit powerdns
 unit_podman_hostname homedns
 unit_podman_network_publish
 unit_unit Description home dns server
-unit_depend $INFRA_DEP
 unit_fs_tempfs 1M /run
 unit_fs_tempfs 50M /tmp
 unit_fs_bind share/sockets /run/sockets

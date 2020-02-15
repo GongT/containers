@@ -12,7 +12,7 @@ RESULT=$(create_if_not infra-result gongt/alpine-init:cn)
 info "init compile..."
 
 buildah run $RESULT apk --no-cache add bash curl wireguard-tools-wg
-buildah copy $RESULT etc /etc
+buildah copy $RESULT fs /
 info "packages installed..."
 
 buildah config --author "GongT <admin@gongt.me>" --created-by "GongT" --label name=gongt/infra "$RESULT"

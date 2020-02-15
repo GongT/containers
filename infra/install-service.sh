@@ -26,7 +26,8 @@ create_unit virtual-gateway
 unit_unit Description virtual machine gateway
 unit_depend network-online.target
 unit_unit WantedBy machines.target
-unit_body ExecStop "/usr/bin/env bash $STOP_SCRIPT"
+unit_hook_stop "-/usr/bin/env bash $STOP_SCRIPT"
+unit_hook_start "-/usr/bin/env bash $STOP_SCRIPT"
 _unit_podman_network_arg --network=bridge0 --mac-address=86:13:02:8F:76:2A --dns=none
 unit_podman_arguments --cap-add=NET_ADMIN $(safe_environment \
 	"DSNS_KEY=${DSNS_KEY}" \

@@ -15,7 +15,7 @@ ENV_PASS=$(safe_environment \
 )
 
 create_unit cloud
-unit_depend $INFRA_DEP mariadb.service
+unit_depend mariadb.service
 unit_data danger
 unit_podman_arguments "$ENV_PASS"
 

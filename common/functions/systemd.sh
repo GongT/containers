@@ -16,7 +16,7 @@ function _unit_init() {
 	_S_INSTALL=machines.target
 	_S_NETWORK=
 	_S_EXEC_RELOAD=
-	
+
 	_S_CURRENT_UNIT=
 	_S_PREP_FOLDER=()
 	_S_VOLUME_ARG=()
@@ -43,7 +43,7 @@ function unit_finish() {
 	if [[ -z "$UN" ]]; then
 		die "create_unit first."
 	fi
-	_unit_assemble > "/usr/lib/systemd/system/$UN"
+	_unit_assemble >"/usr/lib/systemd/system/$UN"
 	if [[ "${SYSTEMD_RELOAD-yes}" == "yes" ]]; then
 		systemctl daemon-reload
 	fi
@@ -54,22 +54,22 @@ function unit_finish() {
 function _unit_assemble() {
 	local I
 	echo "[Unit]"
-	
+
 	if [[ "${#_S_PREP_FOLDER}" -gt 0 ]] && ! [[ "$_S_REQUIRE_INFRA" == "yes" ]]; then
 		unit_depend wait-mount.service
 	fi
-	
-	for VAR_NAME in "${!_S_UNIT_CONFIG[@]}" ; do
+
+	for VAR_NAME in "${!_S_UNIT_CONFIG[@]}"; do
 		echo "$VAR_NAME=${_S_UNIT_CONFIG[$VAR_NAME]}"
 	done
-	
+
 	local EXT="${_S_CURRENT_UNIT##*.}"
 	local NAME="${_S_CURRENT_UNIT%%.*}"
 	echo ""
 	echo "[${EXT^}]
 Type=simple
 PIDFile=/run/$NAME.pid"
-	if [[ -z "$_S_STOP_CMD" ]] ; then
+	if [[ -z "$_S_STOP_CMD" ]]; then
 		echo "ExecStartPre=-/usr/bin/podman stop -t $_S_KILL_TIMEOUT $NAME"
 	else
 		echo "ExecStartPre=-$_S_STOP_CMD"
@@ -77,54 +77,58 @@ PIDFile=/run/$NAME.pid"
 	if [[ "$_S_KILL_FORCE" == "yes" ]]; then
 		echo "ExecStartPre=-/usr/bin/podman rm --ignore --force $NAME"
 	fi
-	for I in "${_S_EXEC_START_PRE[@]}" ; do
-		echo -n "ExecStartPre=$I"
-	done
-	
+
+	if [[ "${#_S_EXEC_START_PRE}" -gt 0 ]]; then
+		for I in "${_S_EXEC_START_PRE[@]}"; do
+			echo -n "ExecStartPre=$I"
+		done
+		echo ''
+	fi
+
 	if [[ "${#_S_PREP_FOLDER}" -gt 0 ]]; then
 		echo -n "ExecStartPre=/usr/bin/mkdir -p"
-		for I in "${_S_PREP_FOLDER[@]}" ; do
+		for I in "${_S_PREP_FOLDER[@]}"; do
 			echo -n " '$I'"
 		done
 		echo ''
 	fi
-	
+
 	echo "ExecStart=/usr/bin/podman run \\
 	--conmon-pidfile=/run/$NAME.conmon.pid \\
 	--hostname=${_S_HOST:-$NAME} --name=$NAME \\
 	--systemd=false --log-opt=path=/dev/null \\"
-	if [[ -n "$_S_NETWORK" ]] ; then
+	if [[ -n "$_S_NETWORK" ]]; then
 		echo "${_S_NETWORK} \\"
 	fi
-	for I in "${_S_PODMAN_ARGS[@]}" ; do
+	for I in "${_S_PODMAN_ARGS[@]}"; do
 		echo -e "\t$I \\"
 	done
-	for I in "${_S_VOLUME_ARG[@]}" ; do
+	for I in "${_S_VOLUME_ARG[@]}"; do
 		echo -e "\t$I \\"
 	done
 	echo -ne "\t--pull=never --rm ${_S_IMAGE:-"gongt/$NAME"}"
-	for I in "${_S_COMMAND_LINE[@]}" ; do
+	for I in "${_S_COMMAND_LINE[@]}"; do
 		echo -n " '$I'"
 	done
 	echo ""
 
-	if [[ -z "$_S_STOP_CMD" ]] ; then
+	if [[ -z "$_S_STOP_CMD" ]]; then
 		echo "ExecStop=/usr/bin/podman stop -t $_S_KILL_TIMEOUT $NAME"
 	else
 		echo "ExecStop=$_S_STOP_CMD"
 	fi
-	for I in "${_S_EXEC_STOP_POST[@]}" ; do
+	for I in "${_S_EXEC_STOP_POST[@]}"; do
 		echo "ExecStopPost=$I"
 	done
 
-	if [[ -n "$_S_EXEC_RELOAD" ]] ; then
+	if [[ -n "$_S_EXEC_RELOAD" ]]; then
 		echo "ExecReload=$_S_EXEC_RELOAD"
 	fi
-	
-	for VAR_NAME in "${!_S_BODY_CONFIG[@]}" ; do
+
+	for VAR_NAME in "${!_S_BODY_CONFIG[@]}"; do
 		echo "$VAR_NAME=${_S_BODY_CONFIG[$VAR_NAME]}"
 	done
-	
+
 	echo ""
 	echo "[Install]"
 	echo "WantedBy=$_S_INSTALL"
@@ -152,13 +156,13 @@ function unit_fs_tempfs() {
 }
 function unit_fs_bind() {
 	local FROM="$1" TO="$2" OPTIONS=":noexec,nodev,nosuid"
-	if [[ "${3+'set'}" == 'set' ]] ; then
+	if [[ "${3+'set'}" == 'set' ]]; then
 		RO=":$3"
 	fi
-	if [[ "${FROM:0:1}" != "/" ]] ; then
+	if [[ "${FROM:0:1}" != "/" ]]; then
 		FROM="/data/AppData/$FROM"
 	fi
-	
+
 	_S_PREP_FOLDER+=("$FROM")
 	_S_VOLUME_ARG+=("'--volume=$FROM:$TO$OPTIONS'")
 }
@@ -168,7 +172,7 @@ function unit_depend() {
 		unit_unit After "$*"
 		unit_unit Requires "$*"
 
-		if echo "$*" | grep -q -- "virtual-gateway.service" ; then
+		if echo "$*" | grep -q -- "virtual-gateway.service"; then
 			_S_REQUIRE_INFRA=yes
 		fi
 	fi
@@ -177,9 +181,9 @@ function unit_unit() {
 	local K=$1
 	shift
 	local V="$*"
-	if echo "$K" | grep -qE '^(Before|After|Requires|Wants)$' ; then
+	if echo "$K" | grep -qE '^(Before|After|Requires|Wants)$'; then
 		_S_UNIT_CONFIG[$K]+=" $V"
-	elif echo "$K" | grep -qE '^(WantedBy)$' ; then
+	elif echo "$K" | grep -qE '^(WantedBy)$'; then
 		_S_INSTALL="$V"
 	else
 		_S_UNIT_CONFIG[$K]="$V"
@@ -189,9 +193,9 @@ function unit_body() {
 	local K="$1"
 	shift
 	local V="$*"
-	if echo "$K" | grep -qE '^(RestartPreventExitStatus)$' ; then
+	if echo "$K" | grep -qE '^(RestartPreventExitStatus)$'; then
 		_S_BODY_CONFIG[$K]+=" $V"
-	elif echo "$K" | grep -qE '^(ExecStop)$' ; then
+	elif echo "$K" | grep -qE '^(ExecStop)$'; then
 		_S_STOP_CMD="$V"
 	else
 		_S_BODY_CONFIG[$K]="$V"
