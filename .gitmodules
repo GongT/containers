@@ -1,6 +1,6 @@
 [submodule "common"]
 	path = common
-	url = git@github.com:GongT/contaners-builder.git
+	url = git@github.com:GongT/containers-builder.git
 [submodule "powerdns/powerdns-webui"]
 	path = powerdns/powerdns-webui
 	url = https://github.com/james-stevens/powerdns-webui.git
