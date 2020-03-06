@@ -1,95 +1,69 @@
-[submodule "nginx/source/nginx"]
-	path = nginx/source/nginx
-	url = git@github.com:nginx/nginx.git
-	
-[submodule "nginx/source/modules/echo-nginx-module"]
-	path = nginx/source/modules/echo-nginx-module
-	url = git@github.com:openresty/echo-nginx-module.git
-	
-[submodule "nginx/source/modules/headers-more-nginx-module"]
-	path = nginx/source/modules/headers-more-nginx-module
-	url = git@github.com:openresty/headers-more-nginx-module.git
-	
-[submodule "nginx/source/modules/ngx_cache_purge"]
-	path = nginx/source/modules/ngx_cache_purge
-	url = git@github.com:FRiCKLE/ngx_cache_purge.git
-	
-[submodule "nginx/source/modules/memc-nginx-module"]
-	path = nginx/source/modules/memc-nginx-module
-	url = git@github.com:openresty/memc-nginx-module.git
-	
-[submodule "nginx/source/modules/ngx_devel_kit"]
-	path = nginx/source/modules/ngx_devel_kit
-	url = git@github.com:simplresty/ngx_devel_kit.git
-	
-[submodule "nginx/source/modules/nginx_cookie_flag_module"]
-	path = nginx/source/modules/nginx_cookie_flag_module
-	url = git@github.com:AirisX/nginx_cookie_flag_module.git
-	
-[submodule "nginx/source/modules/ngx_brotli"]
-	path = nginx/source/modules/ngx_brotli
-	url = git@github.com:google/ngx_brotli.git
-	
-[submodule "nginx/source/modules/nginx_accept_language_module"]
-	path = nginx/source/modules/nginx_accept_language_module
-	url = git@github.com:giom/nginx_accept_language_module.git
-	
-[submodule "nginx/source/modules/ngx-fancyindex"]
-	path = nginx/source/modules/ngx-fancyindex
-	url = git@github.com:aperezdc/ngx-fancyindex.git
-	
-[submodule "nginx/source/modules/traffic-accounting-nginx-module"]
-	path = nginx/source/modules/traffic-accounting-nginx-module
-	url = git@github.com:Lax/traffic-accounting-nginx-module.git
-	
-[submodule "nginx/source/modules/ngx_log_if"]
-	path = nginx/source/modules/ngx_log_if
-	url = git@github.com:cfsego/ngx_log_if.git
-	
-[submodule "nginx/source/modules/nchan"]
-	path = nginx/source/modules/nchan
-	url = git@github.com:slact/nchan.git
-	
-[submodule "nginx/source/modules/ngx_http_geoip2_module"]
-	path = nginx/source/modules/ngx_http_geoip2_module
-	url = git@github.com:leev/ngx_http_geoip2_module.git
-	
-[submodule "powerdns/powerdns-webui"]
-	path = powerdns/powerdns-webui
-	url = git@github.com:james-stevens/powerdns-webui.git
-	
-[submodule "nginx/source/modules/njs"]
-	path = nginx/source/modules/njs
-	url = git@github.com:nginx/njs.git
-
-[submodule "nginx/source/special-modules/njs"]
-	path = nginx/source/special-modules/njs
-	url = git@github.com:nginx/njs.git
-	
-[submodule "nginx/source/modules/lua-nginx-module"]
-	path = nginx/source/modules/lua-nginx-module
-	url = git@github.com:openresty/lua-nginx-module.git
-	
-[submodule "nginx/source/luajit2"]
-	path = nginx/source/luajit2
-	url = git@github.com:openresty/luajit2.git
-
-[submodule "nginx/source/resty/lua-resty-lrucache"]
-	path = nginx/source/resty/lua-resty-lrucache
-	url = git@github.com:openresty/lua-resty-lrucache.git
-
-[submodule "nginx/source/resty/lua-resty-core"]
-	path = nginx/source/resty/lua-resty-core
-	url = git@github.com:openresty/lua-resty-core.git
-
-[submodule "nginx/source/lua/luaposix"]
-	path = nginx/source/lua/luaposix
-	url = git@github.com:luaposix/luaposix.git
-
-[submodule "certbot-dns/opt/acme.sh"]
-	path = certbot-dns/opt/acme.sh
-	url = git@github.com:Neilpang/acme.sh.git
-	
 [submodule "common"]
 	path = common
 	url = git@github.com:GongT/contaners-builder.git
+[submodule "powerdns/powerdns-webui"]
+	path = powerdns/powerdns-webui
+	url = https://github.com/james-stevens/powerdns-webui.git
+[submodule "certbot-dns/opt/acme.sh"]
+	path = certbot-dns/opt/acme.sh
+	url = https://github.com/Neilpang/acme.sh.git
+[submodule "nginx/source/nginx"]
+	path = nginx/source/nginx
+	url = https://github.com/nginx/nginx.git
+[submodule "nginx/source/modules/echo-nginx-module"]
+	path = nginx/source/modules/echo-nginx-module
+	url = https://github.com/openresty/echo-nginx-module.git
+[submodule "nginx/source/modules/headers-more-nginx-module"]
+	path = nginx/source/modules/headers-more-nginx-module
+	url = https://github.com/openresty/headers-more-nginx-module.git
+[submodule "nginx/source/modules/ngx_cache_purge"]
+	path = nginx/source/modules/ngx_cache_purge
+	url = https://github.com/FRiCKLE/ngx_cache_purge.git
+[submodule "nginx/source/modules/memc-nginx-module"]
+	path = nginx/source/modules/memc-nginx-module
+	url = https://github.com/openresty/memc-nginx-module.git
+[submodule "nginx/source/modules/ngx_devel_kit"]
+	path = nginx/source/modules/ngx_devel_kit
+	url = https://github.com/simplresty/ngx_devel_kit.git
+[submodule "nginx/source/modules/nginx_cookie_flag_module"]
+	path = nginx/source/modules/nginx_cookie_flag_module
+	url = https://github.com/AirisX/nginx_cookie_flag_module.git
+[submodule "nginx/source/modules/ngx_brotli"]
+	path = nginx/source/modules/ngx_brotli
+	url = https://github.com/google/ngx_brotli.git
+[submodule "nginx/source/modules/nginx_accept_language_module"]
+	path = nginx/source/modules/nginx_accept_language_module
+	url = https://github.com/giom/nginx_accept_language_module.git
+[submodule "nginx/source/modules/ngx-fancyindex"]
+	path = nginx/source/modules/ngx-fancyindex
+	url = https://github.com/aperezdc/ngx-fancyindex.git
+[submodule "nginx/source/modules/traffic-accounting-nginx-module"]
+	path = nginx/source/modules/traffic-accounting-nginx-module
+	url = https://github.com/Lax/traffic-accounting-nginx-module.git
+[submodule "nginx/source/modules/ngx_log_if"]
+	path = nginx/source/modules/ngx_log_if
+	url = https://github.com/cfsego/ngx_log_if.git
+[submodule "nginx/source/modules/nchan"]
+	path = nginx/source/modules/nchan
+	url = https://github.com/slact/nchan.git
+[submodule "nginx/source/modules/ngx_http_geoip2_module"]
+	path = nginx/source/modules/ngx_http_geoip2_module
+	url = https://github.com/leev/ngx_http_geoip2_module.git
+[submodule "nginx/source/special-modules/njs"]
+	path = nginx/source/special-modules/njs
+	url = https://github.com/nginx/njs.git
+[submodule "nginx/source/modules/lua-nginx-module"]
+	path = nginx/source/modules/lua-nginx-module
+	url = https://github.com/openresty/lua-nginx-module.git
+[submodule "nginx/source/luajit2"]
+	path = nginx/source/luajit2
+	url = https://github.com/openresty/luajit2.git
+[submodule "nginx/source/resty/lua-resty-lrucache"]
+	path = nginx/source/resty/lua-resty-lrucache
+	url = https://github.com/openresty/lua-resty-lrucache.git
+[submodule "nginx/source/resty/lua-resty-core"]
+	path = nginx/source/resty/lua-resty-core
+	url = https://github.com/openresty/lua-resty-core.git
+[submodule "nginx/source/lua/luaposix"]
+	path = nginx/source/lua/luaposix
+	url = https://github.com/luaposix/luaposix.git
