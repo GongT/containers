@@ -36,6 +36,9 @@ chmod a+x "$RESULT_MNT/usr/sbin/nginx.sh"
 info "built content moved..."
 
 cp -r config/. -t "$RESULT_MNT/etc/nginx"
+for D in /config /var/log/nginx /run /tmp /config.auto /etc/letsencrypt /run/sockets ; do
+	mkdir -p "${RESULT_MNT}${D}"
+done
 info "config files created..."
 
 buildah umount "$BUILDER" "$RESULT"
