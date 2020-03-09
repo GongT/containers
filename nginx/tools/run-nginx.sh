@@ -2,6 +2,10 @@
 
 set -Eeuo pipefail
 
+echo "resolv.conf===================="
+echo "$(</etc/resolv.conf)"
+echo "==============================="
+
 if ! [[ -e "/etc/letsencrypt/nginx/load.conf" ]]; then
     mkdir -p /etc/letsencrypt/nginx
     echo > "/etc/letsencrypt/nginx/load.conf"

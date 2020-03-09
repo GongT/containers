@@ -134,6 +134,9 @@ copy_binary /usr/bin/htpasswd
 copy_binary /bin/bash
 copy_binary /bin/mkdir
 copy_binary /usr/bin/sed
+copy_binary /usr/bin/curl
+copy_binary /usr/bin/ls
+copy_binary /usr/bin/cat
 
 for i in /lib64/libnss_{compat*,dns*,files*,myhostname*,resolve*} ; do
 	cp -uv "$i" "$DST/$i"
@@ -142,7 +145,7 @@ done
 mkdir -p "$DST/bin" "$DST/usr/bin"
 
 cp /bin/bash /bin/mkdir /bin/rm "$DST/bin"
-cp /usr/bin/htpasswd /usr/bin/sed "$DST/usr/bin"
+cp /usr/bin/htpasswd /usr/bin/sed /usr/bin/curl /usr/bin/ls /usr/bin/cat "$DST/usr/bin"
 
 mkdir -p "$DST/etc"
 echo "nameserver 8.8.8.8
