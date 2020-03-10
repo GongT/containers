@@ -7,9 +7,9 @@ source ../common/functions-install.sh
 
 arg_string + USERNAME u/user "basic auth username (*)"
 arg_string + PASSWORD p/pass "basic auth password (*)"
+arg_string   PUBLISH  publish "additional publishing ports"
 arg_flag     CENSORSHIP censorship "is http/s port unavailable"
 arg_finish "$@"
-
 
 ENV_PASS=$(
 	safe_environment \
@@ -18,9 +18,17 @@ ENV_PASS=$(
 		"CENSORSHIP=$CENSORSHIP"
 )
 
+PUBPORTS=(80 443)
+if [[ "$CENSORSHIP" == yes ]]; then
+	PUBPORTS+=(59080 59443)
+fi
+if [[ -n "$PUBLISH" ]]; then
+	PUBPORTS+=(${PUBLISH})
+fi
+
 create_unit nginx
 unit_unit Description nginx - high performance web server
-unit_podman_network_publish
+network_use_auto "${PUBPORTS[@]}"
 unit_podman_arguments "$ENV_PASS"
 unit_fs_bind config/nginx /config
 unit_fs_bind logs/nginx /var/log/nginx

@@ -12,7 +12,6 @@ PUBPORT=${_PUBPORT:-53}
 
 create_unit powerdns
 unit_podman_hostname homedns
-unit_podman_network_publish
 unit_unit Description home dns server
 unit_fs_tempfs 1M /run
 unit_fs_tempfs 50M /tmp
