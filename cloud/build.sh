@@ -6,7 +6,7 @@ cd "$(dirname "$(realpath "${BASH_SOURCE[0]}")")"
 source ../common/functions-build.sh
 
 info "starting..."
-RESULT=$(create_if_not cloud-worker gongt/alpine-init:cn)
+RESULT=$(create_if_not cloud-worker gongt/alpine-init:latest-cn)
 
 cat scripts/build-script.sh | buildah run "$RESULT" sh
 info "install complete..."
@@ -19,4 +19,3 @@ info "settings updated..."
 
 buildah commit "$RESULT" gongt/cloud
 info "Done!"
-

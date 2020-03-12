@@ -2,7 +2,7 @@
 
 set -Eeuo pipefail
 
-sleep 10 # wait for other processes
+sleep 2 # wait for other processes
 shopt -s dotglob
 
 if [[ "$(ls /var/lib/mysql | wc -l)" -eq 0 ]]; then
@@ -13,7 +13,10 @@ if [[ "$(ls /var/lib/mysql | wc -l)" -eq 0 ]]; then
 	echo " * start temp server"
 	rm -f /var/log/mysqld.err
 	ln -sf /dev/stderr /var/log/mysqld.err
-	/usr/bin/mariadbd-safe --user=root --skip-name-resolve --socket /tmp/install.sock --datadir /var/lib/mysql-temp &
+	/usr/bin/mysqld --basedir=/usr --datadir=/var/lib/mysql-temp \
+		--plugin-dir=/usr/lib/mariadb/plugin --user=root \
+		--skip-name-resolve --socket /tmp/install.sock \
+		--log-error=/var/log/mysqld.err &
 	sleep 5
 
 	echo " * change password"
@@ -28,7 +31,7 @@ if [[ "$(ls /var/lib/mysql | wc -l)" -eq 0 ]]; then
 	echo "Complete init database."
 fi
 
-trap "echo 'GOT SIGUSR1, MARIADB SERVER WILL SHUTDOWN.' ; bash /opt/stop-mariadb.sh" USR1
+trap "echo 'GOT SIGUSR1, MARIADB SERVER WILL SHUTDOWN.' ; bash /opt/stop-mariadb.sh" USR1 INT
 
 echo "
 \$cfg['ProxyUrl'] = '$PROXY';
@@ -38,6 +41,7 @@ echo "
 rm -f /run/sockets/mariadb.sock
 /usr/bin/mariadbd --user=root --skip-name-resolve --socket /run/sockets/mariadb.sock &
 W=$!
+echo "Mariadb is running... PID=$W"
 
 set +e
 while true ; do

@@ -22,6 +22,7 @@ unit_body OOMScoreAdjust -600
 unit_body Environment "TZ=Asia/Shanghai"
 unit_body LimitNOFILE 16364
 
+unit_podman_arguments --privileged
 unit_fs_bind logs/mariadb /var/log/mariadb
 unit_fs_tempfs 512M /tmp
 unit_fs_bind data/mariadb /var/lib/mysql

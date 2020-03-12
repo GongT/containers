@@ -6,7 +6,7 @@ cd "$(dirname "$(realpath "${BASH_SOURCE[0]}")")"
 source ../common/functions-build.sh
 
 info "starting..."
-RESULT=$(create_if_not wordpress-worker gongt/alpine-init:cn)
+RESULT=$(create_if_not wordpress-worker gongt/alpine-init:latest-cn)
 
 buildah copy "$RESULT" fs /
 info "copy files complete..."
@@ -19,4 +19,3 @@ info "settings updated..."
 
 buildah commit "$RESULT" gongt/wordpress
 info "Done!"
-
