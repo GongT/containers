@@ -43,15 +43,9 @@ for i in vhost.d stream.d rtmp.d ; do
     fi
 done
 
-echo "[***] running nginx." >&2
+cat /usr/sbin/reload-nginx.sh > /run/sockets/nginx.reload.sh
 
-echo "#!/bin/sh
-echo '======================================' >&2
-echo 'try reload nginx...'
-curl -v --unix-socket /run/sockets/nginx.reload.sock http://_/ >&2
-echo '======================================' >&2
-" > /run/sockets/nginx.reload.sh
-chmod a+x /run/sockets/nginx.reload.sh
+echo "[***] running nginx." >&2
 
 rm -f /run/sockets/nginx.reload.sock
 exec /usr/sbin/nginx

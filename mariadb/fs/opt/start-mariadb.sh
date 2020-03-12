@@ -3,6 +3,7 @@
 set -Eeuo pipefail
 
 sleep 10 # wait for other processes
+shopt -s dotglob
 
 if [[ "$(ls /var/lib/mysql | wc -l)" -eq 0 ]]; then
 	RAND_PASS=$(echo $RANDOM | md5sum | awk '{print $1}')
@@ -17,8 +18,8 @@ if [[ "$(ls /var/lib/mysql | wc -l)" -eq 0 ]]; then
 
 	echo " * change password"
 	mariadb-admin --socket /tmp/install.sock password "$RAND_PASS"
-	echo -n "$RAND_PASS" > /var/lib/mysql/.password
-	chmod 0600 /var/lib/mysql/.password
+	echo -n "$RAND_PASS" > /var/lib/mysql-temp/.password
+	chmod 0600 /var/lib/mysql-temp/.password
 
 	echo " * shutdown temp server"
 	mariadb-admin --socket /tmp/install.sock -p"$RAND_PASS" shutdown

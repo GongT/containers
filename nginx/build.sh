@@ -32,7 +32,8 @@ info "result image prepared..."
 
 cp -r "$BUILDER_MNT/opt/dist/." "$RESULT_MNT"
 cp    "tools/run-nginx.sh" "$RESULT_MNT/usr/sbin/nginx.sh"
-chmod a+x "$RESULT_MNT/usr/sbin/nginx.sh"
+cp    "tools/reload-nginx.sh" "$RESULT_MNT/usr/sbin/reload-nginx.sh"
+chmod a+x "$RESULT_MNT/usr/sbin/nginx.sh" "$RESULT_MNT/usr/sbin/reload-nginx.sh"
 info "built content moved..."
 
 cp -r config/. -t "$RESULT_MNT/etc/nginx"
