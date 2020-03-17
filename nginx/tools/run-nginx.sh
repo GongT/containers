@@ -44,8 +44,16 @@ for i in vhost.d stream.d rtmp.d ; do
 done
 
 cat /usr/sbin/reload-nginx.sh > /run/sockets/nginx.reload.sh
+rm -f /run/sockets/nginx.reload.sock
+
+/usr/sbin/nginx -t || {
+	echo "===================================="
+	echo "!! Failed test nginx config files !!"
+	echo "===================================="
+	exit 127
+}
+
+sleep 1
 
 echo "[***] running nginx." >&2
-
-rm -f /run/sockets/nginx.reload.sock
 exec /usr/sbin/nginx
