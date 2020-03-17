@@ -22,11 +22,11 @@ ENV_PASS=$(
 )
 
 
-create_unit certbot-dns
+create_unit gongt/certbot-dns
+unit_podman_image gongt/certbot
 unit_podman_hostname certbot
 unit_podman_arguments "$ENV_PASS"
 unit_body Environment FROM_SERVICE=yes
 unit_fs_bind share/letsencrypt /etc/letsencrypt
 unit_fs_bind share/sockets /run/sockets
-unit_podman_image gongt/certbot
 unit_finish

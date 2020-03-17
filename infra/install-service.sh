@@ -22,7 +22,8 @@ fi
 
 STOP_SCRIPT=$(install_script infra-remove-all.sh)
 
-create_unit virtual-gateway
+create_unit gongt/virtual-gateway
+unit_podman_image gongt/infra
 unit_unit Description virtual machine gateway
 unit_depend network-online.target
 unit_unit WantedBy machines.target
@@ -34,7 +35,6 @@ unit_podman_arguments --cap-add=NET_ADMIN $(safe_environment \
 	"DDNS_HOST=${DDNS_HOST}"
 )
 unit_fs_bind $VOL /storage
-unit_podman_image gongt/infra
 unit_finish
 
 T=$(mktemp)

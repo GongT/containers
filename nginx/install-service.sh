@@ -26,7 +26,7 @@ if [[ -n "$PUBLISH" ]]; then
 	PUBPORTS+=(${PUBLISH})
 fi
 
-create_unit nginx
+create_unit gongt/nginx
 unit_unit Description nginx - high performance web server
 network_use_auto "${PUBPORTS[@]}"
 unit_podman_arguments "$ENV_PASS"

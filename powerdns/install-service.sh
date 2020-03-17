@@ -10,7 +10,7 @@ arg_finish "$@"
 
 PUBPORT=${_PUBPORT:-53}
 
-create_unit powerdns
+create_unit gongt/powerdns
 unit_podman_hostname homedns
 unit_unit Description home dns server
 unit_fs_tempfs 1M /run
