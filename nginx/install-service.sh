@@ -37,5 +37,5 @@ unit_fs_tempfs 512M /tmp
 unit_fs_bind share/nginx /config.auto
 unit_fs_bind share/letsencrypt /etc/letsencrypt
 unit_fs_bind share/sockets /run/sockets
-unit_reload_command '/usr/bin/podman exec nginx nginx -s reload'
+unit_reload_command '/usr/bin/podman exec nginx bash -c "nginx -t && nginx -s reload"'
 unit_finish

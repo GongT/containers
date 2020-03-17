@@ -1,0 +1,15 @@
+#!/bin/bash
+
+if nginx -t &>/dev/null ; then
+	echo "========================="
+	echo "== config test success =="
+	echo "========================="
+	nginx -s reload
+else
+	echo "========================"
+	echo "== config test FAILED =="
+	echo "========================"
+	nginx -t
+fi
+
+true
