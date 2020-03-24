@@ -5,6 +5,22 @@ set -Eeuo pipefail
 sleep 2 # wait for other processes
 shopt -s dotglob
 
+function write_password_cfg() {
+	echo " * write password config"
+	local PWD_FILE="$1"
+	if ! [[ -f "$PWD_FILE" ]]; then
+		echo "Fatal: no .password file, maybe external data dir, you need create it." >&2
+		exit 233
+	fi
+	echo "[client]
+	password = $(<"$PWD_FILE")
+" >/etc/my.cnf.d/98-password.cnf
+	echo "
+\$cfg['ProxyUrl'] = '$PROXY';
+\$cfg['Servers'][\$i]['password'] = '$(<"$PWD_FILE")';
+" >>/etc/phpmyadmin/config.inc.php
+}
+
 if [[ "$(ls /var/lib/mysql | wc -l)" -eq 0 ]]; then
 	RAND_PASS=$(echo $RANDOM | md5sum | awk '{print $1}')
 	echo "Database did not exists!"
@@ -13,30 +29,37 @@ if [[ "$(ls /var/lib/mysql | wc -l)" -eq 0 ]]; then
 	echo " * start temp server"
 	rm -f /var/log/mysqld.err
 	ln -sf /dev/stderr /var/log/mysqld.err
+	echo -e "[mysqld]\ndatadir = /var/lib/mysql-temp" >/etc/my.cnf.d/99-data-dir-temp.cnf
 	/usr/bin/mysqld --basedir=/usr --datadir=/var/lib/mysql-temp \
 		--plugin-dir=/usr/lib/mariadb/plugin --user=root \
 		--skip-name-resolve --socket /tmp/install.sock \
 		--log-error=/var/log/mysqld.err &
 	sleep 5
+	rm -f /etc/my.cnf.d/99-data-dir-temp.cnf
 
 	echo " * change password"
 	mariadb-admin --socket /tmp/install.sock password "$RAND_PASS"
-	echo -n "$RAND_PASS" > /var/lib/mysql-temp/.password
+	echo -n "$RAND_PASS" >/var/lib/mysql-temp/.password
 	chmod 0600 /var/lib/mysql-temp/.password
+
+	write_password_cfg /var/lib/mysql-temp/.password
+	echo " *     phpmyadmin database init"
+	{
+		cat /usr/share/webapps/phpmyadmin/sql/create_tables.sql
+		cat /opt/init.sql
+	} | mysql --socket /tmp/install.sock
+	echo "           -> ok"
 
 	echo " * shutdown temp server"
 	mariadb-admin --socket /tmp/install.sock -p"$RAND_PASS" shutdown
 	echo " * move data files"
 	mv /var/lib/mysql-temp/* /var/lib/mysql/
 	echo "Complete init database."
+else
+	write_password_cfg /var/lib/mysql/.password
 fi
 
 trap "echo 'GOT SIGUSR1, MARIADB SERVER WILL SHUTDOWN.' ; bash /opt/stop-mariadb.sh" USR1 INT
-
-echo "
-\$cfg['ProxyUrl'] = '$PROXY';
-\$cfg['Servers'][\$i]['password'] = '$(</var/lib/mysql/.password)';
-" >> /etc/phpmyadmin/config.inc.php
 
 rm -f /run/sockets/mariadb.sock
 /usr/bin/mariadbd --user=root --skip-name-resolve --socket /run/sockets/mariadb.sock &
@@ -44,11 +67,11 @@ W=$!
 echo "Mariadb is running... PID=$W"
 
 set +e
-while true ; do
+while true; do
 	wait $W
 	RET=$?
-	if [[ $RET -eq 138 ]] ; then # errno 138: Interrupt by signal
-		continue # must wait for mariadbd to really exit
+	if [[ $RET -eq 138 ]]; then # errno 138: Interrupt by signal
+		continue                   # must wait for mariadbd to really exit
 	elif [[ $? -eq 127 ]]; then
 		echo "mariadbd quit with unknown code."
 		break # pid not exists, it already quit by some reason

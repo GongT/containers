@@ -91,3 +91,4 @@ $cfg['RetainQueryBox'] = true;
 $cfg['QueryHistoryDB'] = true;
 $cfg['DefaultLang'] = 'zh_cn';
 $cfg['ServerDefault'] = 1;
+$cfg['DefaultConnectionCollation'] = 'utf8mb4_bin';

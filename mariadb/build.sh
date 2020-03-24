@@ -15,8 +15,8 @@ info "install complete..."
 buildah copy "$RESULT" fs /
 
 buildah config "$RESULT"
-buildah config --entrypoint '["/bin/sh", "-c"]' --cmd '"env ; sleep 1 ; /sbin/init ; RET=$? ; echo \"Exit code $RET\" ; exit $?"' "$RESULT"
-buildah config --volume /var/lib/mysql --volume /var/log --port 3306 "$RESULT"
+buildah config --cmd '/sbin/init' "$RESULT"
+buildah config --volume /var/lib/mysql --volume /var/log --port 3306 --stop-signal SIGINT "$RESULT"
 buildah config --author "GongT <admin@gongt.me>" --created-by "GongT" --label name=gongt/mariadb "$RESULT"
 info "settings updated..."
 
