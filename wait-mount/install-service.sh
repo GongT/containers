@@ -21,7 +21,7 @@ NotifyAccess=all
 RemainAfterExit=yes
 
 [Install]
-WantedBy=machines.target
+WantedBy=multi-user.target
 
 EOF
 

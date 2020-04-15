@@ -27,7 +27,7 @@ fi
 function call_curl() {
 	pecho "------------------ try $1..." >&2
 	local OUT
-	OUT=$(/usr/bin/curl --no-progress-meter --verbose -$NET_TYPE "$1")
+	OUT=$(/usr/bin/curl --no-progress-meter -$NET_TYPE "$1")
 	pecho "$OUT" >&2
 	pecho "------------------" >&2
 	if [[ -z "$OUT" ]]; then
