@@ -69,4 +69,4 @@
 	url = https://github.com/luaposix/luaposix.git
 [submodule "proxyserver-nat/microsocks"]
 	path = proxyserver-nat/microsocks
-	url = git@github.com:rofl0r/microsocks
+	url = https://github.com/rofl0r/microsocks.git
