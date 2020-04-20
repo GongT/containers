@@ -37,7 +37,7 @@ Name = wg-gwtun
 
 [Link]
 RequiredForOnline=no
-MTUBytes=1400
+MTUBytes=1420
 
 [Network]
 Address = $IP_SERVER

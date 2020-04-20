@@ -1,0 +1,14 @@
+[socks5]
+arg[]:/usr/bin/microsocks
+arg[]:-i
+arg[]:0.0.0.0
+arg[]:-p
+arg[]:3270
+
+[dns]
+arg[]:/usr/sbin/unbound
+
+[network]
+arg[]:/bin/bash
+arg[]:-c
+arg[]:/opt/start.sh
