@@ -31,6 +31,7 @@ unit_unit Description nginx - high performance web server
 network_use_auto "${PUBPORTS[@]}"
 unit_podman_arguments "$ENV_PASS"
 unit_start_notify output "start worker process"
+unit_body Restart always
 unit_fs_bind config/nginx /config
 unit_fs_bind logs/nginx /var/log/nginx
 unit_fs_tempfs 1M /run
