@@ -1,0 +1,5 @@
+[udp2raw]
+arg[]:/bin/bash
+arg[]:-c
+arg[]:/opt/udp2raw.sh
+signal:term

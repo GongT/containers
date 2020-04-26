@@ -1,14 +1,22 @@
+[init]
+arg[]:/bin/bash
+arg[]:-c
+arg[]:/opt/init_cron.sh
+signal:term
+
+[dnsmasq]
+arg[]:/bin/bash
+arg[]:/opt/run_dnsmasq.sh
+signal:term
+
+# [privoxy]
+# arg[]:/bin/bash
+# arg[]:/opt/run_privoxy.sh
+# signal:term
+
 [socks5]
 arg[]:/usr/bin/microsocks
 arg[]:-i
 arg[]:0.0.0.0
 arg[]:-p
-arg[]:3270
-
-[dns]
-arg[]:/usr/sbin/unbound
-
-[network]
-arg[]:/bin/bash
-arg[]:-c
-arg[]:/opt/start.sh
+arg[]:23270

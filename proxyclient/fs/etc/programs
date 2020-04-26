@@ -1,0 +1,39 @@
+# [dhclient4]
+# arg[]:/bin/busybox
+# arg[]:udhcpc
+# arg[]:-f
+# arg[]:-C
+# arg[]:-x
+# arg[]:hostname:shabao-proxy-client
+# arg[]:-n
+# arg[]:-R
+# arg[]:-i
+# arg[]:eth0
+# signal:term
+
+[dnsmasq]
+arg[]:/usr/sbin/dnsmasq
+arg[]:--keep-in-foreground
+arg[]:--conf-file=/etc/dnsmasq.conf
+arg[]:--pid-file=/run/dnsmasq.pid
+signal:term
+
+[privoxy]
+arg[]:/bin/bash
+arg[]:/opt/run_privoxy.sh
+signal:term
+
+# [nginx]
+# arg[]:/bin/bash
+# arg[]:/opt/run_nginx.sh
+# signal:term
+
+[udp2raw]
+arg[]:/bin/bash
+arg[]:/opt/udp2raw.sh
+signal:term
+
+[init]
+arg[]:/bin/bash
+arg[]:/opt/init_cron.sh
+signal:term

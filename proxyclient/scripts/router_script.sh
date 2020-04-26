@@ -60,10 +60,12 @@ echo "MTU=$(uci get network.wg_proxy.mtu)"
 
 RS1=
 if [[ "$(uci changes udp2raw)" ]]; then
+	uci changes udp2raw >&2
 	RS1=yes
 fi
 RS2=
 if [[ "$(uci changes network)" ]]; then
+	uci changes network >&2
 	RS2=yes
 fi
 uci commit
