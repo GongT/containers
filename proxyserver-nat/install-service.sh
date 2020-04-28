@@ -34,7 +34,7 @@ else
 	unit_start_notify sleep 3
 fi
 unit_depend network-online.target
-unit_fs_bind config/proxy /config
+unit_fs_bind config/proxyserver /config
 unit_body Restart always
 network_use_manual --network=bridge0 --mac-address=86:13:02:8F:76:2B --dns=127.0.0.1
 unit_podman_arguments --cap-add=NET_ADMIN $(
@@ -48,6 +48,7 @@ unit_podman_arguments --cap-add=NET_ADMIN $(
 		"UDP2RAW_MODE=${UDP2RAW_MODE}" \
 		"MTU=${MTU}"
 )
+unit_body ExecReload podman exec proxyserver bash -c "killall -s SIGHUP dnsmasq"
 unit_finish
 
 systemctl daemon-reload

@@ -34,7 +34,7 @@ else
 fi
 unit_hook_poststart $(install_script scripts/reload_dnsmasq.sh)
 unit_depend network-online.target
-unit_fs_bind config/proxy /config
+unit_fs_bind config/proxyclient /config
 network_use_bridge 3271
 unit_podman_arguments --dns=127.0.0.1
 unit_podman_arguments --cap-add=NET_ADMIN $(
@@ -48,6 +48,7 @@ unit_podman_arguments --cap-add=NET_ADMIN $(
 		"UDP2RAW_MODE=${UDP2RAW_MODE}" \
 		"MTU=${MTU}"
 )
+unit_body ExecReload '/usr/bin/podman exec proxyclient bash -c "killall -s SIGHUP dnsmasq"'
 unit_finish
 
 echo 'resolv-file=/tmp/dnsmasq-resolv-proxy.conf' | write_file '/etc/dnsmasq.d/proxy-hosts.conf'
