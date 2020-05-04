@@ -13,7 +13,7 @@ ENV_PASS=$(
 		"PROXY=$PROXY"
 )
 
-create_unit gongt/mariadb
+create_pod_service_unit gongt/mariadb
 unit_podman_hostname mysql
 unit_data danger
 unit_podman_arguments "$ENV_PASS"

@@ -22,7 +22,7 @@ ENV_PASS=$(
 )
 
 
-create_unit gongt/certbot-dns
+create_pod_service_unit gongt/certbot-dns
 unit_podman_image gongt/certbot
 unit_podman_hostname certbot
 unit_podman_arguments "$ENV_PASS"

@@ -14,7 +14,7 @@ ENV_PASS=$(
 		"https_proxy=http://$PROXY"
 )
 
-create_unit gongt/wordpress
+create_pod_service_unit gongt/wordpress
 unit_depend $INFRA_DEP mariadb.service
 unit_podman_arguments "$ENV_PASS"
 unit_fs_bind data/wordpress /data

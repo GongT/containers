@@ -22,7 +22,7 @@ fi
 
 STOP_SCRIPT=$(install_script infra-remove-all.sh)
 
-create_unit gongt/virtual-gateway
+create_pod_service_unit gongt/virtual-gateway
 unit_podman_image gongt/infra
 unit_unit Description virtual machine gateway
 unit_depend network-online.target

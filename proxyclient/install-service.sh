@@ -25,7 +25,7 @@ source /tmp/load-keys.sh
 
 info "upload settings to router - OK"
 
-create_unit gongt/proxyclient
+create_pod_service_unit gongt/proxyclient
 unit_unit Description "Proxy Client With Nginx:3270 And Privoxy:3271 And Dnsmasq:53"
 if [[ "$UDP2RAW_PASSWORD" ]]; then
 	unit_start_notify output "<service started signal>"

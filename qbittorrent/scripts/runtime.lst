@@ -1,0 +1,14 @@
+i3
+xdg-utils
+tigervnc-server
+boost-system
+boost-chrono
+boost-random
+qt5-qtbase
+qt5-qtbase-gui
+qt5-qtsvg
+wqy-bitmap-fonts
+wqy-microhei-fonts
+wqy-unibit-fonts
+wqy-zenhei-fonts
+bind-utils
