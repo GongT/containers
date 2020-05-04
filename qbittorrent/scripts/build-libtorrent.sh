@@ -1,10 +1,9 @@
 #!/usr/bin/env bash
 
 set -e
-cd /opt/qbittorrent/libtorrent
 
-
-./configure --prefix="$ARTIFACT" -C \
+./bootstrap.sh
+./configure --prefix="$ARTIFACT_PREFIX" -C \
 	--with-gnu-ld \
 	--with-boost \
 	--enable-shared \

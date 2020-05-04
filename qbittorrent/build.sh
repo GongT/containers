@@ -5,51 +5,70 @@ set -Eeuo pipefail
 cd "$(dirname "$(realpath "${BASH_SOURCE[0]}")")"
 source ../common/functions-build.sh
 
-arg_flag FORCE f/force "force rebuild nginx source code"
+arg_flag FORCE     f/force "force rebuild qbittorrent source code"
+arg_flag FORCE_DNF dnf "force dnf install"
 arg_finish "$@"
 
 info "starting..."
 
-BUILDER=$(create_if_not nginx-build-worker fedora)
+BUILDER=$(create_if_not qbittorrent-build-worker fedora)
 BUILDER_MNT=$(buildah mount $BUILDER)
-
 info "init compile..."
 
-buildah run $BUILDER dnf install --setopt=max_parallel_downloads=10 -y $(<requirements/build.lst)
-info "dnf install complete..."
-
-if [[ ! -e "$BUILDER_MNT/opt/dist/usr/sbin/nginx" ]] || [[ -n "$FORCE" ]] ; then
-    buildah copy $BUILDER source "/opt/source"
-    cat tools/build-nginx.sh | buildah run $BUILDER bash
-    info "nginx build complete..."
+if ! [[ -f "$BUILDER_MNT/usr/bin/bash" ]] || [[ -n "$FORCE_DNF" ]]; then
+	buildah run $BUILDER dnf install --setopt=max_parallel_downloads=10 -y $(<scripts/compile.lst)
+	info "dnf install complete..."
 else
-    info "nginx already built, skip..."
+	info "dnf install already complete."
 fi
 
-RESULT=$(new_container "nginx-result-worker" scratch)
+{
+	SHELL_USE_PROXY
+	cat scripts/prepare-golang.sh
+} | buildah run $BUILDER bash
+info "golang prepared..."
+
+if [[ ! -e "$BUILDER_MNT/opt/dist/bin/qbittorrent" ]] || [[ -n "$FORCE" ]]; then
+	mkdir -p "$BUILDER_MNT/opt/dist/usr/bin"
+	for P in libtorrent qbittorrent; do
+		{
+			SHELL_USE_PROXY
+			echo "declare -r SOURCE='/opt/project'"
+			echo "cd /opt/project"
+			echo "declare -r ARTIFACT='/opt/dist/usr/bin'"
+			echo "declare -r ARTIFACT_PREFIX='/opt/dist'"
+			cat "scripts/build-$P.sh"
+		} | buildah --mount "type=bind,src=$(pwd)/source/$P,target=/opt/project" run $BUILDER bash
+		info "qbittorrent build complete..."
+	done
+else
+	info "qbittorrent already built, skip..."
+fi
+
+RESULT=$(create_if_not "qbittorrent-result-worker" scratch)
 RESULT_MNT=$(buildah mount $RESULT)
 info "result image prepared..."
 
-cp -r "$BUILDER_MNT/opt/dist/." "$RESULT_MNT"
-cp    "tools/run-nginx.sh" "$RESULT_MNT/usr/sbin/nginx.sh"
-cp    "tools/reload-nginx.sh" "$RESULT_MNT/usr/sbin/reload-nginx.sh"
-cp    "tools/safe-reload.sh" "$RESULT_MNT/usr/bin/safe-reload"
-chmod a+x "$RESULT_MNT/usr/sbin/nginx.sh" "$RESULT_MNT/usr/sbin/reload-nginx.sh" "$RESULT_MNT/usr/bin/safe-reload"
-info "built content moved..."
+if [[ ! -e "$RESULT_MNT/usr/bin/bash" ]] || [[ -n "$FORCE_DNF" ]]; then
+	run_dnf $RESULT $(<scripts/runtime.lst)
+	buildah run $RESULT bash -c "rm -rf /etc/nginx /etc/privoxy"
+	rm -rf "$RESULT_MNT/var/lib/dnf/" "$RESULT_MNT/var/cache/dnf/"
+	info "dnf install complete..."
+else
+	info "dnf install already complete."
+fi
 
-cp -r config/. -t "$RESULT_MNT/etc/nginx"
-for D in /config /var/log/nginx /run /tmp /config.auto /etc/letsencrypt /run/sockets ; do
-	mkdir -p "${RESULT_MNT}${D}"
-done
-info "config files created..."
+buildah copy $RESULT fs /
+buildah copy $RESULT "$BUILDER_MNT/opt/dist" /usr
+info "result files copy complete..."
+
+cat "scripts/prepare-run.sh" | buildah run $RESULT bash
 
 buildah umount "$BUILDER" "$RESULT"
 
-buildah config --entrypoint '["/bin/bash"]' --cmd '/usr/sbin/nginx.sh' --env PATH="/bin:/usr/bin:/usr/sbin" \
-	--port 80 --port 443 --port 80/udp --port 443/udp "$RESULT"
-buildah config --volume /config --volume /etc/letsencrypt "$RESULT"
-buildah config --author "GongT <admin@gongt.me>" --created-by "GongT" --label name=gongt/nginx "$RESULT"
+buildah config --cmd '/lib/systemd/systemd' "$RESULT"
+buildah config --author "GongT <admin@gongt.me>" --created-by "GongT" --label name=gongt/qbittorrent "$RESULT"
 info "settings update..."
 
-buildah commit "$RESULT" gongt/nginx
+buildah commit "$RESULT" gongt/qbittorrent
 info "Done!"

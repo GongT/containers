@@ -1,0 +1,15 @@
+[Unit]
+Description=qBittorrent NOX i3 wm
+After=network-online.target xvnc0.service
+Requires=xvnc0.service
+
+[Service]
+Type=simple
+Environment=DISPLAY=:0
+ExecStart=/usr/bin/i3
+Restart=on-abort
+User=media_rw
+Group=users
+
+[Install]
+WantedBy=graphical.target

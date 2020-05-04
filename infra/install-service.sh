@@ -30,7 +30,7 @@ unit_body Restart always
 unit_hook_stop "-/usr/bin/env bash $STOP_SCRIPT"
 unit_hook_start "-/usr/bin/env bash $STOP_SCRIPT"
 network_use_manual --network=bridge0 --mac-address=86:13:02:8F:76:2A --dns=none
-unit_podman_arguments --cap-add=NET_ADMIN $(safe_environment \
+unit_podman_arguments $(safe_environment \
 	"DSNS_KEY=${DSNS_KEY}" \
 	"DDNS_HOST=${DDNS_HOST}"
 )

@@ -1,0 +1,12 @@
+[Unit]
+Description=update myself ip address to nginx proxy
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+ExecStart=/usr/bin/env bash /opt/scripts/update-self-ip.sh
+StandardOutput=journal
+StandardError=journal
+
+[Install]
+WantedBy=multi-user.target

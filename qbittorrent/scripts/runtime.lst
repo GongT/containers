@@ -7,8 +7,12 @@ boost-random
 qt5-qtbase
 qt5-qtbase-gui
 qt5-qtsvg
-wqy-bitmap-fonts
-wqy-microhei-fonts
-wqy-unibit-fonts
 wqy-zenhei-fonts
 bind-utils
+privoxy
+nginx
+systemd
+bash
+dhcp-client
+iproute
+curl

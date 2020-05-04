@@ -73,3 +73,12 @@
 [submodule "proxyserver-nat/microsocks"]
 	path = proxyserver-nat/microsocks
 	url = https://github.com/rofl0r/microsocks.git
+[submodule "qbittorrent/source/broadcaster"]
+	path = qbittorrent/source/broadcaster
+	url = https://github.com/gongt/remote-shell.git
+[submodule "qbittorrent/source/libtorrent"]
+	path = qbittorrent/source/libtorrent
+	url = https://github.com/arvidn/libtorrent.git
+[submodule "qbittorrent/source/qbittorrent"]
+	path = qbittorrent/source/qbittorrent
+	url = https://github.com/qbittorrent/qBittorrent.git

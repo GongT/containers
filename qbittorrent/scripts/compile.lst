@@ -14,3 +14,5 @@ qt5-qtsvg-devel
 golang
 boost-python2-devel
 python3-devel
+git
+bash

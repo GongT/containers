@@ -1,0 +1,23 @@
+[Unit]
+Description=qBittorrent
+After=network-online.target
+Requires=xvnc0.service i3.service
+After=xvnc0.service i3.service
+
+[Service]
+Type=simple
+Environment=DISPLAY=:0
+ExecStartPre=+/bin/bash /opt/scripts/prestart.sh
+ExecStart=/usr/bin/qbittorrent --profile=/opt
+Restart=on-abort
+User=media_rw
+Group=users
+LimitAS=infinity
+LimitRSS=infinity
+LimitCORE=infinity
+LimitNOFILE=65536
+KillSignal=SIGINT
+TimeoutStopSec=10min
+
+[Install]
+WantedBy=graphical.target
