@@ -15,7 +15,7 @@ ENV_PASS=$(safe_environment \
 )
 
 create_pod_service_unit gongt/cloud
-unit_depend mariadb.service
+unit_depend mariadb.pod
 unit_data danger
 unit_podman_arguments "$ENV_PASS"
 

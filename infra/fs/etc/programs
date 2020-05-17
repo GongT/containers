@@ -11,7 +11,7 @@ arg[]:-n
 arg[]:-R
 arg[]:-i
 arg[]:eth0
-signal:int
+
 
 [dhclient6]
 arg[]:/bin/busybox

@@ -2,17 +2,17 @@
 arg[]:/bin/bash
 arg[]:-c
 arg[]:/opt/init_cron.sh
-signal:term
+
 
 [dnsmasq]
 arg[]:/bin/bash
 arg[]:/opt/run_dnsmasq.sh
-signal:term
+
 
 # [privoxy]
 # arg[]:/bin/bash
 # arg[]:/opt/run_privoxy.sh
-# signal:term
+# 
 
 [socks5]
 arg[]:/usr/bin/microsocks

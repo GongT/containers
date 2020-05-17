@@ -15,12 +15,11 @@ BUILDER_MNT=$(buildah mount $BUILDER)
 
 info "init compile..."
 
-buildah run $BUILDER dnf install --setopt=max_parallel_downloads=10 -y $(<requirements/build.lst)
-info "dnf install complete..."
-
 if [[ ! -e "$BUILDER_MNT/opt/dist/usr/sbin/nginx" ]] || [[ -n "$FORCE" ]] ; then
-    buildah copy $BUILDER source "/opt/source"
-    cat tools/build-nginx.sh | buildah run $BUILDER bash
+	dev_dnf $BUILDER $(<requirements/build.lst)
+	info "dnf install complete..."
+
+    cat tools/build-nginx.sh | buildah run --volume "`pwd`/source:/opt/source" $BUILDER bash
     info "nginx build complete..."
 else
     info "nginx already built, skip..."

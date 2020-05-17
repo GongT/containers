@@ -25,6 +25,11 @@ function ensure_group() {
 ensure_group 100 users
 ensure_user 100 media_rw 100
 
+mkdir -p /home/media_rw
+chown media_rw:users /home/media_rw
+
+echo 'LANG="zh_CN.utf8"' >/etc/locale.conf
+
 systemctl mask getty@tty1 systemd-logind systemd-networkd-wait-online systemd-hostnamed
 systemctl enable dhclient dhclient6 xvnc0 i3 privoxy nginx update-self-ip update-self-ip.timer
 systemctl enable qbittorrent

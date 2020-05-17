@@ -14,8 +14,7 @@ arg[]:/usr/sbin/php-fpm7
 arg[]:--nodaemonize
 arg[]:--force-stderr
 arg[]:--allow-to-run-as-root
-signal:int
+
 
 [nginx]
 arg[]:/opt/start-nginx.sh
-signal:int

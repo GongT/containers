@@ -46,4 +46,4 @@ ExecStopPost=
 env SYSTEMD_EDITOR="cp $T" systemctl edit cockpit.socket
 
 systemctl daemon-reload
-systemctl enable virtual-gateway.service
+systemctl enable virtual-gateway.pod.service
