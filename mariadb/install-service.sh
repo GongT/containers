@@ -28,6 +28,6 @@ unit_fs_tempfs 512M /tmp
 unit_body Restart on-failure
 unit_body RestartPreventExitStatus 233
 unit_fs_bind data/mariadb /var/lib/mysql
-unit_fs_bind backup/mariadb /backup
+unit_fs_bind /data/backup/mariadb /backup
 unit_fs_bind share/sockets /run/sockets
 unit_finish
