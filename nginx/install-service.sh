@@ -28,7 +28,7 @@ fi
 
 create_pod_service_unit gongt/nginx
 unit_unit Description nginx - high performance web server
-network_use_auto "${PUBPORTS[@]}"
+network_use_auto
 unit_podman_arguments "$ENV_PASS"
 unit_start_notify output "start worker process"
 unit_body Restart always

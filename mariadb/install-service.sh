@@ -26,8 +26,10 @@ unit_body LimitNOFILE 16364
 unit_fs_bind logs/mariadb /var/log/mariadb
 unit_fs_tempfs 512M /tmp
 unit_body Restart on-failure
+unit_body RestartSec 15s
 unit_body RestartPreventExitStatus 233
 unit_fs_bind data/mariadb /var/lib/mysql
 unit_fs_bind /data/backup/mariadb /backup
 unit_fs_bind share/sockets /run/sockets
+unit_fs_bind share/nginx /run/nginx
 unit_finish
