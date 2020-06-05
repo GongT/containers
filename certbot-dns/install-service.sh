@@ -24,6 +24,12 @@ ENV_PASS=$(
 
 create_pod_service_unit gongt/certbot-dns
 unit_podman_image gongt/certbot
+
+unit_start_notify output "everything works well, starting crond"
+unit_body Restart on-failure
+unit_body RestartSec 10s
+unit_body TimeoutStartSec 30s
+
 unit_podman_hostname certbot
 unit_podman_arguments "$ENV_PASS"
 unit_body Environment FROM_SERVICE=yes

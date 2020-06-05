@@ -7,8 +7,15 @@ if [ -e /run/sockets/nginx.reload.sh ]; then
 	sh /run/sockets/nginx.reload.sh
 fi
 
-nginx
-echo "nginx is quitting!"
+nginx &
+PID=$!
+echo "nginx is start: $PID"
+
+trap "echo 'RECEIVE SIGINT' ; nginx -s stop" SIGINT
+
+wait $PID
+echo "nginx is quit"
+
 
 if [ -e /run/sockets/nginx.reload.sh ]; then
 	rm -f /run/nginx/vhost.d/phpmyadmin.conf

@@ -74,5 +74,7 @@ exec acme.sh --renew-all --ecc ${BASE_ARGS_ESCAPE[*]}
 chmod a+x /etc/periodic/20day/acme-renew
 echo '======================================' >&2
 
+sleep 5
+
 echo 'Ok, everything works well, starting crond...' >&2
 exec /usr/sbin/crond -f -d 6
