@@ -59,4 +59,3 @@ PrivateTmp=no
 ' | write_file "/etc/systemd/system/dnsmasq.service.d/proxy.conf"
 
 systemctl daemon-reload
-systemctl enable proxyserver.service

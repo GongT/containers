@@ -50,6 +50,3 @@ unit_podman_arguments --cap-add=NET_ADMIN $(
 )
 unit_body ExecReload podman exec proxyserver bash -c "killall -s SIGHUP dnsmasq"
 unit_finish
-
-systemctl daemon-reload
-systemctl enable proxyserver.service
