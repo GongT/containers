@@ -21,11 +21,6 @@ arg[]:/bin/bash
 arg[]:/opt/run_privoxy.sh
 
 
-# [nginx]
-# arg[]:/bin/bash
-# arg[]:/opt/run_nginx.sh
-# 
-
 [udp2raw]
 arg[]:/bin/bash
 arg[]:/opt/udp2raw.sh

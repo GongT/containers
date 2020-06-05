@@ -9,8 +9,8 @@ arg[]:/opt/lifecycle.sh
 
 
 [nginx]
-arg[]:/bin/sh
-arg[]:/opt/start-nginx.sh
+arg[]:/usr/sbin/nginx
+signal:SIGSTOP
 
 
 [redis]

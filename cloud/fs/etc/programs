@@ -1,12 +1,11 @@
 [php]
 arg[]:/bin/sh
 arg[]:/opt/load-server.sh
-
+signal:SIGQUIT
 
 [nginx]
-arg[]:/bin/sh
-arg[]:/opt/start-nginx.sh
-
+arg[]:/usr/sbin/nginx
+signal:SIGSTOP
 
 [redis]
 arg[]:/usr/bin/redis-server

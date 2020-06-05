@@ -19,7 +19,7 @@ unit_depend mariadb.service
 unit_podman_arguments "$ENV_PASS"
 unit_fs_bind data/wordpress /data
 unit_fs_bind share/nginx /run/nginx
-unit_fs_bind share/sockets /run/sockets
+shared_sockets_provide word-press
 unit_fs_bind /data/DevelopmentRoot/github.com/gongt/my-wordpress /project
 unit_fs_bind data/wordpress/uploads /project/wp-content/uploads
 unit_finish

@@ -61,7 +61,6 @@ fi
 
 trap "echo 'GOT SIGUSR1, MARIADB SERVER WILL SHUTDOWN.' ; bash /opt/stop-mariadb.sh" USR1 INT
 
-rm -f /run/sockets/mariadb.sock
 /usr/bin/mariadbd --user=root --skip-name-resolve --socket /run/sockets/mariadb.sock &
 W=$!
 echo "Mariadb is running... PID=$W"

@@ -3,4 +3,5 @@ arg[]:/opt/start-server.sh
 
 
 [nginx]
-arg[]:/opt/start-web.sh
+arg[]:/usr/sbin/nginx
+signal:SIGSTOP

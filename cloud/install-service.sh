@@ -24,7 +24,7 @@ unit_fs_bind config/cloud /usr/share/webapps/nextcloud/config
 unit_fs_bind logs/cloud /var/log/nextcloud
 unit_fs_bind /data/Volumes/AppData/NextCloud /data
 unit_fs_bind /data/Volumes /drives
-unit_fs_bind share/sockets /run/sockets
+shared_sockets_provide next-cloud
 unit_finish
 
 install_binary scripts/occ.sh

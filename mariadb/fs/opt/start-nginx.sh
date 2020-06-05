@@ -1,7 +1,5 @@
 #!/bin/sh
 
-rm -f /run/sockets/php-my-admin.sock
-
 if [ -e /run/sockets/nginx.reload.sh ]; then
 	cp /opt/phpmyadmin.conf /run/nginx/vhost.d/phpmyadmin.conf
 	sh /run/sockets/nginx.reload.sh
@@ -11,7 +9,7 @@ nginx &
 PID=$!
 echo "nginx is start: $PID"
 
-trap "echo 'RECEIVE SIGINT' ; nginx -s stop" SIGINT
+trap "echo 'RECEIVE SIGINT/SIGSTOP' ; nginx -s stop" SIGINT SIGSTOP
 
 wait $PID
 echo "nginx is quit"

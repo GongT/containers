@@ -30,6 +30,6 @@ unit_body RestartSec 15s
 unit_body RestartPreventExitStatus 233
 unit_fs_bind data/mariadb /var/lib/mysql
 unit_fs_bind /data/backup/mariadb /backup
-unit_fs_bind share/sockets /run/sockets
+shared_sockets_provide mariadb php-my-admin
 unit_fs_bind share/nginx /run/nginx
 unit_finish

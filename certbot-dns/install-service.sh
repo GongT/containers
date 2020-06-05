@@ -34,5 +34,5 @@ unit_podman_hostname certbot
 unit_podman_arguments "$ENV_PASS"
 unit_body Environment FROM_SERVICE=yes
 unit_fs_bind share/letsencrypt /etc/letsencrypt
-unit_fs_bind share/sockets /run/sockets
+shared_sockets_use
 unit_finish

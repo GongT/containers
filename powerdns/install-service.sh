@@ -15,6 +15,6 @@ unit_podman_hostname homedns
 unit_unit Description home dns server
 unit_fs_tempfs 1M /run
 unit_fs_tempfs 50M /tmp
-unit_fs_bind share/sockets /run/sockets
+shared_sockets_provide powerdns
 unit_fs_bind data/powerdns /data
 unit_finish
