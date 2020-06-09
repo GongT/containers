@@ -32,11 +32,11 @@ if [[ "$UDP2RAW_PASSWORD" ]]; then
 else
 	unit_start_notify sleep 3
 fi
-unit_hook_poststart $(install_script scripts/reload_dnsmasq.sh)
+install_script scripts/reload_dnsmasq.sh POSTSTART_SCRIPT
+unit_hook_poststart "$POSTSTART_SCRIPT"
 unit_depend network-online.target
 unit_fs_bind config/proxyclient /config
 network_use_bridge 3271
-unit_podman_arguments --dns=127.0.0.1
 unit_podman_arguments --cap-add=NET_ADMIN $(
 	safe_environment \
 		"KEY_ROUTER_PUBLIC=${KEY_ROUTER_PUBLIC}" \

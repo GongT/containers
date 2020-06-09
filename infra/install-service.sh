@@ -20,7 +20,7 @@ if ! [[ -e "$VOL/wg0.conf" ]] ; then
     die "Failed to run init script on remote host, check output and try again."
 fi
 
-STOP_SCRIPT=$(install_script infra-remove-all.sh)
+install_script infra-remove-all.sh STOP_SCRIPT
 
 create_pod_service_unit gongt/virtual-gateway
 unit_podman_image gongt/infra
