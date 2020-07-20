@@ -1,5 +1,5 @@
 function build_udp2raw() {
-	local WORK=$(create_if_not build_udp2raw_worker gongt/alpine-cn)
+	local WORK=$(create_if_not build_udp2raw_worker alpine)
 	buildah run $WORK apk --no-cache add make gcc musl-dev g++ linux-headers
 
 	buildah unmount $WORK

@@ -15,7 +15,7 @@ BUILDER=$(create_if_not qbittorrent-build-worker fedora)
 BUILDER_MNT=$(buildah mount $BUILDER)
 info "init compile..."
 
-if ! [[ -f "$BUILDER_MNT/usr/bin/bash" ]] || [[ -n "$FORCE_DNF" ]]; then
+if ! [[ -f "$BUILDER_MNT/usr/lib/golang/bin/go" ]] || [[ -n "$FORCE_DNF" ]]; then
 	buildah run $BUILDER dnf install --setopt=max_parallel_downloads=10 -y $(<scripts/compile.lst)
 	info "dnf install complete..."
 else
@@ -31,6 +31,7 @@ info "golang prepared..."
 if [[ ! -e "$BUILDER_MNT/opt/dist/bin/qbittorrent" ]] || [[ -n "$FORCE" ]]; then
 	mkdir -p "$BUILDER_MNT/opt/dist/usr/bin"
 	for P in libtorrent qbittorrent; do
+		info "build $P..."
 		{
 			SHELL_USE_PROXY
 			echo "declare -r SOURCE='/opt/project'"
@@ -39,7 +40,7 @@ if [[ ! -e "$BUILDER_MNT/opt/dist/bin/qbittorrent" ]] || [[ -n "$FORCE" ]]; then
 			echo "declare -r ARTIFACT_PREFIX='/opt/dist'"
 			cat "scripts/build-$P.sh"
 		} | buildah --mount "type=bind,src=$(pwd)/source/$P,target=/opt/project" run $BUILDER bash
-		info "qbittorrent build complete..."
+		info "$P build complete..."
 	done
 else
 	info "qbittorrent already built, skip..."

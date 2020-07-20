@@ -15,7 +15,7 @@ ENV_PASS=$(
 )
 
 create_pod_service_unit gongt/wordpress
-unit_depend mariadb.service
+unit_depend mariadb.pod.service
 unit_podman_arguments "$ENV_PASS"
 unit_fs_bind data/wordpress /data
 unit_fs_bind share/nginx /run/nginx

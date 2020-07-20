@@ -17,5 +17,5 @@ unit_fs_bind config/qbittorrent /opt/qBittorrent/config
 unit_fs_bind data/qbittorrent /opt/qBittorrent/data
 unit_fs_bind /data/Volumes /data/Volumes
 unit_fs_bind share/nginx /run/nginx
-shared_sockets_provide qbittorrent-admin qbittorrent-tracker
+shared_sockets_provide qbittorrent-admin
 unit_finish

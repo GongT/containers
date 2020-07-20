@@ -22,7 +22,7 @@ fi
 
 install_script infra-remove-all.sh STOP_SCRIPT
 
-create_pod_service_unit gongt/virtual-gateway
+auto_create_pod_service_unit
 unit_podman_image gongt/infra
 unit_unit Description virtual machine gateway
 unit_depend network-online.target
@@ -37,12 +37,11 @@ unit_podman_arguments $(safe_environment \
 unit_fs_bind $VOL /storage
 unit_finish
 
-T=$(mktemp)
+mkdir -p "/etc/systemd/system/cockpit.socket.d"
 echo '[Socket]
 ListenStream=/data/AppData/share/sockets/cockpit.sock
 ExecStartPost=
 ExecStopPost=
-' > "$T"
-env SYSTEMD_EDITOR="cp $T" systemctl edit cockpit.socket
+' > "/etc/systemd/system/cockpit.socket.d/listen-socket.conf"
 
 systemctl daemon-reload

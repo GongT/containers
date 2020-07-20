@@ -14,7 +14,7 @@ apk --no-cache add pdns pdns-backend-sqlite3 nginx
 rm -rf /etc/nginx /etc/pdns /var/www/ /etc/inittab /etc/init.d
 mkdir -p /etc/nginx /etc/pdns /var/www/
 mkdir -p /opt /data /run/nginx
-' | buildah run "$RESULT" sh
+' | buildah run $(use_alpine_apk_cache) "$RESULT" sh
 info "required packages installed..."
 
 mnt=$(buildah mount "$RESULT")

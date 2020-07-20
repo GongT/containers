@@ -1,31 +1,36 @@
 set -Eeuo pipefail
 
 cd "$(dirname "$(realpath "${BASH_SOURCE[0]}")")"
-export ROOT="$(pwd)"
 
-cd /usr/lib/systemd/system
+pushd /usr/lib/systemd/system &> /dev/null
 
-function x() {
-	echo -n "$*" >&2
-	"$@" &>/dev/null
-	echo " - $?" >&2
-}
-function remove_service() {
-	cd "$ROOT"
-	local N=$1
-	local S="$N.service"
+LIST=($(
+	systemctl list-unit-files '*.pod@.service' '*.pod.service' --all --no-pager \
+		| grep enabled \
+		| sed -E 's#\.pod@?\.service.+$##g'
+))
 
-	INSTALL=$(grep -lE "create_pod_service_unit .*$N" ./*/install-service.sh)
-	if [[ ! "$INSTALL" ]]; then
-		echo "$N x"
-		return
+popd &> /dev/null
+
+export SYSTEMD_RELOAD=no
+for NAME in "${LIST[@]}"; do
+	if [[ -e "$NAME.service" ]]; then
+		systemctl disable "$NAME" --now &> /dev/null || true
+		unlink "$NAME.service"
 	fi
-	echo "$N - ${INSTALL}"
 
-	x systemctl disable $S
-	x rm -f /usr/lib/systemd/system/$S
-	x bash -c "bash $INSTALL &>/dev/null"
-}
-export -f remove_service x
+	echo -ne "\e[38;5;14m${NAME}...\e[0m "
 
-/usr/bin/podman ps | awk '{print $NF}' | tail -n +2 | xargs -IF -n1 bash -c "remove_service F"
+	TEMPF=$(mktemp)
+	LOG="$TEMPF.log"
+	bash -c "bash '${NAME}/install-service.sh' ; echo -n \$? > '$LOG.ret'" &> "$LOG"
+
+	if [[ "$(< $LOG.ret)" != 0 ]]; then
+		echo -e "\e[38;5;9mFailed!\e[0m"
+		cat "$LOG" >&2
+		exit 1
+	fi
+	echo -e "\e[38;5;10mSuccess!\e[0m"
+done
+
+systemctl daemon-reload

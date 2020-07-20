@@ -1,10 +1,10 @@
 make
+cmake
 gcc-c++
 pkgconf-pkg-config
 autoconf
 automake
 libtool
-tar
 qt-devel
 boost-devel
 openssl-devel
@@ -12,7 +12,8 @@ qt5-qtbase-devel
 qt5-linguist
 qt5-qtsvg-devel
 golang
-boost-python2-devel
+boost-python3-devel
 python3-devel
+tar
 git
 bash

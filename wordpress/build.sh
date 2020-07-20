@@ -11,7 +11,7 @@ RESULT=$(create_if_not wordpress-worker gongt/alpine-init:latest-cn)
 buildah copy "$RESULT" fs /
 info "copy files complete..."
 
-cat scripts/build-script.sh | buildah run "$RESULT" sh
+cat scripts/build-script.sh | buildah run $(use_alpine_apk_cache) "$RESULT" sh
 info "install complete..."
 
 buildah config --author "GongT <admin@gongt.me>" --created-by "GongT" --label name=gongt/wordpress "$RESULT"

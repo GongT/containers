@@ -6,7 +6,7 @@ cd "$(dirname "$(realpath "${BASH_SOURCE[0]}")")"
 source ../common/functions-build.sh
 
 info "starting..."
-WORK=$(create_if_not blog-worker gongt/alpine-cn)
+WORK=$(create_if_not blog-worker alpine)
 RESULT=$(create_if_not blog-result alpine)
 
 info "install..."

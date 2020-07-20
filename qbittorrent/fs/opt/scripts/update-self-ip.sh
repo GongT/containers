@@ -14,7 +14,7 @@ if [[ -e /etc/nginx/gen_pass_url.conf ]]; then
 	FIRST=
 fi
 
-echo "proxy_pass http://10.0.0.1:3271\${request_uri}\${append_arg}port=6881&ipv6=$ipv6_escape&ipv4=$ipv4;" > /etc/nginx/gen_pass_url.conf
+echo "proxy_pass http://10.0.0.1:3271\${request_uri}\${append_arg}port=43081&ipv6=$ipv6_escape&ipv4=$ipv4;" > /etc/nginx/gen_pass_url.conf
 
 mkdir -p /var/log/nginx
 if [[ "$FIRST" ]]; then

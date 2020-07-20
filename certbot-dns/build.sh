@@ -5,7 +5,7 @@ set -Eeuo pipefail
 cd "$(dirname "$(realpath "${BASH_SOURCE[0]}")")"
 source ../common/functions-build.sh
 
-RESULT=$(create_if_not certbot-result gongt/alpine-cn)
+RESULT=$(create_if_not certbot-result alpine)
 info "base image prepare..."
 
 buildah copy "$RESULT" opt /opt
@@ -32,7 +32,7 @@ echo "
 
 mkdir -p /etc/periodic/20day
 
-' | buildah run "$RESULT" sh
+' | buildah run $(use_alpine_apk_cache) "$RESULT" sh
 info "install complete..."
 
 buildah config --entrypoint '["/bin/bash"]' --cmd '/opt/init.sh' --stop-signal=SIGINT "$RESULT"

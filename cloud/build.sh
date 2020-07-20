@@ -8,7 +8,7 @@ source ../common/functions-build.sh
 info "starting..."
 RESULT=$(create_if_not cloud-worker gongt/alpine-init:latest-cn)
 
-cat scripts/build-script.sh | buildah run "$RESULT" sh
+cat scripts/build-script.sh | buildah run $(use_alpine_apk_cache) "$RESULT" sh
 info "install complete..."
 
 buildah copy "$RESULT" fs /

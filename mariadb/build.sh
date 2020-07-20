@@ -9,7 +9,7 @@ info "starting..."
 RESULT=$(create_if_not mariadb-worker gongt/alpine-init:latest-cn)
 
 info "installing..."
-cat scripts/build-script.sh | buildah run "$RESULT" -- sh
+cat scripts/build-script.sh | buildah run $(use_alpine_apk_cache) "$RESULT" -- sh
 info "install complete..."
 
 buildah copy "$RESULT" fs /

@@ -44,11 +44,19 @@ ssl_trusted_certificate $ACME_CERT_FOLDER/cert.pem;
 " > "/etc/letsencrypt/nginx/load.conf"
 ##
 
+cat_resolv() {
+	echo "== resolv.conf ======================="
+	cat /etc/resolv.conf
+	echo "======================================"
+}
+
 if acme --install-cert --ecc "${BASE_ARGS[@]}" ; then
 	echo "installed cert files at $FC, try renew..." >&2
+	cat_resolv
 	acme --renew-all --ecc "${BASE_ARGS[@]}"
 else
 	echo "cannot install cer files, try issue new..." >&2
+	cat_resolv
 	acme --issue --dns dns_cf --keylength ec-256 \
 		--domain-alias "$AUTH_DOMAIN" \
 		"${BASE_ARGS[@]}" \

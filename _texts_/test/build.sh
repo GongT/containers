@@ -5,7 +5,7 @@ set -Eeuo pipefail
 cd "$(dirname "$(realpath "${BASH_SOURCE[0]}")")"
 source ../../common/functions-build.sh
 
-RESULT=$(create_if_not test gongt/alpine-cn)
+RESULT=$(create_if_not test alpine)
 MNT=$(buildah mount $RESULT)
 
 cat << 'EOF' > "$MNT/test.sh"

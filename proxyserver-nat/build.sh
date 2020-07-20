@@ -12,7 +12,7 @@ RESULT=$(create_if_not work-gfw-result gongt/alpine-init:latest-cn)
 
 info "init compile..."
 
-buildah run $RESULT apk --no-cache add wireguard-tools-wg bash dnsmasq privoxy nmap-ncat curl
+buildah run $(use_alpine_apk_cache) $RESULT apk --no-cache add wireguard-tools-wg bash dnsmasq privoxy nmap-ncat curl
 MNT=$(buildah mount $RESULT)
 rm -rf "$MNT/etc/dnsmasq.conf" "$MNT/etc/dnsmasq.d"
 
