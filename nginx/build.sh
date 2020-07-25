@@ -15,7 +15,7 @@ BUILDER_MNT=$(buildah mount $BUILDER)
 
 info "init compile..."
 
-if [[ ! -e "$BUILDER_MNT/opt/dist/usr/sbin/nginx" ]] || [[ -n "$FORCE" ]] ; then
+if [[ ! -e "$BUILDER_MNT/opt/dist/etc/nsswitch.conf" ]] || [[ -n "$FORCE" ]] ; then
 	dev_dnf $BUILDER $(<requirements/build.lst)
 	info "dnf install complete..."
 

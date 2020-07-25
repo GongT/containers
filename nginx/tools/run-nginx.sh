@@ -3,12 +3,12 @@
 set -Eeuo pipefail
 
 echo "resolv.conf===================="
-echo "$(</etc/resolv.conf)"
+echo "$(< /etc/resolv.conf)"
 echo "==============================="
 
 if ! [[ -e "/etc/letsencrypt/nginx/load.conf" ]]; then
 	mkdir -p /etc/letsencrypt/nginx
-	echo >"/etc/letsencrypt/nginx/load.conf"
+	echo > "/etc/letsencrypt/nginx/load.conf"
 fi
 
 erun() {
@@ -32,7 +32,7 @@ fi
 echo "create htpassword file..." >&2
 htpasswd -bc "/config/htpasswd" "$USERNAME" "$PASSWORD"
 
-for i in vhost.d stream.d rtmp.d; do
+for i in conf.d vhost.d stream.d rtmp.d; do
 	if ! [[ -e "/config/$i" ]]; then
 		echo "create /config/$i folder..." >&2
 		mkdir -p "/config/$i"
@@ -43,7 +43,13 @@ for i in vhost.d stream.d rtmp.d; do
 	fi
 done
 
-cat /usr/sbin/reload-nginx.sh >/run/sockets/nginx.reload.sh
+SYSTEM_RESOLVERS=$(cat /etc/resolv.conf | grep -v '127.0.0.1' | grep nameserver | sed -E 's/^nameserver\s+//g')
+if [[ -z "$SYSTEM_RESOLVERS" ]]; then
+	SYSTEM_RESOLVERS="8.8.8.8"
+fi
+echo "resolver $SYSTEM_RESOLVERS;" > /config.auto/conf.d/resolver.conf
+
+cat /usr/sbin/reload-nginx.sh > /run/sockets/nginx.reload.sh
 rm -f /run/sockets/nginx.reload.sock
 
 /usr/sbin/nginx -t || {
