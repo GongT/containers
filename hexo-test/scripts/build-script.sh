@@ -5,7 +5,7 @@ set -e
 echo "nameserver 10.0.0.1" > /etc/resolv.conf
 
 if ! command -v pnpm &>/dev/null ; then
-	apk --no-cache add nodejs git
+	apk add nodejs git
 	wget -O - https://unpkg.com/@pnpm/self-installer | node
 fi
 if ! command -v hexo &>/dev/null ; then

@@ -43,8 +43,6 @@ OTHER_MODULES=()
 OTHER_MODULES+=("--add-module=../special-modules/njs/nginx")
 
 ./auto/configure \
-	"${MODULES[@]}" \
-	"${OTHER_MODULES[@]}" \
 	'--prefix=/usr/' \
 	'--sbin-path=/usr/sbin' \
 	'--modules-path=/usr/nginx/modules' \
@@ -96,7 +94,9 @@ OTHER_MODULES+=("--add-module=../special-modules/njs/nginx")
 	'--with-libatomic' \
 	'--with-debug' \
 	"--with-cc-opt=$CC_OPT" \
-	"--with-ld-opt=$LD_OPT"
+	"--with-ld-opt=$LD_OPT" \
+	"${MODULES[@]}" \
+	"${OTHER_MODULES[@]}"
 
 make BUILDTYPE=Debug -j
 

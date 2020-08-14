@@ -9,7 +9,7 @@ info "preparing..."
 RESULT=$(create_if_not powerdns-work gongt/alpine-init)
 
 echo '
-apk --no-cache add pdns pdns-backend-sqlite3 nginx
+apk add pdns pdns-backend-sqlite3 nginx
 
 rm -rf /etc/nginx /etc/pdns /var/www/ /etc/inittab /etc/init.d
 mkdir -p /etc/nginx /etc/pdns /var/www/

@@ -4,7 +4,7 @@ set -e
 
 if ! [ -e "/data/database.sqlite3" ] ; then
 	echo "Now create database"
-	# apk --no-cache add sqlite
+	# apk add sqlite
 	gzip -d -c /opt/init.sql.gz | sqlite3 /data/database.sqlite3
 	# apk del sqlite
 	echo "Created database"

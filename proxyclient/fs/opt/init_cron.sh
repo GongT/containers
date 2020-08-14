@@ -3,7 +3,11 @@
 set -Eeuo pipefail
 
 function resolveIp() {
-	echo -n $(nslookup -type=A "$1" "${2-8.8.8.8}" | grep Address: | tail -n1 | sed 's/Address: //g')
+	local SRV
+	if [[ "${2+found}" == found ]]; then
+		SRV="${2}"
+	fi
+	echo -n $(nslookup -type=A "$1" $SRV | grep Address: | tail -n1 | sed 's/Address: //g')
 }
 
 function x() {
@@ -14,11 +18,11 @@ function x() {
 # set hosts
 echo '127.0.0.1   localhost localhost.localdomain localhost4 localhost4.localdomain4
 ::1         localhost localhost.localdomain localhost6 localhost6.localdomain6
-' >/etc/hosts
+' > /etc/hosts
 
 # set wireguard
-echo "$KEY_PRIVATE" >/tmp/keyfile
-echo "$KEY_SHARE" >/tmp/psk
+echo "$KEY_PRIVATE" > /tmp/keyfile
+echo "$KEY_SHARE" > /tmp/psk
 
 declare -r DEV=wg0
 x ip link add dev $DEV type wireguard
@@ -41,10 +45,10 @@ SAVED_IP=""
 if [[ "$UDP2RAW_PASSWORD" ]]; then
 	function action() {
 		local NEW_IP="$1"
-		echo -n "$NEW_IP" >/run/remote_host_ip
+		echo -n "$NEW_IP" > /run/remote_host_ip
 
 		if [[ -e /run/udp2raw.pid ]]; then
-			local pid=$(</run/udp2raw.pid)
+			local pid=$(< /run/udp2raw.pid)
 			echo "    try kill process: $pid"
 			kill -SIGINT $pid || true
 		fi

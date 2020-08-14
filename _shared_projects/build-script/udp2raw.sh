@@ -1,6 +1,6 @@
 function build_udp2raw() {
 	local WORK=$(create_if_not build_udp2raw_worker alpine)
-	buildah run $WORK apk --no-cache add make gcc musl-dev g++ linux-headers
+	buildah run $(use_alpine_apk_cache) $WORK apk add make gcc musl-dev g++ linux-headers
 
 	buildah unmount $WORK
 	local MNT_WORK=$(buildah mount $WORK)

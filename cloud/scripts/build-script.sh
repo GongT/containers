@@ -2,7 +2,7 @@
 
 set -e
 
-apk --no-cache add nginx redis nextcloud \
+apk add nginx redis nextcloud \
 	php-fpm php7-pdo_mysql php7-pecl-apcu php7-exif php7-opcache php7-pecl-imagick \
 	nextcloud-activity \
 	nextcloud-admin_audit \

@@ -10,7 +10,7 @@ WORK=$(create_if_not blog-worker alpine)
 RESULT=$(create_if_not blog-result alpine)
 
 info "install..."
-buildah run "$RESULT" apk --no-cache add nodejs
+buildah run $(use_alpine_apk_cache) "$RESULT" apk add nodejs
 info "install complete..."
 
 cat scripts/build-script.sh | buildah run "$WORK" sh

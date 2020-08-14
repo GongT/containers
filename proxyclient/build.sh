@@ -7,11 +7,11 @@ source ../common/functions-build.sh
 
 info "starting..."
 
-RESULT=$(create_if_not gfw-client-result gongt/alpine-init:latest-cn)
+RESULT=$(create_if_not gfw-client-result alpine:latest)
 
 info "init compile..."
 
-buildah run $(use_alpine_apk_cache) $RESULT apk --no-cache add bash wireguard-tools-wg dnsmasq privoxy
+buildah run $(use_alpine_apk_cache) $RESULT apk add bash wireguard-tools-wg dnsmasq privoxy
 MNT=$(buildah mount $RESULT)
 
 rm -rf "$MNT/etc/nginx" "$MNT/etc/dnsmasq.conf" "$MNT/etc/dnsmasq.d" "$MNT/etc/privoxy"

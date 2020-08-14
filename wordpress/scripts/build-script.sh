@@ -2,7 +2,7 @@
 
 set -e
 
-apk --no-cache add nginx redis php7 php-fpm curl memcached \
+apk add nginx redis php7 php-fpm curl memcached \
 	php7-pecl-xdebug php7-pecl-apcu php7-opcache php7-curl \
 	php7-pecl-gmagick php7-pecl-imagick php7-gd php7-gd php7-mbstring \
 	php7-xmlreader php7-xml php7-exif php7-iconv php7-json \

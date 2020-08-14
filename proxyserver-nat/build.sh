@@ -12,13 +12,13 @@ RESULT=$(create_if_not work-gfw-result gongt/alpine-init:latest-cn)
 
 info "init compile..."
 
-buildah run $(use_alpine_apk_cache) $RESULT apk --no-cache add wireguard-tools-wg bash dnsmasq privoxy nmap-ncat curl
+buildah run $(use_alpine_apk_cache) $RESULT apk add wireguard-tools-wg bash dnsmasq privoxy nmap-ncat curl
 MNT=$(buildah mount $RESULT)
 rm -rf "$MNT/etc/dnsmasq.conf" "$MNT/etc/dnsmasq.d"
 
 # build microsocks
 info " * microsocks"
-buildah run $WORK apk --no-cache add make gcc musl-dev
+buildah run $(use_alpine_apk_cache) $WORK apk add make gcc musl-dev
 buildah unmount $WORK
 MNT_WORK=$(buildah mount $WORK)
 
