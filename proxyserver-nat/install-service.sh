@@ -25,8 +25,7 @@ source /tmp/load-keys.sh
 
 info "remote wireguard keys created."
 
-create_pod_service_unit gongt/proxyserver
-unit_podman_image gongt/proxyserver-nat
+create_pod_service_unit gongt/proxyserver-nat
 unit_unit Description "Proxy Server Behind NAT"
 if [[ "$UDP2RAW_PASSWORD" ]]; then
 	unit_start_notify output "<service started signal>"
