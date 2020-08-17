@@ -57,5 +57,3 @@ echo '[Service]
 ExecStartPre=/usr/bin/touch /tmp/dnsmasq-resolv-proxy.conf
 PrivateTmp=no
 ' | write_file "/etc/systemd/system/dnsmasq.service.d/proxy.conf"
-
-systemctl daemon-reload

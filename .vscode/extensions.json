@@ -1,0 +1,12 @@
+{
+	"recommendations": [
+		"foxundermoon.shell-format",
+		"mads-hartmann.bash-ide-vscode",
+		"timonwong.shellcheck",
+		"coolbear.systemd-unit-file",
+		"william-voyek.vscode-nginx"
+	],
+	"unwantedRecommendations": [
+		"ms-vscode.powershell"
+	]
+}
