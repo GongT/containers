@@ -28,9 +28,9 @@ for NAME in "${LIST[@]}"; do
 	if [[ "$(< $LOG.ret)" != 0 ]]; then
 		echo -e "\e[38;5;9mFailed!\e[0m"
 		cat "$LOG" >&2
-		exit 1
+	else
+		echo -e "\e[38;5;10mSuccess!\e[0m"
 	fi
-	echo -e "\e[38;5;10mSuccess!\e[0m"
 done
 
 systemctl daemon-reload

@@ -1,0 +1,12 @@
+writable = yes
+read only = no
+nt acl support = yes
+public = yes
+inherit acls = yes
+browseable = yes
+create mask = 0644
+directory mask = 0755
+recycle:touch = no
+recycle:keeptree = yes
+recycle:versions = no
+recycle:excludedir = .\$samba

@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+
+set -Eeuo pipefail
+
+if testparm --suppress-prompt &> /dev/null; then
+	systemctl reload smb
+else
+	testparm --suppress-prompt || true
+fi

@@ -1,0 +1,12 @@
+[Unit]
+Description=Create samba config file
+Before=smb.service nmb.service
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+EnvironmentFile=/opt/config/environments
+ExecStart=/opt/scripts/start.sh
+
+[Install]
+WantedBy=multi-user.target

@@ -24,7 +24,7 @@ fi
 
 buildah copy $RESULT fs /
 
-buildah config --cmd '/lib/systemd/systemd' "$RESULT"
+buildah config --cmd '/opt/start.sh' --stop-signal SIGINT "$RESULT"
 buildah config --author "GongT <admin@gongt.me>" --created-by "GongT" --label name=gongt/gamedisk "$RESULT"
 info "settings update..."
 

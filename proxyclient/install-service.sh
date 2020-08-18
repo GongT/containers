@@ -37,7 +37,8 @@ unit_hook_poststart "$POSTSTART_SCRIPT"
 unit_depend network-online.target
 unit_fs_bind config/proxyclient /config
 network_use_bridge 3271
-unit_podman_arguments --cap-add=NET_ADMIN $(
+add_network_privilege
+unit_podman_arguments $(
 	safe_environment \
 		"KEY_ROUTER_PUBLIC=${KEY_ROUTER_PUBLIC}" \
 		"KEY_PRIVATE=${KEY_PRIVATE}" \

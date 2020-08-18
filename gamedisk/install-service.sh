@@ -10,10 +10,12 @@ unit_podman_image gongt/gamedisk
 unit_unit Description "iSCSI target daemon for game disk"
 unit_data danger
 
-unit_podman_arguments --device=/dev/scsi/game:/dev/main-disk:rwm --cap-add=CAP_SYS_RAWIO
-unit_using_systemd
+unit_podman_arguments "--env=DISK_TO_USE=/dev/mapper/scsi-game"
+use_full_system_privilege
+unit_fs_bind /dev/mapper /dev/mapper
+unit_start_notify output "tgtd configured"
 
-unit_depend "fiber-host.pod.service"
+unit_depend "fiberhost.pod.service"
 
 # unit_body Restart always
 network_use_container fiberhost

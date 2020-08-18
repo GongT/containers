@@ -1,0 +1,14 @@
+[Match]
+MACAddress=3E:F4:F3:CE:1D:75
+
+[Link]
+RequiredForOnline=yes
+
+[Network]
+Description=Default Network
+DHCP=yes
+
+[DHCPv4]
+SendHostname=yes
+ClientIdentifier=mac
+SendRelease=yes

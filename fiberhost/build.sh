@@ -7,15 +7,14 @@ source ../common/functions-build.sh
 
 info "starting..."
 
-RESULT=$(create_if_not fiber-host-result alpine)
+RESULT=$(create_if_not fiber-host-result gong/alpine-init)
 
 info "init compile..."
 
-buildah run $(use_alpine_apk_cache) $RESULT apk add dnsmasq bash
+buildah run $(use_alpine_apk_cache) $RESULT apk add dnsmasq bash iperf3
 buildah copy $RESULT fs /
 info "packages installed..."
 
-buildah config --cmd "/opt/boot.sh" --stop-signal SIGTERM "$RESULT"
 buildah config --author "GongT <admin@gongt.me>" --created-by "GongT" --label name=gongt/fiberhost "$RESULT"
 info "settings update..."
 

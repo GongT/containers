@@ -24,5 +24,8 @@ unit_podman_arguments --env="INTERFACE_NAME=$INTERFACE_NAME" --env="NET_NAMESPAC
 unit_body Restart always
 unit_hook_stop "+/usr/bin/bash $STOP_SCRIPT"
 unit_hook_start "+/usr/bin/bash $START_SCRIPT"
-network_use_manual "--network=ns:/var/run/netns/$NET_NAMESPACE"
+
+network_use_manual "--network=ns:/var/run/netns/$NET_NAMESPACE" --dns=127.0.0.1
+add_network_privilege
+
 unit_finish

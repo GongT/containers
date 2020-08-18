@@ -5,8 +5,8 @@ set -Eeuo pipefail
 cd "$(dirname "$(realpath "${BASH_SOURCE[0]}")")"
 source ../common/functions-install.sh
 
-arg_string   UDP2RAW_PASSWORD p/pass "udp2raw的密码"
-arg_string   _UDP2RAW_MODE m/mode "udp2raw的模式（可选: icmp/udp/faketcp）"
+arg_string UDP2RAW_PASSWORD p/pass "udp2raw的密码"
+arg_string _UDP2RAW_MODE m/mode "udp2raw的模式（可选: icmp/udp/faketcp）"
 arg_string + TITLE t/title "本服务器的名称"
 arg_string + IP_NUMBER n "本服务器的IP"
 arg_finish "$@"
@@ -18,7 +18,7 @@ TITLE='WireguardProxyServer$TITLE'
 IP_NUMBER='$IP_NUMBER'
 UDP2RAW_PASSWORD='$UDP2RAW_PASSWORD'
 UDP2RAW_MODE='$_UDP2RAW_MODE'
-$(<scripts/router_script.sh)
+$(< scripts/router_script.sh)
 "
 echo "$SCRIPT" | ssh router.home.gongt.me bash > /tmp/load-keys.sh
 source /tmp/load-keys.sh
@@ -35,8 +35,11 @@ fi
 unit_depend network-online.target
 unit_fs_bind config/proxyserver /config
 unit_body Restart always
+
 network_use_manual --network=bridge0 --mac-address=86:13:02:8F:76:2B --dns=127.0.0.1
-unit_podman_arguments --cap-add=NET_ADMIN $(
+add_network_privilege
+
+unit_podman_arguments $(
 	safe_environment \
 		"KEY_ROUTER_PUBLIC=${KEY_ROUTER_PUBLIC}" \
 		"KEY_PRIVATE=${KEY_PRIVATE}" \
