@@ -41,7 +41,6 @@ create_pod_service_unit fiber-samba
 unit_podman_hostname samba.fiberhost
 unit_unit Description "samba server in fiber host"
 
-unit_depend "fiberhost.pod.service"
 network_use_container fiberhost
 
 commonConfig

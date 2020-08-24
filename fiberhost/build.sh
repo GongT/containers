@@ -7,7 +7,7 @@ source ../common/functions-build.sh
 
 info "starting..."
 
-RESULT=$(create_if_not fiber-host-result gong/alpine-init)
+RESULT=$(create_if_not fiber-host-result gongt/alpine-init)
 
 info "init compile..."
 

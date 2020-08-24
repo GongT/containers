@@ -15,8 +15,6 @@ use_full_system_privilege
 unit_fs_bind /dev/mapper /dev/mapper
 unit_start_notify output "tgtd configured"
 
-unit_depend "fiberhost.pod.service"
-
 # unit_body Restart always
 network_use_container fiberhost
 unit_finish

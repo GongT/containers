@@ -1,0 +1,9 @@
+[nginx]
+arg[]:/bin/bash
+arg[]:/opt/boot.sh
+
+[iperf]
+arg[]:/usr/bin/iperf3
+arg[]:--server
+arg[]:--pidfile
+arg[]:/run/iperf3.pid
