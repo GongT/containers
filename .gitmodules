@@ -68,7 +68,7 @@
 	path = nginx/source/lua/luaposix
 	url = https://github.com/luaposix/luaposix.git
 [submodule "_shared_projects/wangyu-/udp2raw-tunnel"]
-	path = _shared_projects/wangyu-/udp2raw-tunnel
+	path = _shared_projects/projects/udp2raw
 	url = https://github.com/wangyu-/udp2raw-tunnel
 [submodule "proxyserver-nat/microsocks"]
 	path = proxyserver-nat/microsocks

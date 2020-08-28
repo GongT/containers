@@ -1,20 +1,27 @@
-function build_udp2raw() {
-	local WORK=$(create_if_not build_udp2raw_worker alpine)
-	buildah run $(use_alpine_apk_cache) $WORK apk add make gcc musl-dev g++ linux-headers
+#!/usr/bin/env bash
 
-	buildah unmount $WORK
-	local MNT_WORK=$(buildah mount $WORK)
+set -Eeuo pipefail
 
-	buildah copy $WORK "$_SHARED_PROJECTS_ROOT/wangyu-/udp2raw-tunnel/" /builds/udp2raw
+WORK=$(create_if_not build_udp2raw_worker alpine)
+buildah run $(use_alpine_apk_cache) "$WORK" apk add make gcc musl-dev g++ linux-headers
 
-	local GIT_VER=$(cd "$_SHARED_PROJECTS_ROOT/wangyu-/udp2raw-tunnel" && git rev-parse HEAD)
-	echo "#!/bin/sh
-	echo $GIT_VER
-	" >"$MNT_WORK/builds/udp2raw/git"
-	chmod a+x "$MNT_WORK/builds/udp2raw/git"
+## no .git folder exists in container, hack here
+GIT_VER=$(cd "$PROJECT_ROOT" && git rev-parse HEAD)
+cat <<- EOF > "$PROJECT_ROOT/git"
+	#!/bin/sh
+	echo '$GIT_VER'
+EOF
+chmod a+x "$PROJECT_ROOT/git"
 
-	buildah run $WORK sh -c 'export PATH="/builds/udp2raw:$PATH" && cd /builds/udp2raw && make -j'
+cat <<- 'EOF' | buildah run "$MOUNT_INSTALL_TARGET" "$MOUNT_BUILD_SOURCE" "$WORK" sh
+	set -e
 
-	echo "${MNT_WORK}/builds/udp2raw/udp2raw"
-	commit_shared "${MNT_WORK}/builds/udp2raw/udp2raw"
-}
+	if ! [ -e "/udp2raw" ]; then
+		export PATH="/build:$PATH"
+		echo "PATH=$PATH"
+		cd /build
+		make -j
+		mv udp2raw /udp2raw
+	fi
+	install -m 0755 /udp2raw /install/usr/bin/udp2raw
+EOF

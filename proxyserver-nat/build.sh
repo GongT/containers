@@ -24,14 +24,10 @@ MNT_WORK=$(buildah mount $WORK)
 
 buildah copy $WORK microsocks/ /build
 buildah run $WORK sh -c "cd /build && make"
-cp "${MNT_WORK}/build/microsocks" "${MNT}/usr/bin/microsocks"
-chmod 0777 "${MNT}/usr/bin/microsocks"
+install -T "${MNT_WORK}/build/microsocks" "${MNT}/usr/bin/microsocks"
 
 # build udp2raw
-info " * udp2raw"
-load_shared_project udp2raw
-build_udp2raw
-copy_dist_program $RESULT
+install_shared_project udp2raw "$MNT" 
 
 # copy config files
 info " * config files"

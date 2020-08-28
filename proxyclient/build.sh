@@ -16,11 +16,10 @@ MNT=$(buildah mount $RESULT)
 
 rm -rf "$MNT/etc/nginx" "$MNT/etc/dnsmasq.conf" "$MNT/etc/dnsmasq.d" "$MNT/etc/privoxy"
 
-# copy udp2raw
-info " * udp2raw"
-load_shared_project udp2raw
-build_udp2raw
-copy_dist_program $RESULT
+# build udp2raw
+install_shared_project \
+	udp2raw "$MNT" 
+install_shared_project udp2raw "$MNT" 
 
 # copy config files
 info " * config files"
