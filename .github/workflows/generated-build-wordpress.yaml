@@ -21,11 +21,11 @@ jobs:
   build:
     name: 'standalone build wordpress image'
     runs-on: [self-hosted, linux]
-    env:
-      http_proxy: http://proxy-server.:3271
     steps:
       - name: 'Checkout'
         uses: actions/checkout@v2
+        env:
+          http_proxy: http://proxy-server.:3271
         with:
           submodules: 'recursive'
           clean: true
@@ -33,9 +33,11 @@ jobs:
       - name: 'Fetch exists image from docker'
         shell: bash
         run: podman pull "docker://docker.io/gongt/wordpress"
-        continue-on-error: true
+        # continue-on-error: true
       - name: 'Build Image'
         run: bash -e _scripts_/ci-single-build.sh wordpress
+        env:
+          http_proxy: http://proxy-server.:3271
       - name: 'Publish to docker hub'
         shell: bash
         env:
