@@ -16,7 +16,7 @@ BUILDER_MNT=$(buildah mount $BUILDER)
 info "init compile..."
 
 if ! [[ -f "$BUILDER_MNT/usr/lib/golang/bin/go" ]] || [[ -n "$FORCE_DNF" ]]; then
-	buildah run $BUILDER dnf install --setopt=max_parallel_downloads=10 -y $(<scripts/compile.lst)
+	run_dnf $BUILDER $(<scripts/compile.lst)
 	info "dnf install complete..."
 else
 	info "dnf install already complete."
