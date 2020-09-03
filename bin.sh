@@ -41,6 +41,15 @@ do_ls() {
 
 declare -r ACTION=$1
 shift
+
+if [[ "$ACTION" == install ]] && ! [[ -L "$0" ]]; then
+	if [[ -e "/usr/local/bin/ms" ]] || [[ -L "/usr/local/bin/ms" ]]; then
+		rm -f /usr/local/bin/ms
+	fi
+	ln -vs "$(realpath "$0")" /usr/local/bin/ms
+	exit
+fi
+
 case "$ACTION" in
 status)
 	systemctl list-units '*.pod@.service' '*.pod.service' --all --no-pager
@@ -68,5 +77,9 @@ logs)
 pause)
 	systemctl list-units '*.pod@.service' '*.pod.service' --all --no-pager --no-legend | grep activating \
 		| awk '{print $1}' | xargs --no-run-if-empty -t
+	;;
+*)
+	usage
+	die "unknown action: $ACTION"
 	;;
 esac
