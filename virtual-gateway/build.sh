@@ -15,8 +15,8 @@ buildah run $(use_alpine_apk_cache) $RESULT apk add bash curl wireguard-tools-wg
 buildah copy $RESULT fs /
 info "packages installed..."
 
-buildah config --author "GongT <admin@gongt.me>" --created-by "GongT" --label name=gongt/infra "$RESULT"
+buildah config --author "GongT <admin@gongt.me>" --created-by "GongT" --label name=gongt/virtual-gateway "$RESULT"
 info "settings update..."
 
-buildah commit "$RESULT" gongt/infra
+buildah commit "$RESULT" gongt/virtual-gateway
 info "Done!"

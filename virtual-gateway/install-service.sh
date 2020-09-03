@@ -23,7 +23,7 @@ fi
 install_script infra-remove-all.sh STOP_SCRIPT
 
 auto_create_pod_service_unit
-unit_podman_image gongt/infra
+unit_podman_image gongt/virtual-gateway
 unit_unit Description virtual machine gateway
 unit_depend network-online.target
 unit_body Restart always
