@@ -10,7 +10,7 @@ if [[ "${CI+found}" != found ]]; then
 	die "This script is only for CI"
 fi
 
-NAME=$1
+declare -r NAME=$1
 cd "$NAME"
 
 declare -rx REWRITE_IMAGE_NAME="docker.io/gongt/${NAME}"
@@ -25,3 +25,5 @@ if [[ "$EXISTS" ]]; then
 else
 	bash "./build.sh" || die "Build failed"
 fi
+
+podman rmi "localhost/gongt/${NAME}" &> /dev/null || true

@@ -2,7 +2,9 @@
 
 set -e
 
-./bootstrap.sh --prefix="$ARTIFACT_PREFIX" -C \
+make distclean || true
+
+./bootstrap.sh --prefix="$ARTIFACT_PREFIX" \
 	--with-gnu-ld \
 	--with-boost \
 	--enable-shared \
@@ -14,7 +16,9 @@ set -e
 	--disable-examples \
 	--disable-tests \
 	--enable-python-binding \
-	--with-libiconv
+	--with-libiconv \
+	--enable-TORRENT_NO_DEPRECATE \
+	CXXFLAGS=-std=c++14
 
 make -j$(nproc)
 make install
