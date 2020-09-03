@@ -17,7 +17,7 @@ Actions:"
 		echo -e "    \e[38;5;14m$N\e[0m: $*"
 	}
 	if [[ "$Z" = */bin.sh ]]; then
-		l install "install (link) bin.sh to /usr/local/bin/ms"
+		l install "install (link) bin.sh to /usr/local/bin/ms, and create auto-pull timer"
 	fi
 	l status "show status of all services"
 	l upgrade "update (re-install) services files"
@@ -35,6 +35,13 @@ if [[ $# -eq 0 ]]; then
 	exit 0
 fi
 
+go_home() {
+	cd "$(dirname "$(readlink "$0")")" || die "failed chdir to containers source folder"
+	if ! [[ -e "bin.sh" ]]; then
+		die "failed chdir to containers source folder (wd: $(pwd))"
+	fi
+}
+
 do_ls() {
 	systemctl list-unit-files '*.pod@.service' '*.pod.service' --all --no-pager --no-legend | awk '{print $1}' | sed -E 's/\.service$//g'
 }
@@ -43,6 +50,15 @@ declare -r ACTION=$1
 shift
 
 if [[ "$ACTION" == install ]] && ! [[ -L "$0" ]]; then
+	go_home
+
+	mkdir -p /usr/share/scripts
+	cp _scripts_/podman-auto-pull.service _scripts_/podman-auto-pull.timer -t /usr/lib/systemd/system/
+	cp _scripts_/podman-auto-pull.sh /usr/share/scripts/podman-auto-pull.sh
+
+	systemctl daemon-reload
+	systemctl enable --now podman-auto-pull.timer
+
 	if [[ -e "/usr/local/bin/ms" ]] || [[ -L "/usr/local/bin/ms" ]]; then
 		rm -f /usr/local/bin/ms
 	fi
@@ -55,10 +71,7 @@ status)
 	systemctl list-units '*.pod@.service' '*.pod.service' --all --no-pager
 	;;
 upgrade)
-	cd "$(dirname "$(readlink "$0")")" || die "failed chdir to containers source folder"
-	if ! [[ -e "bin.sh" ]]; then
-		die "failed chdir to containers source folder (wd: $(pwd))"
-	fi
+	go_home
 	bash ./upgrade.sh
 	;;
 ls)

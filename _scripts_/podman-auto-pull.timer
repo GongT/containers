@@ -1,0 +1,10 @@
+[Unit]
+Description=podman pull all images from remote
+Wants=network-online.target
+
+[Timer]
+OnBootSec=15min
+OnUnitInactiveSec=6h
+
+[Install]
+WantedBy=timers.target

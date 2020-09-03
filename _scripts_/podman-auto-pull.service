@@ -1,0 +1,8 @@
+[Unit]
+Description=podman pull all images from remote
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+RemainAfterExit=no
+ExecStart=/usr/bin/env bash "/usr/share/scripts/podman-auto-pull.sh"
