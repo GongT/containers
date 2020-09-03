@@ -6,12 +6,12 @@ cd "$(dirname "$(realpath "${BASH_SOURCE[0]}")")"
 source ../common/functions-install.sh
 
 NET_NAMESPACE="fiberhostnetworknamespace"
-arg_string   NET_NAMESPACE interfacename "fiber interface name"
+arg_string NET_NAMESPACE interfacename "fiber interface name"
 arg_string + INTERFACE_NAME interfacename "fiber interface name"
 arg_finish "$@"
 
-install_script scripts/create-fiber-namespace.sh START_SCRIPT
-install_script scripts/delete-fiber-namespace.sh STOP_SCRIPT
+START_SCRIPT=$(install_script scripts/create-fiber-namespace.sh)
+STOP_SCRIPT=$(install_script scripts/delete-fiber-namespace.sh)
 
 auto_create_pod_service_unit
 unit_podman_image gongt/fiberhost

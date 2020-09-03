@@ -18,9 +18,9 @@ TITLE='WireguardProxyClient$CLIENT_NAME'
 IP_NUMBER='$IP_NUMBER'
 UDP2RAW_PASSWORD='$UDP2RAW_PASSWORD'
 UDP2RAW_MODE='$_UDP2RAW_MODE'
-$(<scripts/router_script.sh)
+$(< scripts/router_script.sh)
 "
-echo "$SCRIPT" | ssh router.home.gongt.me bash >/tmp/load-keys.sh
+echo "$SCRIPT" | ssh router.home.gongt.me bash > /tmp/load-keys.sh
 source /tmp/load-keys.sh
 
 info "upload settings to router - OK"
@@ -32,7 +32,7 @@ if [[ "$UDP2RAW_PASSWORD" ]]; then
 else
 	unit_start_notify sleep 3
 fi
-install_script scripts/reload_dnsmasq.sh POSTSTART_SCRIPT
+POSTSTART_SCRIPT=$(install_script scripts/reload_dnsmasq.sh)
 unit_hook_poststart "$POSTSTART_SCRIPT"
 unit_depend network-online.target
 unit_fs_bind config/proxyclient /config

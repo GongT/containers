@@ -11,16 +11,16 @@ arg_finish "$@"
 
 VOL=/data/AppData/data/infra
 mkdir -p "$VOL"
-if ! [[ -e "$VOL/wg0.conf" ]] ; then
-    if ! ssh services.gongt.me echo -e "remote login ok" ; then
-        die "Failed SSH login to services.gongt.me, check ssh key files."
-    fi
-    
-    ssh services.gongt.me /usr/bin/env bash < init-script.sh > "$VOL/wg0.conf" ||
-    die "Failed to run init script on remote host, check output and try again."
+if ! [[ -e "$VOL/wg0.conf" ]]; then
+	if ! ssh services.gongt.me echo -e "remote login ok"; then
+		die "Failed SSH login to services.gongt.me, check ssh key files."
+	fi
+
+	ssh services.gongt.me /usr/bin/env bash < init-script.sh > "$VOL/wg0.conf" \
+		|| die "Failed to run init script on remote host, check output and try again."
 fi
 
-install_script infra-remove-all.sh STOP_SCRIPT
+STOP_SCRIPT=$(install_script infra-remove-all.sh)
 
 auto_create_pod_service_unit
 unit_podman_image gongt/virtual-gateway
@@ -34,9 +34,10 @@ unit_hook_start "-/usr/bin/env bash $STOP_SCRIPT"
 network_use_manual --network=bridge0 --mac-address=86:13:02:8F:76:2A --dns=none
 add_network_privilege
 
-unit_podman_arguments $(safe_environment \
-	"DSNS_KEY=${DSNS_KEY}" \
-	"DDNS_HOST=${DDNS_HOST}"
+unit_podman_arguments $(
+	safe_environment \
+		"DSNS_KEY=${DSNS_KEY}" \
+		"DDNS_HOST=${DDNS_HOST}"
 )
 
 unit_fs_bind $VOL /storage

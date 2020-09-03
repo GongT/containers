@@ -5,7 +5,9 @@ set -Eeuo pipefail
 cd "$(dirname "$(realpath "${BASH_SOURCE[0]}")")"
 source ../common/functions-install.sh
 
-install_script wait-all-mount.sh SCRIPT
+arg_finish "$@"
+
+SCRIPT=$(install_script wait-all-mount.sh)
 
 cat << EOF > /usr/lib/systemd/system/wait-mount.service
 [Unit]
