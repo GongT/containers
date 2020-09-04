@@ -3,7 +3,7 @@
 set -Eeuo pipefail
 
 WORK=$(create_if_not build_udp2raw_worker alpine)
-buildah run $(use_alpine_apk_cache) "$WORK" apk add make gcc musl-dev g++ linux-headers
+buildah run $(use_alpine_apk_cache) "$WORK" apk add -U make gcc musl-dev g++ linux-headers
 
 ## no .git folder exists in container, hack here
 GIT_VER=$(cd "$PROJECT_ROOT" && git rev-parse HEAD)

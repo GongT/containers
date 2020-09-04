@@ -11,7 +11,7 @@ RESULT=$(create_if_not infra-result gongt/alpine-init)
 
 info "init compile..."
 
-buildah run $(use_alpine_apk_cache) $RESULT apk add bash curl wireguard-tools-wg
+buildah run $(use_alpine_apk_cache) $RESULT apk add -U bash curl wireguard-tools-wg
 buildah copy $RESULT fs /
 info "packages installed..."
 

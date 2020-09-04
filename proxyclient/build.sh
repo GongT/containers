@@ -11,7 +11,7 @@ RESULT=$(create_if_not gfw-client-result localhost/gongt/alpine-init)
 
 info "init compile..."
 
-buildah run $(use_alpine_apk_cache) $RESULT apk add bash wireguard-tools-wg dnsmasq privoxy
+buildah run $(use_alpine_apk_cache) $RESULT apk add -U bash wireguard-tools-wg dnsmasq privoxy
 MNT=$(buildah mount $RESULT)
 
 rm -rf "$MNT/etc/nginx" "$MNT/etc/dnsmasq.conf" "$MNT/etc/dnsmasq.d" "$MNT/etc/privoxy"

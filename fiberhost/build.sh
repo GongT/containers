@@ -11,7 +11,7 @@ RESULT=$(create_if_not fiber-host-result gongt/alpine-init)
 
 info "init compile..."
 
-buildah run $(use_alpine_apk_cache) $RESULT apk add dnsmasq bash iperf3
+buildah run $(use_alpine_apk_cache) $RESULT apk add -U dnsmasq bash iperf3
 buildah copy $RESULT fs /
 info "packages installed..."
 

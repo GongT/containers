@@ -13,7 +13,7 @@ info "files created..."
 
 echo '
 set -e
-apk add ca-certificates bash curl wget openssl
+apk add -U ca-certificates bash curl wget openssl
 
 cd /opt/acme.sh
 bash acme.sh --install \
