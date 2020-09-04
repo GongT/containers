@@ -7,8 +7,8 @@ source ../common/functions-build.sh
 
 info "starting..."
 
-WORK=$(create_if_not work-gfw-worker gongt/alpine-init:latest-cn)
-RESULT=$(create_if_not work-gfw-result gongt/alpine-init:latest-cn)
+WORK=$(create_if_not work-gfw-worker gongt/alpine-init)
+RESULT=$(create_if_not work-gfw-result gongt/alpine-init)
 
 info "init compile..."
 

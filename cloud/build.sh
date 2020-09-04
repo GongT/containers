@@ -6,7 +6,7 @@ cd "$(dirname "$(realpath "${BASH_SOURCE[0]}")")"
 source ../common/functions-build.sh
 
 info "starting..."
-RESULT=$(create_if_not cloud-worker gongt/alpine-init:latest-cn)
+RESULT=$(create_if_not cloud-worker gongt/alpine-init)
 
 cat scripts/build-script.sh | buildah run $(use_alpine_apk_cache) "$RESULT" sh
 info "install complete..."

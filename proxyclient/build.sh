@@ -7,7 +7,7 @@ source ../common/functions-build.sh
 
 info "starting..."
 
-RESULT=$(create_if_not gfw-client-result gongt/alpine-init:latest-cn)
+RESULT=$(create_if_not gfw-client-result localhost/gongt/alpine-init)
 
 info "init compile..."
 

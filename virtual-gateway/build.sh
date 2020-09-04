@@ -7,7 +7,7 @@ source ../common/functions-build.sh
 
 info "starting..."
 
-RESULT=$(create_if_not infra-result gongt/alpine-init:latest-cn)
+RESULT=$(create_if_not infra-result gongt/alpine-init)
 
 info "init compile..."
 
