@@ -17,3 +17,6 @@ gd-devel
 geoip-devel
 gperftools-devel
 brotli-devel
+ccache
+tar
+curl

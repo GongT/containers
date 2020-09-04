@@ -9,8 +9,9 @@ function die() {
 
 function usage() {
 	local Z=$0
-	echo "Usage: $Z action
-Actions:"
+	echo "Usage: $Z action"
+	echo
+	echo "Containers Management:"
 	l() {
 		local N=$1
 		shift
@@ -19,15 +20,21 @@ Actions:"
 	if [[ "$Z" = */bin.sh ]]; then
 		l install "install (link) bin.sh to /usr/local/bin/ms, and create auto-pull timer"
 	fi
-	l status "show status of all services"
 	l upgrade "update (re-install) services files"
+
+	echo
+	echo "Service Control:"
+	l status "show status of all services"
 	l ls "list all service names"
-	l start "start all"
-	l restart "restart all"
-	l stop "reload all"
-	l stop "stop all"
+	for I in start restart stop reload reset-failed; do
+		l "$I" "$I all service at once"
+	done
 	l logs "show all logs (-f for watch mode)"
-	l pause "prevent startup, if it (re-)starting"
+	l abort "prevent startup, if it (re-)starting"
+
+	echo
+	echo "Tools:"
+	l run "run command in container (default /bin/sh)"
 }
 
 if [[ $# -eq 0 ]]; then
@@ -77,7 +84,7 @@ upgrade)
 ls)
 	do_ls
 	;;
-start | restart | stop | reload)
+start | restart | stop | reload | reset-failed)
 	do_ls | xargs --no-run-if-empty -t systemctl "$ACTION"
 	;;
 logs)
@@ -87,9 +94,26 @@ logs)
 	done
 	journalctl "${LARGS[@]}" "$@"
 	;;
-pause)
+abort)
 	systemctl list-units '*.pod@.service' '*.pod.service' --all --no-pager --no-legend | grep activating \
-		| awk '{print $1}' | xargs --no-run-if-empty -t
+		| awk '{print $1}' | xargs --no-run-if-empty -t systemctl stop
+	;;
+run)
+	TARGET="$1"
+	shift
+	if [[ $# -gt 0 ]]; then
+		CMD="$1"
+		shift
+	else
+		CMD="sh"
+	fi
+
+	if systemctl list-units '*.pod@.service' '*.pod.service' --no-pager --no-legend | grep running | awk '{print $1}' | grep -q "$TARGET"; then
+		set -x
+		exec podman exec -it "$TARGET" "$CMD" "$@"
+	else
+		die "target service ($TARGET) is not running"
+	fi
 	;;
 *)
 	usage

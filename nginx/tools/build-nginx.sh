@@ -2,40 +2,38 @@
 
 set -Eeuo pipefail
 
-DST=/opt/dist
-rm -rf "$DST"
-mkdir -p "$DST"
+rm -rf "$ARTIFACT_PREFIX"
+mkdir -p "$ARTIFACT_PREFIX"
 
 ### TODO: 通过安装系统自带的nginx，运行nginx -V看原本的编译参数
 
-cd "/opt/source/luajit2" && echo "=== install '$(basename "$(pwd)")'..."
+cd "$SOURCE/luajit2" && echo "=== install '$(basename "$(pwd)")'..."
 export LUAJIT_LIB=/usr/lib64
 export LUAJIT_INC=/usr/include/luajit-2.1
 make clean
 make MULTILIB=lib64 PREFIX=/usr -j
-make MULTILIB=lib64 PREFIX=/usr "INSTALL_INC=$LUAJIT_INC" "INSTALL_JITLIB=$DST/usr/share/lua/5.1" install
+make MULTILIB=lib64 PREFIX=/usr "INSTALL_INC=$LUAJIT_INC" "INSTALL_JITLIB=$ARTIFACT_PREFIX/usr/share/lua/5.1" install
 if ! [[ -e /usr/bin/lua ]]; then
 	ln -s luajit /usr/bin/lua
 fi
 
-cd "/opt/source/resty/lua-resty-core" && echo "=== install '$(basename "$(pwd)")'..."
-make "DESTDIR=$DST" LUA_LIB_DIR=/usr/share/lua/5.1 PREFIX=/usr install
-cd "/opt/source/resty/lua-resty-lrucache" && echo "=== install '$(basename "$(pwd)")'..."
-make "DESTDIR=$DST" LUA_LIB_DIR=/usr/share/lua/5.1 PREFIX=/usr install
+cd "$SOURCE/resty/lua-resty-core" && echo "=== install '$(basename "$(pwd)")'..."
+make "DESTDIR=$ARTIFACT_PREFIX" LUA_LIB_DIR=/usr/share/lua/5.1 PREFIX=/usr install
+cd "$SOURCE/resty/lua-resty-lrucache" && echo "=== install '$(basename "$(pwd)")'..."
+make "DESTDIR=$ARTIFACT_PREFIX" LUA_LIB_DIR=/usr/share/lua/5.1 PREFIX=/usr install
 
-cd "/opt/source/lua/luaposix" && echo "=== install '$(basename "$(pwd)")'..."
+cd "$SOURCE/lua/luaposix" && echo "=== install '$(basename "$(pwd)")'..."
 # LUA_LIBDIR
-./build-aux/luke "LUA_INCDIR=$LUAJIT_INC" "PREFIX=$DST/usr/local" LUAVERSION=5.1
-./build-aux/luke "LUA_INCDIR=$LUAJIT_INC" "PREFIX=$DST/usr/local" LUAVERSION=5.1 install
+./build-aux/luke "LUA_INCDIR=$LUAJIT_INC" "PREFIX=$ARTIFACT_PREFIX/usr/local" LUAVERSION=5.1
+./build-aux/luke "LUA_INCDIR=$LUAJIT_INC" "PREFIX=$ARTIFACT_PREFIX/usr/local" LUAVERSION=5.1 install
 
-cd "/opt/source/nginx" && echo "=== install '$(basename "$(pwd)")'..."
+cd "$SOURCE/nginx" && echo "=== install '$(basename "$(pwd)")'..."
 
 export CC_OPT='-O2 -g -pipe -Wall -Werror=format-security -Wp,-D_FORTIFY_SOURCE=2 -Wp,-D_GLIBCXX_ASSERTIONS -fexceptions -fstack-protector-strong -grecord-gcc-switches -m64 -mtune=generic -fasynchronous-unwind-tables -fstack-clash-protection -Wno-error'
 export LD_OPT='-Wl,-z,defs -Wl,-z,now -Wl,-z,relro -Wl,-E'
 
 MODULES=()
-for REL_FOLDER in ../modules/*/
-do
+for REL_FOLDER in ../modules/*/; do
 	MODULES+=("--add-module=$REL_FOLDER")
 done
 
@@ -100,65 +98,38 @@ OTHER_MODULES+=("--add-module=../special-modules/njs/nginx")
 
 make BUILDTYPE=Debug -j
 
-mkdir -p $DST/usr/sbin
+mkdir -p "$ARTIFACT_PREFIX/usr/sbin"
 
-make DESTDIR=$DST install
+make "DESTDIR=$ARTIFACT_PREFIX" install
 
-rm -rf $DST/etc
-mkdir -p $DST/etc/nginx
+rm -rf "$ARTIFACT_PREFIX/etc"
 
-#######
-function copy_binary() {
-	echo "copy binary $1"
-	for i in $(ldd "$1" | grep '=>' | awk '{print $3}') ; do
-		if [[ "$i" == not ]]; then
-			ldd "$1"
-			echo 'Failed to resolve some dependencies of nginx.' >&2 ; exit 1
-		fi
+echo "============================================================"
 
-		mkdir -p "$(dirname "$DST/$i")"
-		cp -vu "$i" $(echo "$DST/$i" | sed 's#/lib/#/lib64/#g' )
-	done
+copy_binary_with_dependencies \
+	"$ARTIFACT_PREFIX/usr/sbin/nginx" \
+	/usr/bin/htpasswd \
+	/bin/bash \
+	/bin/mkdir \
+	/usr/bin/sed \
+	/usr/bin/curl \
+	/usr/bin/ls \
+	/usr/bin/cat \
+	/usr/bin/sleep \
+	/usr/bin/grep \
+	/usr/bin/openssl \
+	/bin/rm
 
-	for i in $(ldd "$1" | grep -v '=>' | awk '{print $1}') ; do
-		if [[ "$i" =~ linux-vdso* ]]; then
-			continue
-		fi
-		mkdir -p "$(dirname "$DST/$i")"
-		cp -vu "$i" $(echo "$DST/$i" | sed 's#/lib/#/lib64/#g' )
-	done
-}
+rm -rf "$ARTIFACT_PREFIX/opt"
 
-copy_binary /opt/dist/usr/sbin/nginx
-copy_binary /usr/bin/htpasswd
-copy_binary /bin/bash
-copy_binary /bin/mkdir
-copy_binary /usr/bin/sed
-copy_binary /usr/bin/curl
-copy_binary /usr/bin/ls
-copy_binary /usr/bin/cat
-copy_binary /usr/bin/sleep
-copy_binary /usr/bin/grep
+mkdir -p "$ARTIFACT_PREFIX/bin" "$ARTIFACT_PREFIX/usr/bin" "$ARTIFACT_PREFIX/etc/nginx"
 
-for i in /lib64/libnss_{compat*,dns*,files*,myhostname*,resolve*} ; do
-	cp -uv "$i" "$DST/$i"
+# echo "create openssl cert..."
+# openssl req -x509 -nodes -days 365 -newkey rsa:2048 -batch \
+# 	-keyout "$ARTIFACT_PREFIX/etc/nginx/selfsigned.key" \
+# 	-out "$ARTIFACT_PREFIX/etc/nginx/selfsigned.crt"
+for D in /config /var/log/nginx /run /tmp /config.auto /etc/letsencrypt /run/sockets; do
+	mkdir -p "${ARTIFACT_PREFIX}${D}"
 done
-
-mkdir -p "$DST/bin" "$DST/usr/bin"
-
-cp /bin/bash /bin/mkdir /bin/rm "$DST/bin"
-cp /usr/bin/htpasswd /usr/bin/sed /usr/bin/curl /usr/bin/ls /usr/bin/cat /usr/bin/sleep /usr/bin/grep "$DST/usr/bin"
-
-mkdir -p "$DST/etc"
-echo "nameserver 8.8.8.8
-nameserver 1.1.1.1
-" > "$DST/etc/resolv.conf"
-
-echo "create openssl cert..."
-openssl req -x509 -nodes -days 365 -newkey rsa:2048 -batch \
-	-keyout "$DST/etc/nginx/selfsigned.key" \
-	-out "$DST/etc/nginx/selfsigned.crt"
-
-cp /etc/passwd /etc/group /etc/nsswitch.conf "$DST/etc"
 
 echo "Done."
