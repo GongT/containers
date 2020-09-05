@@ -45,4 +45,4 @@ jobs:
         env:
           PASSWD: ${{ secrets.DockerPassword }}
           http_proxy: ''
-        run: podman push "${{ env.LAST_COMMITED_IMAGE }}" --creds "gongt:$PASSWD" "docker://docker.io/gongt/samba"
+        run: ./_scripts_/retry.sh podman push "${{ env.LAST_COMMITED_IMAGE }}" --creds "gongt:$PASSWD" "docker://docker.io/gongt/samba"
