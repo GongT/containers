@@ -2,9 +2,13 @@
 
 set -Eeuo pipefail
 
-echo "resolv.conf===================="
-echo "$(< /etc/resolv.conf)"
-echo "==============================="
+if [[ -e /etc/resolv.conf ]]; then
+	echo "resolv.conf===================="
+	cat /etc/resolv.conf
+	echo "==============================="
+else
+	echo "resolv.conf did not exists ===="
+fi
 
 if ! [[ -e "/etc/letsencrypt/nginx/load.conf" ]]; then
 	mkdir -p /etc/letsencrypt/nginx
@@ -50,9 +54,13 @@ for i in conf.d vhost.d stream.d rtmp.d; do
 	fi
 done
 
-SYSTEM_RESOLVERS=$(cat /etc/resolv.conf | grep -v '127.0.0.1' | grep nameserver | sed -E 's/^nameserver\s+//g')
+if [[ -e /etc/resolv.conf ]]; then
+	SYSTEM_RESOLVERS=$(cat /etc/resolv.conf | grep -v '127.0.0.1' | grep nameserver | sed -E 's/^nameserver\s+//g')
+else
+	SYSTEM_RESOLVERS=""
+fi
 if [[ -z "$SYSTEM_RESOLVERS" ]]; then
-	SYSTEM_RESOLVERS="8.8.8.8"
+	SYSTEM_RESOLVERS="8.8.8.8 223.5.5.5"
 fi
 echo "resolver $SYSTEM_RESOLVERS;" > /config.auto/conf.d/resolver.conf
 
