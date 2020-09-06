@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/bash
 
 set -Eeuo pipefail
 
@@ -16,6 +16,13 @@ erun() {
 	"$@"
 }
 cd /etc/nginx/basic
+
+echo "create openssl cert..."
+openssl req -x509 -nodes -days 365 -newkey rsa:2048 -batch \
+	-keyout "/config.auto/selfsigned.key" \
+	-out "/config.auto/selfsigned.crt"
+echo "done..."
+
 if [[ -n "$CENSORSHIP" ]]; then
 	for i in *.conf; do
 		erun sed -i 's#$out_port_https#:59443#g' "$i"

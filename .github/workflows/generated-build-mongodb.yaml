@@ -4,6 +4,8 @@ on:
   push:
     paths:
     - 'mongodb/**'
+    - '.github/workflows/generated-build-mongodb.yaml'
+    # - common
     branches:
     - master
 env:

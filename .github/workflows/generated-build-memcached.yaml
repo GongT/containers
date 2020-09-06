@@ -4,6 +4,8 @@ on:
   push:
     paths:
     - 'memcached/**'
+    - '.github/workflows/generated-build-memcached.yaml'
+    # - common
     branches:
     - master
 env:

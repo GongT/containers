@@ -20,3 +20,4 @@ brotli-devel
 ccache
 tar
 curl
+findutils

@@ -1,12 +1,15 @@
-#!/bin/sh
+#!/usr/bin/env bash
 
-set -e
+set -Eeuo pipefail
 
-cd /mnt
+cd "$INSTALL_TARGET"
 
-[ -d lib ] && rmdir lib
-[ -L lib ] && rm lib
+for D in config var/log/nginx run tmp config.auto etc/letsencrypt run/sockets etc/nginx; do
+	mkdir -p "${D}"
+done
 
-mv lib64 lib
+collect_dist_binary_dependencies
+collect_binary_dependencies /usr/bin/htpasswd /usr/bin/sed /usr/bin/curl /usr/bin/grep /usr/bin/openssl
 
-cp -fa -- * /
+copy_dist_root
+copy_collected_dependencies

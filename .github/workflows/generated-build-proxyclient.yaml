@@ -4,6 +4,8 @@ on:
   push:
     paths:
     - 'proxyclient/**'
+    - '.github/workflows/generated-build-proxyclient.yaml'
+    # - common
     branches:
     - master
 env:

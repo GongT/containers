@@ -4,6 +4,8 @@ on:
   push:
     paths:
     - 'certbot-dns/**'
+    - '.github/workflows/generated-build-certbot-dns.yaml'
+    # - common
     branches:
     - master
 env:

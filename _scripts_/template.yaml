@@ -4,6 +4,8 @@ on:
   push:
     paths:
     - '{{PROJ}}/**'
+    - '{{thisfile}}'
+    # - common
     branches:
     - master
 env:

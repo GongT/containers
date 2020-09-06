@@ -4,6 +4,8 @@ on:
   push:
     paths:
     - 'fiberhost/**'
+    - '.github/workflows/generated-build-fiberhost.yaml'
+    # - common
     branches:
     - master
 env:

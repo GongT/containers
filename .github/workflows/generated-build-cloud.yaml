@@ -4,6 +4,8 @@ on:
   push:
     paths:
     - 'cloud/**'
+    - '.github/workflows/generated-build-cloud.yaml'
+    # - common
     branches:
     - master
 env:

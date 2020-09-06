@@ -4,6 +4,8 @@ on:
   push:
     paths:
     - 'virtual-gateway/**'
+    - '.github/workflows/generated-build-virtual-gateway.yaml'
+    # - common
     branches:
     - master
 env:

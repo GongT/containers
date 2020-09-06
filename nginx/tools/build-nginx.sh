@@ -5,8 +5,6 @@ set -Eeuo pipefail
 rm -rf "$ARTIFACT_PREFIX"
 mkdir -p "$ARTIFACT_PREFIX"
 
-### TODO: 通过安装系统自带的nginx，运行nginx -V看原本的编译参数
-
 cd "$SOURCE/luajit2" && echo "=== install '$(basename "$(pwd)")'..."
 export LUAJIT_LIB=/usr/lib64
 export LUAJIT_INC=/usr/include/luajit-2.1
@@ -40,6 +38,7 @@ done
 OTHER_MODULES=()
 OTHER_MODULES+=("--add-module=../special-modules/njs/nginx")
 
+### TODO: 通过安装系统自带的nginx，运行nginx -V看原本的编译参数
 ./auto/configure \
 	'--prefix=/usr/' \
 	'--sbin-path=/usr/sbin' \
@@ -103,33 +102,5 @@ mkdir -p "$ARTIFACT_PREFIX/usr/sbin"
 make "DESTDIR=$ARTIFACT_PREFIX" install
 
 rm -rf "$ARTIFACT_PREFIX/etc"
-
-echo "============================================================"
-
-copy_binary_with_dependencies \
-	"$ARTIFACT_PREFIX/usr/sbin/nginx" \
-	/usr/bin/htpasswd \
-	/bin/bash \
-	/bin/mkdir \
-	/usr/bin/sed \
-	/usr/bin/curl \
-	/usr/bin/ls \
-	/usr/bin/cat \
-	/usr/bin/sleep \
-	/usr/bin/grep \
-	/usr/bin/openssl \
-	/bin/rm
-
-rm -rf "$ARTIFACT_PREFIX/opt"
-
-mkdir -p "$ARTIFACT_PREFIX/bin" "$ARTIFACT_PREFIX/usr/bin" "$ARTIFACT_PREFIX/etc/nginx"
-
-# echo "create openssl cert..."
-# openssl req -x509 -nodes -days 365 -newkey rsa:2048 -batch \
-# 	-keyout "$ARTIFACT_PREFIX/etc/nginx/selfsigned.key" \
-# 	-out "$ARTIFACT_PREFIX/etc/nginx/selfsigned.crt"
-for D in /config /var/log/nginx /run /tmp /config.auto /etc/letsencrypt /run/sockets; do
-	mkdir -p "${ARTIFACT_PREFIX}${D}"
-done
 
 echo "Done."

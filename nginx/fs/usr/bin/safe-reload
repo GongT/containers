@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/bash
 
 if nginx -t &>/dev/null ; then
 	echo "========================="

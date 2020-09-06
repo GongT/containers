@@ -4,6 +4,8 @@ on:
   push:
     paths:
     - 'bttracker/**'
+    - '.github/workflows/generated-build-bttracker.yaml'
+    # - common
     branches:
     - master
 env:

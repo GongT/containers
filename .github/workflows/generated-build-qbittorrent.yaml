@@ -4,6 +4,8 @@ on:
   push:
     paths:
     - 'qbittorrent/**'
+    - '.github/workflows/generated-build-qbittorrent.yaml'
+    # - common
     branches:
     - master
 env:

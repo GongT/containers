@@ -4,6 +4,8 @@ on:
   push:
     paths:
     - 'gamedisk/**'
+    - '.github/workflows/generated-build-gamedisk.yaml'
+    # - common
     branches:
     - master
 env:

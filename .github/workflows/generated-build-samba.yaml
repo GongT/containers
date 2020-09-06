@@ -4,6 +4,8 @@ on:
   push:
     paths:
     - 'samba/**'
+    - '.github/workflows/generated-build-samba.yaml'
+    # - common
     branches:
     - master
 env:

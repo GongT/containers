@@ -13,11 +13,12 @@ for i in */build.sh; do
 	F=".github/workflows/generated-build-$PROJ.yaml"
 
 	sed "s#{{PROJ}}#$PROJ#g" _scripts_/template.yaml > "$F"
+	sed -i "s#{{thisfile}}#$F#g" "$F"
 
-	TABLE+="| $PROJ " 
-	TABLE+="| https://hub.docker.com/r/gongt/$PROJ " 
+	TABLE+="| $PROJ "
+	TABLE+="| https://hub.docker.com/r/gongt/$PROJ "
 	TABLE+="| [![$PROJ](https://github.com/GongT/containers/workflows/$PROJ/badge.svg)](https://github.com/GongT/containers/actions?query=workflow%3A$PROJ)"
-	TABLE+=" |" 
+	TABLE+=" |"
 	TABLE+=$'\n'
 done
 

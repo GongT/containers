@@ -4,6 +4,8 @@ on:
   push:
     paths:
     - 'nginx/**'
+    - '.github/workflows/generated-build-nginx.yaml'
+    # - common
     branches:
     - master
 env:

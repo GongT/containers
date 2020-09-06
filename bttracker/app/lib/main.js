@@ -108,8 +108,7 @@ async function restartNginx() {
 			(res) => {
 				res.on('data', (buff) => process.stdout.write(buff));
 				res.on('error', (e) => {
-					debugger;
-					reject(e);
+					console.error("warning:", e);
 				});
 				res.on('end', () => resolve());
 			}

@@ -4,6 +4,8 @@ on:
   push:
     paths:
     - 'hexo-test/**'
+    - '.github/workflows/generated-build-hexo-test.yaml'
+    # - common
     branches:
     - master
 env:

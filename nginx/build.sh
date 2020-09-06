@@ -13,17 +13,8 @@ arg_finish "$@"
 
 ### 编译时依赖项目
 STEP="install system dependencies during compile"
-hash_compile_deps() {
-	md5sum requirements/build.lst
-}
-install_compile_deps() {
-	info "dnf install..."
-	local TARGET="$1" RESULT
-	RESULT=$(new_container "$TARGET" scratch)
-	run_dnf "$RESULT" $(< requirements/build.lst)
-	info "dnf install complete..."
-}
-BUILDAH_FORCE="$FORCE_DNF" buildah_cache "nginx-build" hash_compile_deps install_compile_deps
+mapfile -t COMPILE_DEPS < requirements/build.lst
+make_base_image_by_dnf "nginx-build" "${COMPILE_DEPS[@]}"
 ### 编译时依赖项目 END
 
 ### 编译!
@@ -34,10 +25,7 @@ hash_nginx() {
 build_nginx() {
 	local BUILDER
 	BUILDER=$(new_container "$1" "$BUILDAH_LAST_IMAGE")
-
 	SOURCE_DIRECTORY=source run_compile "nginx" "$BUILDER" "tools/build-nginx.sh"
-
-	info "nginx build complete..."
 }
 BUILDAH_FORCE="$FORCE" buildah_cache "nginx-build" hash_nginx build_nginx
 COMPILE_RESULT_IMAGE="$BUILDAH_LAST_IMAGE"
@@ -51,22 +39,12 @@ hash_program_files() {
 	} | md5sum
 }
 copy_program_files() {
-	info "program copy to target..."
-	local PROGRAM PROGRAM_MNT
-	PROGRAM=$(create_if_not nginx-result-copyout "$COMPILE_RESULT_IMAGE")
-	PROGRAM_MNT=$(buildah mount "$PROGRAM")
-	info "program prepared..."
-
 	local RESULT
-	RESULT=$(new_container "$1" "busybox")
+	RESULT=$(new_container "$1" "gongt/glibc:bash")
+	RESULT_MNT=$(buildah mount "$RESULT")
 
-	cat "tools/prepare-run.sh" \
-		| buildah run \
-			"--volume=$PROGRAM_MNT/opt/dist:/mnt" \
-			"$RESULT" sh
-
-	buildah unmount "$PROGRAM" > /dev/null
-	buildah rm "$PROGRAM" > /dev/null
+	run_install "nginx" "$COMPILE_RESULT_IMAGE" "$RESULT_MNT" "tools/prepare-run.sh"
+	buildah unmount "$RESULT" > /dev/null
 }
 buildah_cache "nginx" hash_program_files copy_program_files
 ### 编译好的nginx END

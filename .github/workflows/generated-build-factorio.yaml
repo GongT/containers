@@ -4,6 +4,8 @@ on:
   push:
     paths:
     - 'factorio/**'
+    - '.github/workflows/generated-build-factorio.yaml'
+    # - common
     branches:
     - master
 env:

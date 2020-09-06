@@ -13,5 +13,5 @@ cd proj
 
 set -x
 dep ensure -update
-go build -o "$ARTIFACT/x-www-browser" cmd/client.go
-chmod a+x "$ARTIFACT/x-www-browser"
+go build -o "$ARTIFACT_PREFIX/usr/bin/x-www-browser" cmd/client.go
+chmod a+x "$ARTIFACT_PREFIX/usr/bin/x-www-browser"

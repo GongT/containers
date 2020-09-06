@@ -4,6 +4,8 @@ on:
   push:
     paths:
     - 'docker-registry/**'
+    - '.github/workflows/generated-build-docker-registry.yaml'
+    # - common
     branches:
     - master
 env:

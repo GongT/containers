@@ -4,6 +4,8 @@ on:
   push:
     paths:
     - 'proxyserver-nat/**'
+    - '.github/workflows/generated-build-proxyserver-nat.yaml'
+    # - common
     branches:
     - master
 env:
