@@ -31,3 +31,8 @@ arg[]:-d
 arg[]:6
 arg[]:-c
 arg[]:/etc/crontabs
+
+[wireguard]
+arg[]:/usr/bin/env
+arg[]:bash
+arg[]:/opt/start-wireguard.sh

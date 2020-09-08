@@ -82,3 +82,6 @@
 [submodule "qbittorrent/source/qbittorrent"]
 	path = qbittorrent/source/qbittorrent
 	url = https://github.com/qbittorrent/qBittorrent.git
+[submodule "_shared_projects/projects/wireguard-config-client"]
+	path = _shared_projects/projects/wireguard-config-client
+	url = https://github.com/GongT/wireguard-config-distribute.git
