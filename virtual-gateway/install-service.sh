@@ -24,7 +24,7 @@ unit_podman_safe_environment \
 	"DDNS_HOST=${DDNS_HOST}" \
 	"WIREGUARD_PASSWORD=$PASSWORD"
 
-# unit_fs_bind $VOL /storage
+unit_volume 'ip-cache' /storage
 
 unit_finish
 

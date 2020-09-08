@@ -3,4 +3,12 @@
 set -a
 source /etc/wireguard/client.conf
 
-/usr/libexec/wireguard-config-client
+echo "Wait for first connection..."
+while [[ -e /opt/wait-ip-exists.lock ]]; do
+	sleep 3
+done
+
+while true; do
+	/usr/libexec/wireguard-config-client
+	sleep 5
+done
