@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
-export PKG_CONFIG_PATH="$ARTIFACT_PREFIX/lib/pkgconfig:$PKG_CONFIG_PATH"
-export CPPFLAGS="$CPPFLAGS -I/usr/include/qt5"
+export PKG_CONFIG_PATH="$ARTIFACT_PREFIX/lib/pkgconfig:${PKG_CONFIG_PATH:-}"
+export CPPFLAGS="${CPPFLAGS:-} -I/usr/include/qt5"
 
 ldconfig
 

@@ -60,9 +60,9 @@ install_runtime_deps() {
 	local TARGET="$1" RESULT
 	RESULT=$(new_container "$TARGET" scratch)
 	run_dnf "$RESULT" $(< scripts/runtime.lst)
-	delete_rpm_files "$RESULT"
-	buildah run "$RESULT" bash -c "rm -rf /etc/nginx /etc/privoxy /var/lib/dnf /var/cache/dnf"
 	info "dnf install complete..."
+	delete_rpm_files "$RESULT"
+	buildah run "$RESULT" bash -c "rm -rf /etc/nginx /etc/privoxy"
 }
 BUILDAH_FORCE="$FORCE_DNF" buildah_cache "qbittorrent" hash_runtime_deps install_runtime_deps
 ### 运行时依赖项目 END
