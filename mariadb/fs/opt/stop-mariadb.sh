@@ -1,4 +1,9 @@
 #!/bin/sh
 
+set -e
+
 echo "Request shutdown server..." >&2
-exec mariadb-admin "-p$(< /var/lib/mysql/.password)" shutdown
+PASWD=$(cat /var/lib/mysql/.password)
+
+set -x
+exec mariadb-admin "-p$PASWD" shutdown

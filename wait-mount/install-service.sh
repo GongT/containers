@@ -9,7 +9,7 @@ arg_finish "$@"
 
 SCRIPT=$(install_script wait-all-mount.sh)
 
-cat << EOF > /usr/lib/systemd/system/wait-mount.service
+write_file /usr/lib/systemd/system/wait-mount.service << EOF
 [Unit]
 Description=wait all mount point before start any pod
 After=network-online.target
