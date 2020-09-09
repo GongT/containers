@@ -1,3 +1,0 @@
-#!/bin/sh
-cd /data
-exec ./node_modules/.bin/hexo generate

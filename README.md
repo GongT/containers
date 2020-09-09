@@ -17,10 +17,7 @@ https://github.com/GongT/containers/issues/new
 | factorio | https://hub.docker.com/r/gongt/factorio | [![factorio](https://github.com/GongT/containers/workflows/factorio/badge.svg)](https://github.com/GongT/containers/actions?query=workflow%3Afactorio) |
 | fiberhost | https://hub.docker.com/r/gongt/fiberhost | [![fiberhost](https://github.com/GongT/containers/workflows/fiberhost/badge.svg)](https://github.com/GongT/containers/actions?query=workflow%3Afiberhost) |
 | gamedisk | https://hub.docker.com/r/gongt/gamedisk | [![gamedisk](https://github.com/GongT/containers/workflows/gamedisk/badge.svg)](https://github.com/GongT/containers/actions?query=workflow%3Agamedisk) |
-| hexo-test | https://hub.docker.com/r/gongt/hexo-test | [![hexo-test](https://github.com/GongT/containers/workflows/hexo-test/badge.svg)](https://github.com/GongT/containers/actions?query=workflow%3Ahexo-test) |
 | mariadb | https://hub.docker.com/r/gongt/mariadb | [![mariadb](https://github.com/GongT/containers/workflows/mariadb/badge.svg)](https://github.com/GongT/containers/actions?query=workflow%3Amariadb) |
-| memcached | https://hub.docker.com/r/gongt/memcached | [![memcached](https://github.com/GongT/containers/workflows/memcached/badge.svg)](https://github.com/GongT/containers/actions?query=workflow%3Amemcached) |
-| mongodb | https://hub.docker.com/r/gongt/mongodb | [![mongodb](https://github.com/GongT/containers/workflows/mongodb/badge.svg)](https://github.com/GongT/containers/actions?query=workflow%3Amongodb) |
 | nginx | https://hub.docker.com/r/gongt/nginx | [![nginx](https://github.com/GongT/containers/workflows/nginx/badge.svg)](https://github.com/GongT/containers/actions?query=workflow%3Anginx) |
 | powerdns | https://hub.docker.com/r/gongt/powerdns | [![powerdns](https://github.com/GongT/containers/workflows/powerdns/badge.svg)](https://github.com/GongT/containers/actions?query=workflow%3Apowerdns) |
 | proxyclient | https://hub.docker.com/r/gongt/proxyclient | [![proxyclient](https://github.com/GongT/containers/workflows/proxyclient/badge.svg)](https://github.com/GongT/containers/actions?query=workflow%3Aproxyclient) |
