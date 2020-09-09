@@ -37,7 +37,7 @@ info "install complete..."
 
 buildah config --entrypoint '["/bin/bash"]' --cmd '/opt/init.sh' --stop-signal=SIGINT "$RESULT"
 buildah config --volume /config --volume /etc/letsencrypt "$RESULT"
-buildah config --author "GongT <admin@gongt.me>" --created-by "GongT" --label name=gongt/certbot-dns "$RESULT"
+buildah config --author "GongT <admin@gongt.me>" --created-by "#MAGIC!" --label name=gongt/certbot-dns "$RESULT"
 info "settings updated..."
 
 buildah commit "$RESULT" gongt/certbot-dns

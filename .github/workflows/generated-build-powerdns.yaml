@@ -17,7 +17,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: cancel running workflows
-        uses: GongT/cancel-previous-workflows@d71dfdad6d8b1d2e5896e4be6484a1bf727560ec
+        uses: GongT/cancel-previous-workflows@5cdc17f4f91a30861d1f7be16f34719371d804d7
         env:
           DELETE: "yes"
           GITHUB_TOKEN: ${{ github.token }}
@@ -26,11 +26,13 @@ jobs:
     runs-on: [self-hosted, linux]
     env:
       http_proxy: http://proxy-server.:3271
+      https_proxy: http://proxy-server.:3271
     steps:
       - name: 'Checkout'
         uses: actions/checkout@v2
         env:
           http_proxy: http://proxy-server.:3271
+          https_proxy: http://proxy-server.:3271
         with:
           submodules: 'recursive'
           clean: true
@@ -41,6 +43,7 @@ jobs:
         # continue-on-error: true
         env:
           http_proxy: ''
+          https_proxy: ''
       - name: 'Build Image'
         run: bash -e _scripts_/ci-single-build.sh powerdns
       - name: 'Publish to docker hub'
@@ -48,4 +51,5 @@ jobs:
         env:
           PASSWD: ${{ secrets.DockerPassword }}
           http_proxy: ''
+          https_proxy: ''
         run: ./_scripts_/retry.sh podman push "${{ env.LAST_COMMITED_IMAGE }}" --creds "gongt:$PASSWD" "docker://docker.io/gongt/powerdns"

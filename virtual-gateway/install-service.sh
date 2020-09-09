@@ -13,7 +13,10 @@ arg_finish "$@"
 auto_create_pod_service_unit
 unit_podman_image gongt/virtual-gateway
 unit_unit Description virtual machine gateway
+
 unit_depend network-online.target
+unit_unit After wait-mount.service
+
 unit_body Restart always
 
 network_use_manual --network=bridge0 --mac-address=86:13:02:8F:76:2A --dns=none

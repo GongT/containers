@@ -104,7 +104,7 @@ buildah_cache "qbittorrent" hash_supporting_files copy_supporting_files
 
 RESULT=$(create_if_not "qbittorrent-final" "$BUILDAH_LAST_IMAGE")
 buildah config --cmd '/lib/systemd/systemd' "$RESULT"
-buildah config --author "GongT <admin@gongt.me>" --created-by "GongT" --label name=gongt/qbittorrent "$RESULT"
+buildah config --author "GongT <admin@gongt.me>" --created-by "#MAGIC!" --label name=gongt/qbittorrent "$RESULT"
 info "settings update..."
 
 buildah commit "$RESULT" gongt/qbittorrent

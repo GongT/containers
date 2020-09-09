@@ -13,7 +13,6 @@ cat << EOF > /usr/lib/systemd/system/wait-mount.service
 [Unit]
 Description=wait all mount point before start any pod
 After=network-online.target
-Before=virtual-gateway.pod.service
 
 [Service]
 Type=oneshot

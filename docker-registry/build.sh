@@ -13,7 +13,7 @@ buildah copy "$RESULT" opt /opt
 info "files added..."
 
 buildah config --entrypoint '["/bin/sh"]' --cmd '/opt/run.sh' --stop-signal=SIGINT "$RESULT"
-buildah config --author "GongT <admin@gongt.me>" --created-by "GongT" --label name=gongt/docker-registry "$RESULT"
+buildah config --author "GongT <admin@gongt.me>" --created-by "#MAGIC!" --label name=gongt/docker-registry "$RESULT"
 info "settings updated..."
 
 buildah commit "$RESULT" gongt/docker-registry

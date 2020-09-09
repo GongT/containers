@@ -37,7 +37,7 @@ buildah copy $RESULT fs /
 info "files ok."
 
 buildah config --entrypoint='["/bin/bash"]' --cmd '/opt/init.sh' "$RESULT"
-buildah config --author "GongT <admin@gongt.me>" --created-by "GongT" --label name=gongt/proxyserver-nat "$RESULT"
+buildah config --author "GongT <admin@gongt.me>" --created-by "#MAGIC!" --label name=gongt/proxyserver-nat "$RESULT"
 info "settings updated..."
 
 buildah commit "$RESULT" gongt/proxyserver-nat

@@ -27,7 +27,7 @@ buildah copy $RESULT fs /
 info "result files copy complete..."
 
 buildah config --cmd '/opt/scripts/start.sh' --port 34197 --stop-signal SIGINT "$RESULT"
-buildah config --author "GongT <admin@gongt.me>" --created-by "GongT" --label name=gongt/factorio "$RESULT"
+buildah config --author "GongT <admin@gongt.me>" --created-by "#MAGIC!" --label name=gongt/factorio "$RESULT"
 info "settings update..."
 
 buildah commit "$RESULT" gongt/factorio

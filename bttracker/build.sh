@@ -16,7 +16,7 @@ info "copy files..."
 
 buildah config --cmd 'node --unhandled-rejections=strict /data/app/lib/main.js' "$RESULT"
 buildah config --stop-signal SIGINT "$RESULT"
-buildah config --author "GongT <admin@gongt.me>" --created-by "GongT" --label name=gongt/bttracker "$RESULT"
+buildah config --author "GongT <admin@gongt.me>" --created-by "#MAGIC!" --label name=gongt/bttracker "$RESULT"
 info "settings updated..."
 
 buildah commit "$RESULT" gongt/bttracker

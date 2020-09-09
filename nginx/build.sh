@@ -68,7 +68,7 @@ info_log ""
 RESULT=$(new_container "nginx-final" "$BUILDAH_LAST_IMAGE")
 buildah config --cmd '/usr/sbin/nginx.sh' --port 80 --port 443 --port 80/udp --port 443/udp "$RESULT"
 buildah config --volume /config --volume /etc/letsencrypt "$RESULT"
-buildah config --author "GongT <admin@gongt.me>" --created-by "GongT" --label name=gongt/nginx "$RESULT"
+buildah config --author "GongT <admin@gongt.me>" --created-by "#MAGIC!" --label name=gongt/nginx "$RESULT"
 info "settings update..."
 info_log ""
 

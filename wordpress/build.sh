@@ -14,7 +14,7 @@ info "copy files complete..."
 cat scripts/build-script.sh | buildah run $(use_alpine_apk_cache) "$RESULT" sh
 info "install complete..."
 
-buildah config --author "GongT <admin@gongt.me>" --created-by "GongT" --label name=gongt/wordpress "$RESULT"
+buildah config --author "GongT <admin@gongt.me>" --created-by "#MAGIC!" --label name=gongt/wordpress "$RESULT"
 info "settings updated..."
 
 buildah commit "$RESULT" gongt/wordpress

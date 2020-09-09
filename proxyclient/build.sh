@@ -28,7 +28,7 @@ buildah copy $RESULT fs /
 
 info "files ok."
 
-buildah config --author "GongT <admin@gongt.me>" --created-by "GongT" --label name=gongt/proxyclient "$RESULT"
+buildah config --author "GongT <admin@gongt.me>" --created-by "#MAGIC!" --label name=gongt/proxyclient "$RESULT"
 info "settings updated..."
 
 buildah commit "$RESULT" gongt/proxyclient

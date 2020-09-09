@@ -14,7 +14,7 @@ info "install complete..."
 buildah copy "$RESULT" fs /
 info "copy config files complete..."
 
-buildah config --author "GongT <admin@gongt.me>" --created-by "GongT" --label name=gongt/cloud "$RESULT"
+buildah config --author "GongT <admin@gongt.me>" --created-by "#MAGIC!" --label name=gongt/cloud "$RESULT"
 info "settings updated..."
 
 buildah commit "$RESULT" gongt/cloud

@@ -33,7 +33,7 @@ info "config file copied..."
 
 buildah config --cmd "/sbin/init" --port 53/udp --port 53/tcp --port 53000 "$RESULT"
 buildah config --volume /data "$RESULT"
-buildah config --author "GongT <admin@gongt.me>" --created-by "GongT" --label name=gongt/powerdns "$RESULT"
+buildah config --author "GongT <admin@gongt.me>" --created-by "#MAGIC!" --label name=gongt/powerdns "$RESULT"
 info "settings updated..."
 
 buildah commit "$RESULT" gongt/powerdns

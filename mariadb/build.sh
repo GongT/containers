@@ -17,7 +17,7 @@ buildah copy "$RESULT" fs /
 buildah config "$RESULT"
 buildah config --cmd '/sbin/init' "$RESULT"
 buildah config --volume /var/lib/mysql --volume /var/log --port 3306 --stop-signal SIGINT "$RESULT"
-buildah config --author "GongT <admin@gongt.me>" --created-by "GongT" --label name=gongt/mariadb "$RESULT"
+buildah config --author "GongT <admin@gongt.me>" --created-by "#MAGIC!" --label name=gongt/mariadb "$RESULT"
 info "settings updated..."
 
 buildah commit "$RESULT" gongt/mariadb
