@@ -40,7 +40,7 @@ function usage() {
 }
 
 if [[ $# -eq 0 ]]; then
-	usage >&2
+	systemctl list-units '*.pod@.service' '*.pod.service' --all --no-pager
 	exit 0
 fi
 
@@ -103,9 +103,6 @@ if [[ "$ACTION" == install ]] && ! [[ -L "$0" ]]; then
 fi
 
 case "$ACTION" in
-status)
-	systemctl list-units '*.pod@.service' '*.pod.service' --all --no-pager
-	;;
 upgrade)
 	go_home
 	bash ./upgrade.sh
@@ -120,7 +117,7 @@ rm)
 ls)
 	do_ls
 	;;
-start | restart | stop | reload | reset-failed)
+start | restart | stop | reload | reset-failed | status)
 	do_ls | xargs --no-run-if-empty -t systemctl "$ACTION"
 	;;
 logs)
