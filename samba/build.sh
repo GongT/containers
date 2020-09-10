@@ -24,7 +24,7 @@ fi
 buildah copy $RESULT fs /
 cat "scripts/prepare.sh" | buildah run $RESULT bash
 
-buildah config --cmd "/lib/systemd/systemd systemd.show_status systemd.log_target=console" "$RESULT"
+buildah config --cmd "$FEDORA_SYSTEMD_COMMAND" "$RESULT"
 buildah config --author "GongT <admin@gongt.me>" --created-by "#MAGIC!" --label name=gongt/samba "$RESULT"
 info "settings update..."
 
