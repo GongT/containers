@@ -53,3 +53,7 @@ jobs:
           http_proxy: ''
           https_proxy: ''
         run: ./_scripts_/retry.sh podman push "${{ env.LAST_COMMITED_IMAGE }}" --creds "gongt:$PASSWD" "docker://docker.io/gongt/gamedisk"
+
+      - name: 'Delete old images'
+        shell: bash
+        run: ./_scripts_/delete-old.sh
