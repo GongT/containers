@@ -35,6 +35,8 @@ function usage() {
 	echo
 	echo "Tools:"
 	l run "run command in container (default /bin/sh)"
+	l rm "remove (uninstall) service file"
+	echo
 }
 
 if [[ $# -eq 0 ]]; then
@@ -46,6 +48,33 @@ go_home() {
 	cd "$(dirname "$(readlink "$0")")" || die "failed chdir to containers source folder"
 	if ! [[ -e "bin.sh" ]]; then
 		die "failed chdir to containers source folder (wd: $(pwd))"
+	fi
+}
+
+do_rm() {
+	go_home
+	local T=$1 FILES I
+	mapfile -t FILES < <(systemctl list-unit-files "$T.pod@.service" "$T.pod.service" "$T.service" --all --no-pager --no-legend | awk '{print $1}')
+
+	for I in "${FILES[@]}"; do
+		local OVERWRITE="/etc/systemd/system/$I.d"
+		if [[ -d "$OVERWRITE" ]]; then
+			echo "remove directory: $OVERWRITE"
+			rm -rf "$OVERWRITE"
+		fi
+
+		echo -ne "disable (and stop) service $I\n    "
+		systemctl disable --now --no-block "$I" || true
+
+		local F="/usr/lib/systemd/system/$I"
+		if [[ -e "$F" ]]; then
+			echo "remove service file: $F"
+			rm -f "$F"
+		fi
+	done
+
+	if [[ "${#FILES[@]}" -gt 0 ]]; then
+		systemctl daemon-reload
 	fi
 }
 
@@ -80,6 +109,13 @@ status)
 upgrade)
 	go_home
 	bash ./upgrade.sh
+	;;
+rm)
+	if ! [[ "${1:-}" ]]; then
+		usage >&2
+		die "missing 1 argument"
+	fi
+	do_rm "$1"
 	;;
 ls)
 	do_ls
