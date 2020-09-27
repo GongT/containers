@@ -25,6 +25,6 @@ unit_body TimeoutStartSec 300
 unit_start_notify output "Hosting game at IP ADDR:"
 unit_podman_arguments "$ENV_PASS"
 network_use_auto 34197 # --mac-address=9E:49:F9:6B:6B:82 --network=bridge0
-unit_fs_bind data/factorio /opt/data
-unit_fs_tempfs 512M /opt/data/temp
+unit_fs_bind data/factorio /data
+unit_fs_tempfs 512M /data/temp
 unit_finish
