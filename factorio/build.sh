@@ -34,7 +34,7 @@ buildah_cache "factorio-build" hash_factorio build_factorio
 ### 下载安装 END
 
 RESULT=$(new_container "factorio-final" "$BUILDAH_LAST_IMAGE")
-buildah copy "$RESULT" "$(pwd)/fs" /
+buildah copy "$RESULT" fs /
 info "result files copy complete..."
 
 buildah config --cmd '/opt/scripts/start.sh' --port 34197 --stop-signal SIGINT "$RESULT"
