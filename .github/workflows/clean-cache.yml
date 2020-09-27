@@ -1,9 +1,9 @@
-name: Cancel All
+name: Clean Cache
 on:
   workflow_dispatch:
 jobs:
   cancel:
-    name: Cancel All Runs
+    name: Clean Cache Runs
     runs-on: ubuntu-latest
     steps:
       - name: 'Delete cache images'
