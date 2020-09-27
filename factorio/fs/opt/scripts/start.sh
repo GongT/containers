@@ -3,7 +3,7 @@
 set -Eeuo pipefail
 
 declare -r GAME_INST=/opt/factorio
-declare -r MAPFILE=/opt/data/map.zip
+declare -r MAPFILE=/data/map.zip
 
 if ! [[ -e "$MAPFILE" ]]; then
 	echo "map file ($MAPFILE) did not exists."
@@ -19,8 +19,8 @@ fi
 
 exec $GAME_INST/bin/x64/factorio \
 	--port 34197 \
-	--mod-directory "/opt/data/mods" \
+	--mod-directory "/data/mods" \
 	--server-settings "/opt/server-settings.json" \
 	--console-log /dev/null \
-	--server-id "/opt/data/server-id.json" \
+	--server-id "/data/server-id.json" \
 	--start-server "$MAPFILE"

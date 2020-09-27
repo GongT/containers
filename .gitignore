@@ -2,3 +2,5 @@
 environment
 .download
 /test*
+*.bak
+*.log
