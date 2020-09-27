@@ -28,6 +28,12 @@ jobs:
       http_proxy: http://proxy-server.:3271
       https_proxy: http://proxy-server.:3271
     steps:
+      - name: 'Force Reset'
+        shell: bash
+        run: |
+          git reset --hard --recurse-submodule
+          git submodule foreach bash -c "git clean -ffdx"
+
       - name: 'Checkout'
         uses: actions/checkout@v2
         env:
