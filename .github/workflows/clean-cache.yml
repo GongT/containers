@@ -8,4 +8,4 @@ jobs:
     steps:
       - name: 'Delete cache images'
         shell: bash
-        run: ./_scripts_/clean-cache.sh
+        run: ./_scripts_/remove-all-cached-layers.sh

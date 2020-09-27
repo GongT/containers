@@ -56,4 +56,4 @@ jobs:
 
       - name: 'Delete old images'
         shell: bash
-        run: ./_scripts_/delete-old.sh
+        run: ./_scripts_/delete-old-images.sh
