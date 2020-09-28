@@ -4,8 +4,7 @@ set -Eeuo pipefail
 
 cd "$PROJECT_ROOT"
 
-if ! [[ -e dist/client.alpine ]]; then
-	pwsh ./scripts/build.ps1 musl
-fi
+URL=$(< "URL.txt")
+FILE=$(download_file "$URL" wireguard-config-client-linux-x64)
 
-install -D --verbose --compare --mode=0755 --no-target-directory dist/client.alpine "$INSTALL_TO/wireguard-config-client"
+install -D --verbose --compare --mode=0755 --no-target-directory "$FILE" "$INSTALL_TO/wireguard-config-client"
