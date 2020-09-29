@@ -4,7 +4,7 @@ on:
   push:
     paths:
     - 'wordpress/**'
-    - '！wordpress/install-service.sh'
+    - '!wordpress/install-service.sh'
     - '.github/workflows/generated-build-wordpress.yaml'
     # - common
     branches:

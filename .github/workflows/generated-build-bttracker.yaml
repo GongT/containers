@@ -4,7 +4,7 @@ on:
   push:
     paths:
     - 'bttracker/**'
-    - '！bttracker/install-service.sh'
+    - '!bttracker/install-service.sh'
     - '.github/workflows/generated-build-bttracker.yaml'
     # - common
     branches:

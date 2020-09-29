@@ -4,7 +4,7 @@ on:
   push:
     paths:
     - 'certbot-dns/**'
-    - '！certbot-dns/install-service.sh'
+    - '!certbot-dns/install-service.sh'
     - '.github/workflows/generated-build-certbot-dns.yaml'
     # - common
     branches:

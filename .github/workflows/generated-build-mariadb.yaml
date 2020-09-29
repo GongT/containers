@@ -4,7 +4,7 @@ on:
   push:
     paths:
     - 'mariadb/**'
-    - '！mariadb/install-service.sh'
+    - '!mariadb/install-service.sh'
     - '.github/workflows/generated-build-mariadb.yaml'
     # - common
     branches:

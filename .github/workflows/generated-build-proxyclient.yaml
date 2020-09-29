@@ -4,7 +4,7 @@ on:
   push:
     paths:
     - 'proxyclient/**'
-    - '！proxyclient/install-service.sh'
+    - '!proxyclient/install-service.sh'
     - '.github/workflows/generated-build-proxyclient.yaml'
     # - common
     branches:

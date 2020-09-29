@@ -4,7 +4,7 @@ on:
   push:
     paths:
     - 'samba/**'
-    - '！samba/install-service.sh'
+    - '!samba/install-service.sh'
     - '.github/workflows/generated-build-samba.yaml'
     # - common
     branches:

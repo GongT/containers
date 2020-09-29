@@ -4,7 +4,7 @@ on:
   push:
     paths:
     - 'qbittorrent/**'
-    - '！qbittorrent/install-service.sh'
+    - '!qbittorrent/install-service.sh'
     - '.github/workflows/generated-build-qbittorrent.yaml'
     # - common
     branches:

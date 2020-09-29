@@ -4,7 +4,7 @@ on:
   push:
     paths:
     - 'fiberhost/**'
-    - '！fiberhost/install-service.sh'
+    - '!fiberhost/install-service.sh'
     - '.github/workflows/generated-build-fiberhost.yaml'
     # - common
     branches:
