@@ -31,7 +31,7 @@ download_wireguard() {
 
 	buildah config --label "client-version=$VERSION" "$RESULT"
 }
-BUILDAH_FORCE="$FORCE" buildah_cache "infra-build" hash_wireguard download_wireguard
+buildah_cache "infra-build" hash_wireguard download_wireguard
 ### 下载 END
 
 RESULT=$(create_if_not "infra-result" "$BUILDAH_LAST_IMAGE")
