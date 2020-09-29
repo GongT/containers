@@ -16,7 +16,7 @@ function commonConfig() {
 	unit_using_systemd
 	add_capability SYS_ADMIN
 
-	unit_start_notify output "Started Samba SMB Daemon"
+	unit_start_notify output "daemon_ready: daemon 'smbd' finished starting up"
 
 	unit_podman_image gongt/samba
 	unit_podman_arguments --env="DEFAULT_PASSWORD=$DEFAULT_PASSWORD"
