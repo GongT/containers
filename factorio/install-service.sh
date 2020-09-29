@@ -20,6 +20,7 @@ ENV_PASS=$(
 create_pod_service_unit gongt/factorio
 unit_unit Description factorio server
 unit_data danger
+unit_body TimeoutStartSec 60s
 unit_body RestartPreventExitStatus 66
 unit_start_notify output "Obtained serverPadlock for serverHash"
 unit_podman_arguments "$ENV_PASS"

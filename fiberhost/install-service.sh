@@ -6,7 +6,7 @@ cd "$(dirname "$(realpath "${BASH_SOURCE[0]}")")"
 source ../common/functions-install.sh
 
 NET_NAMESPACE="fiberhostnetworknamespace"
-arg_string NET_NAMESPACE interfacename "fiber interface name"
+arg_string NET_NAMESPACE networkns "network namespace to create"
 arg_string + INTERFACE_NAME interfacename "fiber interface name"
 arg_finish "$@"
 
