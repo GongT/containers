@@ -13,16 +13,17 @@ make_base_image_by_apt gongt/alpine-init "infra-build" bash curl wireguard-tools
 ### 依赖项目 END
 
 ### 下载
-URL='https://github.com/GongT/wireguard-config-distribute/releases/download/latest/client.alpine'
+REPO="GongT/wireguard-config-distribute"
+RELEASE_BINARY_URL="https://github.com/$REPO/releases/download/latest/client.alpine"
 STEP="下载 wireguard-config-client"
 hash_wireguard() {
-	http_get_etag "$URL"
+	http_get_github_release_id "GongT/wireguard-config-distribute"
 }
 download_wireguard() {
 	local RESULT MNT DOWNLOADED VERSION
 	RESULT=$(new_container "$1" "$BUILDAH_LAST_IMAGE")
 	MNT=$(buildah mount "$RESULT")
-	DOWNLOADED=$(download_file "$DIST_URL" "$WANTED_HASH")
+	DOWNLOADED=$(download_file "$RELEASE_BINARY_URL" "wg-client.$WANTED_HASH")
 
 	install -D --verbose --compare --mode=0755 --no-target-directory "$DOWNLOADED" "$MNT/usr/libexec/wireguard-config-client"
 

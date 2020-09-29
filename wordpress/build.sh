@@ -8,12 +8,16 @@ source ../common/functions-build.sh
 info "starting..."
 RESULT=$(create_if_not wordpress-worker gongt/alpine-init)
 
+### 依赖项目
+STEP="安装系统依赖"
+declare -a DEPS
+mapfile -t DEPS < <(cat scripts/deps.lst)
+make_base_image_by_apt gongt/alpine-init "wordpress-build" "${DEPS[@]}"
+### 依赖项目 END
+
+RESULT=$(create_if_not wordpress-worker "$BUILDAH_LAST_IMAGE")
+
 buildah copy "$RESULT" fs /
-info "copy files complete..."
-
-cat scripts/build-script.sh | buildah run $(use_alpine_apk_cache) "$RESULT" sh
-info "install complete..."
-
 buildah config --author "GongT <admin@gongt.me>" --created-by "#MAGIC!" --label name=gongt/wordpress "$RESULT"
 info "settings updated..."
 
