@@ -4,6 +4,7 @@ on:
   push:
     paths:
     - 'powerdns/**'
+    - '！powerdns/install-service.sh'
     - '.github/workflows/generated-build-powerdns.yaml'
     # - common
     branches:

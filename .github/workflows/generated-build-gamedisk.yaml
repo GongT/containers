@@ -4,6 +4,7 @@ on:
   push:
     paths:
     - 'gamedisk/**'
+    - '！gamedisk/install-service.sh'
     - '.github/workflows/generated-build-gamedisk.yaml'
     # - common
     branches:

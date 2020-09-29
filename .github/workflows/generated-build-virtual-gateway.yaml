@@ -4,6 +4,7 @@ on:
   push:
     paths:
     - 'virtual-gateway/**'
+    - '！virtual-gateway/install-service.sh'
     - '.github/workflows/generated-build-virtual-gateway.yaml'
     # - common
     branches:

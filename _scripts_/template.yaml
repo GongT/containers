@@ -4,6 +4,7 @@ on:
   push:
     paths:
     - '{{PROJ}}/**'
+    - '！{{PROJ}}/install-service.sh'
     - '{{thisfile}}'
     # - common
     branches:

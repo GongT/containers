@@ -4,6 +4,7 @@ on:
   push:
     paths:
     - 'nginx/**'
+    - '！nginx/install-service.sh'
     - '.github/workflows/generated-build-nginx.yaml'
     # - common
     branches:

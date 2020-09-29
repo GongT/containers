@@ -4,6 +4,7 @@ on:
   push:
     paths:
     - 'factorio/**'
+    - '！factorio/install-service.sh'
     - '.github/workflows/generated-build-factorio.yaml'
     # - common
     branches:

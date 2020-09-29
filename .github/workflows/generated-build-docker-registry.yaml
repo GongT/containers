@@ -4,6 +4,7 @@ on:
   push:
     paths:
     - 'docker-registry/**'
+    - '！docker-registry/install-service.sh'
     - '.github/workflows/generated-build-docker-registry.yaml'
     # - common
     branches:
