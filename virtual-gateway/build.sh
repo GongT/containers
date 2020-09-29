@@ -26,7 +26,7 @@ download_wireguard() {
 
 	install -D --verbose --compare --mode=0755 --no-target-directory "$DOWNLOADED" "$MNT/usr/libexec/wireguard-config-client"
 
-	VERSION=$(xbuildah run bash -c '/usr/libexec/wireguard-config-client -V')
+	VERSION=$(xbuildah run sh -c '/usr/libexec/wireguard-config-client -V')
 	info "VERSION = $VERSION"
 
 	buildah config --label "client-version=$VERSION" "$RESULT"

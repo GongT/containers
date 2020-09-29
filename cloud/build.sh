@@ -6,9 +6,16 @@ cd "$(dirname "$(realpath "${BASH_SOURCE[0]}")")"
 source ../common/functions-build.sh
 
 info "starting..."
-RESULT=$(create_if_not cloud-worker gongt/alpine-init)
 
-cat scripts/build-script.sh | buildah run $(use_alpine_apk_cache) "$RESULT" sh
+### 依赖项目
+STEP="安装系统依赖"
+mapfile -t DEPS scripts/deps.lst
+make_base_image_by_apt gongt/alpine-init "infra-build" "${DEPS}"
+### 依赖项目 END
+
+RESULT=$(create_if_not cloud-worker "$BUILDAH_LAST_IMAGE")
+
+buildah run "$RESULT" sh < scripts/build-script.sh
 info "install complete..."
 
 buildah copy "$RESULT" fs /
