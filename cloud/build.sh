@@ -9,8 +9,9 @@ info "starting..."
 
 ### 依赖项目
 STEP="安装系统依赖"
-mapfile -t DEPS scripts/deps.lst
-make_base_image_by_apt gongt/alpine-init "infra-build" "${DEPS}"
+declare -a DEPS
+mapfile -t DEPS < <(cat scripts/deps.lst)
+make_base_image_by_apt gongt/alpine-init "infra-build" "${DEPS[@]}"
 ### 依赖项目 END
 
 RESULT=$(create_if_not cloud-worker "$BUILDAH_LAST_IMAGE")
