@@ -16,5 +16,6 @@
 	},
 	"[json]": {
 		"editor.defaultFormatter": "vscode.json-language-features"
-	}
+	},
+	"shellformat.flag": "-s -ln=bash -bn",
 }

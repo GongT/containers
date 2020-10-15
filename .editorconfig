@@ -10,5 +10,3 @@ insert_final_newline = true
 
 shell_variant      = bash
 binary_next_line   = true  # -bn
-switch_case_indent = false # -ci
-keep_padding       = true  # -kp
