@@ -1,78 +1,98 @@
 [submodule "common"]
 	path = common
 	url = git@github.com:GongT/containers-builder.git
-	update = checkout
+	branch = master
+	update = rebase
 [submodule "powerdns/powerdns-webui"]
 	path = powerdns/powerdns-webui
 	url = https://github.com/james-stevens/powerdns-webui.git
+	branch = master
 	update = checkout
+	#git reset --hard ; git clean -ffdx ; git checkout --force master ; git pull
 [submodule "certbot-dns/opt/acme.sh"]
 	path = certbot-dns/opt/acme.sh
 	url = https://github.com/Neilpang/acme.sh.git
+	branch = master
 	update = checkout
 [submodule "nginx/source/nginx"]
 	path = nginx/source/nginx
 	url = https://github.com/nginx/nginx.git
+	branch = master
 	update = checkout
 [submodule "nginx/source/modules/echo-nginx-module"]
 	path = nginx/source/modules/echo-nginx-module
 	url = https://github.com/openresty/echo-nginx-module.git
+	branch = master
 	update = checkout
 [submodule "nginx/source/modules/headers-more-nginx-module"]
 	path = nginx/source/modules/headers-more-nginx-module
 	url = https://github.com/openresty/headers-more-nginx-module.git
+	branch = master
 	update = checkout
 [submodule "nginx/source/modules/ngx_cache_purge"]
 	path = nginx/source/modules/ngx_cache_purge
 	url = https://github.com/FRiCKLE/ngx_cache_purge.git
+	branch = master
 	update = checkout
 [submodule "nginx/source/modules/memc-nginx-module"]
 	path = nginx/source/modules/memc-nginx-module
 	url = https://github.com/openresty/memc-nginx-module.git
+	branch = master
 	update = checkout
 [submodule "nginx/source/modules/ngx_devel_kit"]
 	path = nginx/source/modules/ngx_devel_kit
 	url = https://github.com/simplresty/ngx_devel_kit.git
+	branch = master
 	update = checkout
 [submodule "nginx/source/modules/nginx_cookie_flag_module"]
 	path = nginx/source/modules/nginx_cookie_flag_module
 	url = https://github.com/AirisX/nginx_cookie_flag_module.git
+	branch = master
 	update = checkout
 [submodule "nginx/source/modules/ngx_brotli"]
 	path = nginx/source/modules/ngx_brotli
 	url = https://github.com/google/ngx_brotli.git
+	branch = master
 	update = checkout
 [submodule "nginx/source/modules/nginx_accept_language_module"]
 	path = nginx/source/modules/nginx_accept_language_module
 	url = https://github.com/giom/nginx_accept_language_module.git
+	branch = master
 	update = checkout
 [submodule "nginx/source/modules/ngx-fancyindex"]
 	path = nginx/source/modules/ngx-fancyindex
 	url = https://github.com/aperezdc/ngx-fancyindex.git
+	branch = master
 	update = checkout
 [submodule "nginx/source/modules/traffic-accounting-nginx-module"]
 	path = nginx/source/modules/traffic-accounting-nginx-module
 	url = https://github.com/Lax/traffic-accounting-nginx-module.git
+	branch = master
 	update = checkout
 [submodule "nginx/source/modules/ngx_log_if"]
 	path = nginx/source/modules/ngx_log_if
 	url = https://github.com/cfsego/ngx_log_if.git
+	branch = master
 	update = checkout
 [submodule "nginx/source/modules/nchan"]
 	path = nginx/source/modules/nchan
 	url = https://github.com/slact/nchan.git
+	branch = master
 	update = checkout
 [submodule "nginx/source/modules/ngx_http_geoip2_module"]
 	path = nginx/source/modules/ngx_http_geoip2_module
 	url = https://github.com/leev/ngx_http_geoip2_module.git
+	branch = master
 	update = checkout
 [submodule "nginx/source/special-modules/njs"]
 	path = nginx/source/special-modules/njs
 	url = https://github.com/nginx/njs.git
+	branch = master
 	update = checkout
 [submodule "nginx/source/modules/lua-nginx-module"]
 	path = nginx/source/modules/lua-nginx-module
 	url = https://github.com/openresty/lua-nginx-module.git
+	branch = master
 	update = checkout
 [submodule "nginx/source/luajit2"]
 	path = nginx/source/luajit2
@@ -82,27 +102,32 @@
 [submodule "nginx/source/resty/lua-resty-lrucache"]
 	path = nginx/source/resty/lua-resty-lrucache
 	url = https://github.com/openresty/lua-resty-lrucache.git
+	branch = master
 	update = checkout
 [submodule "nginx/source/resty/lua-resty-core"]
 	path = nginx/source/resty/lua-resty-core
 	url = https://github.com/openresty/lua-resty-core.git
+	branch = master
 	update = checkout
 [submodule "nginx/source/lua/luaposix"]
 	path = nginx/source/lua/luaposix
 	url = https://github.com/luaposix/luaposix.git
+	branch = master
 	update = checkout
 [submodule "_shared_projects/wangyu-/udp2raw-tunnel"]
 	path = _shared_projects/projects/udp2raw
-	url = https://github.com/wangyu-/udp2raw-tunnel
+	url = https://github.com/wangyu-/udp2raw-tunnel.git
 	update = checkout
 	branch = unified
 [submodule "proxyserver-nat/microsocks"]
 	path = proxyserver-nat/microsocks
 	url = https://github.com/rofl0r/microsocks.git
+	branch = master
 	update = checkout
 [submodule "qbittorrent/source/broadcaster"]
 	path = qbittorrent/source/broadcaster
 	url = https://github.com/gongt/remote-shell.git
+	branch = master
 	update = checkout
 [submodule "qbittorrent/source/libtorrent"]
 	path = qbittorrent/source/libtorrent
@@ -112,4 +137,5 @@
 [submodule "qbittorrent/source/qbittorrent"]
 	path = qbittorrent/source/qbittorrent
 	url = https://github.com/qbittorrent/qBittorrent.git
+	branch = master
 	update = checkout
