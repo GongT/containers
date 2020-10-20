@@ -10,19 +10,14 @@ arg_finish "$@"
 
 info "starting..."
 
-RESULT=$(create_if_not gamedisk-tgtd-result scratch)
-RESULT_MNT=$(buildah mount $RESULT)
-info "init complete..."
+### TGTD
+STEP="install iscsi-tgtd"
+make_base_image_by_dnf "fedora-tgtd" "scsi-target-utils"
+### TGTD END
 
-if ! [[ -f "$RESULT_MNT/usr/sbin/tgtd" ]] || [[ -n "$FORCE_DNF" ]]; then
-	run_dnf $RESULT "scsi-target-utils"
-	buildah run $RESULT systemctl enable tgtd
-	info "dnf install complete..."
-else
-	info "dnf install already complete."
-fi
+RESULT=$(create_if_not gamedisk-tgtd-result $BUILDAH_LAST_IMAGE)
 
-buildah copy $RESULT fs /
+buildah copy "$RESULT" fs /
 
 buildah config --cmd '/opt/start.sh' --stop-signal SIGINT "$RESULT"
 buildah config --author "GongT <admin@gongt.me>" --created-by "#MAGIC!" --label name=gongt/gamedisk "$RESULT"

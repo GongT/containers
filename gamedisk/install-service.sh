@@ -10,7 +10,7 @@ unit_podman_image gongt/gamedisk
 unit_unit Description "iSCSI target daemon for game disk"
 unit_data danger
 
-unit_podman_arguments "--env=DISK_TO_USE=/dev/mapper/scsi-game"
+unit_podman_arguments "--env=DISK_TO_USE=/dev/mapper/H-root"
 use_full_system_privilege
 unit_fs_bind /dev/mapper /dev/mapper
 unit_start_notify output "tgtd configured"

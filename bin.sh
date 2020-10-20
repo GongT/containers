@@ -117,7 +117,7 @@ rm)
 ls)
 	do_ls
 	;;
-start | restart | stop | reload | reset-failed | status)
+start | restart | stop | reload | reset-failed | status | enable | disable)
 	do_ls | xargs --no-run-if-empty -t systemctl "$ACTION"
 	;;
 logs)

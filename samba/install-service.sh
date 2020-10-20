@@ -24,7 +24,6 @@ function commonConfig() {
 	unit_fs_bind /data/Volumes /drives
 	unit_fs_bind /dev/shm /mountpoints/shm
 	unit_fs_bind /data/DevelopmentRoot /mountpoints/DevelopmentRoot
-	unit_fs_bind /data/Cache /mountpoints/SlowCache
 	unit_fs_bind config/samba /opt/config
 	unit_fs_bind logs/samba /var/log/samba
 
