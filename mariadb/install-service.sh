@@ -23,6 +23,8 @@ unit_body OOMScoreAdjust -600
 unit_body Environment "TZ=Asia/Shanghai"
 unit_body LimitNOFILE 16364
 
+network_use_bridge
+
 # unit_podman_image_pull never
 # unit_podman_arguments --privileged
 unit_fs_bind logs/mariadb /var/log/mariadb

@@ -1,4 +1,4 @@
-[dhclient4]
+[dhcp4]
 arg[]:/bin/busybox
 arg[]:udhcpc
 arg[]:-f
@@ -11,9 +11,10 @@ arg[]:-n
 arg[]:-R
 arg[]:-i
 arg[]:eth0
+arg[]:-s
+arg[]:/opt/dhclient-script/entry4.sh
 
-
-[dhclient6]
+[dhcp6]
 arg[]:/bin/busybox
 arg[]:udhcpc6
 arg[]:-f
@@ -23,14 +24,13 @@ arg[]:-n
 arg[]:-R
 arg[]:-i
 arg[]:eth0
+arg[]:-s
+arg[]:/opt/dhclient-script/entry6.sh
 
 [ddns]
-arg[]:/usr/sbin/crond
-arg[]:-f
-arg[]:-d
-arg[]:6
-arg[]:-c
-arg[]:/etc/crontabs
+arg[]:/usr/bin/env
+arg[]:bash
+arg[]:/opt/start-crond.sh
 
 [wireguard]
 arg[]:/usr/bin/env

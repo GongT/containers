@@ -1,4 +1,4 @@
-if [[ -z "$NET_TYPE" ]]; then
+if [[ -z $NET_TYPE ]]; then
 	echo 'Error NET_TYPE' >&2
 	exit 1
 fi
@@ -10,18 +10,10 @@ function pecho() {
 
 declare -a API_LIST
 API_LIST=()
-if [[ "$NET_TYPE" -eq 4 ]]; then
-	API_LIST+=(http://show-my-ip.gongt.me)
-fi
-API_LIST+=(
-	http://checkip.dns.he.net
-	http://checkip.dyndns.org
-	
-)
-if [[ "$NET_TYPE" -eq 6 ]]; then
-	API_LIST+=(https://api6.ipify.org http://show-my-ip6.gongt.me)
+if [[ $NET_TYPE -eq 6 ]]; then
+	API_LIST+=(https://api6.ipify.org)
 else
-	API_LIST+=(https://api.ipify.org http://show-my-ip.gongt.me)
+	API_LIST+=(http://show-my-ip.gongt.me https://api.ipify.org)
 fi
 
 function call_curl() {
@@ -30,10 +22,10 @@ function call_curl() {
 	OUT=$(/usr/bin/curl --no-progress-meter -$NET_TYPE "$1")
 	pecho "$OUT" >&2
 	pecho "------------------" >&2
-	if [[ -z "$OUT" ]]; then
+	if [[ -z $OUT ]]; then
 		return 1
 	fi
-	if [[ "${CURRENT_IP_LIST+ns}" != ns ]]; then
+	if [[ ${CURRENT_IP_LIST+ns} != ns ]]; then
 		pecho "dont check ip valid." >&2s
 		echo -n ${OUT}
 		return 0
@@ -52,6 +44,14 @@ function request_url() {
 		if call_curl "$i"; then
 			return
 		fi
+		sleep 2
+		if call_curl "$i"; then
+			return
+		fi
+		sleep 2
+		if call_curl "$i"; then
+			return
+		fi
 	done
 	echo ""
 }
@@ -63,4 +63,25 @@ function ddns_script() {
 		-d "password=${DSNS_KEY}"
 	pecho ""
 	pecho "update done."
+}
+
+declare -r SAVE_FILE="/storage/save.ip.$NET_TYPE"
+function exit_if_same() {
+	local IP="$1" SAVED
+	if [[ -e $SAVE_FILE ]]; then
+		SAVED=$(<"$SAVE_FILE")
+		if [[ $SAVED == "$IP" ]]; then
+			pecho "current IP output not change"
+			exit 0
+		else
+			pecho "    saved IP output has change. saved one is: $SAVED"
+		fi
+	else
+		pecho "    no saved IP."
+	fi
+}
+
+function save_current_ip() {
+	echo "$1" >"$SAVE_FILE"
+	pecho "state saved."
 }

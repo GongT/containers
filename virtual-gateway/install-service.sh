@@ -12,14 +12,16 @@ arg_finish "$@"
 
 auto_create_pod_service_unit
 unit_podman_image gongt/virtual-gateway
+unit_podman_image_pull never
 unit_unit Description virtual machine gateway
 
 unit_depend network-online.target
 unit_unit After wait-mount.service
 
 unit_body Restart always
+unit_start_notify output "network startup complete"
 
-network_use_manual --network=bridge0 --mac-address=86:13:02:8F:76:2A --dns=none
+network_use_manual --network=bridge0 --mac-address=86:13:02:8F:76:2A --dns-env=ns1.he.net
 add_network_privilege
 
 unit_podman_safe_environment \
@@ -27,7 +29,7 @@ unit_podman_safe_environment \
 	"DDNS_HOST=${DDNS_HOST}" \
 	"WIREGUARD_PASSWORD=$PASSWORD"
 
-unit_volume 'ip-cache' /storage
+unit_fs_bind data/virtual-gateway /storage
 
 unit_finish
 
@@ -36,6 +38,6 @@ echo '[Socket]
 ListenStream=/data/AppData/share/sockets/cockpit.sock
 ExecStartPost=
 ExecStopPost=
-' > "/etc/systemd/system/cockpit.socket.d/listen-socket.conf"
+' >"/etc/systemd/system/cockpit.socket.d/listen-socket.conf"
 
 systemctl daemon-reload
