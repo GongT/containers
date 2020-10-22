@@ -32,8 +32,11 @@ jobs:
       - name: 'Force Reset'
         shell: bash
         run: |
-          git reset --hard --recurse-submodule
-          git submodule foreach bash -c "git clean -ffdx"
+          if [[ -e ".git" ]]; then
+            git reset --hard --recurse-submodule
+            git clean -ffdx
+            git submodule foreach bash -c "git clean -ffdx"
+          fi
 
       - name: 'Checkout'
         uses: actions/checkout@v2
