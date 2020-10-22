@@ -20,7 +20,7 @@ unit_unit After wait-mount.service
 unit_body Restart always
 unit_start_notify output "network startup complete"
 
-network_use_manual --network=bridge0 --mac-address=86:13:02:8F:76:2A --dns-env=ns1.he.net
+network_use_manual --network=bridge0 --mac-address=86:13:02:8F:76:2A --dns-env=p.a.s.s --dns-env=ns1.he.net
 add_network_privilege
 
 unit_podman_safe_environment \
