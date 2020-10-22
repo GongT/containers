@@ -50,7 +50,7 @@ create_pod_service_unit samba
 unit_podman_hostname $HOSTNAME
 unit_unit Description "standalone samba server"
 
-network_use_manual --network=bridge0 --mac-address=3E:F4:F3:CE:1D:75 --dns=none
+network_use_manual --network=bridge0 --mac-address=3E:F4:F3:CE:1D:75
 unit_podman_arguments --env=ENABLE_DHCP=yes
 
 commonConfig

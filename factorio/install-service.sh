@@ -24,7 +24,7 @@ unit_body TimeoutStartSec 60s
 unit_body RestartPreventExitStatus 66
 unit_start_notify output "Obtained serverPadlock for serverHash"
 unit_podman_arguments "$ENV_PASS"
-network_use_manual --mac-address=9E:49:F9:6B:6B:82 --network=bridge0
+network_use_manual --mac-address=9E:49:F9:6B:6B:82 --network=bridge0 --dns-env=p.a.s.s
 unit_fs_bind /data/Volumes/AppData/GameSave/factorio /data
 unit_fs_tempfs 512M /data/temp
 unit_finish

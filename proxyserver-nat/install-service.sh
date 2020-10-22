@@ -36,7 +36,7 @@ unit_depend network-online.target
 unit_fs_bind config/proxyserver /config
 unit_body Restart always
 
-network_use_manual --network=bridge0 --mac-address=86:13:02:8F:76:2B --dns=127.0.0.1
+network_use_manual --network=bridge0 --mac-address=86:13:02:8F:76:2B
 add_network_privilege
 
 unit_podman_arguments $(

@@ -12,7 +12,6 @@ arg_finish "$@"
 
 auto_create_pod_service_unit
 unit_podman_image gongt/virtual-gateway
-unit_podman_image_pull never
 unit_unit Description virtual machine gateway
 
 unit_depend network-online.target
