@@ -3,7 +3,7 @@
 set -Eeuo pipefail
 
 function resolveIp() {
-	echo -n $(nslookup -type=A "$1" "${2-8.8.8.8}" | grep Address: | tail -n1 | sed 's/Address: //g')
+	nslookup -type=A "$1" | tail -n +3 | grep 'Address: ' | sed 's/Address: //g' | head -n1
 }
 
 function x() {

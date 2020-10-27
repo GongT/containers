@@ -3,11 +3,7 @@
 set -Eeuo pipefail
 
 function resolveIp() {
-	local SRV=""
-	if [[ "${2+found}" == found ]]; then
-		SRV="${2}"
-	fi
-	echo -n $(nslookup -type=A "$1" | grep Address: | tail -n1 | sed 's/Address: //g')
+	nslookup -type=A "$1" | tail -n +3 | grep 'Address: ' | sed 's/Address: //g' | head -n1
 }
 
 function x() {

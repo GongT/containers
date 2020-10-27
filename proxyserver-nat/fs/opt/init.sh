@@ -7,4 +7,8 @@ else
 	echo "DO NOT USE UDP2RAW" >&2
 fi
 
+echo '
+nameserver 127.0.0.1
+' > /etc/resolv.conf
+
 exec /sbin/init
