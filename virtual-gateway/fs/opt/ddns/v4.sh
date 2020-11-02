@@ -6,7 +6,7 @@ cd "$(dirname "$(realpath "${BASH_SOURCE[0]}")")"
 export NET_TYPE=4
 source ddns-inc.sh
 
-bash /opt/wait-net.sh
+bash /opt/wait-net/wait.sh
 
 CURRENT_IP=$(request_url)
 

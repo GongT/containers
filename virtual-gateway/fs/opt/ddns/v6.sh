@@ -6,7 +6,7 @@ cd "$(dirname "$(realpath "${BASH_SOURCE[0]}")")"
 export NET_TYPE=6
 source ddns-inc.sh
 
-bash /opt/wait-net.sh
+bash /opt/wait-net/wait.sh
 
 mapfile -t CURRENT_IP_OUTPUT < <(ip addr | grep inet6 | grep global | awk '{print $2}' | sed -E 's#/\d+$##g')
 

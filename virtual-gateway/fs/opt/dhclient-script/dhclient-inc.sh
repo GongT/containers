@@ -47,6 +47,8 @@ update_all() {
 	update_addresses
 	update_routes
 	resolvconf
+
+	bash "/opt/ddns/v$NET_TYPE.sh"
 }
 
 function dump_env() {
