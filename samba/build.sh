@@ -8,21 +8,15 @@ source ../common/functions-build.sh
 arg_flag FORCE_DNF dnf "force dnf install"
 arg_finish
 
-info "starting..."
+### 依赖项目
+STEP="安装系统依赖"
+declare -ra COMPILE_DEPS=(systemd bash samba samba-common-tools iproute iputils passwd)
+make_base_image_by_dnf "samba-install" "${COMPILE_DEPS[@]}"
+### 依赖项目 END
 
-RESULT=$(create_if_not samba-result scratch)
-RESULT_MNT=$(buildah mount $RESULT)
-info "init complete..."
-
-if [[ ! -e "$RESULT_MNT/usr/bin/bash" ]] || [[ -n "$FORCE_DNF" ]]; then
-	run_dnf $RESULT systemd bash samba samba-common-tools iproute iputils passwd
-	info "dnf install complete..."
-else
-	info "dnf install already complete."
-fi
-
-buildah copy $RESULT fs /
-cat "scripts/prepare.sh" | buildah run $RESULT bash
+RESULT=$(new_container "samba-final" "$BUILDAH_LAST_IMAGE")
+buildah copy "$RESULT" fs /
+cat "scripts/prepare.sh" | buildah run "$RESULT" bash
 
 buildah config --cmd "$FEDORA_SYSTEMD_COMMAND" "$RESULT"
 buildah config --author "GongT <admin@gongt.me>" --created-by "#MAGIC!" --label name=gongt/samba "$RESULT"
