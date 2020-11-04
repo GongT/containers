@@ -7,3 +7,4 @@ echo "Wait for ip address..."
 while [[ -e wait-ip-exists.4.lock ]] || [[ -e wait-ip-exists.6.lock ]]; do
 	sleep 3
 done
+echo "Wait for ip address: Done."

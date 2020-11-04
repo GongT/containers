@@ -47,7 +47,9 @@ update_all() {
 	update_addresses
 	update_routes
 	resolvconf
+}
 
+call_ddns() {
 	bash "/opt/ddns/v$NET_TYPE.sh"
 }
 
@@ -62,6 +64,7 @@ case "$ACTION" in
 renew)
 	dump_env
 	update_all
+	call_ddns
 	;;
 deconfig)
 	ip route flush default dev "$interface"
@@ -73,6 +76,7 @@ bound)
 	update_all
 
 	bash /opt/wait-net/delete.sh "$NET_TYPE"
+	call_ddns
 	;;
 leasefail)
 	die "udhcpc failed to get a DHCP lease"
