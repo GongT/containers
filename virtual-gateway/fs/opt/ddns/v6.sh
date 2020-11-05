@@ -19,7 +19,6 @@ if [[ ${#CURRENT_IP_OUTPUT[@]} -ne 1 ]]; then
 	pecho "failed to detect ip from interface (got ${#CURRENT_IP_OUTPUT[@]} address, but want 1)"
 	CURRENT_IP=$(request_url)
 else
-	pecho "use it"
 	CURRENT_IP=${CURRENT_IP_OUTPUT[0]}
 fi
 

@@ -17,26 +17,26 @@ else
 fi
 
 function call_curl() {
-	pecho "------------------ try $1..." >&2
+	pecho "  - /usr/bin/curl --no-progress-meter -$NET_TYPE $1" >&2
 	local OUT
 	OUT=$(/usr/bin/curl --no-progress-meter -$NET_TYPE "$1")
-	pecho "$OUT" >&2
-	pecho "------------------" >&2
+	pecho "    $OUT" >&2
 	if [[ -z $OUT ]]; then
 		return 1
 	fi
-	if [[ ${CURRENT_IP_LIST+ns} != ns ]]; then
-		pecho "dont check ip valid." >&2s
-		echo -n ${OUT}
+	if [[ ${CURRENT_IP_OUTPUT:-} ]]; then
+		for i in "${CURRENT_IP_OUTPUT[@]}"; do
+			if [[ $OUT == "$i" ]]; then
+				echo -n "${i}"
+				return 0
+			fi
+		done
+		return 1
+	else
+		pecho "    dont check ip valid." >&2s
+		echo -n "${OUT}"
 		return 0
 	fi
-	for i in "${CURRENT_IP_LIST[@]}"; do
-		if echo "$OUT" | grep -q "$i"; then
-			echo -n ${i}
-			return 0
-		fi
-	done
-	return 1
 }
 
 function request_url() {
