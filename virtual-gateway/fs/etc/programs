@@ -13,6 +13,7 @@ arg[]:-i
 arg[]:eth0
 arg[]:-s
 arg[]:/opt/dhclient-script/entry4.sh
+# /bin/busybox udhcpc -f -C -x hostname:virtual-gateway -x 0x3d:8613028F762A -n -R -i eth0 -s /opt/dhclient-script/entry4.sh
 
 [dhcp6]
 arg[]:/bin/busybox
@@ -26,6 +27,7 @@ arg[]:-i
 arg[]:eth0
 arg[]:-s
 arg[]:/opt/dhclient-script/entry6.sh
+# /bin/busybox udhcpc6 -f -x fqdn:virtual-gateway -n -R -i eth0 -s /opt/dhclient-script/entry6.sh
 
 [ddns]
 arg[]:/usr/bin/env

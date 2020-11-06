@@ -10,5 +10,6 @@ function set_ip_address() {
 }
 
 function update_routes() {
-	ip route add default dev "$interface" metric 1 &>/dev/null || true
+	# ip route add default dev "$interface" metric 1 &>/dev/null || true
+	:
 }

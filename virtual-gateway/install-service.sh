@@ -13,9 +13,9 @@ arg_finish "$@"
 auto_create_pod_service_unit
 unit_podman_image gongt/virtual-gateway
 unit_unit Description virtual machine gateway
+unit_podman_image_pull never
 
-unit_depend network-online.target
-unit_unit After wait-mount.service
+unit_unit After network-online.target wait-mount.service
 
 unit_body Restart always
 unit_start_notify output "network startup complete"
