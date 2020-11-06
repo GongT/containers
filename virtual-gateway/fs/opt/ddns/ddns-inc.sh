@@ -19,15 +19,21 @@ fi
 function call_curl() {
 	pecho "  - /usr/bin/curl --no-progress-meter -$NET_TYPE $1" >&2
 	local OUT
-	OUT=$(/usr/bin/curl -v --no-progress-meter -$NET_TYPE "$1" | grep -oE '[0-9]+.[0-9]+.[0-9]+.[0-9]+')
+	OUT=$(/usr/bin/curl -v --no-progress-meter -$NET_TYPE "$1")
+	if [[ $NET_TYPE == 4 ]]; then
+		OUT=$(echo "$OUT" | grep -oE '[0-9]+.[0-9]+.[0-9]+.[0-9]+')
+	else
+		OUT=$(echo "$OUT" | grep -oE '\b[0-9a-f:]+:[0-9a-f:]+\b')
+	fi
 	pecho "    $OUT" >&2
 	if [[ -z $OUT ]]; then
 		return 1
 	fi
-	if [[ ${CURRENT_IP_OUTPUT:-} ]]; then
-		for i in "${CURRENT_IP_OUTPUT[@]}"; do
-			if [[ $OUT == "$i" ]]; then
-				echo -n "${i}"
+	if [[ ${CURRENT_IP_OUTPUT:-} ]]; then # only ipv6 have this
+		local IP
+		for IP in "${CURRENT_IP_OUTPUT[@]}"; do
+			if [[ $OUT == "$IP" ]]; then
+				echo -n "${IP}"
 				return 0
 			fi
 		done
@@ -40,6 +46,7 @@ function call_curl() {
 }
 
 function request_url() {
+	local i
 	for i in "${API_LIST[@]}"; do
 		if call_curl "$i"; then
 			return
