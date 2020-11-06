@@ -9,7 +9,19 @@ info "starting..."
 
 ### 依赖项目
 STEP="安装系统依赖"
-make_base_image_by_apt gongt/alpine-init "infra-build" bash curl wireguard-tools-wg
+DEPS=(bash curl wireguard-tools-wg util-linux)
+apk_hash() {
+	{
+		cat scripts/install.sh
+		echo "${DEPS[*]} dhclient"
+	} | md5sum
+}
+apk_install() {
+	local CONTAINER
+	CONTAINER=$(new_container "$1" "gongt/alpine-init")
+	buildah run $(use_alpine_apk_cache) "$CONTAINER" sh -s- -- "${DEPS[@]}" <scripts/install.sh
+}
+buildah_cache "infra-build" apk_hash apk_install
 ### 依赖项目 END
 
 ### 下载

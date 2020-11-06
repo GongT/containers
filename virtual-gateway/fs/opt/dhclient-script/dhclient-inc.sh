@@ -7,7 +7,6 @@ function die() {
 	exit 1
 }
 
-declare -rx ACTION="$1"
 declare -rx RESOLV_CONF="/etc/resolv.conf"
 
 IP=$(command -v ip)
@@ -39,7 +38,8 @@ update_addresses() {
 }
 
 resolvconf() {
-	local -a DNS_ARR=($dns)
+	local -a DNS_ARR
+	mapfile -t DNS_ARR < <(get_received_dns_servers)
 	flock /etc/resolv.conf bash resolve.conf.sh "gateway$NET_TYPE" "${DNS_ARR[@]}"
 }
 
@@ -59,32 +59,42 @@ function dump_env() {
 	echo "------------------------------------------"
 }
 
-echo "SCRIPT: $ACTION" >&2
-case "$ACTION" in
-renew)
+echo "SCRIPT: $reason" >&2
+case "$reason" in
+PREINIT | PREINIT6)
+	if ! ip link show eth0 | grep -q 'state UP'; then
+		ip link set dev "$interface" up
+		while ! ip link show eth0 | grep -q 'state UP'; do
+			sleep 1
+		done
+	fi
+	;;
+RENEW | REBIND | RENEW6 | REBIND6)
 	dump_env
 	update_all
 	call_ddns
 	;;
-deconfig)
+EXPIRE | RELEASE | STOP | EXPIRE6 | RELEASE6 | STOP6)
 	ip route flush default dev "$interface"
 	remove_ip_address
 	;;
-bound)
+BOUND | REBOOT | BOUND6)
 	dump_env
-	ip link set dev "$interface" up
 	update_all
 
 	bash /opt/wait-net/delete.sh "$NET_TYPE"
 	call_ddns
 	;;
-leasefail)
-	die "udhcpc failed to get a DHCP lease"
+DEPREF6)
+	if [[ "${cur_ip6_prefixlen}" ]]; then
+		ip addr change "${cur_ip6_address}/${cur_ip6_prefixlen}" \
+			dev "${interface}" scope global preferred_lft 0
+	fi
 	;;
-nak)
-	die "udhcpc received DHCP NAK"
+FAIL)
+	die "dhclient failed to get a DHCP lease"
 	;;
-*)
-	die "Error: this script should be called from udhcpc"
+TIMEOUT)
+	die "dhclient timeout"
 	;;
 esac

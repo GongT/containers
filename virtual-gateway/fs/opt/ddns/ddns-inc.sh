@@ -2,7 +2,7 @@ if [[ -z $NET_TYPE ]]; then
 	echo 'Error NET_TYPE' >&2
 	exit 1
 fi
-export http_proxy="" https_proxy="" HTTP_PROXY="" HTTPS_PROXY=""
+export http_proxy="" https_proxy="" all_proxy="" HTTP_PROXY="" HTTPS_PROXY="" ALL_PROXY=""
 
 function pecho() {
 	echo "($NET_TYPE) $*"
@@ -11,7 +11,7 @@ function pecho() {
 declare -a API_LIST
 API_LIST=()
 if [[ $NET_TYPE -eq 6 ]]; then
-	API_LIST+=(https://api6.ipify.org)
+	API_LIST+=(http://checkip.dns.he.net https://api6.ipify.org)
 else
 	API_LIST+=(http://show-my-ip.gongt.me https://api.ipify.org)
 fi
@@ -19,7 +19,7 @@ fi
 function call_curl() {
 	pecho "  - /usr/bin/curl --no-progress-meter -$NET_TYPE $1" >&2
 	local OUT
-	OUT=$(/usr/bin/curl --no-progress-meter -$NET_TYPE "$1")
+	OUT=$(/usr/bin/curl -v --no-progress-meter -$NET_TYPE "$1" | grep -oE '[0-9]+.[0-9]+.[0-9]+.[0-9]+')
 	pecho "    $OUT" >&2
 	if [[ -z $OUT ]]; then
 		return 1
@@ -56,11 +56,21 @@ function request_url() {
 	echo ""
 }
 
+function x() {
+	pecho " + $*"
+	"$@"
+}
+
 function ddns_script() {
 	pecho "request update api..."
-	/usr/bin/curl --no-progress-meter --silent "-$NET_TYPE" "https://dyn.dns.he.net/nic/update" \
-		-d "hostname=${DDNS_HOST}" \
-		-d "password=${DSNS_KEY}"
+	while true; do
+		sleep 1
+		if x /usr/bin/curl --no-progress-meter "-$NET_TYPE" "https://dyn.dns.he.net/nic/update" \
+			-d "hostname=${DDNS_HOST}" \
+			-d "password=${DSNS_KEY}"; then
+			break
+		fi
+	done
 	pecho ""
 	pecho "update done."
 }
