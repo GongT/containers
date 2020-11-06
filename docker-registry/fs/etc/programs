@@ -1,0 +1,10 @@
+[registry]
+arg[]:/bin/sh
+arg[]:/opt/run.sh
+signal:SIGINT
+
+[crond]
+arg[]:/usr/sbin/crond
+arg[]:-f
+arg[]:-d
+arg[]:6

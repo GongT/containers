@@ -3,8 +3,8 @@
 PROJ=docker-registry
 
 apply_gateway() {
-	local F=$1 T="/run/nginx/vhost.d/${PROJ}.conf"
-	if [ -z "$F" ] ; then
+	F=$1 T="/run/nginx/vhost.d/${PROJ}.conf"
+	if [ -z "$F" ]; then
 		rm -v "${T}"
 	else
 		cp -v "/opt/${F}.conf" "${T}"
@@ -13,6 +13,10 @@ apply_gateway() {
 }
 trap 'echo "got SIGINT"' INT
 
+echo "GC...."
+registry garbage-collect /etc/docker/registry/config.yml --delete-untagged
+
+echo "reload nginx..."
 apply_gateway docker-registry
 
 echo "starting...."

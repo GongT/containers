@@ -5,16 +5,40 @@ set -Eeuo pipefail
 cd "$(dirname "$(realpath "${BASH_SOURCE[0]}")")"
 source ../common/functions-build.sh
 
-info "starting..."
-RESULT=$(create_if_not registry-worker registry)
+arg_finish
 
+### 依赖项目
+STEP="复制gongt/alpine-init"
+hash_init() {
+	{
+		run_with_proxy podman pull -q gongt/alpine-init
+		run_with_proxy podman pull -q registry
+	} | md5sum
+}
+download_init() {
+	local RESULT MNT SOURCE
+	RESULT=$(new_container "$1" "registry")
 
-buildah copy "$RESULT" opt /opt
-info "files added..."
+	SOURCE=$(new_container "temp$RANDOM" "gongt/alpine-init")
+	MNT=$(buildah mount "$SOURCE")
 
-buildah config --entrypoint '["/bin/sh"]' --cmd '/opt/run.sh' --stop-signal=SIGINT "$RESULT"
+	buildah copy "$RESULT" "$MNT/sbin/init" "/sbin/init"
+	buildah run $(use_alpine_apk_cache) $RESULT apk add -U libstdc++
+
+	{
+		buildah umount "$SOURCE"
+		buildah rm "$SOURCE"
+	} >/dev/null
+}
+buildah_cache "docker-registry-copy" hash_init download_init
+### 依赖项目 END
+
+info "copy files..."
+RESULT=$(new_container registry-worker "$BUILDAH_LAST_IMAGE")
+
+buildah copy "$RESULT" fs /
+buildah config --cmd '/sbin/init' --stop-signal=SIGINT "$RESULT"
 buildah config --author "GongT <admin@gongt.me>" --created-by "#MAGIC!" --label name=gongt/docker-registry "$RESULT"
-info "settings updated..."
 
 buildah commit "$RESULT" gongt/docker-registry
 info "Done!"
