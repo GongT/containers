@@ -15,25 +15,19 @@ function ip() {
 	"$IP" "-$NET_TYPE" "$@"
 }
 
-declare -r LAST_FILE="/tmp/last-addr-$NET_TYPE"
-remove_ip_address() {
-	if [[ -e $LAST_FILE ]]; then
-		ip addr del "$(<"$LAST_FILE")" dev "$interface"
-		rm -f "$LAST_FILE"
-	fi
-}
-
 update_addresses() {
-	local ADDR
+	local ADDR OLD_ADDR
 	ADDR=$(format_ip_address)
+	OLD_ADDR=$(format_oldip_address)
 	if [[ ! $ADDR ]]; then
 		die "no ip from dhcp"
 	fi
+	if [[ "$OLD_ADDR" ]] && [[ $OLD_ADDR != "$ADDR" ]]; then
+		remove_ip_address
+	fi
 
 	if ! ip addr show dev "$interface" | grep -- "$ADDR" &>/dev/null; then
-		remove_ip_address
 		set_ip_address
-		echo "$ADDR" >"$LAST_FILE"
 	fi
 }
 
@@ -75,13 +69,11 @@ RENEW | REBIND | RENEW6 | REBIND6)
 	call_ddns
 	;;
 EXPIRE | RELEASE | STOP | EXPIRE6 | RELEASE6 | STOP6)
-	ip route flush default dev "$interface"
 	remove_ip_address
 	;;
 BOUND | REBOOT | BOUND6)
 	dump_env
 	update_all
-
 	bash /opt/wait-net/delete.sh "$NET_TYPE"
 	call_ddns
 	;;

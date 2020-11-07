@@ -8,14 +8,14 @@ source ddns-inc.sh
 
 bash /opt/wait-net/wait.sh
 
-mapfile -t CURRENT_IP_OUTPUT < <(ip addr | grep inet6 | grep global | grep -v deprecated | awk '{print $2}' | sed -E 's#/\d+$##g' | sort)
+mapfile -t CURRENT_IP_OUTPUT < <(ip addr | grep inet6 | grep global | grep -v deprecated | awk '{print $2}' | sed -E 's#/\d+$##g' | sort -u -)
 
 pecho "interface ip address:"
 for i in "${CURRENT_IP_OUTPUT[@]}"; do
 	pecho "  * $i"
 done
 
-exit_if_same "${CURRENT_IP_OUTPUT[*]}"
+exit_if_same_list "${CURRENT_IP_OUTPUT[@]}"
 
 if [[ ${#CURRENT_IP_OUTPUT[@]} -ne 1 ]]; then
 	pecho "failed to detect ip from interface (got ${#CURRENT_IP_OUTPUT[@]} address, but want 1)"
@@ -29,8 +29,11 @@ if [[ -z $CURRENT_IP ]]; then
 	exit 1
 fi
 
+exit_if_same "$CURRENT_IP"
+
 pecho "current ip address is: $CURRENT_IP"
 
 ddns_script
 
-save_current_ip "${CURRENT_IP_OUTPUT[*]}"
+save_current_ip "${CURRENT_IP}"
+save_current_ip_list "${CURRENT_IP_OUTPUT[@]}"

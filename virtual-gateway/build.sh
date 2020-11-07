@@ -9,7 +9,7 @@ info "starting..."
 
 ### 依赖项目
 STEP="安装系统依赖"
-DEPS=(bash curl wireguard-tools-wg util-linux)
+DEPS=(bash curl wireguard-tools-wg util-linux iproute2)
 apk_hash() {
 	{
 		cat scripts/install.sh

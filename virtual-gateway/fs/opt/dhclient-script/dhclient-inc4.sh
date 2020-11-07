@@ -4,15 +4,30 @@ set -Eeuo pipefail
 function format_ip_address() {
 	echo "$new_ip_address/$new_subnet_mask"
 }
+function format_oldip_address() {
+	if [[ "${old_ip_address:-}" ]]; then
+		if [[ "${old_prefix:-}" ]]; then
+			echo "$old_ip_address/$old_prefix"
+		else
+			echo "$old_ip_address"
+		fi
+	fi
+}
 
 function set_ip_address() {
 	local BC=()
 	if [[ "${new_broadcast_address:-}" ]]; then
 		BC=(broadcast "$new_broadcast_address")
 	fi
-	ip addr add "$new_ip_address/$new_subnet_mask" "${BC[@]}" dev "$interface"
+	ip addr replace "$(format_ip_address)" "${BC[@]}" dev "$interface"
 }
-
+remove_ip_address() {
+	local OLD
+	OLD=$(format_oldip_address)
+	if [[ "${OLD}" ]]; then
+		ip addr del "${OLDOLD}" dev "${interface}" >/dev/null 2>&1
+	fi
+}
 function update_routes() {
 	local -a ROUTE_ARR=($new_routers)
 	for I in "${ROUTE_ARR[@]}"; do

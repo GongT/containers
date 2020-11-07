@@ -19,7 +19,7 @@ fi
 function call_curl() {
 	pecho "  - /usr/bin/curl --no-progress-meter -$NET_TYPE $1" >&2
 	local OUT
-	OUT=$(/usr/bin/curl -v --no-progress-meter -$NET_TYPE "$1")
+	OUT=$(/usr/bin/curl --no-progress-meter -$NET_TYPE "$1")
 	if [[ $NET_TYPE == 4 ]]; then
 		OUT=$(echo "$OUT" | grep -oE '[0-9]+.[0-9]+.[0-9]+.[0-9]+')
 	else
@@ -55,10 +55,6 @@ function request_url() {
 		if call_curl "$i"; then
 			return
 		fi
-		sleep 2
-		if call_curl "$i"; then
-			return
-		fi
 	done
 	echo ""
 }
@@ -83,6 +79,7 @@ function ddns_script() {
 }
 
 declare -r SAVE_FILE="/storage/save.ip.$NET_TYPE"
+declare -r SAVE_FILE_LIST="/storage/save.ip.$NET_TYPE.list"
 function exit_if_same() {
 	local IP="$1" SAVED
 	if [[ -e $SAVE_FILE ]]; then
@@ -97,8 +94,37 @@ function exit_if_same() {
 		pecho "    no saved IP."
 	fi
 }
+function exit_if_same_list() {
+	local SLIST SAVED
+	if ! [[ -e $SAVE_FILE_LIST ]]; then
+		pecho "    no saved IP list."
+		return
+	fi
+	SAVED=$(<"$SAVE_FILE_LIST")
+
+	SLIST=$(
+		local I
+		for I; do
+			echo "$I"
+		done | sort -u -
+	)
+
+	if [[ $SAVED == "$SLIST" ]]; then
+		pecho "current IP list output not change"
+		exit 0
+	else
+		pecho "    saved IP list output has change."
+	fi
+}
 
 function save_current_ip() {
 	echo "$1" >"$SAVE_FILE"
 	pecho "state saved."
+}
+function save_current_ip_list() {
+	local I
+	for I; do
+		echo "$I"
+	done | sort -u - >"$SAVE_FILE_LIST"
+	pecho "list state saved."
 }
