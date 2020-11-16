@@ -71,6 +71,7 @@ function run() {
 		echo "[$(date "+%F %T")] Update ip: no change!" >&2
 	else
 		echo "[$(date "+%F %T")] Update ip: from '$SAVED_IP' to '$IP'!" >&2
+		sleep 5
 		action "$IP"
 
 		SAVED_IP="$IP"
