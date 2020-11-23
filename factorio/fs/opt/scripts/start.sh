@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/usr/bin/bash
 
 set -Eeuo pipefail
 
@@ -10,6 +10,7 @@ if ! [[ -e $SAVE_FILE ]]; then
 	exit 66
 fi
 
+sed -i "s/GATE_SERVER_TITLE/$SERVER_TITLE/g; s/GAME_SERVER_DESCRIPTION/$SERVER_DESCRIPTION/g" /opt/server-settings.json
 sed -i "s/LOGIN_USERNAME_HERE/$USERNAME/g; s/LOGIN_PASSWORD_HERE/$PASSWORD/g" /opt/server-settings.json
 if [[ "$GAME_PASSWORD" ]]; then
 	sed -i "s/GAME_PASSWORD_HERE/$GAME_PASSWORD/g" /opt/server-settings.json

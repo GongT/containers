@@ -1,6 +1,6 @@
 {
-	"name": "GongT's factorio server (Stable)",
-	"description": "Boy ♂ Next ♂ Door",
+	"name": "GATE_SERVER_TITLE",
+	"description": "GAME_SERVER_DESCRIPTION",
 	"tags": [],
 	"max_players": 100,
 	"visibility": {
