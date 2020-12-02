@@ -55,6 +55,10 @@ PID=$!
 
 export PID
 echo "PID=$PID"
-wait $PID || :
 
-echo "wait done... bye bye~"
+set +Ee
+wait $PID
+RET=$?
+
+echo "wait done (code $RET)... bye bye~"
+exit $RET

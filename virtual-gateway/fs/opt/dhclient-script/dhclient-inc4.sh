@@ -6,8 +6,8 @@ function format_ip_address() {
 }
 function format_oldip_address() {
 	if [[ "${old_ip_address:-}" ]]; then
-		if [[ "${old_prefix:-}" ]]; then
-			echo "$old_ip_address/$old_prefix"
+		if [[ "${old_subnet_mask:-}" ]]; then
+			echo "$old_ip_address/$old_subnet_mask"
 		else
 			echo "$old_ip_address"
 		fi
@@ -25,7 +25,7 @@ remove_ip_address() {
 	local OLD
 	OLD=$(format_oldip_address)
 	if [[ "${OLD}" ]]; then
-		ip addr del "${OLDOLD}" dev "${interface}" >/dev/null 2>&1
+		ip addr del "${OLD}" dev "${interface}" || :
 	fi
 }
 function update_routes() {
