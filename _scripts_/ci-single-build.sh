@@ -21,7 +21,7 @@ EXISTS="$(get_up_to_date_image "$HASH")"
 
 if [[ "$EXISTS" ]]; then
 	info "$NAME - $HASH - exists [$EXISTS]"
-	control_ci "::set-env name=LAST_COMMITED_IMAGE::$EXISTS"
+	control_ci "set-env" "LAST_COMMITED_IMAGE" "$EXISTS"
 else
 	bash "./build.sh" || die "Build failed"
 fi
