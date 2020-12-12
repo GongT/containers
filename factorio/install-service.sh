@@ -21,16 +21,24 @@ ENV_PASS=$(
 		"GAME_PASSWORD=$GAME_PASSWORD"
 )
 
-create_pod_service_unit gongt/factorio
-unit_unit Description factorio server
-unit_data danger
-unit_body TimeoutStartSec 60s
-unit_body RestartPreventExitStatus 66
-unit_start_notify output "Obtained serverPadlock for serverHash"
-unit_podman_arguments "$ENV_PASS"
+function create_one() {
+	local -r SERVICE_NAME="$1" DIST_TAG="$2" PORT="$3"
 
-network_use_auto 34197/udp
+	create_pod_service_unit "$SERVICE_NAME"
+	unit_podman_image gongt/factorio
+	unit_unit Description factorio server
+	unit_data danger
+	unit_body TimeoutStartSec 60s
+	unit_body RestartPreventExitStatus 66
+	unit_start_notify output "Obtained serverPadlock for serverHash"
+	unit_podman_arguments "$ENV_PASS" "--env=DIST_TAG=$DIST_TAG" "--env=SERVER_PORT=$PORT"
 
-unit_fs_bind /data/Volumes/AppData/GameSave/factorio /data
-unit_fs_tempfs 512M /data/temp
-unit_finish
+	network_use_auto "$PORT/udp"
+
+	unit_fs_bind "/data/Volumes/AppData/GameSave/factorio/$DIST_TAG" /data
+	unit_fs_tempfs 512M /data/temp
+	unit_finish
+}
+
+create_one factorio stable 34197
+create_one factorio-experimental latest 34198
