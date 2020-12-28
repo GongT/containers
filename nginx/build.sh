@@ -72,5 +72,7 @@ buildah config --author "GongT <admin@gongt.me>" --created-by "#MAGIC!" --label 
 info "settings update..."
 info_log ""
 
+healthcheck "30s" "5" "curl --insecure https://127.0.0.1:443"
+
 buildah commit "$RESULT" gongt/nginx
 info "Done!"

@@ -40,6 +40,9 @@ unit_fs_bind share/nginx /config.auto
 unit_fs_bind share/letsencrypt /etc/letsencrypt
 shared_sockets_use
 unit_reload_command '/usr/bin/podman exec nginx bash -c "nginx -t && nginx -s reload"'
+
+healthcheck "30s" "5" "curl --insecure https://127.0.0.1:443"
+
 unit_finish
 
 write_file /etc/logrotate.d/nginx <<- LOGR
