@@ -1,33 +1,21 @@
+#!/usr/bin/env bash
 set -Eeuo pipefail
 
-cd "$(dirname "$(realpath "${BASH_SOURCE[0]}")")"
+cd /usr/lib/systemd/system
 
-pushd /usr/lib/systemd/system &> /dev/null
+mapfile -t SCRIPT_LIST < <(grep 'INSTALLER_SCRIPT=' . -R | sed -E 's/^.+INSTALLER_SCRIPT=//g' | sort | uniq)
 
-LIST=($(
-	systemctl list-unit-files '*.pod@.service' '*.pod.service' --all --no-pager \
-		| grep enabled \
-		| sed -E 's#\.pod@?\.service.+$##g'
-))
-
-popd &> /dev/null
+cd /tmp
 
 export SYSTEMD_RELOAD=no
-for NAME in "${LIST[@]}"; do
-	if [[ -e "$NAME.service" ]]; then
-		systemctl disable "$NAME" --now &> /dev/null || true
-		unlink "$NAME.service"
-	fi
+for FILE in "${SCRIPT_LIST[@]}"; do
+	BASE=$(basename "$(dirname "$FILE")" .sh)
+	echo -ne "\e[38;5;14m$BASE...\e[0m "
 
-	echo -ne "\e[38;5;14m${NAME}...\e[0m "
-
-	TEMPF=$(mktemp)
-	LOG="$TEMPF.log"
-	bash -c "bash '${NAME}/install-service.sh' ; echo -n \$? > '$LOG.ret'" &> "$LOG"
-
-	if [[ "$(< $LOG.ret)" != 0 ]]; then
-		echo -e "\e[38;5;9mFailed!\e[0m"
+	LOG="/tmp/$BASE.log"
+	if ! bash "$FILE" &>"$LOG"; then
 		cat "$LOG" >&2
+		echo -e "\e[38;5;9mFailed!\e[0m"
 	else
 		echo -e "\e[38;5;10mSuccess!\e[0m"
 	fi

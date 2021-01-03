@@ -26,7 +26,7 @@ create_pod_service_unit gongt/certbot-dns
 network_use_bridge
 
 # unit_start_notify output "everything works well, starting crond"
-unit_body Restart on-failure
+# unit_body Restart on-failure
 unit_body RestartSec 10s
 unit_body TimeoutStartSec 30s
 

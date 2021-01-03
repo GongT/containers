@@ -7,11 +7,11 @@ source ../common/functions-install.sh
 
 arg_finish "$@"
 
-SCRIPT=$(install_script wait-all-mount.sh)
+SCRIPT=$(install_script wait-dns-provider.sh)
 
-write_file /usr/lib/systemd/system/wait-mount.service << EOF
+write_file /usr/lib/systemd/system/wait-dns-provider.service << EOF
 [Unit]
-Description=wait all mount point before start any pod
+Description=wait dns server ready to resolve names
 After=network-online.target
 
 [Service]
@@ -29,7 +29,7 @@ WantedBy=multi-user.target
 
 EOF
 
-info "wait-mount.service created"
+info "wait-dns-provider.service created"
 
 systemctl daemon-reload
-systemctl enable wait-mount.service
+systemctl enable wait-dns-provider.service

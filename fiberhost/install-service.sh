@@ -21,7 +21,7 @@ unit_depend network-online.target
 unit_body Environment "INTERFACE_NAME=$INTERFACE_NAME NET_NAMESPACE=$NET_NAMESPACE"
 unit_podman_arguments --env="INTERFACE_NAME=$INTERFACE_NAME" --env="NET_NAMESPACE=$NET_NAMESPACE"
 
-unit_body Restart always
+# unit_body Restart always
 unit_hook_stop "+/usr/bin/bash $STOP_SCRIPT"
 unit_hook_start "+/usr/bin/bash $START_SCRIPT"
 

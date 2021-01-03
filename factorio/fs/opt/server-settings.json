@@ -13,7 +13,7 @@
 	"require_user_verification": true,
 	"ignore_player_limit_for_returning_players": false,
 	"autosave_interval": 5,
-	"autosave_slots": 10,
+	"autosave_slots": 50,
 	"afk_autokick_interval": 0,
 	"auto_pause": true,
 	"only_admins_can_pause_the_game": false,
