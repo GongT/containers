@@ -1,11 +1,11 @@
-name: "samba"
+name: "bitcoin-peer"
 on:
   workflow_dispatch:
   push:
     paths:
-    - 'samba/**'
-    - '!samba/install-service.sh'
-    - '.github/workflows/generated-build-samba.yaml'
+    - 'bitcoin-peer/**'
+    - '!bitcoin-peer/install-service.sh'
+    - '.github/workflows/generated-build-bitcoin-peer.yaml'
     # - common
     branches:
     - master
@@ -22,7 +22,7 @@ jobs:
           DELETE: "yes"
           GITHUB_TOKEN: ${{ github.token }}
   build:
-    name: 'standalone build samba image'
+    name: 'standalone build bitcoin-peer image'
     runs-on: [self-hosted, linux]
     env:
       http_proxy: http://proxy-server.:3271
@@ -48,13 +48,13 @@ jobs:
           fetch-depth: 0
       - name: 'Fetch exists image from docker'
         shell: bash
-        run: podman pull "docker://docker.io/gongt/samba"
-        # continue-on-error: true
+        run: podman pull "docker://docker.io/gongt/bitcoin-peer"
+        continue-on-error: true
         env:
           http_proxy: ''
           https_proxy: ''
       - name: 'Build Image'
-        run: bash -e _scripts_/ci-single-build.sh samba
+        run: bash -e _scripts_/ci-single-build.sh bitcoin-peer
         env:
           GITHUB_TOKEN: ${{ github.token }}
       - name: 'Publish to docker hub'
@@ -63,7 +63,7 @@ jobs:
           PASSWD: ${{ secrets.DockerPassword }}
           http_proxy: ''
           https_proxy: ''
-        run: ./_scripts_/retry.sh podman push "${{ env.LAST_COMMITED_IMAGE }}" --creds "gongt:$PASSWD" "docker://docker.io/gongt/samba"
+        run: ./_scripts_/retry.sh podman push "${{ env.LAST_COMMITED_IMAGE }}" --creds "gongt:$PASSWD" "docker://docker.io/gongt/bitcoin-peer"
 
       - name: 'Delete old images'
         shell: bash

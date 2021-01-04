@@ -10,6 +10,7 @@ https://github.com/GongT/containers/issues/new
 <!-- StatusTable: -->
 | Container | Link | Build Status |
 |----:|:----|:----:|
+| bitcoin-peer | https://hub.docker.com/r/gongt/bitcoin-peer | [![bitcoin-peer](https://github.com/GongT/containers/workflows/bitcoin-peer/badge.svg)](https://github.com/GongT/containers/actions?query=workflow%3Abitcoin-peer) |
 | bttracker | https://hub.docker.com/r/gongt/bttracker | [![bttracker](https://github.com/GongT/containers/workflows/bttracker/badge.svg)](https://github.com/GongT/containers/actions?query=workflow%3Abttracker) |
 | certbot-dns | https://hub.docker.com/r/gongt/certbot-dns | [![certbot-dns](https://github.com/GongT/containers/workflows/certbot-dns/badge.svg)](https://github.com/GongT/containers/actions?query=workflow%3Acertbot-dns) |
 | cloud | https://hub.docker.com/r/gongt/cloud | [![cloud](https://github.com/GongT/containers/workflows/cloud/badge.svg)](https://github.com/GongT/containers/actions?query=workflow%3Acloud) |

@@ -55,6 +55,8 @@ jobs:
           https_proxy: ''
       - name: 'Build Image'
         run: bash -e _scripts_/ci-single-build.sh virtual-gateway
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
       - name: 'Publish to docker hub'
         shell: bash
         env:
