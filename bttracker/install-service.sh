@@ -8,7 +8,7 @@ source ../common/functions-install.sh
 create_pod_service_unit gongt/bttracker
 unit_unit Description bttracker
 unit_start_notify output "Ok, All setup"
-network_use_auto
+network_use_auto 43079/udp
 # unit_body Restart always
 # unit_podman_image_pull never
 unit_fs_bind share/nginx /run/nginx

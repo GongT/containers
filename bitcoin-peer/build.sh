@@ -50,6 +50,9 @@ copy_program_files() {
 	RESULT_MNT=$(buildah mount "$RESULT")
 
 	run_install "bitcoin" "$BUILDAH_LAST_IMAGE" "$RESULT_MNT" "source/prepare-deps.sh"
+	rm -rf "$RESULT_MNT/data"
+	mkdir "$RESULT_MNT/data"
+	chattr +i "$RESULT_MNT/data"
 	buildah unmount "$RESULT" >/dev/null
 
 	VERSION=$(xbuildah run "$RESULT" bitcoind --version | grep 'Bitcoin Core version ' | sed 's#Bitcoin Core version ##g')
@@ -63,8 +66,8 @@ buildah_cache "btc-build" hash_program_files copy_program_files
 info_log ""
 
 RESULT=$(new_container "btc-final" "$BUILDAH_LAST_IMAGE")
-buildah config --cmd '/opt/run.sh' --port 8332 --port 8333 --port 8332/udp --port 8333/udp "$RESULT"
-buildah config --author "GongT <admin@gongt.me>" --created-by "#MAGIC!" --label name=gongt/bitcoind "$RESULT"
+buildah config --cmd '/opt/start.sh' --port 8332 --port 8333 --port 8332/udp --port 8333/udp "$RESULT"
+buildah config --author "GongT <admin@gongt.me>" --created-by "#MAGIC!" --label name=gongt/bitcoin-peer "$RESULT"
 buildah copy "$RESULT" fs /
-buildah commit "$RESULT" gongt/bitcoind
+buildah commit "$RESULT" gongt/bitcoin-peer
 info "Done!"
