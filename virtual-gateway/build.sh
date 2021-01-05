@@ -26,20 +26,21 @@ buildah_cache "infra-build" apk_hash apk_install
 
 ### 下载
 REPO="GongT/wireguard-config-distribute"
-RELEASE_BINARY_URL="https://github.com/$REPO/releases/download/latest/client.alpine"
+RELEASE_BIN_URL="https://github.com/$REPO/releases/download/latest/client.alpine"
 STEP="下载 wireguard-config-client"
 hash_wireguard() {
-	http_get_github_release_id "GongT/wireguard-config-distribute"
+	http_get_github_release_id "$REPO"
 }
 download_wireguard() {
 	local RESULT MNT DOWNLOADED VERSION
 	RESULT=$(new_container "$1" "$BUILDAH_LAST_IMAGE")
 	MNT=$(buildah mount "$RESULT")
-	DOWNLOADED=$(download_file "$RELEASE_BINARY_URL" "wg-client.$WANTED_HASH")
+	DOWNLOADED=$(download_file "$RELEASE_BIN_URL" "wg-client.$WANTED_HASH")
 
 	install -D --verbose --compare --mode=0755 --no-target-directory "$DOWNLOADED" "$MNT/usr/libexec/wireguard-config-client"
+	info_note "install done."
 
-	VERSION=$(xbuildah run "$RESULT" sh -c '/usr/libexec/wireguard-config-client -V' 2>&1)
+	VERSION=$(xbuildah run "$RESULT" /usr/libexec/wireguard-config-client -V)
 	info "VERSION = $VERSION"
 
 	buildah config --label "client-version=$VERSION" "$RESULT"
