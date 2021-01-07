@@ -41,7 +41,7 @@ if (existsSync(SOCKET_FILE)) {
 	unlinkSync(SOCKET_FILE);
 }
 
-const UDP_PORT = parseInt(process.env.PORT) || 43079;
+const UDP_PORT = 43079;
 
 setTimeout(main, 100);
 function main() {
