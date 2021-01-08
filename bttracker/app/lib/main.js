@@ -1,5 +1,5 @@
 const Server = require('bittorrent-tracker/server');
-const { existsSync, unlinkSync, copyFileSync } = require('fs');
+const { existsSync, unlinkSync, copyFileSync, readFileSync, writeFileSync } = require('fs');
 const { resolve } = require('path');
 const { request } = require('http');
 
@@ -11,6 +11,28 @@ const server = new Server({
 	trustProxy: true,
 	// filter:  function (infoHash, params, cb) {}
 });
+
+const storeFile = '/data/store/store.json';
+// if (existsSync(storeFile)) {
+// 	console.log('restore torrents from data file...');
+// 	try {
+// 		Object.assign(server.torrents, JSON.parse(readFileSync(storeFile, 'utf-8')));
+// 	} catch (e) {
+// 		console.error('    failed load data file: %s', e.message);
+// 	}
+// } else {
+// 	console.log('data file did not exists.');
+// }
+function saveStoreFile() {
+	try {
+		writeFileSync(storeFile, JSON.stringify(server.torrents), 'utf-8');
+	} catch (e) {
+		console.error('    failed save data file: %s', e.message);
+	}
+}
+setInterval(() => {
+	saveStoreFile();
+}, 5 * 60 * 1000);
 
 server.on('error', function (err) {
 	console.error('ERROR: \x1B[2m%s\x1B[0m', err.stack);
@@ -78,6 +100,9 @@ process.on('beforeExit', () => beforeQuit());
 function beforeQuit(code = 0) {
 	process.removeAllListeners('beforeExit');
 
+	console.log('saving data file...');
+	saveStoreFile();
+
 	removeNginxFiles();
 	Promise.resolve()
 		.then(restartNginx)
@@ -120,6 +145,7 @@ async function restartNginx() {
 async function addNginxFiles() {
 	copyFileSync(resolve(__dirname, 'nginx-http.conf'), '/run/nginx/vhost.d/torrent-tracker.conf');
 	copyFileSync(resolve(__dirname, 'nginx-udp.conf'), '/run/nginx/stream.d/torrent-tracker.conf');
+	copyFileSync(resolve(__dirname, 'filter.lua'), '/run/nginx/vhost.d/torrent-tracker-filter.lua');
 }
 async function removeNginxFiles() {
 	try {
@@ -129,6 +155,11 @@ async function removeNginxFiles() {
 	}
 	try {
 		unlinkSync('/run/nginx/stream.d/torrent-tracker.conf');
+	} catch (e) {
+		console.error('Failed Unlink: ', e.message);
+	}
+	try {
+		unlinkSync('/run/nginx/vhost.d/torrent-tracker-filter.lua');
 	} catch (e) {
 		console.error('Failed Unlink: ', e.message);
 	}

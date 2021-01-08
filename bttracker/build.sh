@@ -14,8 +14,8 @@ pnpm -C app --prod install
 buildah copy "$RESULT" app /data/app
 info "copy files..."
 
-buildah config --cmd 'node --unhandled-rejections=strict /data/app/lib/main.js' "$RESULT"
-buildah config --stop-signal SIGINT "$RESULT"
+buildah config --entrypoint '' --cmd 'node --unhandled-rejections=strict /data/app/lib/main.js' "$RESULT"
+buildah config --stop-signal SIGINT --volume /data/store "$RESULT"
 buildah config --author "GongT <admin@gongt.me>" --created-by "#MAGIC!" --label name=gongt/bttracker "$RESULT"
 info "settings updated..."
 
