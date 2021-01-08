@@ -16,7 +16,7 @@ server.on('error', function (err) {
 	console.error('ERROR: \x1B[2m%s\x1B[0m', err.stack);
 });
 server.on('warning', function (err) {
-	console.log('WARNING: \x1B[2m%s\x1B[0m', err.stack);
+	console.log('WARNING: \x1B[2m%s\x1B[0m', err.message);
 });
 server.on('update', function (addr) {
 	// console.log('update: ' + addr);
