@@ -17,8 +17,8 @@ chmod a+x "$PROJECT_ROOT/git"
 SCRIPT="$(dirname "$(realpath "${BASH_SOURCE[0]}")")/udp2raw.build.sh"
 
 __hash_udp2raw() {
-	cd "$PROJECT_ROOT"
-	git ls-tree -r -t HEAD "${HASH_FOLDERS[@]}"
+	echo "$GIT_VER"
+	cat "$SCRIPT"
 }
 __compile_udp2raw() {
 	local BUILDER="$1"
@@ -27,5 +27,7 @@ __compile_udp2raw() {
 STEP="编译udp2raw"
 buildah_cache2 "udp2raw" __hash_udp2raw __compile_udp2raw
 
-cp "$PROJECT_ROOT/udp2raw" "$COMPILE_TARGET_DIRECTORY/"
-chmod a+x "$COMPILE_TARGET_DIRECTORY/udp2raw"
+STEP="复制udp2raw"
+run_install udp2raw "$BUILDAH_LAST_IMAGE" "$COMPILE_TARGET_DIRECTORY" <<-'INSTALL'
+	install -m 0755 /usr/bin/udp2raw "$INSTALL_TARGET/"
+INSTALL
