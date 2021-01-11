@@ -9,11 +9,6 @@ arg[]:/bin/bash
 arg[]:/opt/run_dnsmasq.sh
 
 
-# [privoxy]
-# arg[]:/bin/bash
-# arg[]:/opt/run_privoxy.sh
-# 
-
 [socks5]
 arg[]:/usr/bin/microsocks
 arg[]:-i

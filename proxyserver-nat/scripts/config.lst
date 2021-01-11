@@ -1,0 +1,5 @@
+--entrypoint=
+--cmd=/bin/bash /opt/init.sh
+--author=GongT <admin@gongt.me>
+--created-by="#MAGIC!"
+--label=name=gongt/proxyserver-nat

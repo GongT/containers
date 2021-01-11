@@ -18,12 +18,24 @@ TITLE='WireguardProxyServer$TITLE'
 IP_NUMBER='$IP_NUMBER'
 UDP2RAW_PASSWORD='$UDP2RAW_PASSWORD'
 UDP2RAW_MODE='$_UDP2RAW_MODE'
-$(< scripts/router_script.sh)
+$(<scripts/router_script.sh)
 "
-echo "$SCRIPT" | ssh router.home.gongt.me bash > /tmp/load-keys.sh
+echo "$SCRIPT" | ssh router.home.gongt.me bash >/tmp/load-keys.sh
 source /tmp/load-keys.sh
 
 info "remote wireguard keys created."
+
+ENV_PASS=$(
+	safe_environment \
+		"KEY_ROUTER_PUBLIC=${KEY_ROUTER_PUBLIC}" \
+		"KEY_PRIVATE=${KEY_PRIVATE}" \
+		"KEY_SHARE=${KEY_SHARE}" \
+		"IP_NUMBER=${IP_NUMBER}" \
+		"UDP2RAW_PASSWORD=${UDP2RAW_PASSWORD}" \
+		"ROUTER_PORT=${ROUTER_PORT}" \
+		"UDP2RAW_MODE=${UDP2RAW_MODE}" \
+		"MTU=${MTU}"
+)
 
 create_pod_service_unit gongt/proxyserver-nat
 unit_unit Description "Proxy Server Behind NAT"
@@ -36,19 +48,13 @@ unit_depend network-online.target
 unit_fs_bind config/proxyserver /config
 # unit_body Restart always
 
-network_use_manual --network=bridge0 --mac-address=86:13:02:8F:76:2B
+network_use_manual --network=bridge0 --mac-address=86:13:02:8F:76:2B --dns=127.0.0.1
 add_network_privilege
 
-unit_podman_arguments $(
-	safe_environment \
-		"KEY_ROUTER_PUBLIC=${KEY_ROUTER_PUBLIC}" \
-		"KEY_PRIVATE=${KEY_PRIVATE}" \
-		"KEY_SHARE=${KEY_SHARE}" \
-		"IP_NUMBER=${IP_NUMBER}" \
-		"UDP2RAW_PASSWORD=${UDP2RAW_PASSWORD}" \
-		"ROUTER_PORT=${ROUTER_PORT}" \
-		"UDP2RAW_MODE=${UDP2RAW_MODE}" \
-		"MTU=${MTU}"
-)
+healthcheck "3min" 2 "bash" "/opt/hc.sh"
+healthcheck_start_period 30s
+healthcheck_timeout 60s
+
+unit_podman_arguments "$ENV_PASS"
 unit_body ExecReload podman exec proxyserver bash -c "killall -s SIGHUP dnsmasq"
 unit_finish

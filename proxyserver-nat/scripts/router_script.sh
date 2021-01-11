@@ -7,10 +7,15 @@ function uci() {
 	/sbin/uci "$@"
 }
 
+if ! uci get network.wg_proxy.listen_port &>/dev/null; then
+	echo "Failed: no network named wg_proxy (or config error) on the router." >&2
+	exit 1
+fi
+
 echo "KEY_ROUTER_PUBLIC=$(uci get network.wg_proxy.private_key | wg pubkey)"
 
 declare -r WG_PORT=$(uci get network.wg_proxy.listen_port)
-declare -r UDP2RAW_PORT=$((49300 + $IP_NUMBER))
+declare -r UDP2RAW_PORT=$((49300 + IP_NUMBER))
 if [[ "${UDP2RAW_PASSWORD}" ]]; then
 	UDP2RAW_MODE=${UDP2RAW_MODE-icmp}
 
