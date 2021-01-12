@@ -34,6 +34,10 @@ copy_files() {
 buildah_cache2 "proxyclient" test_changes copy_files
 ### 编译udp2raw END
 
+### IANA根域名列表
+source ../_shared_projects/dns/iana-tlds-to-dnsmasq.sh "proxyclient"
+### IANA根域名列表 END
+
 STEP="配置镜像信息"
 buildah_config "proxyclient" \
 	--author "GongT <admin@gongt.me>" \

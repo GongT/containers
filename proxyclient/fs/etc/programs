@@ -1,30 +1,14 @@
-# [dhclient4]
-# arg[]:/bin/busybox
-# arg[]:udhcpc
-# arg[]:-f
-# arg[]:-C
-# arg[]:-x
-# arg[]:hostname:shabao-proxy-client
-# arg[]:-n
-# arg[]:-R
-# arg[]:-i
-# arg[]:eth0
-# 
-
 [dnsmasq]
 arg[]:/bin/bash
 arg[]:/opt/run_dnsmasq.sh
-
 
 [privoxy]
 arg[]:/bin/bash
 arg[]:/opt/run_privoxy.sh
 
-
 [udp2raw]
 arg[]:/bin/bash
 arg[]:/opt/udp2raw.sh
-
 
 [init]
 arg[]:/bin/bash

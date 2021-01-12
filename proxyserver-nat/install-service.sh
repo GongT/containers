@@ -51,7 +51,7 @@ unit_fs_bind config/proxyserver /config
 network_use_manual --network=bridge0 --mac-address=86:13:02:8F:76:2B --dns=127.0.0.1
 add_network_privilege
 
-healthcheck "3min" 2 "bash" "/opt/hc.sh"
+healthcheck "3m" 2 "bash /opt/hc.sh"
 healthcheck_start_period 30s
 healthcheck_timeout 60s
 

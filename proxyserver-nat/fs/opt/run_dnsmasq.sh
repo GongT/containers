@@ -11,4 +11,4 @@ fi
 
 ND='--keep-in-foreground'
 # ND='--no-daemon'
-exec /usr/sbin/dnsmasq $ND --conf-file=/etc/dnsmasq.conf --pid-file=/run/dnsmasq.pid
+exec /usr/sbin/dnsmasq $ND --conf-file=/etc/dnsmasq.backend.conf --pid-file=/run/dnsmasq.backend.pid

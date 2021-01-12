@@ -4,4 +4,4 @@ set -Eeuo pipefail
 
 IP=$(podman inspect "proxyclient" --format '{{.NetworkSettings.IPAddress}}')
 
-echo "nameserver ${IP}" > /tmp/dnsmasq-resolv-proxy.conf
+echo "server=${IP}" > /etc/dnsmasq.d/dnsmasq-resolv-proxy.conf
