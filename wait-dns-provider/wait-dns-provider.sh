@@ -31,14 +31,14 @@ function try() {
 	fi
 }
 
-_notify " -> try resolve china dns"
-try z.cn 10.0.0.1
+# _notify " -> try resolve china dns"
+# try z.cn 10.0.0.1
 
-_notify " -> try resolve world dns"
-try www.google.com 10.0.0.1
+# _notify " -> try resolve world dns"
+# try docker.io 10.0.0.1
 
 _notify " -> try resolve china dns (local)"
 try z.cn 127.0.0.1
 
 _notify " -> try resolve world dns (local)"
-try www.google.com 127.0.0.1
+try docker.io 127.0.0.1
