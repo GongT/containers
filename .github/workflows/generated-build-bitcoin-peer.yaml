@@ -49,7 +49,7 @@ jobs:
       - name: 'Fetch exists image from docker'
         shell: bash
         run: podman pull "docker://docker.io/gongt/bitcoin-peer"
-        continue-on-error: true
+        # continue-on-error: true
         env:
           http_proxy: ''
           https_proxy: ''
