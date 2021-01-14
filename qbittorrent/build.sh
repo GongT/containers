@@ -19,7 +19,7 @@ install_compile_deps() {
 	info "dnf install..."
 	local TARGET="$1" RESULT
 	RESULT=$(new_container "$TARGET" fedora)
-	run_dnf "$RESULT" $(< scripts/compile.lst)
+	run_dnf "$RESULT" $(<scripts/compile.lst)
 	info "dnf install complete..."
 
 	{
@@ -30,24 +30,28 @@ install_compile_deps() {
 BUILDAH_FORCE="$FORCE_DNF" buildah_cache "qbittorrent-build" hash_compile_deps install_compile_deps
 ### 编译时依赖项目 END
 
+### 编译libtorrent
+hash_libtorrent() {
+	fast_hash_path source/libtorrent scripts/build-libtorrent.sh
+}
+build_libtorrent() {
+	clean_submodule source/libtorrent
+	run_compile "libtorrent" "$1" "./scripts/build-libtorrent.sh"
+	info "libtorrent build complete..."
+}
+buildah_cache2 "qbittorrent-build" hash_libtorrent build_libtorrent
+### 编译! END
+
 ### 编译!
 hash_qbittorrent() {
-	{
-		cat "scripts/build-libtorrent.sh"
-		cat "scripts/build-qbittorrent.sh"
-		git ls-tree -r HEAD source
-	} | md5sum
+	git ls-tree -r HEAD source/qbittorrent scripts/build-qbittorrent.sh
 }
 build_qbittorrent() {
-	local BUILDER P
-	BUILDER=$(new_container "$1" "$BUILDAH_LAST_IMAGE")
-	rm -rf
-	for P in libtorrent qbittorrent; do
-		run_compile "$P" "$BUILDER" "./scripts/build-$P.sh"
-		info "$P build complete..."
-	done
+	clean_submodule source/qbittorrent
+	run_compile "qbittorrent" "$1" "./scripts/build-qbittorrent.sh"
+	info "qbittorrent build complete..."
 }
-buildah_cache "qbittorrent-build" hash_qbittorrent build_qbittorrent
+buildah_cache2 "qbittorrent-build" hash_qbittorrent build_qbittorrent
 COMPILE_RESULT_IMAGE="$BUILDAH_LAST_IMAGE"
 ### 编译! END
 
@@ -59,7 +63,7 @@ install_runtime_deps() {
 	info "dnf install..."
 	local TARGET="$1" RESULT
 	RESULT=$(new_container "$TARGET" scratch)
-	run_dnf "$RESULT" $(< scripts/runtime.lst)
+	run_dnf "$RESULT" $(<scripts/runtime.lst)
 	info "dnf install complete..."
 	delete_rpm_files "$RESULT"
 	buildah run "$RESULT" bash -c "rm -rf /etc/nginx /etc/privoxy"
@@ -82,8 +86,8 @@ copy_program_files() {
 	RESULT=$(new_container "$1" "$BUILDAH_LAST_IMAGE")
 	buildah copy "$RESULT" "$PROGRAM_MNT/opt/dist" /usr
 
-	buildah unmount "$PROGRAM" > /dev/null
-	buildah rm "$PROGRAM" > /dev/null
+	buildah unmount "$PROGRAM" >/dev/null
+	buildah rm "$PROGRAM" >/dev/null
 }
 buildah_cache "qbittorrent" hash_program_files copy_program_files
 ### 编译好的qbt END
@@ -97,7 +101,7 @@ copy_supporting_files() {
 	local RESULT
 	RESULT=$(new_container "$1" "$BUILDAH_LAST_IMAGE")
 	buildah copy "$RESULT" fs /
-	buildah run "$RESULT" bash < "scripts/prepare-run.sh"
+	buildah run "$RESULT" bash <"scripts/prepare-run.sh"
 }
 buildah_cache "qbittorrent" hash_supporting_files copy_supporting_files
 ### 配置文件等 END

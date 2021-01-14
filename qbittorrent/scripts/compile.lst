@@ -6,6 +6,8 @@ autoconf
 automake
 libtool
 qt-devel
+boost-b2
+boost-build
 boost-devel
 openssl-devel
 qt5-qtbase-devel
@@ -18,3 +20,4 @@ tar
 git
 bash
 ccache
+diffutils

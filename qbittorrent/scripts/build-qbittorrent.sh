@@ -2,18 +2,17 @@
 
 export PKG_CONFIG_PATH="$ARTIFACT_PREFIX/lib/pkgconfig:${PKG_CONFIG_PATH:-}"
 export CPPFLAGS="${CPPFLAGS:-} -I/usr/include/qt5"
+export LDFLAGS="${LDFLAGS:-} -lpthread"
 
 ldconfig
 
-pkg-config --list-all | grep torrent
+function die() {
+	echo "$*" >&2
+	exit 1
+}
 
-make distclean || true
+pkg-config --list-all | grep libtorrent-rasterbar || die "pkg-config did not list libtorrent-rasterbar"
 
-./bootstrap.sh
-./configure --prefix="$ARTIFACT_PREFIX" \
-	--enable-TORRENT_NO_DEPRECATE \
-	--with-boost \
-	CXXFLAGS=-std=c++14
-
-make -j$(nproc)
-make install
+cmake -B build -DCMAKE_BUILD_TYPE=Release "-DCMAKE_INSTALL_PREFIX=$ARTIFACT_PREFIX"
+cmake --build build --parallel --clean-first
+cmake --install build
