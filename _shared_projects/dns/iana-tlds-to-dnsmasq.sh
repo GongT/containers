@@ -22,7 +22,7 @@ tlds_update() {
 			continue
 		fi
 		echo "address=/${LINE,,}/::"
-		echo "server=/${LINE,,}/127.0.0.1#5353"
+		echo "server=/${LINE,,}/${REAL_DNS_SERVER}"
 	done >"$F"
 }
 buildah_cache2 "$1" tlds_etag tlds_update

@@ -68,7 +68,9 @@ buildah_cache2 "proxyserver-nat" test_changes copy_files
 ### 编译结果 END
 
 ### IANA根域名列表
-SAVE_TO="/opt/tlds.conf" source ../_shared_projects/dns/iana-tlds-to-dnsmasq.sh "proxyserver-nat"
+REAL_DNS_SERVER=127.0.0.1#5353 \
+	SAVE_TO="/opt/tlds.conf" \
+	source ../_shared_projects/dns/iana-tlds-to-dnsmasq.sh "proxyserver-nat"
 ### IANA根域名列表 END
 
 STEP="配置镜像信息"

@@ -17,7 +17,7 @@ function usage() {
 		shift
 		echo -e "    \e[38;5;14m$N\e[0m: $*"
 	}
-	if [[ "$Z" = */bin.sh ]]; then
+	if [[ $Z == */bin.sh ]]; then
 		l install "install (link) bin.sh to /usr/local/bin/ms, and create auto-pull timer"
 	fi
 	l upgrade "update (re-install) services files"
@@ -36,6 +36,7 @@ function usage() {
 	echo "Tools:"
 	l run "run command in container (default /bin/sh)"
 	l rm "remove (uninstall) service file"
+	l pull "pull images new version"
 	echo
 }
 
@@ -58,7 +59,7 @@ do_rm() {
 
 	for I in "${FILES[@]}"; do
 		local OVERWRITE="/etc/systemd/system/$I.d"
-		if [[ -d "$OVERWRITE" ]]; then
+		if [[ -d $OVERWRITE ]]; then
 			echo "remove directory: $OVERWRITE"
 			rm -rf "$OVERWRITE"
 		fi
@@ -67,13 +68,13 @@ do_rm() {
 		systemctl disable --now --no-block "$I" || true
 
 		local F="/usr/lib/systemd/system/$I"
-		if [[ -e "$F" ]]; then
+		if [[ -e $F ]]; then
 			echo "remove service file: $F"
 			rm -f "$F"
 		fi
 	done
 
-	if [[ "${#FILES[@]}" -gt 0 ]]; then
+	if [[ ${#FILES[@]} -gt 0 ]]; then
 		systemctl daemon-reload
 	fi
 }
@@ -82,10 +83,15 @@ do_ls() {
 	systemctl list-unit-files '*.pod@.service' '*.pod.service' --all --no-pager --no-legend | awk '{print $1}' | sed -E 's/\.service$//g'
 }
 
+pull_all() {
+	go_home
+	source _scripts_/pull_all_images.sh
+}
+
 declare -r ACTION=$1
 shift
 
-if [[ "$ACTION" == install ]] && ! [[ -L "$0" ]]; then
+if [[ $ACTION == install ]] && ! [[ -L $0 ]]; then
 	go_home
 
 	mkdir -p /usr/share/scripts
@@ -147,6 +153,9 @@ run)
 	else
 		die "target service ($TARGET) is not running"
 	fi
+	;;
+pull)
+	pull_all
 	;;
 *)
 	usage

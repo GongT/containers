@@ -35,7 +35,8 @@ buildah_cache2 "proxyclient" test_changes copy_files
 ### 编译udp2raw END
 
 ### IANA根域名列表
-source ../_shared_projects/dns/iana-tlds-to-dnsmasq.sh "proxyclient"
+REAL_DNS_SERVER=10.233.233.1 \
+	source ../_shared_projects/dns/iana-tlds-to-dnsmasq.sh "proxyclient"
 ### IANA根域名列表 END
 
 STEP="配置镜像信息"
