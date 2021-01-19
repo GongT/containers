@@ -9,7 +9,7 @@ nginx &
 PID=$!
 echo "nginx is start: $PID"
 
-trap "echo 'RECEIVE SIGINT/SIGSTOP' ; nginx -s stop" SIGINT SIGSTOP
+trap "echo 'RECEIVE SIGINT/SIGSTOP' ; nginx -s stop" USR1 INT
 
 wait $PID
 echo "nginx is quit"

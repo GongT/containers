@@ -46,12 +46,10 @@ if [[ "$UDP2RAW_PASSWORD" ]]; then
 else
 	unit_start_notify sleep 3
 fi
-POSTSTART_SCRIPT=$(install_script scripts/reload_dnsmasq.sh)
-unit_hook_poststart "$POSTSTART_SCRIPT"
 unit_depend network-online.target
 unit_fs_bind config/proxyclient /config
 unit_podman_arguments --dns=127.0.0.1
-network_use_bridge 3271/tcp
+network_use_bridge 3271/tcp 35353:53/udp
 add_network_privilege
 unit_podman_arguments "$ENV_PASS"
 unit_body ExecReload '/usr/bin/podman exec proxyclient bash -c "killall -s SIGHUP dnsmasq"'

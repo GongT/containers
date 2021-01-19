@@ -18,4 +18,4 @@ signal:SIGQUIT
 
 [nginx]
 arg[]:/opt/start-nginx.sh
-signal:SIGSTOP
+signal:usr1
