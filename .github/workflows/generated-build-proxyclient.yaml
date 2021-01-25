@@ -1,6 +1,11 @@
 name: "proxyclient"
 on:
   workflow_dispatch:
+    inputs:
+      skipEarlyDetect:
+        description: 'Skip early change detect'     
+        required: false
+        default: ''
   push:
     paths:
     - 'proxyclient/**'
@@ -11,6 +16,7 @@ on:
     - master
 env:
   NODE_ENV: production
+  TRIGGER_SKIP_EARLY_DETECT: ${{ github.event.inputs.skipEarlyDetect }}
 jobs:
   cancel:
     name: Cancel Previous Runs
