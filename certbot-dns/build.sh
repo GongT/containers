@@ -5,40 +5,30 @@ set -Eeuo pipefail
 cd "$(dirname "$(realpath "${BASH_SOURCE[0]}")")"
 source ../common/functions-build.sh
 
-RESULT=$(create_if_not certbot-result alpine)
-info "base image prepare..."
+### 依赖项目
+STEP="安装系统依赖"
+declare -a DEPS=(ca-certificates bash curl wget openssl)
+make_base_image_by_apt gongt/alpine-cn "certbot" "${DEPS[@]}"
+### 依赖项目 END
 
-buildah copy "$RESULT" opt /opt
-info "files created..."
+### 安装acme
+STEP="安装acme.sh"
+hash_acme() {
+	fast_hash_path opt/acme.sh
+}
+copy_acme() {
+	buildah add "$1" opt /opt
+	buildah run "$1" bash <scripts/install.sh
+}
+buildah_cache2 "certbot" hash_acme copy_acme
+### 安装acme END
 
-echo '
-set -e
-apk add -U ca-certificates bash curl wget openssl
-
-cd /opt/acme.sh
-bash acme.sh --install \
-	--home /usr/bin \
-	--config-home "/etc/letsencrypt/acme.sh" \
-	--accountemail "admin@example.com" \
-	--accountkey /etc/letsencrypt/acme.sh/account.key \
-	--accountconf /etc/letsencrypt/acme.sh/account.conf \
-	--nocron \
-	--noprofile
-
-echo "
-# min   hour    day     month   weekday command
-0       0       */20    *       *       run-parts /etc/periodic/20day
-" > /etc/crontabs/root
-
-mkdir -p /etc/periodic/20day
-
-' | buildah run $(use_alpine_apk_cache) "$RESULT" sh
-info "install complete..."
-
-buildah config --entrypoint '["/bin/bash"]' --cmd '/opt/init.sh' --stop-signal=SIGINT "$RESULT"
-buildah config --volume /config --volume /etc/letsencrypt "$RESULT"
-buildah config --author "GongT <admin@gongt.me>" --created-by "#MAGIC!" --label name=gongt/certbot-dns "$RESULT"
+STEP="配置镜像信息"
+buildah_config "certbot" --entrypoint '["/bin/bash"]' --cmd '/opt/init.sh' --stop-signal=SIGINT \
+	--volume /config --volume /etc/letsencrypt \
+	--author "GongT <admin@gongt.me>" --created-by "#MAGIC!" --label name=gongt/certbot-dns
 info "settings updated..."
 
+RESULT=$(create_if_not "certbot" "$BUILDAH_LAST_IMAGE")
 buildah commit "$RESULT" gongt/certbot-dns
 info "Done!"
