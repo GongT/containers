@@ -57,11 +57,8 @@ jobs:
           fetch-depth: 0
       - name: 'Fetch exists image from docker'
         shell: bash
-        run: podman pull "docker://docker.io/gongt/factorio"
+        run: ./_scripts_/retry.sh podman pull "docker://docker.io/gongt/factorio"
         # continue-on-error: true
-        env:
-          http_proxy: ''
-          https_proxy: ''
       - name: 'Build Image'
         run: bash -e _scripts_/ci-single-build.sh factorio
         env:
@@ -70,8 +67,6 @@ jobs:
         shell: bash
         env:
           PASSWD: ${{ secrets.DockerPassword }}
-          http_proxy: ''
-          https_proxy: ''
         run: ./_scripts_/retry.sh podman push "${{ env.LAST_COMMITED_IMAGE }}" --creds "gongt:$PASSWD" "docker://docker.io/gongt/factorio"
 
       - name: 'Delete old images'

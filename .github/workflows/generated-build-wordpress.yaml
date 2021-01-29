@@ -17,6 +17,9 @@ on:
 env:
   NODE_ENV: production
   TRIGGER_SKIP_EARLY_DETECT: ${{ github.event.inputs.skipEarlyDetect }}
+  HTTP_PROXY: ""
+  HTTPS_PROXY: ""
+  ALL_PROXY: ""
 jobs:
   cancel:
     name: Cancel Previous Runs
@@ -54,11 +57,8 @@ jobs:
           fetch-depth: 0
       - name: 'Fetch exists image from docker'
         shell: bash
-        run: podman pull "docker://docker.io/gongt/wordpress"
+        run: ./_scripts_/retry.sh podman pull "docker://docker.io/gongt/wordpress"
         # continue-on-error: true
-        env:
-          http_proxy: ''
-          https_proxy: ''
       - name: 'Build Image'
         run: bash -e _scripts_/ci-single-build.sh wordpress
         env:
@@ -67,8 +67,6 @@ jobs:
         shell: bash
         env:
           PASSWD: ${{ secrets.DockerPassword }}
-          http_proxy: ''
-          https_proxy: ''
         run: ./_scripts_/retry.sh podman push "${{ env.LAST_COMMITED_IMAGE }}" --creds "gongt:$PASSWD" "docker://docker.io/gongt/wordpress"
 
       - name: 'Delete old images'
