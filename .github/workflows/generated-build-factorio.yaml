@@ -17,6 +17,9 @@ on:
 env:
   NODE_ENV: production
   TRIGGER_SKIP_EARLY_DETECT: ${{ github.event.inputs.skipEarlyDetect }}
+  HTTP_PROXY: ""
+  HTTPS_PROXY: ""
+  ALL_PROXY: ""
 jobs:
   cancel:
     name: Cancel Previous Runs
