@@ -18,7 +18,7 @@ STEP="下载factorio可执行文件"
 hash_factorio() {
 	local -r DIST_URL="https://factorio.com/get-download/$DIST_TAG/headless/linux64"
 	echo -n "$DIST_TAG::"
-	run_without_proxy http_get_etag "$DIST_URL"
+	http_get_etag "$DIST_URL"
 }
 build_factorio() {
 	local -r DIST_URL="https://factorio.com/get-download/$DIST_TAG/headless/linux64"
