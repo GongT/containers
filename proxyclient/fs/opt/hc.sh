@@ -19,8 +19,9 @@ nslookup -retry=6 -timeout=5 -type=A www.google.com 127.0.0.1 \
 	|| die "can not resolve google.com"
 echo "dns resolve success"
 
-curl -s --max-time 10 https://google.com >/dev/null || die "failed request google homepage directly"
+wget -T 10 -O /dev/null -Y off https://www.baidu.com || die "failed request baidu homepage directly"
 echo "network access success"
 
-curl -s --max-time 10 -x http://127.0.0.1:3271 https://google.com >/dev/null || die "failed request google homepage through proxy"
+export http_proxy="127.0.0.1:3271" https_proxy="127.0.0.1:3271"
+wget -T 10 -O /dev/null -Y on https://google.com || die "failed request google homepage through proxy"
 echo "http proxy server ok"
