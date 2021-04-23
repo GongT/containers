@@ -14,7 +14,7 @@ bash acme.sh --install \
 
 echo "
 # min   hour    day     month   weekday command
-0       0       */20    *       *       run-parts /etc/periodic/20day
+0       3       *       *       1       run-parts /etc/periodic/weekly
 " >/etc/crontabs/root
 
 mkdir -p /etc/periodic/20day

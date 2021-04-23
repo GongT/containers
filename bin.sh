@@ -85,7 +85,7 @@ do_ls() {
 
 pull_all() {
 	go_home
-	source _scripts_/pull_all_images.sh
+	source _scripts_/pull_all_images.sh "$@"
 }
 
 declare -r ACTION=$1
@@ -155,7 +155,7 @@ run)
 	fi
 	;;
 pull)
-	pull_all
+	pull_all "$@"
 	;;
 *)
 	usage

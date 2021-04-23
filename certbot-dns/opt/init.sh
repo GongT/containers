@@ -76,10 +76,13 @@ echo 'Install cronjob...' >&2
 echo '======================================' >&2
 echo "#!/bin/bash
 
-exec acme.sh --renew-all --ecc ${BASE_ARGS_ESCAPE[*]}
+date '+%F %T' > /tmp/last_run
+echo acme.sh --renew-all --ecc ${BASE_ARGS_ESCAPE[*]} >> /tmp/last_run
+acme.sh --renew-all --ecc ${BASE_ARGS_ESCAPE[*]} 2>&1 | tee -a /tmp/last_run
+date \"\$?\" >> /tmp/last_run
 
-" | tee /etc/periodic/20day/acme-renew >&2
-chmod a+x /etc/periodic/20day/acme-renew
+" | tee /etc/periodic/weekly/acme-renew >&2
+chmod a+x /etc/periodic/weekly/acme-renew
 echo '======================================' >&2
 
 sleep 5
