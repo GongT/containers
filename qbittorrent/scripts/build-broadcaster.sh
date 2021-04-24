@@ -1,17 +1,16 @@
 #!/usr/bin/env bash
 
-set -e
+function x() {
+	echo -e "\e[48;5;10;38;5;0m$*\e[0m" >&2
+	"$@"
+}
 
+export GO111MODULE="auto"
+export GOCACHE="$SYSTEM_COMMON_CACHE/golang"
+export GOMODCACHE="$SYSTEM_COMMON_CACHE/golang.mod"
 export GOPATH=/go
+export GOPROXY="https://proxy.golang.org"
 export PATH="$GOPATH/bin:$PATH"
 
-mkdir -p "$GOPATH/src"
-cd "$GOPATH/src"
-rm -f proj
-ln -s "$SOURCE" proj
-cd proj
-
-set -x
-dep ensure -update
-go build -o "$ARTIFACT_PREFIX/usr/bin/x-www-browser" cmd/client.go
-chmod a+x "$ARTIFACT_PREFIX/usr/bin/x-www-browser"
+x go build -o "$ARTIFACT_PREFIX/usr/bin/x-www-browser" cmd/client.go
+x chmod a+x "$ARTIFACT_PREFIX/usr/bin/x-www-browser"

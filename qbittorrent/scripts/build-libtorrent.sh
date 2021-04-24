@@ -1,7 +1,5 @@
 #!/usr/bin/env bash
 
-set -e
-
 export CXXFLAGS+=-std=c++14
 
 ./bootstrap.sh --prefix="$ARTIFACT_PREFIX" \

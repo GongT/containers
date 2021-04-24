@@ -10,9 +10,13 @@ function die() {
 	echo "$*" >&2
 	exit 1
 }
+function x() {
+	echo -e "\e[48;5;10;38;5;0m$*\e[0m" >&2
+	"$@"
+}
 
 pkg-config --list-all | grep libtorrent-rasterbar || die "pkg-config did not list libtorrent-rasterbar"
 
-cmake -B build -DCMAKE_BUILD_TYPE=Release "-DCMAKE_INSTALL_PREFIX=$ARTIFACT_PREFIX"
-cmake --build build --parallel --clean-first
-cmake --install build
+x cmake -B build -DCMAKE_BUILD_TYPE=Release "-DCMAKE_INSTALL_PREFIX=$ARTIFACT_PREFIX"
+x cmake --build build --parallel --clean-first
+x cmake --install build

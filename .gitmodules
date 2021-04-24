@@ -124,18 +124,3 @@
 	url = https://github.com/rofl0r/microsocks.git
 	branch = master
 	update = checkout
-[submodule "qbittorrent/source/broadcaster"]
-	path = qbittorrent/source/broadcaster
-	url = https://github.com/gongt/remote-shell.git
-	branch = master
-	update = checkout
-[submodule "qbittorrent/source/libtorrent"]
-	path = qbittorrent/source/libtorrent
-	url = https://github.com/arvidn/libtorrent.git
-	update = checkout
-	branch = RC_1_2
-[submodule "qbittorrent/source/qbittorrent"]
-	path = qbittorrent/source/qbittorrent
-	url = https://github.com/qbittorrent/qBittorrent.git
-	branch = master
-	update = checkout

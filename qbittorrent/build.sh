@@ -13,67 +13,57 @@ info "starting..."
 
 ### 编译时依赖项目
 hash_compile_deps() {
-	tar -c -f- scripts/compile.lst scripts/prepare-golang.sh | md5sum
+	dnf_hash_version scripts/compile.lst
 }
 install_compile_deps() {
 	info "dnf install..."
 	local TARGET="$1" RESULT
 	RESULT=$(new_container "$TARGET" fedora)
-	run_dnf "$RESULT" $(<scripts/compile.lst)
+	run_dnf_with_list_file "$RESULT" scripts/compile.lst
 	info "dnf install complete..."
-
-	{
-		SHELL_USE_PROXY
-		cat scripts/prepare-golang.sh
-	} | buildah run "$RESULT" bash
 }
 BUILDAH_FORCE="$FORCE_DNF" buildah_cache "qbittorrent-build" hash_compile_deps install_compile_deps
 ### 编译时依赖项目 END
 
+CACHE_BRANCH=qbittorrent-build
 ### 编译libtorrent
-hash_libtorrent() {
-	fast_hash_path source/libtorrent scripts/build-libtorrent.sh
-}
-build_libtorrent() {
-	clean_submodule source/libtorrent
-	run_compile "libtorrent" "$1" "./scripts/build-libtorrent.sh"
-	info "libtorrent build complete..."
-}
-buildah_cache2 "qbittorrent-build" hash_libtorrent build_libtorrent
-### 编译! END
+PROJ_ID="libtorrent"
+REPO=arvidn/libtorrent
+BRANCH=RC_1_2
 
-### 编译!
-hash_qbittorrent() {
-	git ls-tree -r HEAD source/qbittorrent scripts/build-qbittorrent.sh
-}
-build_qbittorrent() {
-	clean_submodule source/qbittorrent
-	run_compile "qbittorrent" "$1" "./scripts/build-qbittorrent.sh"
-	info "qbittorrent build complete..."
-}
-buildah_cache2 "qbittorrent-build" hash_qbittorrent build_qbittorrent
+download_and_build_github
+### 编译libtorrent END
+
+### 编译qbittorrent!
+PROJ_ID="qbittorrent"
+REPO=c0re100/qBittorrent-Enhanced-Edition
+BRANCH=
+
+download_and_build_github
+### 编译qbittorrent! END
+
+### 编译remote-shell
+PROJ_ID="broadcaster"
+REPO=GongT/remote-shell
+BRANCH=master
+
+run_with_proxy download_and_build_github
+### 编译remote-shell END
+
 COMPILE_RESULT_IMAGE="$BUILDAH_LAST_IMAGE"
-### 编译! END
 
 ### 运行时依赖项目
-hash_runtime_deps() {
-	md5sum scripts/runtime.lst
-}
-install_runtime_deps() {
-	info "dnf install..."
-	local TARGET="$1" RESULT
-	RESULT=$(new_container "$TARGET" scratch)
-	run_dnf "$RESULT" $(<scripts/runtime.lst)
-	info "dnf install complete..."
+cleanup_unused_files() {
+	local RESULT=$1
 	delete_rpm_files "$RESULT"
 	buildah run "$RESULT" bash -c "rm -rf /etc/nginx /etc/privoxy"
 }
-BUILDAH_FORCE="$FORCE_DNF" buildah_cache "qbittorrent" hash_runtime_deps install_runtime_deps
+POST_SCRIPT=cleanup_unused_files make_base_image_by_dnf "qbittorrent" scripts/runtime.lst
 ### 运行时依赖项目 END
 
 ### 编译好的qbt
 hash_program_files() {
-	echo "$BUILDAH_LAST_IMAGE" | md5sum --binary -
+	echo "$COMPILE_RESULT_IMAGE"
 }
 copy_program_files() {
 	info "program copy to target..."

@@ -14,7 +14,6 @@ qt5-qtbase-devel
 qt5-linguist
 qt5-qtsvg-devel
 golang
-boost-python3-devel
 python3-devel
 tar
 git
