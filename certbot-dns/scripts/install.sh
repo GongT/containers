@@ -2,19 +2,14 @@
 
 set -Eeuo pipefail
 
-cd /opt/acme.sh
+rm -rf /etc/crontabs /etc/periodic
+mkdir /etc/crontabs
+touch /etc/crontabs/root /root/.bashrc
+
+cd /opt/acme.sh.source
 bash acme.sh --install \
-	--home /usr/bin \
+	--home /opt/acme.sh \
 	--config-home "/etc/letsencrypt/acme.sh" \
 	--accountemail "admin@example.com" \
 	--accountkey /etc/letsencrypt/acme.sh/account.key \
-	--accountconf /etc/letsencrypt/acme.sh/account.conf \
-	--nocron \
-	--noprofile
-
-echo "
-# min   hour    day     month   weekday command
-0       3       *       *       1       run-parts /etc/periodic/weekly
-" >/etc/crontabs/root
-
-mkdir -p /etc/periodic/20day
+	--accountconf /etc/letsencrypt/acme.sh/account.conf
