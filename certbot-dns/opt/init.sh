@@ -3,7 +3,8 @@
 set -uo pipefail
 
 function die() {
-	echo "$@" >&2 ; exit 66
+	echo "$@" >&2
+	exit 66
 }
 
 function acme() {
@@ -34,14 +35,14 @@ function do_install() {
 echo "
 ACCOUNT_KEY_PATH='$ACME_SH_CONFIG_HOME/account.key'
 ACCOUNT_EMAIL='$EMAIL'
-"> "$ACME_SH_CONFIG_HOME/account.conf"
+" >"$ACME_SH_CONFIG_HOME/account.conf"
 
 mkdir -p /etc/letsencrypt/nginx
 echo "
 ssl_certificate $ACME_CERT_FOLDER/fullchain.pem;
 ssl_certificate_key $ACME_CERT_FOLDER/privkey.pem;
 ssl_trusted_certificate $ACME_CERT_FOLDER/cert.pem;
-" > "/etc/letsencrypt/nginx/load.conf"
+" >"/etc/letsencrypt/nginx/load.conf"
 ##
 
 cat_resolv() {
@@ -50,38 +51,46 @@ cat_resolv() {
 	echo "======================================"
 }
 
-if acme --install-cert --ecc "${BASE_ARGS[@]}" ; then
+LOGFILE="/log/$TARGET_DOMAIN/$(date '+%F.%T').init.log"
+
+if acme --install-cert --ecc "${BASE_ARGS[@]}"; then
 	echo "installed cert files at $FC, try renew..." >&2
 	cat_resolv
-	acme --renew-all --ecc "${BASE_ARGS[@]}"
+	acme --renew-all --ecc "${BASE_ARGS[@]}" 2>&1 | tee "$LOGFILE"
 else
 	echo "cannot install cer files, try issue new..." >&2
 	cat_resolv
 	acme --issue --dns dns_cf --keylength ec-256 \
 		--domain-alias "$AUTH_DOMAIN" \
-		"${BASE_ARGS[@]}" \
-			|| die "Failed to CREATE cert."
+		"${BASE_ARGS[@]}" 2>&1 | tee "$LOGFILE" \
+		|| die "Failed to CREATE cert."
 fi
 
-if ! [[ -e "$FC" ]] ; then
+if ! [[ -e $FC ]]; then
 	die "Fatal: No cert file in place."
 fi
 
 BASE_ARGS_ESCAPE=()
-for i in "${BASE_ARGS[@]}" ; do
+for i in "${BASE_ARGS[@]}"; do
 	BASE_ARGS_ESCAPE+=("'$i'")
 done
 
+mkdir -p "/log/$TARGET_DOMAIN"
+
 echo 'Install cronjob...' >&2
 echo '======================================' >&2
-echo "#!/bin/bash
+cat <<-CRON_WORK_FILE >/etc/periodic/weekly/acme-renew
+	#!/bin/bash
 
-date '+%F %T' > /tmp/last_run
-echo acme.sh --renew-all --ecc ${BASE_ARGS_ESCAPE[*]} >> /tmp/last_run
-acme.sh --renew-all --ecc ${BASE_ARGS_ESCAPE[*]} 2>&1 | tee -a /tmp/last_run
-date \"\$?\" >> /tmp/last_run
+	LOGFILE="/log/$TARGET_DOMAIN/\$(date '+%F.%T').log"
+	{
+		echo acme.sh --renew-all --ecc ${BASE_ARGS_ESCAPE[*]}
+		acme.sh --renew-all --ecc ${BASE_ARGS_ESCAPE[*]} 2>&1
+		echo "Execute finish, code: \$?"
+	} | tee "\$LOGFILE"
 
-" | tee /etc/periodic/weekly/acme-renew >&2
+CRON_WORK_FILE
+
 chmod a+x /etc/periodic/weekly/acme-renew
 echo '======================================' >&2
 

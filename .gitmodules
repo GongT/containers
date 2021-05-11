@@ -9,11 +9,6 @@
 	branch = master
 	update = checkout
 	#git reset --hard ; git clean -ffdx ; git checkout --force master ; git pull
-[submodule "certbot-dns/opt/acme.sh"]
-	path = certbot-dns/opt/acme.sh
-	url = https://github.com/Neilpang/acme.sh.git
-	branch = master
-	update = checkout
 [submodule "nginx/source/nginx"]
 	path = nginx/source/nginx
 	url = https://github.com/nginx/nginx.git

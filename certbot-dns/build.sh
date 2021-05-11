@@ -13,19 +13,24 @@ make_base_image_by_apt gongt/alpine-cn "certbot" "${DEPS[@]}"
 
 ### 安装acme
 STEP="安装acme.sh"
-hash_acme() {
-	fast_hash_path opt/acme.sh
+REPO="Neilpang/acme.sh"
+BRANCH="master"
+hash_download() {
+	http_get_github_last_commit_id_on_branch "$REPO" "$BRANCH"
 }
 copy_acme() {
+	local MNT
+	download_github "$REPO" "$BRANCH"
+	MNT=$(buildah mount "$1")
+	download_git_result_copy "$MNT/opt/acme.sh" "$REPO" "$BRANCH"
 	buildah add "$1" opt /opt
-	buildah run "$1" bash <scripts/install.sh
 }
-buildah_cache2 "certbot" hash_acme copy_acme
+buildah_cache2 "certbot" hash_download copy_acme
 ### 安装acme END
 
 STEP="配置镜像信息"
 buildah_config "certbot" --entrypoint '["/bin/bash"]' --cmd '/opt/init.sh' --stop-signal=SIGINT \
-	--volume /config --volume /etc/letsencrypt \
+	--volume /config --volume /log --volume /etc/letsencrypt \
 	--author "GongT <admin@gongt.me>" --created-by "#MAGIC!" --label name=gongt/certbot-dns
 info "settings updated..."
 
