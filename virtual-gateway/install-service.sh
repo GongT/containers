@@ -33,10 +33,10 @@ unit_fs_bind data/virtual-gateway /storage
 unit_finish
 
 mkdir -p "/etc/systemd/system/cockpit.socket.d"
-echo '[Socket]
-ListenStream=/data/AppData/share/sockets/cockpit.sock
+echo "[Socket]
+ListenStream=$SHARED_SOCKET_PATH/cockpit.sock
 ExecStartPost=
 ExecStopPost=
-' >"/etc/systemd/system/cockpit.socket.d/listen-socket.conf"
+" >"/etc/systemd/system/cockpit.socket.d/listen-socket.conf"
 
 systemctl daemon-reload
