@@ -7,6 +7,7 @@ source ../common/functions-build.sh
 
 arg_flag FORCE f/force "force rebuild qbittorrent source code"
 arg_flag FORCE_DNF dnf "force dnf install"
+arg_flag FORCE_RSHELL fr "force rebuild remote shell"
 arg_finish "$@"
 
 info "starting..."
@@ -51,7 +52,7 @@ PROJ_ID="broadcaster"
 REPO=GongT/remote-shell
 BRANCH=master
 
-run_with_proxy download_and_build_github
+BUILDAH_FORCE="$FORCE_RSHELL" run_with_proxy download_and_build_github
 ### 编译remote-shell END
 
 COMPILE_RESULT_IMAGE="$BUILDAH_LAST_IMAGE"
