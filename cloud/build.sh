@@ -11,7 +11,7 @@ info "starting..."
 STEP="安装系统依赖"
 declare -a DEPS
 mapfile -t DEPS < <(cat scripts/deps.lst)
-make_base_image_by_apt gongt/alpine-init "nextcloud" "${DEPS[@]}"
+make_base_image_by_apk gongt/alpine-init "nextcloud" "${DEPS[@]}"
 ### 依赖项目 END
 
 RESULT=$(create_if_not cloud-worker "$BUILDAH_LAST_IMAGE")

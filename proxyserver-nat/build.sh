@@ -10,7 +10,7 @@ info "starting..."
 ### 编译microsocks
 STEP="安装microsocks编译依赖"
 DEPS=(bash make gcc musl-dev)
-make_base_image_by_apt "gongt/alpine-init" "proxyserver-nat.microsocks" "${DEPS[@]}"
+make_base_image_by_apk "gongt/alpine-init" "proxyserver-nat.microsocks" "${DEPS[@]}"
 
 STEP="下载并编译microsocks"
 CURRENT_COMMIT_ID=
@@ -34,7 +34,7 @@ MICROSOCKS_IMAGE=$BUILDAH_LAST_IMAGE
 ### 依赖项目
 STEP="安装系统依赖"
 DEPS=(bash curl wireguard-tools-wg dnsmasq util-linux iproute2 bind-tools)
-make_base_image_by_apt "gongt/alpine-init" "proxyserver-nat" "${DEPS[@]}" <scripts/post-install.sh
+make_base_image_by_apk "gongt/alpine-init" "proxyserver-nat" "${DEPS[@]}" <scripts/post-install.sh
 ### 依赖项目 END
 
 ### 编译udp2raw

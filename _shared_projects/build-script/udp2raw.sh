@@ -5,7 +5,7 @@ set -Eeuo pipefail
 ### 编译udp2raw
 STEP="安装udp2raw编译依赖"
 DEPS=(bash make gcc musl-dev g++ linux-headers)
-make_base_image_by_apt "alpine" "udp2raw" "${DEPS[@]}"
+make_base_image_by_apk "alpine" "udp2raw" "${DEPS[@]}"
 
 ## no .git folder exists in container, hack here
 GIT_VER=$(cd "$PROJECT_ROOT" && git rev-parse HEAD)

@@ -12,7 +12,7 @@ RESULT=$(create_if_not wordpress-worker gongt/alpine-init)
 STEP="安装系统依赖"
 declare -a DEPS
 mapfile -t DEPS < <(cat scripts/deps.lst)
-make_base_image_by_apt gongt/alpine-init "wordpress-build" "${DEPS[@]}"
+make_base_image_by_apk gongt/alpine-init "wordpress-build" "${DEPS[@]}"
 ### 依赖项目 END
 
 RESULT=$(create_if_not wordpress-worker "$BUILDAH_LAST_IMAGE")

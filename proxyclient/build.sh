@@ -10,7 +10,7 @@ info "starting..."
 ### 依赖项目
 STEP="安装系统依赖"
 DEPS=(bash wireguard-tools-wg dnsmasq privoxy)
-make_base_image_by_apt "gongt/alpine-init" "proxyclient" "${DEPS[@]}" <scripts/post-install.sh
+make_base_image_by_apk "gongt/alpine-init" "proxyclient" "${DEPS[@]}" <scripts/post-install.sh
 ### 依赖项目 END
 
 ### 编译udp2raw
