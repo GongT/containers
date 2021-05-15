@@ -12,6 +12,7 @@ arg_finish "$@"
 info "starting..."
 
 ### 编译时依赖项目
+STEP="编译时依赖项目"
 hash_compile_deps() {
 	dnf_hash_version scripts/compile.lst
 }
@@ -27,6 +28,7 @@ BUILDAH_FORCE="$FORCE_DNF" buildah_cache "qbittorrent-build" hash_compile_deps i
 
 CACHE_BRANCH=qbittorrent-build
 ### 编译libtorrent
+STEP="编译libtorrent"
 PROJ_ID="libtorrent"
 REPO=arvidn/libtorrent
 BRANCH=RC_1_2
@@ -35,6 +37,7 @@ download_and_build_github
 ### 编译libtorrent END
 
 ### 编译qbittorrent!
+STEP="编译qbittorrent"
 PROJ_ID="qbittorrent"
 REPO=c0re100/qBittorrent-Enhanced-Edition
 BRANCH=
@@ -43,6 +46,7 @@ download_and_build_github
 ### 编译qbittorrent! END
 
 ### 编译remote-shell
+STEP="编译remote-shell"
 PROJ_ID="broadcaster"
 REPO=GongT/remote-shell
 BRANCH=master
@@ -53,6 +57,7 @@ run_with_proxy download_and_build_github
 COMPILE_RESULT_IMAGE="$BUILDAH_LAST_IMAGE"
 
 ### 运行时依赖项目
+STEP="运行时依赖项目"
 cleanup_unused_files() {
 	local RESULT=$1
 	delete_rpm_files "$RESULT"
@@ -62,6 +67,7 @@ POST_SCRIPT=cleanup_unused_files make_base_image_by_dnf "qbittorrent" scripts/ru
 ### 运行时依赖项目 END
 
 ### 编译好的qbt
+STEP="复制编译结果文件"
 hash_program_files() {
 	echo "$COMPILE_RESULT_IMAGE"
 }
@@ -83,6 +89,7 @@ buildah_cache "qbittorrent" hash_program_files copy_program_files
 ### 编译好的qbt END
 
 ### 配置文件等
+STEP="复制配置文件"
 hash_supporting_files() {
 	tar -c -f- scripts/prepare-run.sh fs | md5sum
 }
