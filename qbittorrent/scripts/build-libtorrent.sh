@@ -1,7 +1,5 @@
 #!/usr/bin/env bash
 
-export CXXFLAGS+=-std=c++14
-
 ./bootstrap.sh --prefix="$ARTIFACT_PREFIX" \
 	--disable-silent-rules \
 	--with-gnu-ld \
@@ -18,7 +16,6 @@ export CXXFLAGS+=-std=c++14
 	--enable-python-binding \
 	--with-libiconv
 # --enable-TORRENT_NO_DEPRECATE \
-# CXXFLAGS=-std=c++14
 
 make -j$(nproc)
 make install
@@ -32,9 +29,10 @@ cd build
 export BOOST_LIBRARYDIR=/usr/local/lib
 cmake .. \
 	-DCMAKE_BUILD_TYPE=Release \
-	-DCMAKE_CXX_STANDARD=17 \
 	-Dpython-bindings=ON \
 	-Dwebtorrent=ON \
 	-DCMAKE_INSTALL_PREFIX:PATH="$ARTIFACT_PREFIX"
+
+#	-DCMAKE_CXX_STANDARD=17 \
 
 cmake --build . --target install --config Release --parallel $(nproc)
