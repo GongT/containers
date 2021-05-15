@@ -12,7 +12,7 @@ info "starting..."
 
 ### TGTD
 STEP="install iscsi-tgtd"
-make_base_image_by_dnf "fedora-tgtd" "scsi-target-utils"
+make_base_image_by_dnf "fedora-tgtd" source/dependencies.lst
 ### TGTD END
 
 RESULT=$(create_if_not gamedisk-tgtd-result $BUILDAH_LAST_IMAGE)

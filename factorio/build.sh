@@ -9,8 +9,7 @@ arg_finish "$@"
 
 ### 依赖项目
 STEP="安装系统依赖"
-declare -ra COMPILE_DEPS=(glibc sed bash busybox)
-make_base_image_by_dnf "factorio-install" "${COMPILE_DEPS[@]}"
+make_base_image_by_dnf "factorio-install" source/dependencies.lst
 ### 依赖项目 END
 
 ### 下载安装

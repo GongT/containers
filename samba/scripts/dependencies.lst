@@ -1,0 +1,8 @@
+systemd
+systemd-networkd
+bash
+samba
+samba-common-tools
+iproute
+iputils
+passwd

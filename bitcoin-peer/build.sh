@@ -7,8 +7,7 @@ source ../common/functions-build.sh
 
 ### 依赖项目
 STEP="安装编译依赖"
-DEPS=(bash python3 clang rpm libtool make autoconf automake libevent-devel boost-devel e2fsprogs)
-make_base_image_by_dnf "btc-build" "${DEPS[@]}"
+make_base_image_by_dnf "btc-build" source/dependencies.lst
 ### 依赖项目 END
 
 ### 下载&编译
@@ -16,14 +15,14 @@ REPO="bitcoin/bitcoin"
 RELEASE_URL=""
 RELEASE_NAME=""
 STEP="下载 bitcoin 代码"
-hash_wireguard() {
+hash_bitcoind() {
 	http_get_github_release_id "$REPO"
 	RELEASE_URL=$(echo "$LAST_GITHUB_RELEASE_JSON" | jq -r '.tarball_url')
 	info_note "       * RELEASE_URL=$RELEASE_URL"
 	RELEASE_NAME=$(echo "$LAST_GITHUB_RELEASE_JSON" | jq -r '.tag_name')
 	info_note "       * RELEASE_NAME=$RELEASE_NAME"
 }
-compile_wireguard() {
+compile_bitcoind() {
 	local RESULT DOWNLOADED VERSION FILE_NAME="bitcoin.$RELEASE_NAME.tar.gz"
 	DOWNLOADED=$(download_file "$RELEASE_URL" "$FILE_NAME")
 	SOURCE_DIRECTORY="$(pwd)/source/bitcoin"
@@ -33,7 +32,7 @@ compile_wireguard() {
 	RESULT=$(new_container "$1" "$BUILDAH_LAST_IMAGE")
 	run_compile "bitcoin" "$RESULT" "source/builder.sh"
 }
-buildah_cache "btc-build" hash_wireguard compile_wireguard
+buildah_cache "btc-build" hash_bitcoind compile_bitcoind
 ### 下载&编译 END
 
 ### 复制文件

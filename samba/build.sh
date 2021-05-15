@@ -10,8 +10,7 @@ arg_finish
 
 ### 依赖项目
 STEP="安装系统依赖"
-declare -ra COMPILE_DEPS=(systemd systemd-networkd bash samba samba-common-tools iproute iputils passwd)
-make_base_image_by_dnf "samba-install" "${COMPILE_DEPS[@]}"
+make_base_image_by_dnf "samba-install" scripts/dependencies.lst
 ### 依赖项目 END
 
 RESULT=$(new_container "samba-final" "$BUILDAH_LAST_IMAGE")

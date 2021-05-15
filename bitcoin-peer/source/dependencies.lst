@@ -1,0 +1,11 @@
+bash
+python3
+clang
+rpm
+libtool
+make
+autoconf
+automake
+libevent-devel
+boost-devel
+e2fsprogs

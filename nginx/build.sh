@@ -13,8 +13,7 @@ arg_finish "$@"
 
 ### 编译时依赖项目
 STEP="install system dependencies during compile"
-mapfile -t COMPILE_DEPS < requirements/build.lst
-make_base_image_by_dnf "nginx-build" "${COMPILE_DEPS[@]}"
+make_base_image_by_dnf "nginx-build" requirements/build.lst
 ### 编译时依赖项目 END
 
 ### 编译!
