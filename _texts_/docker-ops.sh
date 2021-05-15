@@ -15,6 +15,7 @@ buildah push localhost/gongt/nginx docker://docker-registry.service.gongt.me/gon
 buildah push localhost/gongt/certbot docker://docker-registry.service.gongt.me/gongt/certbot:latest
 
 ## server
+podman login docker-registry.service.gongt.me:59443
 podman login docker-registry.service.gongt.me:59080
 podman pull docker://docker-registry.service.gongt.me:59080/gongt/nginx
 podman pull docker://docker-registry.service.gongt.me:59080/gongt/certbot

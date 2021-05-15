@@ -12,8 +12,8 @@ export GOPATH=/go
 export GOPROXY="https://proxy.golang.org"
 export PATH="$GOPATH/bin:$PATH"
 
-x go build -o "$ARTIFACT_PREFIX/usr/bin/x-www-browser" cmd/client.go
-x chmod a+x "$ARTIFACT_PREFIX/usr/bin/x-www-browser"
+x go build -o "$ARTIFACT_PREFIX/bin/x-www-browser" cmd/client.go
+x chmod a+x "$ARTIFACT_PREFIX/bin/x-www-browser"
 
 echo "broadcaster built complete!"
-ls -l "$ARTIFACT_PREFIX/usr/bin/x-www-browser"
+ls -l "$ARTIFACT_PREFIX/bin/x-www-browser"

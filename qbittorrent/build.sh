@@ -74,19 +74,9 @@ hash_program_files() {
 }
 copy_program_files() {
 	info "program copy to target..."
-	local PROGRAM PROGRAM_MNT
-	PROGRAM=$(create_if_not qbittorrent-result-copyout "$COMPILE_RESULT_IMAGE")
-	PROGRAM_MNT=$(buildah mount "$PROGRAM")
-	info "program prepared..."
-
-	local RESULT
-	RESULT=$(new_container "$1" "$BUILDAH_LAST_IMAGE")
-	buildah copy "$RESULT" "$PROGRAM_MNT/opt/dist" /usr
-
-	buildah unmount "$PROGRAM" >/dev/null
-	buildah rm "$PROGRAM" >/dev/null
+	buildah copy --from "$COMPILE_RESULT_IMAGE" "$1" "/opt/dist" /usr
 }
-buildah_cache "qbittorrent" hash_program_files copy_program_files
+buildah_cache2 "qbittorrent" hash_program_files copy_program_files
 ### 编译好的qbt END
 
 ### 配置文件等
