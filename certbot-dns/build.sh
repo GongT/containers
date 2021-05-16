@@ -13,24 +13,7 @@ make_base_image_by_apk gongt/alpine-cn "certbot" "${DEPS[@]}"
 
 ### 安装acme
 STEP="安装acme.sh"
-REPO="Neilpang/acme.sh"
-BRANCH="master"
-hash_download() {
-	cat scripts/install.sh
-	http_get_github_last_commit_id_on_branch "$REPO" "$BRANCH"
-}
-copy_acme() {
-	local TMPSRC
-	download_github "$REPO" "$BRANCH"
-	TMPSRC=$(create_temp_dir "acme-downloaded")
-
-	download_git_result_copy "$TMPSRC" "$REPO" "$BRANCH"
-	buildah run \
-		"--volume=$TMPSRC:/opt/acme.sh.source" \
-		"$1" \
-		bash <scripts/install.sh
-}
-buildah_cache2 "certbot" hash_download copy_acme
+download_and_build_github certbot acme "acmesh-official/acme.sh" master
 ### 安装acme END
 
 ### 复制文件

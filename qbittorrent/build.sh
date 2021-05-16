@@ -27,32 +27,19 @@ install_compile_deps() {
 BUILDAH_FORCE="$FORCE_DNF" buildah_cache "qbittorrent-build" hash_compile_deps install_compile_deps
 ### 编译时依赖项目 END
 
-CACHE_BRANCH=qbittorrent-build
 ### 编译libtorrent
 STEP="编译libtorrent"
-PROJ_ID="libtorrent"
-REPO=arvidn/libtorrent
-BRANCH=RC_1_2
-
-download_and_build_github
+download_and_build_github qbittorrent-build libtorrent arvidn/libtorrent RC_1_2
 ### 编译libtorrent END
 
 ### 编译qbittorrent!
 STEP="编译qbittorrent"
-PROJ_ID="qbittorrent"
-REPO=c0re100/qBittorrent-Enhanced-Edition
-BRANCH=
-
-download_and_build_github
+download_and_build_github qbittorrent-build qbittorrent c0re100/qBittorrent-Enhanced-Edition
 ### 编译qbittorrent! END
 
 ### 编译remote-shell
 STEP="编译remote-shell"
-PROJ_ID="broadcaster"
-REPO=GongT/remote-shell
-BRANCH=master
-
-BUILDAH_FORCE="$FORCE_RSHELL" run_with_proxy download_and_build_github
+BUILDAH_FORCE="$FORCE_RSHELL" run_with_proxy download_and_build_github qbittorrent-build broadcaster GongT/remote-shell master
 ### 编译remote-shell END
 
 COMPILE_RESULT_IMAGE="$BUILDAH_LAST_IMAGE"
