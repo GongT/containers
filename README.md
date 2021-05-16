@@ -6,6 +6,9 @@ Free to ask question about `podman` `systemd` `bash` `nginx` or `PHP` `TypeScrip
 https://github.com/GongT/containers/issues/new
 
 
+# Notes
+* minimal: `git clone --recurse-submodules="common" git@github.com:GongT/containers.git`
+
 # CI Status
 <!-- StatusTable: -->
 | Container | Link | Build Status |
