@@ -58,7 +58,7 @@ jobs:
       - name: 'Fetch exists image from docker'
         shell: bash
         run: ./_scripts_/retry.sh podman pull "docker://docker.io/gongt/ethereum-peer"
-        # continue-on-error: true
+        continue-on-error: true
       - name: 'Build Image'
         run: bash -e _scripts_/ci-single-build.sh ethereum-peer
         env:
