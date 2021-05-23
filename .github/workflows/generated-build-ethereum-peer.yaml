@@ -1,0 +1,74 @@
+name: "ethereum-peer"
+on:
+  workflow_dispatch:
+    inputs:
+      skipEarlyDetect:
+        description: 'Skip early change detect'     
+        required: false
+        default: ''
+  push:
+    paths:
+    - 'ethereum-peer/**'
+    - '!ethereum-peer/install-service.sh'
+    - '.github/workflows/generated-build-ethereum-peer.yaml'
+    # - common
+    branches:
+    - master
+env:
+  NODE_ENV: production
+  TRIGGER_SKIP_EARLY_DETECT: ${{ github.event.inputs.skipEarlyDetect }}
+  HTTP_PROXY: ""
+  HTTPS_PROXY: ""
+  ALL_PROXY: ""
+jobs:
+  cancel:
+    name: Cancel Previous Runs
+    runs-on: ubuntu-latest
+    steps:
+      - name: cancel running workflows
+        uses: GongT/cancel-previous-workflows@6dd7af8389c9434cc893fd33b58609e73db49fbe
+        env:
+          DELETE: "yes"
+          GITHUB_TOKEN: ${{ github.token }}
+  build:
+    name: 'standalone build ethereum-peer image'
+    runs-on: [self-hosted, linux]
+    env:
+      http_proxy: http://proxy-server.:3271
+      https_proxy: http://proxy-server.:3271
+    steps:
+      - name: 'Force Reset'
+        shell: bash
+        run: |
+          if [[ -e ".git" ]]; then
+            git reset --hard --recurse-submodule || true
+            git clean -ffdx || true
+            git submodule foreach bash -c "git clean -ffdx" || true
+          fi
+
+      - name: 'Checkout'
+        uses: actions/checkout@v2
+        env:
+          http_proxy: http://proxy-server.:3271
+          https_proxy: http://proxy-server.:3271
+        with:
+          submodules: 'recursive'
+          clean: true
+          fetch-depth: 0
+      - name: 'Fetch exists image from docker'
+        shell: bash
+        run: ./_scripts_/retry.sh podman pull "docker://docker.io/gongt/ethereum-peer"
+        # continue-on-error: true
+      - name: 'Build Image'
+        run: bash -e _scripts_/ci-single-build.sh ethereum-peer
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+      - name: 'Publish to docker hub'
+        shell: bash
+        env:
+          PASSWD: ${{ secrets.DockerPassword }}
+        run: ./_scripts_/retry.sh podman push "${{ env.LAST_COMMITED_IMAGE }}" --creds "gongt:$PASSWD" "docker://docker.io/gongt/ethereum-peer"
+
+      - name: 'Delete old images'
+        shell: bash
+        run: ./_scripts_/delete-old-images.sh

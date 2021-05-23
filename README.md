@@ -18,6 +18,7 @@ https://github.com/GongT/containers/issues/new
 | certbot-dns | https://hub.docker.com/r/gongt/certbot-dns | [![certbot-dns](https://github.com/GongT/containers/workflows/certbot-dns/badge.svg)](https://github.com/GongT/containers/actions?query=workflow%3Acertbot-dns) |
 | cloud | https://hub.docker.com/r/gongt/cloud | [![cloud](https://github.com/GongT/containers/workflows/cloud/badge.svg)](https://github.com/GongT/containers/actions?query=workflow%3Acloud) |
 | docker-registry | https://hub.docker.com/r/gongt/docker-registry | [![docker-registry](https://github.com/GongT/containers/workflows/docker-registry/badge.svg)](https://github.com/GongT/containers/actions?query=workflow%3Adocker-registry) |
+| ethereum-peer | https://hub.docker.com/r/gongt/ethereum-peer | [![ethereum-peer](https://github.com/GongT/containers/workflows/ethereum-peer/badge.svg)](https://github.com/GongT/containers/actions?query=workflow%3Aethereum-peer) |
 | factorio | https://hub.docker.com/r/gongt/factorio | [![factorio](https://github.com/GongT/containers/workflows/factorio/badge.svg)](https://github.com/GongT/containers/actions?query=workflow%3Afactorio) |
 | fiberhost | https://hub.docker.com/r/gongt/fiberhost | [![fiberhost](https://github.com/GongT/containers/workflows/fiberhost/badge.svg)](https://github.com/GongT/containers/actions?query=workflow%3Afiberhost) |
 | gamedisk | https://hub.docker.com/r/gongt/gamedisk | [![gamedisk](https://github.com/GongT/containers/workflows/gamedisk/badge.svg)](https://github.com/GongT/containers/actions?query=workflow%3Agamedisk) |
