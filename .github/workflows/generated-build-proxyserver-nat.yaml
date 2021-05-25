@@ -17,9 +17,9 @@ on:
 env:
   NODE_ENV: production
   TRIGGER_SKIP_EARLY_DETECT: ${{ github.event.inputs.skipEarlyDetect }}
-  HTTP_PROXY: ""
-  HTTPS_PROXY: ""
-  ALL_PROXY: ""
+  http_proxy: ""
+  https_proxy: ""
+  all_proxy: ""
 jobs:
   cancel:
     name: Cancel Previous Runs
@@ -34,8 +34,7 @@ jobs:
     name: 'standalone build proxyserver-nat image'
     runs-on: [self-hosted, linux]
     env:
-      http_proxy: http://proxy-server.:3271
-      https_proxy: http://proxy-server.:3271
+      PROXY: proxy-server.:3271
     steps:
       - name: 'Force Reset'
         shell: bash
@@ -45,12 +44,8 @@ jobs:
             git clean -ffdx || true
             git submodule foreach bash -c "git clean -ffdx" || true
           fi
-
       - name: 'Checkout'
         uses: actions/checkout@v2
-        env:
-          http_proxy: http://proxy-server.:3271
-          https_proxy: http://proxy-server.:3271
         with:
           submodules: 'recursive'
           clean: true

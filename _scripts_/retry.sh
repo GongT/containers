@@ -18,9 +18,14 @@ for I in $(seq 1 3); do
 	fi
 done
 
-echo "::: Failed with proxy, retry without proxy :::" >&2
+if ! [[ "${PROXY:-}" ]]; then
+	echo "::: Failed without proxy, no proxy to try :::" >&2
+	exit $RET
+fi
 
-export http_proxy='' https_proxy='' all_proxy='' HTTP_PROXY='' HTTPS_PROXY='' ALL_PROXY=''
+echo "::: Failed without proxy, retry with proxy ($PROXY) :::" >&2
+
+export http_proxy="$PROXY"
 for I in $(seq 1 3); do
 	echo "============================== try $I ==============================" >&2
 	"$@"
