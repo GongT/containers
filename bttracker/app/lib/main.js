@@ -138,6 +138,10 @@ async function restartNginx() {
 				res.on('end', () => resolve());
 			}
 		);
+		req.on('error', (e) => {
+			console.error("warning:", e);
+			resolve();
+		});
 		req.end();
 	});
 	console.log('=======================');
