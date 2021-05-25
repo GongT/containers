@@ -13,7 +13,6 @@ unit_unit Description ethereum full peer service
 network_use_auto 30303
 # unit_body Restart no
 unit_body TimeoutStopSec 1min
-unit_podman_image_pull never
 unit_fs_bind share/nginx /run/nginx
 shared_sockets_provide ethereum-tracker
 
