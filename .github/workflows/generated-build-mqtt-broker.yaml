@@ -1,4 +1,4 @@
-name: "ethereum-peer"
+name: "mqtt-broker"
 on:
   workflow_dispatch:
     inputs:
@@ -8,9 +8,9 @@ on:
         default: ''
   push:
     paths:
-    - 'ethereum-peer/**'
-    - '!ethereum-peer/install-service.sh'
-    - '.github/workflows/generated-build-ethereum-peer.yaml'
+    - 'mqtt-broker/**'
+    - '!mqtt-broker/install-service.sh'
+    - '.github/workflows/generated-build-mqtt-broker.yaml'
     # - common
     branches:
     - master
@@ -31,7 +31,7 @@ jobs:
           DELETE: "yes"
           GITHUB_TOKEN: ${{ github.token }}
   build:
-    name: 'standalone build ethereum-peer image'
+    name: 'standalone build mqtt-broker image'
     runs-on: [self-hosted, linux]
     env:
       http_proxy: http://proxy-server.:3271
@@ -57,17 +57,17 @@ jobs:
           fetch-depth: 0
       - name: 'Fetch exists image from docker'
         shell: bash
-        run: ./_scripts_/retry.sh podman pull "docker://docker.io/gongt/ethereum-peer"
-        # continue-on-error: true
+        run: ./_scripts_/retry.sh podman pull "docker://docker.io/gongt/mqtt-broker"
+        continue-on-error: true
       - name: 'Build Image'
-        run: bash -e _scripts_/ci-single-build.sh ethereum-peer
+        run: bash -e _scripts_/ci-single-build.sh mqtt-broker
         env:
           GITHUB_TOKEN: ${{ github.token }}
       - name: 'Publish to docker hub'
         shell: bash
         env:
           PASSWD: ${{ secrets.DockerPassword }}
-        run: ./_scripts_/retry.sh podman push "${{ env.LAST_COMMITED_IMAGE }}" --creds "gongt:$PASSWD" "docker://docker.io/gongt/ethereum-peer"
+        run: ./_scripts_/retry.sh podman push "${{ env.LAST_COMMITED_IMAGE }}" --creds "gongt:$PASSWD" "docker://docker.io/gongt/mqtt-broker"
 
       - name: 'Delete old images'
         shell: bash

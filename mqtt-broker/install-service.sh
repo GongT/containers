@@ -1,0 +1,29 @@
+#!/usr/bin/env bash
+
+set -Eeuo pipefail
+
+cd "$(dirname "$(realpath "${BASH_SOURCE[0]}")")"
+source ../common/functions-install.sh
+
+arg_string + USERNAME u/user "mqtt connect username"
+arg_string + PASSWORD p/password "mqtt connect password"
+arg_finish "$@"
+
+ENV_PASS=$(
+	safe_environment \
+		"USERNAME=$USERNAME" \
+		"PASSWORD=$PASSWORD"
+)
+
+create_pod_service_unit gongt/mqtt-broker
+unit_unit After nginx.pod
+unit_unit Requires nginx.pod
+unit_podman_arguments "$ENV_PASS"
+unit_start_notify output 'mosquitto version'
+network_use_auto
+unit_podman_image_pull never
+unit_body Restart no
+unit_fs_bind data/mqtt /data
+shared_sockets_provide mqtt
+unit_fs_bind share/nginx /run/nginx
+unit_finish
