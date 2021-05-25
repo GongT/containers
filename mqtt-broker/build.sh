@@ -23,7 +23,7 @@ buildah_config "mqtt" \
 	--env "PATH=/opt/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin" \
 	--entrypoint '["/bin/bash"]' \
 	--cmd '/opt/start.sh' \
-	--volume '/data' \
+	--volume /data --volume /settings \
 	--author "GongT <admin@gongt.me>" \
 	--created-by "#MAGIC!" \
 	--label name=gongt/mqtt-broker

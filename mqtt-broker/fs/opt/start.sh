@@ -8,7 +8,11 @@ bash /opt/nginx-control.sh start
 
 PASSWD=$(echo $RANDOM | md5sum | awk '{print $1}')
 
-mosquitto_passwd -c -b /etc/mosquitto/passwords admin "$PASSWD"
+if ! [[ -e /etc/mosquitto/passwords ]]; then
+	touch /etc/mosquitto/passwords
+fi
+
+mosquitto_passwd -b /etc/mosquitto/passwords admin "$PASSWD"
 echo "--pw $PASSWD" >>/etc/mosquitto/client.conf
 
 mosquitto_passwd -b /etc/mosquitto/passwords "$USERNAME" "$PASSWORD"
