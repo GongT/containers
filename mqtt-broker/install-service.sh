@@ -22,8 +22,9 @@ unit_podman_arguments "$ENV_PASS"
 unit_start_notify output 'mosquitto version'
 network_use_auto
 unit_body Restart no
+unit_podman_image_pull never
 unit_fs_bind data/mqtt /data
 unit_fs_bind config/mqtt /settings
-shared_sockets_provide mqtt
 unit_fs_bind share/nginx /run/nginx
+shared_sockets_provide mqtt
 unit_finish
