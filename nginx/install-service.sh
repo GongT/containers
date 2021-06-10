@@ -39,7 +39,7 @@ unit_fs_tempfs 512M /tmp
 unit_fs_bind share/nginx /config.auto
 unit_fs_bind share/letsencrypt /etc/letsencrypt
 shared_sockets_use
-unit_reload_command '/usr/bin/podman exec nginx bash -c "nginx -t && nginx -s reload"'
+unit_reload_command '/usr/bin/podman exec nginx bash /usr/bin/safe-reload'
 
 healthcheck "30s" "5" "curl --insecure https://127.0.0.1:443"
 
