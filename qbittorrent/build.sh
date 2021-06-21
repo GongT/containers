@@ -34,7 +34,7 @@ download_and_build_github qbittorrent-build libtorrent arvidn/libtorrent RC_1_2
 
 ### 编译qbittorrent!
 STEP="编译qbittorrent"
-download_and_build_github qbittorrent-build qbittorrent c0re100/qBittorrent-Enhanced-Edition
+download_and_build_github qbittorrent-build qbittorrent qbittorrent/qBittorrent
 ### 编译qbittorrent! END
 
 ### 编译remote-shell
