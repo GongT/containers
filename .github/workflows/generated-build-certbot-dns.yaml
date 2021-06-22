@@ -34,7 +34,7 @@ jobs:
     name: 'standalone build certbot-dns image'
     runs-on: [self-hosted, linux]
     env:
-      PROXY: proxy-server.:3271
+      PROXY: http://proxy-server.:3271
     steps:
       - name: 'Force Reset'
         shell: bash
@@ -46,6 +46,9 @@ jobs:
           fi
       - name: 'Checkout'
         uses: actions/checkout@v2
+        env:
+          http_proxy: "http://proxy-server.:3271"
+          https_proxy: "http://proxy-server.:3271"
         with:
           submodules: 'recursive'
           clean: true
