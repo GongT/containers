@@ -4,7 +4,7 @@ set -Eeuo pipefail
 
 cd "$(dirname "$(realpath "${BASH_SOURCE[0]}")")/.."
 # shellcheck source=../common/functions-build-host.sh
-source "./common/functions-build-host.sh"
+source "./common/functions-build-host.sh" &>/dev/null
 
 if [[ ${CI+found} != found ]]; then
 	die "This script is only for CI"
@@ -13,7 +13,9 @@ fi
 declare -r NAME=$1
 cd "$NAME"
 
-declare -rx REWRITE_IMAGE_NAME="docker.io/gongt/${NAME}"
+if ! [[ "${REWRITE_IMAGE_NAME:-}" ]]; then
+	die "no REWRITE_IMAGE_NAME"
+fi
 
 HASH=$(hash_current_folder)
 
