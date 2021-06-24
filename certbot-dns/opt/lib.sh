@@ -78,8 +78,6 @@ function create_nginx_config() {
 		ssl_certificate "/etc/letsencrypt/live/$DOMAIN/fullchain.pem";
 		ssl_certificate_key "/etc/letsencrypt/live/$DOMAIN/privkey.pem";
 		ssl_trusted_certificate "/etc/letsencrypt/live/$DOMAIN/cert.pem";
-		ssl_stapling on;
-		ssl_stapling_verify on;
 	NGX_CFG
 }
 
@@ -90,5 +88,7 @@ function create_nginx_lagacy_load() {
 	fi
 	local CFG="/etc/letsencrypt/nginx/load.conf"
 	info "create nginx config: $CFG"
-	echo "include \"/etc/letsencrypt/nginx/${DOMAIN}.conf\";" >"$CFG"
+	echo "include \"/etc/letsencrypt/nginx/${DOMAIN}.conf\";
+ssl_stapling on;
+ssl_stapling_verify on;" >"$CFG"
 }

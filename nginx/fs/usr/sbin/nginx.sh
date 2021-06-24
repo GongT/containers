@@ -21,7 +21,7 @@ erun() {
 }
 cd /etc/nginx/basic
 
-if [[ -n $CENSORSHIP ]]; then
+if [[ $CENSORSHIP ]]; then
 	for i in *.conf; do
 		erun sed -i 's#$out_port_https#:59443#g' "$i"
 	done
