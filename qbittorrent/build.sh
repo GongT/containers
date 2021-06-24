@@ -39,7 +39,7 @@ download_and_build_github qbittorrent-build qbittorrent qbittorrent/qBittorrent
 
 ### 编译remote-shell
 STEP="编译remote-shell"
-BUILDAH_FORCE="$FORCE_RSHELL" run_with_proxy download_and_build_github qbittorrent-build broadcaster GongT/remote-shell master
+BUILDAH_FORCE="$FORCE_RSHELL" perfer_proxy download_and_build_github qbittorrent-build broadcaster GongT/remote-shell master
 ### 编译remote-shell END
 
 COMPILE_RESULT_IMAGE="$BUILDAH_LAST_IMAGE"

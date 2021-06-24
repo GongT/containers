@@ -17,7 +17,7 @@ STEP="下载factorio可执行文件"
 hash_factorio() {
 	local -r DIST_URL="https://factorio.com/get-download/$DIST_TAG/headless/linux64"
 	echo -n "$DIST_TAG::"
-	run_with_proxy http_get_etag "$DIST_URL"
+	perfer_proxy http_get_etag "$DIST_URL"
 }
 build_factorio() {
 	local -r DIST_URL="https://factorio.com/get-download/$DIST_TAG/headless/linux64"
@@ -25,7 +25,7 @@ build_factorio() {
 	local CNTR MNT DOWNLOADED VERSION
 	CNTR=$(new_container "$1" "$BUILDAH_LAST_IMAGE")
 	MNT=$(buildah mount "$CNTR")
-	DOWNLOADED=$(run_with_proxy download_file "$DIST_URL" "$WANTED_HASH")
+	DOWNLOADED=$(perfer_proxy download_file "$DIST_URL" "$WANTED_HASH")
 	extract_tar "$DOWNLOADED" 1 "$MNT/$GAME_ROOT"
 	VERSION=$("$MNT/$GAME_ROOT/bin/x64/factorio" --version | head -n 1)
 	buildah config \

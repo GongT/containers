@@ -11,8 +11,8 @@ arg_finish
 STEP="复制gongt/alpine-init"
 hash_init() {
 	{
-		run_with_proxy podman pull -q gongt/alpine-init
-		run_with_proxy podman pull -q registry
+		perfer_proxy podman pull -q gongt/alpine-init
+		perfer_proxy podman pull -q registry
 	} | md5sum
 }
 download_init() {
