@@ -40,7 +40,7 @@ network_use_bridge
 unit_start_notify output "everything works well, starting crond"
 # unit_body Restart no
 unit_body RestartSec 10s
-unit_body TimeoutStartSec 30s
+unit_body TimeoutStartSec 30min
 
 unit_podman_hostname certbot
 unit_podman_arguments "$ENV_PASS"
