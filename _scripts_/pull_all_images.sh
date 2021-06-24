@@ -15,10 +15,13 @@ export SKIP_REMOVE=yes
 IMAGES=()
 
 if [[ $# -eq 0 ]]; then
-	mapfile -t IMAGES < <(podman images | grep gongt/ | grep latest | awk '{print $1}')
+	mapfile -t _IMAGES < <(podman images | grep gongt/ | grep latest | awk '{print $1}')
+	for I in "${_IMAGES[@]}"; do
+		IMAGES+=("${I#*\/}")
+	done
 else
 	for IMAGE in "${@}"; do
-		IMAGES+=("docker.io/gongt/$IMAGE")
+		IMAGES+=("gongt/$IMAGE")
 	done
 fi
 
