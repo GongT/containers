@@ -2,6 +2,8 @@
 
 set -Eeuo pipefail
 
+CONTROL_SERVICES=(wait-all-fstab.service 'wait-dns-working@*.service')
+
 function die() {
 	echo "$*" >&2
 	exit 1
@@ -41,7 +43,8 @@ function usage() {
 }
 
 if [[ $# -eq 0 ]]; then
-	systemctl list-units '*.pod@.service' '*.pod.service' --all --no-pager
+	set -x
+	systemctl list-units '*.pod@.service' '*.pod.service' "${CONTROL_SERVICES[@]}" --all --no-pager
 	exit 0
 fi
 
