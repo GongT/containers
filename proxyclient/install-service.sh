@@ -9,7 +9,7 @@ arg_string UDP2RAW_PASSWORD p/pass "udp2raw的密码"
 arg_string _UDP2RAW_MODE m/mode "udp2raw的模式（可选: icmp/udp/faketcp）"
 arg_string + CLIENT_NAME t/title "客户端ID"
 arg_string + IP_NUMBER n "客户端的IP"
-arg_finish "$@"
+arg_finish
 
 info "upload settings to router..."
 
@@ -20,7 +20,7 @@ UDP2RAW_PASSWORD='$UDP2RAW_PASSWORD'
 UDP2RAW_MODE='$_UDP2RAW_MODE'
 $(<scripts/router_script.sh)
 "
-echo "$SCRIPT" | ssh router.home.gongt.me bash >/tmp/load-keys.sh
+echo "$SCRIPT" | ssh router bash >/tmp/load-keys.sh
 source /tmp/load-keys.sh
 
 info "upload settings to router - OK"

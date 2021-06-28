@@ -20,7 +20,10 @@ UDP2RAW_PASSWORD='$UDP2RAW_PASSWORD'
 UDP2RAW_MODE='$_UDP2RAW_MODE'
 $(<scripts/router_script.sh)
 "
-echo "$SCRIPT" | ssh router.home.gongt.me bash >/tmp/load-keys.sh
+echo "$SCRIPT" | ssh router bash >/tmp/load-keys.sh
+
+info "upload settings to router - OK"
+
 source /tmp/load-keys.sh
 
 info "remote wireguard keys created."
