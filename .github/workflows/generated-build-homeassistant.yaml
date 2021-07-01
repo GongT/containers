@@ -1,4 +1,4 @@
-name: "ethereum-peer"
+name: "homeassistant"
 on:
   workflow_dispatch:
     inputs:
@@ -12,15 +12,15 @@ on:
         default: ""
   push:
     paths:
-      - "ethereum-peer/**"
-      - "!ethereum-peer/install-service.sh"
-      - ".github/workflows/generated-build-ethereum-peer.yaml"
+      - "homeassistant/**"
+      - "!homeassistant/install-service.sh"
+      - ".github/workflows/generated-build-homeassistant.yaml"
     # - common
     branches:
       - master
 env:
   NODE_ENV: production
-  PROJECT_NAME: "ethereum-peer"
+  PROJECT_NAME: "homeassistant"
   # TRIGGER_SKIP_EARLY_DETECT: ${{ github.event.inputs.skipEarlyDetect }}
 jobs:
   cancel:

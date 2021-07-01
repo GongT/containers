@@ -32,12 +32,10 @@ hash_wireguard() {
 	http_get_github_release_id "$REPO"
 }
 download_wireguard() {
-	local RESULT MNT DOWNLOADED VERSION
-	RESULT=$(new_container "$1" "$BUILDAH_LAST_IMAGE")
-	MNT=$(buildah mount "$RESULT")
+	local RESULT="$1" DOWNLOADED VERSION
 	DOWNLOADED=$(download_file "$RELEASE_BIN_URL" "wg-client.$WANTED_HASH")
 
-	install -D --verbose --compare --mode=0755 --no-target-directory "$DOWNLOADED" "$MNT/usr/libexec/wireguard-config-client"
+	xbuildah copy --chmod=0755 "$RESULT" "$DOWNLOADED" "/usr/libexec/wireguard-config-client"
 	info_note "install done."
 
 	VERSION=$(xbuildah run "$RESULT" /usr/libexec/wireguard-config-client -V)
@@ -45,13 +43,17 @@ download_wireguard() {
 
 	buildah config --label "client-version=$VERSION" "$RESULT"
 }
-buildah_cache "infra-build" hash_wireguard download_wireguard
+buildah_cache2 "infra-build" hash_wireguard download_wireguard
 ### 下载 END
 
-RESULT=$(new_container "infra-result" "$BUILDAH_LAST_IMAGE")
-buildah copy "$RESULT" fs /
-buildah config --author "GongT <admin@gongt.me>" --label name=gongt/virtual-gateway "$RESULT"
+### 配置文件等
+STEP="复制配置文件"
+merge_local_fs "infra-build"
+### 配置文件等 END
+
+buildah_config "infra-build" --author "GongT <admin@gongt.me>" --label name=gongt/virtual-gateway
 info "settings update..."
 
+RESULT=$(create_if_not "infra-result" "$BUILDAH_LAST_IMAGE")
 buildah commit "$RESULT" gongt/virtual-gateway
 info "Done!"

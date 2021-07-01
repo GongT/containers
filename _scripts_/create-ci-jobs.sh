@@ -5,14 +5,16 @@ set -Eeuo pipefail
 cd "$(dirname "$(realpath "${BASH_SOURCE[0]}")")"
 cd ..
 
+mapfile -d '' -t BUILD_FILES < <(find . -maxdepth 2 -name build.sh -print0)
+
 TABLE="| Container | Link | Build Status |
 |----:|:----|:----:|
 "
-for i in */build.sh; do
+for i in "${BUILD_FILES[@]}"; do
 	PROJ=$(basename "$(dirname "$i")")
 	F=".github/workflows/generated-build-$PROJ.yaml"
 
-	sed "s#{{PROJ}}#$PROJ#g" _scripts_/template.yaml > "$F"
+	sed "s#{{PROJ}}#$PROJ#g" _scripts_/template.yaml >"$F"
 	sed -i "s#{{thisfile}}#$F#g" "$F"
 
 	TABLE+="| $PROJ "
@@ -25,4 +27,4 @@ done
 DATA=$(sed -n "/StatusTable:/{p; :a; N; /:StatusTable/!ba; s/.*\n/__TABLE_BODY__/}; p" README.md)
 DATA="${DATA/__TABLE_BODY__/"$TABLE"}"
 
-echo "$DATA" > README.md
+echo "$DATA" >README.md
