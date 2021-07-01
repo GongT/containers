@@ -41,7 +41,7 @@ create_pod_service_unit gongt/proxyclient
 
 unit_podman_image gongt/proxyclient
 unit_unit Description "proxy client with http(3271) and dns(53)"
-unit_podman_image_pull never
+# unit_podman_image_pull never
 if [[ "$UDP2RAW_PASSWORD" ]]; then
 	unit_start_notify output "<service started signal>"
 else

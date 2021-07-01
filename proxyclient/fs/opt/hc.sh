@@ -3,25 +3,29 @@
 set -Eeuo pipefail
 
 function die() {
-	echo "$*" >&2
+	echo -e "\n$*" >&2
 	return 1
 }
 
+echo -n "[Step 1] ping 10.233.233.1 with wireguard interface ... "
 PING_RESULT=$(ping -4 -A -c5 -w5 10.233.233.1 || true | grep 'packets transmitted')
 if echo "$PING_RESULT" | grep -q "0 packets transmitted"; then
-	die "ping failed (all packat lost)"
+	die "wireguard VPN failed"
 fi
-echo "wireguard interface ping success"
+echo "success"
 
+echo -n "[Step 2] resolve www.google.com ... "
 nslookup -retry=6 -timeout=5 -type=A www.google.com 127.0.0.1 \
-	| tail -n +3 \
-	| grep -q Address: \
-	|| die "can not resolve google.com"
-echo "dns resolve success"
+	| tail -n +2 \
+	| grep Address: \
+	| head -n 1 \
+	|| die "dns not working"
 
-wget -T 10 -O /dev/null -Y off http://www.baidu.com || die "failed request baidu homepage directly"
-echo "network access success"
+echo "[Step 3] access china website (www.baidu.com) ... "
+wget -T 10 -O /tmp/hc.direct -Y off http://www.baidu.com || die "failed request baidu homepage directly"
+echo "[Step 3] network access success"
 
-export http_proxy="127.0.0.1:3271" https_proxy="127.0.0.1:3271"
-wget -T 10 -O /dev/null -Y on http://www.google.co.jp || die "failed request google homepage through proxy"
-echo "http proxy server ok"
+echo "[Step 4] access world website (www.google.co.jp) through proxy ... "
+export http_proxy="http://127.0.0.1:3271" https_proxy="http://127.0.0.1:3271"
+wget -T 10 -O /tmp/hc.proxy -Y on http://www.google.co.jp || die "failed request google homepage through proxy"
+echo "[Step 4] proxy is ok"

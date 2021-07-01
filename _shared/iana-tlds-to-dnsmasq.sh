@@ -6,14 +6,8 @@ tlds_etag() {
 	http_get_etag "$TLDS_URL"
 }
 tlds_update() {
-	local FILE LINE LINES MNT F D
-	MNT=$(buildah mount "$1")
-	F="$MNT${SAVE_TO:-/etc/dnsmasq.d/iana.conf}"
-	D=$(dirname "$F")
-
-	if ! [[ -d $D ]]; then
-		mkdir "$D"
-	fi
+	local FILE LINE LINES TMPF
+	TMPF=$(create_temp_file iana)
 
 	FILE=$(download_file_force "$TLDS_URL" tlds.txt)
 	mapfile -t LINES <"$FILE"
@@ -23,6 +17,8 @@ tlds_update() {
 		fi
 		echo "address=/${LINE,,}/::"
 		echo "server=/${LINE,,}/${REAL_DNS_SERVER}"
-	done >"$F"
+	done >"$TMPF"
+
+	buildah copy "$1" "$TMPF" "${SAVE_TO:-/etc/dnsmasq.d/iana.conf}"
 }
 buildah_cache2 "$1" tlds_etag tlds_update

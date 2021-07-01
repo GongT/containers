@@ -5,7 +5,7 @@ set -Eeuo pipefail
 cd "$(dirname "$(realpath "${BASH_SOURCE[0]}")")"
 source ../common/functions-build.sh
 
-info "starting..."
+source ../_shared/proxy-server-client.sh
 
 ### 依赖项目
 STEP="安装系统依赖"
@@ -13,30 +13,18 @@ DEPS=(bash wireguard-tools-wg dnsmasq privoxy)
 make_base_image_by_apk "gongt/alpine-init" "proxyclient" "${DEPS[@]}" <scripts/post-install.sh
 ### 依赖项目 END
 
-### 编译udp2raw
-TMPF="/tmp/build.udp2raw"
-collect_temp_file "$TMPF"
-install_shared_project udp2raw "$TMPF"
+### 复制编译结果
 STEP="复制编译结果"
-test_changes() {
-	hash_path "$TMPF"
-	fast_hash_path "$(pwd)/fs"
-}
-copy_files() {
-	local CTR=$1 MNT
-	MNT=$(buildah mount "$CTR")
-	info_log "      copy udp2raw"
-	install -m 0755 "$TMPF/udp2raw" "$MNT/usr/bin"
+install_build_result "proxyclient" "$PROXY_BUILT_IMAGE" udp2raw
+### 复制编译结果 END
 
-	info_log "      copy /fs"
-	cp -r "$(pwd)/fs" -T "$MNT"
-}
-buildah_cache2 "proxyclient" test_changes copy_files
-### 编译udp2raw END
+### 复制配置文件
+merge_local_fs "proxyclient"
+### 复制配置文件 END
 
 ### IANA根域名列表
 REAL_DNS_SERVER=10.233.233.1 \
-	source ../_shared_projects/dns/iana-tlds-to-dnsmasq.sh "proxyclient"
+	source ../_shared/iana-tlds-to-dnsmasq.sh "proxyclient"
 ### IANA根域名列表 END
 
 STEP="配置镜像信息"

@@ -17,6 +17,13 @@ mapfile -t TARGETS < <(JQ '.publish[]')
 for BASE in "${TARGETS[@]}"; do
 	CMD=(podman push "$LAST_COMMITED_IMAGE" "docker://$BASE/$PROJECT_NAME:latest")
 	control_ci group "${CMD[*]}"
-	"${CMD[@]}"
+	declare -i TRY=3
+	while [[ $TRY -gt 0 ]]; do
+		if "${CMD[@]}"; then
+			break
+		fi
+		TRY=$((TRY - 1))
+		echo "failed, retry ($TRY)" >&2
+	done
 	control_ci groupEnd
 done
