@@ -23,15 +23,14 @@ build_factorio() {
 	local -r CNTR="$1"
 	local -r DIST_URL="https://factorio.com/get-download/$DIST_TAG/headless/linux64"
 	local -r GAME_ROOT="/opt/factorio/$DIST_TAG"
-	local DOWNLOADED VERSION
+	local DOWNLOADED VERSION EXTRACTED
 
 	DOWNLOADED=$(perfer_proxy download_file "$DIST_URL" "${DIST_TAG}.tar.gz")
+	EXTRACTED=$(create_temp_dir factorio_binary)
+	extract_tar "$DOWNLOADED" 1 "$EXTRACTED"
 
-	cat <<-UNSH | buildah unshare bash
-		set -Eeuo pipefail
-		MNT=\$(buildah mount "$CNTR")
-		extract_tar "$DOWNLOADED" 1 "\$MNT/${GAME_ROOT}"
-	UNSH
+	buildah copy "$CNTR" "$EXTRACTED" "$GAME_ROOT"
+
 	VERSION=$(buildah run "$CNTR" "$GAME_ROOT/bin/x64/factorio" --version | head -n 1)
 	buildah config \
 		--label "factorio.version=${DIST_TAG}:$VERSION" \
