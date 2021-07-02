@@ -10,16 +10,15 @@ arg_finish
 
 ### 依赖项目
 STEP="安装系统依赖"
-make_base_image_by_dnf "samba-install" scripts/dependencies.lst
+make_base_image_by_dnf "samba" scripts/dependencies.lst
 ### 依赖项目 END
 
-RESULT=$(new_container "samba-final" "$BUILDAH_LAST_IMAGE")
-buildah copy "$RESULT" fs /
-cat "scripts/prepare.sh" | buildah run "$RESULT" bash
+STEP="复制配置文件"
+merge_local_fs "samba" "scripts/prepare.sh"
 
-buildah config --cmd "$FEDORA_SYSTEMD_COMMAND" "$RESULT"
-buildah config --author "GongT <admin@gongt.me>" --created-by "#MAGIC!" --label name=gongt/samba "$RESULT"
-info "settings update..."
+buildah_config "samba" --cmd "$FEDORA_SYSTEMD_COMMAND" \
+	--author "GongT <admin@gongt.me>" --created-by "#MAGIC!" --label name=gongt/samba
 
+RESULT=$(create_if_not "samba" "$BUILDAH_LAST_IMAGE")
 buildah commit "$RESULT" gongt/samba
 info "Done!"
