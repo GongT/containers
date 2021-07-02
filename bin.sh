@@ -2,7 +2,7 @@
 
 set -Eeuo pipefail
 
-CONTROL_SERVICES=(wait-all-fstab.service 'wait-dns-working@*.service')
+CONTROL_SERVICES=(wait-all-fstab.service create-dnsmasq-config.service wait-dns-working.service)
 
 function die() {
 	echo "$*" >&2

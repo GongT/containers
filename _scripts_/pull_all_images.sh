@@ -2,14 +2,7 @@
 
 cd "$(dirname "$(realpath "${BASH_SOURCE[0]}")")" || die "???"
 
-if [[ "${HTTP_PROXY:-}" ]]; then
-	echo -e "\e[38;5;14mUsing proxy $HTTP_PROXY\e[0m" >&2
-	unset http_proxy https_proxy all_proxy
-	export HTTPS_PROXY="$HTTP_PROXY" ALL_PROXY="$HTTP_PROXY"
-else
-	unset http_proxy https_proxy all_proxy HTTP_PROXY HTTPS_PROXY ALL_PROXY
-	echo -e "\e[38;5;14mUsing direct connection\e[0m" >&2
-fi
+unset http_proxy https_proxy all_proxy HTTP_PROXY HTTPS_PROXY ALL_PROXY
 
 export SKIP_REMOVE=yes
 IMAGES=()
@@ -21,7 +14,10 @@ if [[ $# -eq 0 ]]; then
 	done
 else
 	for IMAGE in "${@}"; do
-		IMAGES+=("gongt/$IMAGE")
+		if [[ $IMAGE != gongt/* ]]; then
+			IMAGE="gongt/$IMAGE"
+		fi
+		IMAGES+=("$IMAGE")
 	done
 fi
 
