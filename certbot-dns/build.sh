@@ -8,7 +8,7 @@ source ../common/functions-build.sh
 ### 依赖项目
 STEP="安装系统依赖"
 declare -a DEPS=(ca-certificates bash curl openssl ssmtp)
-make_base_image_by_apk gongt/alpine-cn "certbot" "${DEPS[@]}"
+make_base_image_by_apk alpine "certbot" "${DEPS[@]}"
 ### 依赖项目 END
 
 ### 安装acme
