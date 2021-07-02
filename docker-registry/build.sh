@@ -7,38 +7,30 @@ source ../common/functions-build.sh
 
 arg_finish
 
-### 依赖项目
+### 依赖
+STEP="安装依赖"
+make_base_image_by_apk "docker.io/registry" "docker-registry" libstdc++
+### 依赖 END
+
+### sbin/init
 STEP="复制gongt/alpine-init"
 hash_init() {
-	{
-		perfer_proxy podman pull -q gongt/alpine-init
-		perfer_proxy podman pull -q registry
-	} | md5sum
+	perfer_proxy podman pull gongt/alpine-init
 }
 download_init() {
-	local RESULT MNT SOURCE
-	RESULT=$(new_container "$1" "registry")
-
-	SOURCE=$(new_container "temp$RANDOM" "gongt/alpine-init")
-	MNT=$(buildah mount "$SOURCE")
-
-	buildah copy "$RESULT" "$MNT/sbin/init" "/sbin/init"
-	buildah run $(use_alpine_apk_cache) $RESULT apk add -U libstdc++
-
-	{
-		buildah umount "$SOURCE"
-		buildah rm "$SOURCE"
-	} >/dev/null
+	local RESULT="$1"
+	buildah copy "--from=gongt/alpine-init" "$RESULT" "/sbin/init" "/sbin/init"
 }
-buildah_cache "docker-registry-copy" hash_init download_init
-### 依赖项目 END
+buildah_cache2 "docker-registry" hash_init download_init
+### sbin/init END
 
 info "copy files..."
-RESULT=$(new_container registry-worker "$BUILDAH_LAST_IMAGE")
 
-buildah copy "$RESULT" fs /
-buildah config --cmd '/sbin/init' --stop-signal=SIGINT "$RESULT"
-buildah config --author "GongT <admin@gongt.me>" --created-by "#MAGIC!" --label name=gongt/docker-registry "$RESULT"
+merge_local_fs "docker-registry"
 
+buildah_config "docker-registry" --cmd '/sbin/init' --stop-signal=SIGINT \
+	--author "GongT <admin@gongt.me>" --created-by "#MAGIC!" --label name=gongt/docker-registry
+
+RESULT=$(create_if_not registry-worker "$BUILDAH_LAST_IMAGE")
 buildah commit "$RESULT" gongt/docker-registry
 info "Done!"

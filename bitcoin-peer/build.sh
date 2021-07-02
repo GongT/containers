@@ -7,66 +7,51 @@ source ../common/functions-build.sh
 
 ### 依赖项目
 STEP="安装编译依赖"
-make_base_image_by_dnf "btc-build" source/dependencies.lst
+make_base_image_by_dnf "btc-build" scripts/dependencies.lst
 ### 依赖项目 END
 
 ### 下载&编译
-REPO="bitcoin/bitcoin"
-RELEASE_URL=""
-RELEASE_NAME=""
-STEP="下载 bitcoin 代码"
-hash_bitcoind() {
-	http_get_github_release_id "$REPO"
-	RELEASE_URL=$(echo "$LAST_GITHUB_RELEASE_JSON" | jq -r '.tarball_url')
-	info_note "       * RELEASE_URL=$RELEASE_URL"
-	RELEASE_NAME=$(echo "$LAST_GITHUB_RELEASE_JSON" | jq -r '.tag_name')
-	info_note "       * RELEASE_NAME=$RELEASE_NAME"
-}
-compile_bitcoind() {
-	local RESULT DOWNLOADED VERSION FILE_NAME="bitcoin.$RELEASE_NAME.tar.gz"
-	DOWNLOADED=$(download_file "$RELEASE_URL" "$FILE_NAME")
-	SOURCE_DIRECTORY="$(pwd)/source/bitcoin"
-	rm -rf "$SOURCE_DIRECTORY"
-	extract_tar "$DOWNLOADED" "1" "$SOURCE_DIRECTORY"
-
-	RESULT=$(new_container "$1" "$BUILDAH_LAST_IMAGE")
-	run_compile "bitcoin" "$RESULT" "source/builder.sh"
-}
-buildah_cache "btc-build" hash_bitcoind compile_bitcoind
+STEP="bitcoin 代码"
+download_and_build_github_release "btc-build" bitcoind "bitcoin/bitcoin"
+BUILT_IMAGE="$BUILDAH_LAST_IMAGE"
 ### 下载&编译 END
 
 ### 复制文件
+buildah_cache_start "gongt/glibc:bash"
+
 STEP="复制编译结果和依赖文件到目标容器"
 hash_program_files() {
-	{
-		image_get_id "gongt/glibc:bash"
-		cat "source/prepare-deps.sh"
-	} | md5sum
+	cat "scripts/prepare-deps.sh"
 }
 copy_program_files() {
-	local RESULT
-	RESULT=$(new_container "$1" "gongt/glibc:bash")
-	RESULT_MNT=$(buildah mount "$RESULT")
+	local RESULT="$1"
 
-	run_install "bitcoin" "$BUILDAH_LAST_IMAGE" "$RESULT_MNT" "source/prepare-deps.sh"
-	rm -rf "$RESULT_MNT/data"
-	mkdir "$RESULT_MNT/data"
-	chattr +i "$RESULT_MNT/data"
-	buildah unmount "$RESULT" >/dev/null
+	run_install "$BUILT_IMAGE" "$RESULT" bitcoind "scripts/prepare-deps.sh"
+
+	buildah unshare bash <<-EOF
+		RESULT_MNT=\$(buildah mount "$RESULT")
+		rm -rf "\$RESULT_MNT/data"
+		mkdir "\$RESULT_MNT/data"
+		chattr +i "\$RESULT_MNT/data"
+		buildah unmount "$RESULT"
+	EOF
 
 	VERSION=$(xbuildah run "$RESULT" bitcoind --version | grep 'Bitcoin Core version ' | sed 's#Bitcoin Core version ##g')
 	info "VERSION = $VERSION"
 
 	buildah config --label "bitcoind-version=$VERSION" "$RESULT"
 }
-buildah_cache "btc-build" hash_program_files copy_program_files
+buildah_cache2 "btc" hash_program_files copy_program_files
 ### 复制文件 END
 
-info_log ""
+### 复制fs
+STEP="复制配置文件"
+merge_local_fs "btc"
+### 复制fs END
 
-RESULT=$(new_container "btc-final" "$BUILDAH_LAST_IMAGE")
-buildah config --cmd '/opt/start.sh' --port 8332 --port 8333 --port 8332/udp --port 8333/udp "$RESULT"
-buildah config --author "GongT <admin@gongt.me>" --created-by "#MAGIC!" --label name=gongt/bitcoin-peer "$RESULT"
-buildah copy "$RESULT" fs /
+buildah_config "btc" --cmd '/opt/start.sh' --port 8332 --port 8333 --port 8332/udp --port 8333/udp \
+	--author "GongT <admin@gongt.me>" --created-by "#MAGIC!" --label name=gongt/bitcoin-peer
+
+RESULT=$(new_container "btc" "$BUILDAH_LAST_IMAGE")
 buildah commit "$RESULT" gongt/bitcoin-peer
 info "Done!"
