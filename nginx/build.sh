@@ -11,67 +11,84 @@ arg_flag FORCE_DNF dnf "force reinstall dependencies"
 arg_flag FORCE f/force "force rebuild nginx source code"
 arg_finish "$@"
 
+declare -a NGX_SRC_PATH=() NGX_SRC_URL=() NGX_SRC_BRANCH=()
+source ./scripts/nginx-source-registry.sh
+
+if [[ ${#NGX_SRC_PATH[@]} != "${#NGX_SRC_URL[@]}" ]] || [[ ${#NGX_SRC_BRANCH[@]} != "${#NGX_SRC_URL[@]}" ]]; then
+	die "nginx source settings error"
+fi
+
 ### 编译时依赖项目
-STEP="install system dependencies during compile"
-make_base_image_by_dnf "nginx-build" requirements/build.lst
+STEP="安装编译时依赖项目"
+make_base_image_by_dnf "nginx-build" scripts/build-requirements.lst
 ### 编译时依赖项目 END
 
 ### 编译!
-STEP="compile nginx source code"
+STEP="下载Nginx源码"
 hash_nginx() {
-	md5sum tools/build-nginx.sh
+	# 下载代码
+	local INDEX URL BRANCH NAME
+	for INDEX in "${!NGX_SRC_URL[@]}"; do
+		URL="${NGX_SRC_URL[$INDEX]}"
+		BRANCH="${NGX_SRC_BRANCH[$INDEX]}"
+		NAME="${NGX_SRC_PATH[$INDEX]}"
+		NAME="${NAME////_}"
+		download_git "$URL" "$NAME" "$BRANCH"
+	done
 }
 build_nginx() {
-	local BUILDER
-	BUILDER=$(new_container "$1" "$BUILDAH_LAST_IMAGE")
-	SOURCE_DIRECTORY=source run_compile "nginx" "$BUILDER" "tools/build-nginx.sh"
+	local BUILDER="$1" SOURCE_DIRECTORY
+
+	SOURCE_DIRECTORY=$(create_temp_dir "build-source-nginx")
+	local INDEX BRANCH NAME
+	for INDEX in "${!NGX_SRC_URL[@]}"; do
+		BRANCH="${NGX_SRC_BRANCH[$INDEX]}"
+		CPATH="${NGX_SRC_PATH[$INDEX]}"
+		NAME="${CPATH////_}"
+		download_git_result_copy "$SOURCE_DIRECTORY/$CPATH" "$NAME" "$BRANCH"
+	done
+
+	buildah copy "$BUILDER" "$SOURCE_DIRECTORY" "/opt/projects/nginx"
 }
-BUILDAH_FORCE="$FORCE" buildah_cache "nginx-build" hash_nginx build_nginx
+BUILDAH_FORCE="$FORCE" buildah_cache2 "nginx-build" hash_nginx build_nginx
+
+STEP="编译Nginx源码"
+hash_build() {
+	cat "scripts/build-nginx.sh"
+}
+run_build() {
+	local SOURCE_DIRECTORY=no
+	run_compile nginx "$1" "scripts/build-nginx.sh"
+}
+buildah_cache2 "nginx-build" hash_build run_build
 COMPILE_RESULT_IMAGE="$BUILDAH_LAST_IMAGE"
 ### 编译! END
 
 ### 编译好的nginx
-STEP="copy compiled files into base image"
+buildah_cache_start "gongt/glibc:bash"
+STEP="复制Nginx到glibc镜像中"
 hash_program_files() {
-	{
-		cat "tools/prepare-run.sh"
-	} | md5sum
+	echo "$COMPILE_RESULT_IMAGE"
+	cat "scripts/prepare-run.sh"
 }
 copy_program_files() {
-	local RESULT
-	RESULT=$(new_container "$1" "gongt/glibc:bash")
-	RESULT_MNT=$(buildah mount "$RESULT")
-
-	run_install "nginx" "$COMPILE_RESULT_IMAGE" "$RESULT_MNT" "tools/prepare-run.sh"
-	buildah unmount "$RESULT" > /dev/null
+	run_install "$COMPILE_RESULT_IMAGE" "$1" "nginx" "scripts/prepare-run.sh"
 }
-buildah_cache "nginx" hash_program_files copy_program_files
+buildah_cache2 "nginx" hash_program_files copy_program_files
 ### 编译好的nginx END
 
 ### 配置文件等
-STEP="copy config files"
-hash_supporting_files() {
-	tar -c -f- fs | md5sum
-}
-copy_supporting_files() {
-	info "supporting files copy to target..."
-	local RESULT
-	RESULT=$(new_container "$1" "$BUILDAH_LAST_IMAGE")
-	buildah copy "$RESULT" fs /
-}
-buildah_cache "nginx" hash_supporting_files copy_supporting_files
+STEP="复制配置文件"
+merge_local_fs "nginx"
 ### 配置文件等 END
 
 info_log ""
 
-RESULT=$(new_container "nginx-final" "$BUILDAH_LAST_IMAGE")
-buildah config --cmd '/usr/sbin/nginx.sh' --port 80 --port 443 --port 80/udp --port 443/udp "$RESULT"
-buildah config --volume /config --volume /etc/letsencrypt "$RESULT"
-buildah config --author "GongT <admin@gongt.me>" --created-by "#MAGIC!" --label name=gongt/nginx "$RESULT"
-info "settings update..."
-info_log ""
+buildah_config "nginx" --cmd '/usr/sbin/nginx.sh' --port 80 --port 443 --port 80/udp --port 443/udp \
+	--volume /config --volume /etc/letsencrypt \
+	--author "GongT <admin@gongt.me>" --created-by "#MAGIC!" --label name=gongt/nginx
 
 healthcheck "30s" "5" "curl --insecure https://127.0.0.1:443"
 
+RESULT=$(create_if_not nginx "$BUILDAH_LAST_IMAGE")
 buildah commit "$RESULT" gongt/nginx
-info "Done!"

@@ -1,7 +1,0 @@
-[pdns]
-arg[]:/opt/start-server.sh
-
-
-[nginx]
-arg[]:/usr/sbin/nginx
-signal:SIGSTOP

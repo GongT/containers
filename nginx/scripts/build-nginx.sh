@@ -2,9 +2,6 @@
 
 set -Eeuo pipefail
 
-rm -rf "$ARTIFACT_PREFIX"
-mkdir -p "$ARTIFACT_PREFIX"
-
 cd "$SOURCE/luajit2" && echo "=== install '$(basename "$(pwd)")'..."
 export LUAJIT_LIB=/usr/lib64
 export LUAJIT_INC=/usr/include/luajit-2.1

@@ -1,5 +1,5 @@
 gcc
-g++
+gcc-c++
 make
 bash
 which
@@ -14,7 +14,7 @@ openssl-devel
 libxml2-devel
 libxslt-devel
 gd-devel
-geoip-devel
+GeoIP-devel
 gperftools-devel
 brotli-devel
 ccache
