@@ -28,6 +28,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: cancel running workflows
+        timeout-minutes: 5
         uses: GongT/cancel-previous-workflows@6dd7af8389c9434cc893fd33b58609e73db49fbe
         env:
           DELETE: "yes"
@@ -49,7 +50,7 @@ jobs:
 
       - name: "获取代码"
         uses: actions/checkout@v2
-        timeout-minutes: 5
+        timeout-minutes: 1
         with:
           submodules: "recursive"
           clean: true
@@ -57,6 +58,7 @@ jobs:
 
       - name: "初始化登录信息和基本环境"
         shell: bash
+        timeout-minutes: 2
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SECRET_PASSWORD: ${{ secrets.SECRET_PASSWORD }}
@@ -71,7 +73,7 @@ jobs:
       - name: "从ghcr.io获取上次生成的镜像"
         shell: bash
         if: github.event.inputs.brandNew == ''
-        timeout-minutes: 10
+        timeout-minutes: 1
         run: ./_scripts_/retry.sh podman pull "docker://ghcr.io/gongt/$PROJECT_NAME"
 
       - name: "运行构建过程"
@@ -82,7 +84,7 @@ jobs:
         run: bash _scripts_/ci-single-build.sh
 
       - name: "发布镜像"
-        timeout-minutes: 5
+        timeout-minutes: 20
         shell: bash
         env:
           SECRET_PASSWORD: ${{ secrets.SECRET_PASSWORD }}
