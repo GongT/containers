@@ -9,7 +9,7 @@ arg_finish "$@"
 
 ### 依赖项目
 STEP="安装系统依赖"
-make_base_image_by_dnf "factorio-install" source/dependencies.lst
+make_base_image_by_dnf "factorio" source/dependencies.lst
 ### 依赖项目 END
 
 ### 下载安装
@@ -20,32 +20,36 @@ hash_factorio() {
 	perfer_proxy http_get_etag "$DIST_URL"
 }
 build_factorio() {
+	local -r CNTR="$1"
 	local -r DIST_URL="https://factorio.com/get-download/$DIST_TAG/headless/linux64"
 	local -r GAME_ROOT="/opt/factorio/$DIST_TAG"
-	local CNTR MNT DOWNLOADED VERSION
-	CNTR=$(new_container "$1" "$BUILDAH_LAST_IMAGE")
-	MNT=$(buildah mount "$CNTR")
-	DOWNLOADED=$(perfer_proxy download_file "$DIST_URL" "$WANTED_HASH")
-	extract_tar "$DOWNLOADED" 1 "$MNT/$GAME_ROOT"
-	VERSION=$("$MNT/$GAME_ROOT/bin/x64/factorio" --version | head -n 1)
+	local DOWNLOADED VERSION
+
+	DOWNLOADED=$(perfer_proxy download_file "$DIST_URL" "${DIST_TAG}.tar.gz")
+
+	cat <<-UNSH | buildah unshare bash
+		set -Eeuo pipefail
+		MNT=\$(buildah mount "$CNTR")
+		extract_tar "$DOWNLOADED" 1 "\$MNT/${GAME_ROOT}"
+	UNSH
+	VERSION=$(buildah run "$CNTR" "$GAME_ROOT/bin/x64/factorio" --version | head -n 1)
 	buildah config \
-		--label "VERSION_${DIST_TAG^^}=$VERSION" \
+		--label "factorio.version=${DIST_TAG}:$VERSION" \
 		"$CNTR"
 	info "Factorio $VERSION"
 }
 
-DIST_TAG="stable" buildah_cache "factorio-install" hash_factorio build_factorio
-DIST_TAG="latest" buildah_cache "factorio-install" hash_factorio build_factorio
+DIST_TAG="stable" buildah_cache2 "factorio" hash_factorio build_factorio
+# DIST_TAG="latest" buildah_cache2 "factorio" hash_factorio build_factorio
 ### 下载安装 END
 
-RESULT=$(new_container "factorio-final" "$BUILDAH_LAST_IMAGE")
-buildah copy "$RESULT" fs /
-info "result files copy complete..."
+merge_local_fs "factorio"
 
-buildah config --cmd '/opt/scripts/start.sh' --port 34197 --stop-signal SIGINT "$RESULT"
-buildah config --author "GongT <admin@gongt.me>" --created-by "#MAGIC!" --label name=gongt/factorio "$RESULT"
+buildah_config "factorio" --cmd '/opt/scripts/start.sh' --port 34197 --stop-signal SIGINT \
+	--author "GongT <admin@gongt.me>" --created-by "#MAGIC!" --label name=gongt/factorio
 info "settings update..."
 
+RESULT=$(create_if_not "factorio" "$BUILDAH_LAST_IMAGE")
 buildah commit "$RESULT" gongt/factorio
 
 info "Done!"
