@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+
+set -Eeuo pipefail
+
+sed -i '/log_type /d' /etc/mosquitto/mosquitto.conf
+if [[ ${1:-} != off ]]; then
+	echo "log_type all" >>/etc/mosquitto/mosquitto.conf
+fi
+
+kill -SIGHUP 1
