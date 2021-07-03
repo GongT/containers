@@ -2,10 +2,6 @@ name: "{{PROJ}}"
 on:
   workflow_dispatch:
     inputs:
-      # skipEarlyDetect:
-      #   description: Skip early change detect
-      #   required: false
-      #   default: ""
       brandNew:
         description: Skip pull last image
         required: false
@@ -21,7 +17,7 @@ on:
 env:
   NODE_ENV: production
   PROJECT_NAME: "{{PROJ}}"
-  # TRIGGER_SKIP_EARLY_DETECT: ${{ github.event.inputs.skipEarlyDetect }}
+  TMPDIR: ${{ env.RUNNER_TEMP }}
 jobs:
   cancel:
     name: Cancel Previous Runs
@@ -85,7 +81,6 @@ jobs:
         shell: bash
         timeout-minutes: 30
         env:
-          REWRITE_IMAGE_NAME: ${{ env.MIDDLE_IMAGE_FQDN }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: bash _scripts_/ci-single-build.sh
 

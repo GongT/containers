@@ -1,13 +1,14 @@
 #!/usr/bin/env bash
 
 set -Eeuo pipefail
+cd "$(dirname "$(realpath "${BASH_SOURCE[0]}")")"
+
 export TMPDIR="$RUNNER_TEMP"
 INDEX=$1
 
-# shellcheck source=../common/functions-build.sh
-source ./common/functions-build.sh
+source ../common/functions-build.sh
 
-JSON=$(gpg --quiet --batch --yes --passphrase "$SECRET_PASSWORD" --decrypt _scripts_/build-secrets.json.gpg)
+JSON=$(gpg --quiet --batch --yes --passphrase "$SECRET_PASSWORD" --decrypt build-secrets.json.gpg)
 
 function JQ() {
 	echo "$JSON" | jq --exit-status --compact-output --monochrome-output --raw-output "$@"

@@ -1,12 +1,13 @@
 #!/usr/bin/env bash
 
 set -Eeuo pipefail
+cd "$(dirname "$(realpath "${BASH_SOURCE[0]}")")"
 
 if [[ "${CI:-}" ]] && ! command -v podman &>/dev/null; then
 	sudp apt install podman
 fi
 
-JSON=$(gpg --quiet --batch --yes --passphrase "$SECRET_PASSWORD" --decrypt _scripts_/build-secrets.json.gpg)
+JSON=$(gpg --quiet --batch --yes --passphrase "$SECRET_PASSWORD" --decrypt build-secrets.json.gpg)
 
 function query() {
 	jq --exit-status --compact-output --monochrome-output --raw-output "$@"

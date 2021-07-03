@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
 
 set -Eeuo pipefail
+cd "$(dirname "$(realpath "${BASH_SOURCE[0]}")")"
+
 export TMPDIR="${RUNNER_TEMP:-$SYSTEM_COMMON_CACHE/tmp}"
 mkdir -p "$TMPDIR"
 if [[ ! ${GITHUB_ENV:-} ]]; then
@@ -11,7 +13,7 @@ if [[ "${CI:-}" ]]; then
 	sudo apt install jq gnupg podman buildah
 fi
 
-JSON=$(gpg --quiet --batch --yes --passphrase "$SECRET_PASSWORD" --decrypt _scripts_/build-secrets.json.gpg)
+JSON=$(gpg --quiet --batch --yes --passphrase "$SECRET_PASSWORD" --decrypt build-secrets.json.gpg)
 
 function query() {
 	jq --exit-status --compact-output --monochrome-output --raw-output "$@"
