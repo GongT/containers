@@ -2,6 +2,7 @@
 
 set -Eeuo pipefail
 export TMPDIR="$RUNNER_TEMP"
+INDEX=$1
 
 # shellcheck source=../common/functions-build.sh
 source ./common/functions-build.sh
@@ -12,18 +13,24 @@ function JQ() {
 	echo "$JSON" | jq --exit-status --compact-output --monochrome-output --raw-output "$@"
 }
 
-mapfile -t TARGETS < <(JQ '.publish[]')
+PRIMARY=$(JQ '.publish[0]')
+podman pull "docker://$PRIMARY/$PROJECT_NAME:latest"
 
-for BASE in "${TARGETS[@]}"; do
-	CMD=(podman push "$LAST_COMMITED_IMAGE" "docker://$BASE/$PROJECT_NAME:latest")
-	control_ci group "${CMD[*]}"
-	declare -i TRY=3
-	while [[ $TRY -gt 0 ]]; do
-		if "${CMD[@]}"; then
-			break
-		fi
-		TRY=$((TRY - 1))
-		echo "failed, retry ($TRY)" >&2
-	done
+BASE=$(JQ ".publish[$INDEX]")
+CMD=(podman push "$PRIMARY/$PROJECT_NAME:latest" "docker://$BASE/$PROJECT_NAME:latest")
+
+declare -i TRY=3
+while [[ $TRY -gt 0 ]]; do
+	control_ci group "$TRY: ${CMD[*]}"
+	if "${CMD[@]}"; then
+		control_ci groupEnd
+		echo "complete." >&2
+		exit 0
+	fi
 	control_ci groupEnd
+	TRY=$((TRY - 1))
+	echo "failed, retry" >&2
 done
+
+echo "all failed" >&2
+exit 1

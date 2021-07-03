@@ -1,7 +1,11 @@
 #!/usr/bin/env bash
 
 set -Eeuo pipefail
-export TMPDIR="$RUNNER_TEMP"
+export TMPDIR="${RUNNER_TEMP:-$SYSTEM_COMMON_CACHE/tmp}"
+mkdir -p "$TMPDIR"
+if [[ ! ${GITHUB_ENV:-} ]]; then
+	GITHUB_ENV="$TMPDIR/github-env-fake"
+fi
 
 if [[ "${CI:-}" ]]; then
 	sudo apt install jq gnupg podman buildah
@@ -21,7 +25,7 @@ DOCKER_CACHE_CENTER=$(JQ '.cacheCenter')
 echo "DOCKER_CACHE_CENTER=${DOCKER_CACHE_CENTER}" >>"$GITHUB_ENV"
 
 echo "SYSTEM_COMMON_CACHE=${SYSTEM_COMMON_CACHE:=$HOME/cache}" >>"$GITHUB_ENV"
-mkdir "$SYSTEM_COMMON_CACHE"
+mkdir -p "$SYSTEM_COMMON_CACHE"
 
 mkdir -p "$HOME/secrets"
 chmod 0700 "$HOME/secrets"

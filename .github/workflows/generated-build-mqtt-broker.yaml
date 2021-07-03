@@ -35,8 +35,10 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   build:
-    name: "生成镜像并推送"
+    name: "生成镜像"
     runs-on: ubuntu-latest
+    outputs:
+      INDEX_ARRAY: ${{ steps.result.outputs.INDEX_ARRAY }}
     steps:
       - name: "强制清理项目（如果有）"
         timeout-minutes: 1
@@ -68,7 +70,10 @@ jobs:
         uses: actions/cache@v2
         with:
           path: ${{ env.SYSTEM_COMMON_CACHE }}
-          key: common-cache
+          key: common-cache-mqtt-broker-${{ hashFiles('mqtt-broker') }}
+          restore-keys: |
+            common-cache-mqtt-broker
+            common-cache-
 
       - name: "从ghcr.io获取上次生成的镜像"
         shell: bash
@@ -77,15 +82,47 @@ jobs:
         run: ./_scripts_/retry.sh podman pull "docker://ghcr.io/gongt/$PROJECT_NAME"
 
       - name: "运行构建过程"
+        shell: bash
         timeout-minutes: 30
         env:
           REWRITE_IMAGE_NAME: ${{ env.MIDDLE_IMAGE_FQDN }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: bash _scripts_/ci-single-build.sh
 
+      - id: result
+        name: "输出状态"
+        shell: bash
+        env:
+          SECRET_PASSWORD: ${{ secrets.SECRET_PASSWORD }}
+        run: bash _scripts_/publish_create_index.sh
+
+  publish:
+    runs-on: ubuntu-latest
+    needs: build
+    strategy:
+      matrix:
+        index: ${{ fromJson(needs.build.outputs.INDEX_ARRAY) }}
+      fail-fast: false
+    steps:
+      - name: "获取代码"
+        uses: actions/checkout@v2
+        timeout-minutes: 1
+        with:
+          submodules: "recursive"
+          clean: true
+          fetch-depth: 2
+
+      - name: "初始化登录信息和基本环境"
+        shell: bash
+        timeout-minutes: 2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SECRET_PASSWORD: ${{ secrets.SECRET_PASSWORD }}
+        run: bash _scripts_/prepare-secrets.sh
+
       - name: "发布镜像"
         timeout-minutes: 20
         shell: bash
         env:
           SECRET_PASSWORD: ${{ secrets.SECRET_PASSWORD }}
-        run: bash _scripts_/publish_all_targets.sh
+        run: bash _scripts_/publish_all_targets.sh ${{ matrix.index }}
