@@ -14,7 +14,9 @@ function JQ() {
 }
 
 PRIMARY=$(JQ '.publish[0]')
+control_ci group "pull from $PRIMARY"
 podman pull "docker://$PRIMARY/$PROJECT_NAME:latest"
+control_ci groupEnd
 
 BASE=$(JQ ".publish[$INDEX]")
 CMD=(podman push "$PRIMARY/$PROJECT_NAME:latest" "docker://$BASE/$PROJECT_NAME:latest")

@@ -58,7 +58,7 @@ go_home() {
 do_rm() {
 	go_home
 	local T=$1 FILES I
-	mapfile -t FILES < <(systemctl list-unit-files "$T.pod@.service" "$T.pod.service" "$T.service" --all --no-pager --no-legend | awk '{print $1}')
+	mapfile -t FILES < <(systemctl list-unit-files "$T.pod@.service" "$T.pod.service" --all --no-pager --no-legend | awk '{print $1}')
 
 	for I in "${FILES[@]}"; do
 		local OVERWRITE="/etc/systemd/system/$I.d"
