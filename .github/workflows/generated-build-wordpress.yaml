@@ -2,10 +2,6 @@ name: "wordpress"
 on:
   workflow_dispatch:
     inputs:
-      # skipEarlyDetect:
-      #   description: Skip early change detect
-      #   required: false
-      #   default: ""
       brandNew:
         description: Skip pull last image
         required: false
@@ -21,7 +17,6 @@ on:
 env:
   NODE_ENV: production
   PROJECT_NAME: "wordpress"
-  # TRIGGER_SKIP_EARLY_DETECT: ${{ github.event.inputs.skipEarlyDetect }}
 jobs:
   cancel:
     name: Cancel Previous Runs
@@ -85,7 +80,6 @@ jobs:
         shell: bash
         timeout-minutes: 30
         env:
-          REWRITE_IMAGE_NAME: ${{ env.MIDDLE_IMAGE_FQDN }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: bash _scripts_/ci-single-build.sh
 
@@ -121,7 +115,7 @@ jobs:
         run: bash _scripts_/prepare-secrets.sh
 
       - name: "发布镜像"
-        timeout-minutes: 20
+        timeout-minutes: 5
         shell: bash
         env:
           SECRET_PASSWORD: ${{ secrets.SECRET_PASSWORD }}
