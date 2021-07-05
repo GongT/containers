@@ -1,0 +1,44 @@
+{
+	"version": 2,
+	"global": {
+		"WebHookUrlsV2": {
+			"HasValue": true,
+			"Value": "http://127.0.0.1/webhook"
+		},
+		"RecordFilenameFormat": {
+			"HasValue": true,
+			"Value": "raw/[{date}_{time}][{title}.{random}.flv"
+		},
+		"CuttingMode": {
+			"HasValue": true
+		},
+		"CuttingNumber": {
+			"HasValue": true,
+			"Value": 30
+		},
+		"RecordDanmaku": {
+			"HasValue": true,
+			"Value": true
+		},
+		"RecordDanmakuRaw": {
+			"HasValue": true,
+			"Value": true
+		},
+		"RecordDanmakuGift": {
+			"HasValue": true,
+			"Value": true
+		}
+	},
+	"rooms": [
+		{
+			"RoomId": {
+				"HasValue": true,
+				"Value": 114514
+			},
+			"AutoRecord": {
+				"HasValue": true,
+				"Value": true
+			}
+		}
+	]
+}

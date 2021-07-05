@@ -1,0 +1,9 @@
+[hook]
+arg[]: /usr/bin/python
+arg[]: /opt/app/handle-webhook.py
+signal: INT
+
+[record]
+arg[]: /bin/bash
+arg[]: /opt/start-record.sh
+signal: TERM

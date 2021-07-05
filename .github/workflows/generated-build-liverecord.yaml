@@ -1,4 +1,4 @@
-name: "{{PROJ}}"
+name: "liverecord"
 on:
   workflow_dispatch:
     inputs:
@@ -8,15 +8,15 @@ on:
         default: ""
   push:
     paths:
-      - "{{PROJ}}/**"
-      - "!{{PROJ}}/install-service.sh"
-      - "{{thisfile}}"
+      - "liverecord/**"
+      - "!liverecord/install-service.sh"
+      - ".github/workflows/generated-build-liverecord.yaml"
     # - common
     branches:
       - master
 env:
   NODE_ENV: production
-  PROJECT_NAME: "{{PROJ}}"
+  PROJECT_NAME: "liverecord"
 jobs:
   cancel:
     name: Cancel Previous Runs
@@ -65,9 +65,9 @@ jobs:
         uses: actions/cache@v2
         with:
           path: ${{ env.SYSTEM_COMMON_CACHE }}
-          key: common-cache-{{PROJ}}-${{ hashFiles('{{PROJ}}') }}
+          key: common-cache-liverecord-${{ hashFiles('liverecord') }}
           restore-keys: |
-            common-cache-{{PROJ}}
+            common-cache-liverecord
             common-cache-
 
       - name: "从ghcr.io获取上次生成的镜像"
