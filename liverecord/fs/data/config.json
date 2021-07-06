@@ -3,7 +3,7 @@
 	"global": {
 		"WebHookUrlsV2": {
 			"HasValue": true,
-			"Value": "http://127.0.0.1/webhook"
+			"Value": "http://127.0.0.1:8000/webhook"
 		},
 		"RecordFilenameFormat": {
 			"HasValue": true,

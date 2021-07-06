@@ -9,7 +9,7 @@ arg_string + LIVE_ROOM r/room "直播间ID"
 arg_finish "$@"
 
 create_pod_service_unit gongt/liverecord@
-unit_podman_arguments "--env=LIVE_ROOM=%i"
+unit_podman_arguments "--env=WATCH_LIVEROOM=%i"
 # unit_start_notify output 'mosquitto version'
 network_use_auto
 unit_body Restart no
