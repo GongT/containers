@@ -12,10 +12,11 @@ if ! [[ -e /usr/bin/lua ]]; then
 	ln -s luajit /usr/bin/lua
 fi
 
-cd "$SOURCE/resty/lua-resty-core" && echo "=== install '$(basename "$(pwd)")'..."
-make "DESTDIR=$ARTIFACT_PREFIX" LUA_LIB_DIR=/usr/share/lua/5.1 PREFIX=/usr install
-cd "$SOURCE/resty/lua-resty-lrucache" && echo "=== install '$(basename "$(pwd)")'..."
-make "DESTDIR=$ARTIFACT_PREFIX" LUA_LIB_DIR=/usr/share/lua/5.1 PREFIX=/usr install
+mapfile -t LIB_PS < <(find "$SOURCE/resty" -maxdepth 1 -type d)
+for LIB_P in "${LIB_PS[@]}"; do
+	cd "$LIB_P" && echo "=== install '$(basename "$(pwd)")'..."
+	make "DESTDIR=$ARTIFACT_PREFIX" LUA_LIB_DIR=/usr/share/lua/5.1 PREFIX=/usr install
+done
 
 cd "$SOURCE/lua/luaposix" && echo "=== install '$(basename "$(pwd)")'..."
 # LUA_LIBDIR
