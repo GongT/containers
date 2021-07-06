@@ -2,7 +2,8 @@
 
 set -Eeuo pipefail
 
-cd "$SOURCE/luajit2" && echo "=== install '$(basename "$(pwd)")'..."
+cd "$SOURCE/luajit2"
+group "=== install '$(basename "$(pwd)")'..."
 export LUAJIT_LIB=/usr/lib64
 export LUAJIT_INC=/usr/include/luajit-2.1
 make clean
@@ -11,19 +12,25 @@ make MULTILIB=lib64 PREFIX=/usr "INSTALL_INC=$LUAJIT_INC" "INSTALL_JITLIB=$ARTIF
 if ! [[ -e /usr/bin/lua ]]; then
 	ln -s luajit /usr/bin/lua
 fi
+groupEnd
 
-mapfile -t LIB_PS < <(find "$SOURCE/resty" -maxdepth 1 -type d)
+mapfile -t LIB_PS < <(find "$SOURCE/resty/" -maxdepth 1 -mindepth 1 -type d)
 for LIB_P in "${LIB_PS[@]}"; do
-	cd "$LIB_P" && echo "=== install '$(basename "$(pwd)")'..."
+	cd "$LIB_P"
+	group "=== install '$(basename "$(pwd)")'..."
+	make "DESTDIR=$ARTIFACT_PREFIX" LUA_LIB_DIR=/usr/share/lua/5.1 PREFIX=/usr
 	make "DESTDIR=$ARTIFACT_PREFIX" LUA_LIB_DIR=/usr/share/lua/5.1 PREFIX=/usr install
+	groupEnd
 done
 
-cd "$SOURCE/lua/luaposix" && echo "=== install '$(basename "$(pwd)")'..."
+cd "$SOURCE/lua/luaposix"
+group "=== install '$(basename "$(pwd)")'..."
 # LUA_LIBDIR
 ./build-aux/luke "LUA_INCDIR=$LUAJIT_INC" "PREFIX=$ARTIFACT_PREFIX/usr/local" LUAVERSION=5.1
 ./build-aux/luke "LUA_INCDIR=$LUAJIT_INC" "PREFIX=$ARTIFACT_PREFIX/usr/local" LUAVERSION=5.1 install
+groupEnd
 
-cd "$SOURCE/nginx" && echo "=== install '$(basename "$(pwd)")'..."
+cd "$SOURCE/nginx"
 
 export CC_OPT='-O2 -g -pipe -Wall -Werror=format-security -Wp,-D_FORTIFY_SOURCE=2 -Wp,-D_GLIBCXX_ASSERTIONS -fexceptions -fstack-protector-strong -grecord-gcc-switches -m64 -mtune=generic -fasynchronous-unwind-tables -fstack-clash-protection -Wno-error'
 export LD_OPT='-Wl,-z,defs -Wl,-z,now -Wl,-z,relro -Wl,-E'
@@ -93,12 +100,14 @@ OTHER_MODULES+=("--add-module=../special-modules/njs/nginx")
 	"${MODULES[@]}" \
 	"${OTHER_MODULES[@]}"
 
+group "=== build nginx"
 make BUILDTYPE=Debug -j
+groupEnd
 
+group "=== install nginx"
 mkdir -p "$ARTIFACT_PREFIX/usr/sbin"
 
 make "DESTDIR=$ARTIFACT_PREFIX" install
 
 rm -rf "$ARTIFACT_PREFIX/etc"
-
-echo "Done."
+groupEnd
