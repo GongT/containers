@@ -1,6 +1,8 @@
 #!/usr/bin/bash
 
-if nginx -t &>/dev/null ; then
+remove-ssl
+
+if nginx -t &>/dev/null; then
 	echo "========================="
 	echo "== config test success =="
 	echo "========================="

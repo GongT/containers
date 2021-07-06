@@ -7,6 +7,7 @@ source ../common/functions-install.sh
 
 arg_string + USERNAME u/user "basic auth username (*)"
 arg_string + PASSWORD p/pass "basic auth password (*)"
+arg_flag DISABLE_SSL no-ssl "disable listen 443 and letsencrypt related config"
 arg_string PUBLISH publish "additional publishing ports"
 arg_flag CENSORSHIP censorship "is http/s port unavailable"
 arg_finish "$@"
@@ -15,14 +16,21 @@ ENV_PASS=$(
 	safe_environment \
 		"USERNAME=$USERNAME" \
 		"PASSWORD=$PASSWORD" \
-		"CENSORSHIP=$CENSORSHIP"
+		"CENSORSHIP=$CENSORSHIP" \
+		"DISABLE_SSL=$DISABLE_SSL"
 )
 
-PUBPORTS=(80 443 8883/tcp)
-if [[ "$CENSORSHIP" == yes ]]; then
-	PUBPORTS+=(59080 59443)
+PUBPORTS=(80/tcp 8883/tcp)
+if ! [[ $DISABLE_SSL ]]; then
+	PUBPORTS+=(443)
 fi
-if [[ -n "$PUBLISH" ]]; then
+if [[ $CENSORSHIP == yes ]]; then
+	PUBPORTS+=(59080/tcp)
+	if ! [[ $DISABLE_SSL ]]; then
+		PUBPORTS+=(59443)
+	fi
+fi
+if [[ -n $PUBLISH ]]; then
 	PUBPORTS+=(${PUBLISH})
 fi
 
@@ -37,7 +45,9 @@ unit_fs_bind logs/nginx /var/log/nginx
 unit_fs_tempfs 1M /run
 unit_fs_tempfs 512M /tmp
 unit_fs_bind share/nginx /config.auto
-unit_fs_bind share/letsencrypt /etc/letsencrypt
+if ! [[ $DISABLE_SSL ]]; then
+	unit_fs_bind share/letsencrypt /etc/letsencrypt
+fi
 shared_sockets_use
 unit_reload_command '/usr/bin/podman exec nginx bash /usr/bin/safe-reload'
 
@@ -45,7 +55,7 @@ healthcheck "30s" "5" "curl --insecure https://127.0.0.1:443"
 
 unit_finish
 
-write_file /etc/logrotate.d/nginx <<- LOGR
+write_file /etc/logrotate.d/nginx <<-LOGR
 	/data/AppData/logs/nginx/*.log {
 	    weekly
 	    missingok

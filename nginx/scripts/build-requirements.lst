@@ -21,3 +21,5 @@ ccache
 tar
 curl
 findutils
+zlib-devel
+unzip

@@ -10,10 +10,7 @@ else
 	echo "resolv.conf did not exists ===="
 fi
 
-if ! [[ -e "/etc/letsencrypt/nginx/load.conf" ]]; then
-	mkdir -p /etc/letsencrypt/nginx
-	echo >"/etc/letsencrypt/nginx/load.conf"
-fi
+mkdir -p /etc/letsencrypt/nginx
 
 erun() {
 	echo " + $*" >&2
@@ -81,6 +78,15 @@ else
 		-out "/config.auto/selfsigned.crt"
 	echo "done..."
 fi
+
+if [[ -e /config/dhparam.pem ]]; then
+	echo "ssl_dhparam /config/dhparam.pem;" >>/etc/nginx/params/ssl_params
+	echo "ssl_dhparam /config/dhparam.pem;" >>/etc/nginx/params/ssl_params_stream
+else
+	echo 'Not using DH parameters file! generate using "openssl dhparam -dsaparam -out XXXX/dhparam.pem 4096"' >&2
+fi
+
+remove-ssl
 
 /usr/sbin/nginx -t || {
 	echo "===================================="

@@ -76,6 +76,18 @@ NGX_SRC_PATH+=(resty/lua-resty-core)
 NGX_SRC_URL+=(https://github.com/openresty/lua-resty-core.git)
 NGX_SRC_BRANCH+=(master)
 
+NGX_SRC_PATH+=(resty/lua-tablepool)
+NGX_SRC_URL+=(https://github.com/openresty/lua-tablepool.git)
+NGX_SRC_BRANCH+=(master)
+
+NGX_SRC_PATH+=(resty/lua-resty-signal)
+NGX_SRC_URL+=(https://github.com/openresty/lua-resty-signal.git)
+NGX_SRC_BRANCH+=(master)
+
+NGX_SRC_PATH+=(resty/lua-resty-shell)
+NGX_SRC_URL+=(https://github.com/openresty/lua-resty-shell.git)
+NGX_SRC_BRANCH+=(master)
+
 NGX_SRC_PATH+=(lua/luaposix)
 NGX_SRC_URL+=(https://github.com/luaposix/luaposix.git)
 NGX_SRC_BRANCH+=(master)
