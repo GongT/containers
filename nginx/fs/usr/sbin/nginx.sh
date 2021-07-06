@@ -82,7 +82,7 @@ fi
 if [[ -e /config/dhparam.pem ]]; then
 	echo "ssl_dhparam /config/dhparam.pem;" >>/etc/nginx/params/ssl_params
 	echo "ssl_dhparam /config/dhparam.pem;" >>/etc/nginx/params/ssl_params_stream
-else
+elif ! [[ $DISABLE_SSL ]]; then
 	echo 'Not using DH parameters file! generate using "openssl dhparam -dsaparam -out XXXX/dhparam.pem 4096"' >&2
 fi
 
