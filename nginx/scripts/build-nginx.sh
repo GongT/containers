@@ -9,10 +9,9 @@ export LUAJIT_INC=/usr/include/luajit-2.1
 make clean
 make MULTILIB=lib64 PREFIX=/usr -j
 make MULTILIB=lib64 PREFIX=/usr "INSTALL_INC=$LUAJIT_INC" "INSTALL_JITLIB=$ARTIFACT_PREFIX/usr/share/lua/5.1" install
-if ! [[ -e /usr/bin/lua ]]; then
-	ln -s luajit /usr/bin/lua
-fi
 groupEnd
+
+ln -s luajit /usr/bin/lua # for following build steps
 
 mapfile -t LIB_PS < <(find "$SOURCE/resty/" -maxdepth 1 -mindepth 1 -type d)
 for LIB_P in "${LIB_PS[@]}"; do
@@ -22,6 +21,15 @@ for LIB_P in "${LIB_PS[@]}"; do
 	make "DESTDIR=$ARTIFACT_PREFIX" LUA_LIB_DIR=/usr/share/lua/5.1 PREFIX=/usr install
 	groupEnd
 done
+
+### fix path wrong
+mkdir -p "$ARTIFACT_PREFIX/usr/local/lib/lua/5.1"
+mapfile -t LIBFILES < <(find "$ARTIFACT_PREFIX/usr/share/lua/5.1/" -name '*.so')
+for FILE_PATH in "${LIBFILES[@]}"; do
+	x mv "$FILE_PATH" "$ARTIFACT_PREFIX/usr/local/lib/lua/5.1/$(basename "$FILE_PATH")"
+done
+
+### END of resty libs
 
 cd "$SOURCE/lua/luaposix"
 group "=== install '$(basename "$(pwd)")'..."
@@ -43,6 +51,7 @@ done
 OTHER_MODULES=()
 OTHER_MODULES+=("--add-module=../special-modules/njs/nginx")
 
+group "=== configure nginx"
 ### TODO: 通过安装系统自带的nginx，运行nginx -V看原本的编译参数
 ./auto/configure \
 	'--prefix=/usr/' \
@@ -99,6 +108,7 @@ OTHER_MODULES+=("--add-module=../special-modules/njs/nginx")
 	"--with-ld-opt=$LD_OPT" \
 	"${MODULES[@]}" \
 	"${OTHER_MODULES[@]}"
+groupEnd
 
 group "=== build nginx"
 make BUILDTYPE=Debug -j

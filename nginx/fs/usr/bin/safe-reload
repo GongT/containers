@@ -1,5 +1,7 @@
 #!/usr/bin/bash
 
+export PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/xbin
+
 remove-ssl
 
 if nginx -t &>/dev/null; then

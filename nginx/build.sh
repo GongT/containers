@@ -58,6 +58,7 @@ hash_build() {
 }
 run_build() {
 	local SOURCE_DIRECTORY=no
+	info_log "(re-)building nginx and modules"
 	run_compile nginx "$1" "scripts/build-nginx.sh"
 }
 buildah_cache2 "nginx-build" hash_build run_build

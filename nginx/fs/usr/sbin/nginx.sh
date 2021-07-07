@@ -86,6 +86,12 @@ elif ! [[ $DISABLE_SSL ]]; then
 	echo 'Not using DH parameters file! generate using "openssl dhparam -dsaparam -out XXXX/dhparam.pem 4096"' >&2
 fi
 
+if [[ $DISABLE_SSL ]]; then
+	sed -i "s#\$DISABLE_SSL#$DISABLE_SSL#g" /usr/bin/remove-ssl
+else
+	echo '#''!/usr/bin/bash' >/usr/bin/remove-ssl
+fi
+
 remove-ssl
 
 /usr/sbin/nginx -t || {
