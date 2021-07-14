@@ -7,7 +7,6 @@ source ../common/functions-install.sh
 
 arg_string + DDNS_HOST h/host "ddns host FQDN"
 arg_string + DSNS_KEY k/key "ddns api key"
-arg_string + PASSWORD p/password "wireguard config client password"
 arg_finish "$@"
 
 auto_create_pod_service_unit
@@ -25,8 +24,7 @@ add_network_privilege
 
 unit_podman_safe_environment \
 	"DSNS_KEY=${DSNS_KEY}" \
-	"DDNS_HOST=${DDNS_HOST}" \
-	"WIREGUARD_PASSWORD=$PASSWORD"
+	"DDNS_HOST=${DDNS_HOST}"
 
 unit_fs_bind data/virtual-gateway /storage
 
