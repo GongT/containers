@@ -1,0 +1,39 @@
+#!/usr/bin/env bash
+
+set -Eeuo pipefail
+
+function x() {
+	echo "$*" >&2
+	"$@"
+}
+
+declare -r DEV=wg0
+
+if ip link show $DEV &>/dev/null; then
+	x ip link del $DEV
+fi
+
+x ip link add dev $DEV type wireguard
+x ip link set $DEV mtu 1160
+x ip address add "10.233.222.1" dev $DEV
+
+echo -n "$KEY_PRIVATE" >/tmp/keyfile
+
+x wg set $DEV listen-port 14517 private-key /tmp/keyfile
+x wg set $DEV peer "$CLIENT_PUB" \
+	allowed-ips "10.233.222.2" \
+	persistent-keepalive 25 \
+	endpoint "127.0.0.1:14516"
+
+x ip link set up dev $DEV
+x ip route add "10.233.222.2" dev $DEV
+
+trap "echo wireguard close ; ip link del $DEV; exit 0" SIGUSR1
+
+while :; do
+	sleep infinity &
+	wait $!
+done
+
+echo "script killed!"
+exit 1

@@ -14,8 +14,3 @@ signal:USR1
 arg[]:/usr/bin/env
 arg[]:bash
 arg[]:/opt/start-crond.sh
-
-[wireguard]
-arg[]:/usr/bin/env
-arg[]:bash
-arg[]:/opt/start-wireguard.sh
