@@ -36,16 +36,18 @@ function reset_args() {
 		--reloadcmd "bash /opt/nginx-reload.sh"
 		--renew-hook "bash /opt/nginx-reload.sh"
 	)
-
-	if [[ ${AUTH_DOMAIN+found} == found ]] && [[ $AUTH_DOMAIN ]]; then
-		BASE_ARGS+=(--domain-alias "$AUTH_DOMAIN")
-	fi
 }
 
 reset_args
 
 function push_args() {
-	local TARGET_DOMAIN=$1
+	local TARGET_DOMAIN=$1 AUTH_DOMAIN=
+
+	if [[ $TARGET_DOMAIN == *:* ]]; then
+		AUTH_DOMAIN=${TARGET_DOMAIN#*:}
+		TARGET_DOMAIN=${TARGET_DOMAIN%:*}
+	fi
+
 	local -r CERT_INSTALL_DIR="/etc/letsencrypt/live/$TARGET_DOMAIN"
 	mkdir -p "$CERT_INSTALL_DIR"
 
@@ -55,6 +57,10 @@ function push_args() {
 		--key-file "${CERT_INSTALL_DIR}/privkey.pem"
 		--fullchain-file "${CERT_INSTALL_DIR}/fullchain.pem"
 	)
+
+	if [[ $AUTH_DOMAIN ]]; then
+		BASE_ARGS+=(--domain-alias "$AUTH_DOMAIN")
+	fi
 }
 
 function load_config() {

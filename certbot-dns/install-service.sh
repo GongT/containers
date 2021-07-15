@@ -6,7 +6,6 @@ cd "$(dirname "$(realpath "${BASH_SOURCE[0]}")")"
 source ../common/functions-install.sh
 
 arg_string + STR_DOMAINS domains "list of domain name, eg: www.a.com,www.b.com"
-arg_string - AUTH_DOMAIN auth_domain "domain auth alias"
 arg_string + CF_ID id "cloudflare dns account id"
 arg_string + CF_TOKEN token "cloudflare api token"
 arg_string + ACCOUNT_EMAIL m/mail "acme account email"
@@ -20,7 +19,6 @@ ENV_PASS=$(
 		"CF_Token=$CF_TOKEN" \
 		"CF_Account_ID=$CF_ID" \
 		"ACCOUNT_EMAIL=$ACCOUNT_EMAIL" \
-		"AUTH_DOMAIN=$AUTH_DOMAIN" \
 		"NOTIFY_MAIL_USER=$NOTIFY_MAIL_USER" \
 		"NOTIFY_MAIL_PASS=$NOTIFY_MAIL_PASS" \
 		"NOTIFY_MAIL_HUB=$NOTIFY_MAIL_HUB"
