@@ -1,7 +1,7 @@
-[wireguard]
-arg[]:/bin/bash
-arg[]:/opt/start/wireguard.sh
-signal:USR1
+# [wireguard]
+# arg[]:/bin/bash
+# arg[]:/opt/start/wireguard.sh
+# signal:USR1
 
 [udpspeeder]
 arg[]:/bin/bash
