@@ -8,6 +8,7 @@ source ../common/functions-install.sh
 arg_string WG_KEY_PRIVATE pk1 "本地wireguard私钥"
 arg_string WG_KEY_PRIVATE_SERVER pk2 "服务器wireguard私钥"
 arg_string REMOTE_SERVER remote "服务器地址"
+arg_flag IPV6 6 "使用IPv6而禁用IPv4"
 arg_finish "$@"
 
 if [[ "$WG_KEY_PRIVATE" ]]; then
@@ -35,7 +36,8 @@ if [[ $REMOTE_SERVER ]]; then
 		safe_environment \
 			"KEY_PRIVATE=$KEY_PRIVATE" \
 			"SERVER_PUB=$SERVER_PUB" \
-			"REMOTE_SERVER=$REMOTE_SERVER"
+			"REMOTE_SERVER=$REMOTE_SERVER" \
+			"IPV6=$IPV6"
 	)
 	network_use_gateway
 else
@@ -43,8 +45,9 @@ else
 	CLIENT_PUB=$(echo "$KEY_PRIVATE" | wg pubkey)
 	ENV_PASS=$(
 		safe_environment \
-			"KEY_PRIVATE=$KEY_PRIVATE" \
-			"CLIENT_PUB=$CLIENT_PUB"
+			"KEY_PRIVATE=$KEY_PRIVATE_SRV" \
+			"CLIENT_PUB=$CLIENT_PUB" \
+			"IPV6=$IPV6"
 	)
 	network_use_host
 fi

@@ -14,7 +14,7 @@ if ip link show $DEV &>/dev/null; then
 fi
 
 x ip link add dev $DEV type wireguard
-x ip link set $DEV mtu 1160
+x ip link set $DEV mtu 1100
 x ip address add "10.233.222.2" dev $DEV
 
 echo -n "$KEY_PRIVATE" >/tmp/keyfile
