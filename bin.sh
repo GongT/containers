@@ -11,34 +11,36 @@ function die() {
 
 function usage() {
 	local Z=$0
-	echo "Usage: $Z action"
+	echo "用法: $Z action"
 	echo
-	echo "Containers Management:"
+	echo "镜像管理:"
 	l() {
 		local N=$1
 		shift
 		echo -e "    \e[38;5;14m$N\e[0m: $*"
 	}
 	if [[ $Z == */bin.sh ]]; then
-		l install "install (link) bin.sh to /usr/local/bin/ms, and create auto-pull timer"
+		l install "安装（链接）bin.sh 到 /usr/local/bin/ms，并安装自动拉镜像的脚本"
 	fi
-	l upgrade "update (re-install) services files"
+	l upgrade "重新执行所有已安装服务的安装脚本"
 
 	echo
-	echo "Service Control:"
-	l status "show status of all services"
-	l ls "list all service names"
+	echo "服务控制:"
+	l status "显示所有服务状态"
+	l ls "（用于脚本）列出服务名称"
 	for I in start restart stop reload reset-failed; do
-		l "$I" "$I all service at once"
+		l "$I" "对每个服务使用${I}命令"
 	done
-	l logs "show all logs (-f for watch mode)"
-	l abort "prevent startup, if it (re-)starting"
+	l log "显示单个服务本次运行的日志（-f：跟踪模式）"
+	l logs "显示服务日志（-f：跟踪模式）"
+	l abort "如果服务正在启动，则中止启动过程"
+	l refresh "检查哪些容器的镜像已经更新（--run：自动运行重启命令）"
 
 	echo
-	echo "Tools:"
-	l run "run command in container (default /bin/sh)"
-	l rm "remove (uninstall) service file"
-	l pull "pull images new version"
+	echo "其他工具:"
+	l run "在镜像里运行命令（默认运行sh）"
+	l rm "停止服务，并删除服务文件"
+	l pull "拉取新镜像版本（--force：无视最近记录）"
 	echo
 }
 
@@ -86,6 +88,33 @@ do_ls() {
 	systemctl list-units --all --no-pager --no-legend --type=service '*.pod@*.service' '*.pod.service' | awk '{print $1}' | sed -E 's/\.service$//g' | sort
 }
 
+do_refresh() {
+	local NEED_RESTART=() I
+	local -A CONTAINER_SERVICE_MAP=()
+	for I in $(do_ls); do
+		CONTAINER_SERVICE_MAP["$(echo "$I" | sed -E 's/\.pod$//g; s/\.pod@/_/g')"]="$I"
+	done
+
+	while read -r CONTAINER IMAGE_ID IMAGE_NAME; do
+		WANT_ID=$(podman inspect "$IMAGE_NAME" --type=image --format='{{.Id}}')
+		if ! [[ $WANT_ID ]]; then
+			echo "$IMAGE_NAME not exists" >&2
+			continue
+		fi
+		if [[ $WANT_ID == "$IMAGE_ID" ]]; then
+			UP_TO_DATE+=("${CONTAINER_SERVICE_MAP[$CONTAINER]}")
+		else
+			NEED_RESTART+=("${CONTAINER_SERVICE_MAP[$CONTAINER]}")
+		fi
+	done < <(podman inspect "${!CONTAINER_SERVICE_MAP[@]}" --type=container --format='{{.Name}} {{.Image}} {{.ImageName}}' || true)
+
+	echo "${UP_TO_DATE[*]} is up to date" >&2
+	echo "need update: ${NEED_RESTART[*]}"
+	if [[ $* == *--run* ]]; then
+		systemctl restart "${NEED_RESTART[@]}"
+	fi
+}
+
 pull_all() {
 	echo "$*"
 	local ARG IMAGES=()
@@ -126,6 +155,9 @@ upgrade)
 	go_home
 	bash ./upgrade.sh
 	;;
+refresh)
+	do_refresh "$@"
+	;;
 rm)
 	if ! [[ "${1:-}" ]]; then
 		usage >&2
@@ -139,12 +171,42 @@ ls)
 start | restart | stop | reload | reset-failed | status | enable | disable)
 	do_ls | xargs --no-run-if-empty -t systemctl "$ACTION"
 	;;
-logs)
-	LARGS=()
-	for i in $(do_ls); do
-		LARGS+=("-u" "$i")
+log)
+	IARGS=() NARGS=()
+	for I; do
+		if [[ $I == -f ]]; then
+			NARGS+=(-f)
+		else
+			IARGS+=("$I")
+		fi
 	done
-	journalctl "${LARGS[@]}" "$@"
+
+	if [[ ${#IARGS[@]} -ne 1 ]]; then
+		die "must 1 argument"
+	fi
+	V=${IARGS[0]}
+	if [[ $V != *.pod ]]; then
+		V+=".pod"
+	fi
+	IID=$(systemctl show -p InvocationID --value "$V.service")
+	echo "InvocationID=$IID"
+	journalctl "${NARGS[@]}" "_SYSTEMD_INVOCATION_ID=$IID"
+	;;
+logs)
+	LARGS=() NARGS=()
+	for I; do
+		if [[ $I == -f ]]; then
+			NARGS+=(-f)
+		else
+			LARGS+=(-u "$I")
+		fi
+	done
+	if [[ ${#LARGS[@]} -eq 0 ]]; then
+		for i in $(do_ls); do
+			LARGS+=("-u" "$i")
+		done
+	fi
+	journalctl "${LARGS[@]}" "${NARGS[@]}"
 	;;
 abort)
 	systemctl list-units '*.pod@.service' '*.pod.service' --all --no-pager --no-legend | grep activating \
