@@ -81,6 +81,7 @@ function create_nginx_config() {
 		DOMAIN_TXT=${DOMAIN_TXT:2}
 	fi
 
+	mkdir -p "/etc/ssl/nginx"
 	local CFG="/etc/ssl/nginx/${DOMAIN_TXT}.conf"
 
 	info "create nginx config: $CFG"
@@ -96,6 +97,8 @@ function create_nginx_lagacy_load() {
 	if [[ $DOMAIN == '*.'* ]]; then
 		DOMAIN=${DOMAIN:2}
 	fi
+
+	mkdir -p "/etc/ssl/nginx"
 	local CFG="/etc/ssl/nginx/load.conf"
 	info "create nginx config: $CFG"
 	echo "include \"/etc/ssl/nginx/${DOMAIN}.conf\";" >"$CFG"

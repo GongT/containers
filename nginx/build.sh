@@ -86,7 +86,7 @@ merge_local_fs "nginx"
 info_log ""
 
 buildah_config "nginx" --cmd '/usr/sbin/nginx.sh' --port 80 --port 443 --port 80/udp --port 443/udp \
-	--volume /config --volume /etc/letsencrypt \
+	--volume /config --volume /etc/ssl \
 	--author "GongT <admin@gongt.me>" --created-by "#MAGIC!" --label name=gongt/nginx
 
 healthcheck "30s" "5" "curl --insecure https://127.0.0.1:443"

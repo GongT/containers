@@ -7,7 +7,7 @@ source ../common/functions-install.sh
 
 arg_string + USERNAME u/user "basic auth username (*)"
 arg_string + PASSWORD p/pass "basic auth password (*)"
-arg_flag DISABLE_SSL no-ssl "disable listen 443 and letsencrypt related config"
+arg_flag DISABLE_SSL no-ssl "disable listen 443 and SSL related config"
 arg_string PUBLISH publish "additional publishing ports"
 arg_flag CENSORSHIP censorship "is http/s port unavailable"
 arg_finish "$@"
@@ -46,7 +46,7 @@ unit_fs_tempfs 1M /run
 unit_fs_tempfs 512M /tmp
 unit_fs_bind share/nginx /config.auto
 if ! [[ $DISABLE_SSL ]]; then
-	unit_fs_bind share/letsencrypt /etc/letsencrypt
+	unit_fs_bind share/ssl /etc/ssl
 fi
 shared_sockets_use
 unit_reload_command '/usr/bin/podman exec nginx bash /usr/bin/safe-reload'

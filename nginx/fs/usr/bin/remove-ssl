@@ -2,7 +2,7 @@
 
 if [[ "$DISABLE_SSL" ]]; then
 	while true; do
-		MISSING_FILE=$(nginx -t 2>&1 | grep -o 'open() "/etc/letsencrypt/.*" failed' | sed -E 's#^[^"]+"([^"]+).*$#\1#g')
+		MISSING_FILE=$(nginx -t 2>&1 | grep -o 'open() "/etc/ssl/.*" failed' | sed -E 's#^[^"]+"([^"]+).*$#\1#g')
 		if [[ "$MISSING_FILE" ]]; then
 			mkdir -p "$(dirname "$MISSING_FILE")" || break
 			touch "$MISSING_FILE" || break
