@@ -94,9 +94,9 @@ function create_nginx_config() {
 
 	info "create nginx config: $CFG"
 	cat <<-NGX_CFG >"$CFG"
-		ssl_certificate "/etc/ACME/live/$DOMAIN/fullchain.pem";
-		ssl_certificate_key "/etc/ACME/live/$DOMAIN/privkey.pem";
-		ssl_trusted_certificate "/etc/ACME/live/$DOMAIN/cert.pem";
+		ssl_certificate "/etc/ACME/$DOMAIN/fullchain.pem";
+		ssl_certificate_key "/etc/ACME/$DOMAIN/privkey.pem";
+		ssl_trusted_certificate "/etc/ACME/$DOMAIN/cert.pem";
 	NGX_CFG
 }
 
