@@ -4,7 +4,8 @@ export PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/xb
 
 remove-ssl
 
-if nginx -t &>/dev/null; then
+TEMPF=$(mktemp)
+if nginx -t &>"$TEMPF"; then
 	echo "========================="
 	echo "== config test success =="
 	echo "========================="
@@ -12,8 +13,9 @@ if nginx -t &>/dev/null; then
 else
 	echo "========================"
 	echo "== config test FAILED =="
+	cat "$TEMPF"
 	echo "========================"
-	nginx -t
 fi
+rm -f "$TEMPF"
 
 true

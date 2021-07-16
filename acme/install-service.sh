@@ -43,7 +43,7 @@ done
 create_pod_service_unit gongt/acme
 unit_podman_image gongt/acme "${DOMAINS[@]}"
 # unit_podman_image_pull never
-network_use_auto
+network_use_bridge
 
 unit_start_notify output "everything works well, starting crond"
 # unit_body Restart no

@@ -44,6 +44,14 @@ if [[ ${MAIL_TO+found} == found ]] && [[ $MAIL_TO ]]; then
 	EOF
 fi
 
+echo "options timeout:999" >>/etc/resolv.conf
+
+case "$DNS_SERVER" in
+cf)
+	nslookup api.cloudflare.com
+	;;
+esac
+
 case "$SERVER" in
 letsencrypt)
 	replace_config MAIL_TO "$ACCOUNT_EMAIL"
