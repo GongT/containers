@@ -70,7 +70,7 @@ function ddns_script() {
 		sleep 1
 		if x /usr/bin/curl --no-progress-meter "-$NET_TYPE" "https://dyn.dns.he.net/nic/update" \
 			-d "hostname=${DDNS_HOST}" \
-			-d "password=${DSNS_KEY}"; then
+			-d "password=${DDNS_KEY}"; then
 			break
 		fi
 	done

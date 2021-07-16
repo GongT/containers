@@ -6,7 +6,7 @@ cd "$(dirname "$(realpath "${BASH_SOURCE[0]}")")"
 source ../common/functions-install.sh
 
 arg_string + DDNS_HOST h/host "ddns host FQDN"
-arg_string + DSNS_KEY k/key "ddns api key"
+arg_string + DDNS_KEY k/key "ddns api key"
 arg_finish "$@"
 
 auto_create_pod_service_unit
@@ -23,7 +23,7 @@ network_use_manual --network=bridge0 --mac-address=86:13:02:8F:76:2A --dns-env=p
 add_network_privilege
 
 unit_podman_safe_environment \
-	"DSNS_KEY=${DSNS_KEY}" \
+	"DDNS_KEY=${DDNS_KEY}" \
 	"DDNS_HOST=${DDNS_HOST}"
 
 unit_fs_bind data/virtual-gateway /storage
