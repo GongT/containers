@@ -78,11 +78,20 @@ RELOAD_FAKE
 create_nginx_lagacy_load "$1"
 for DOMAIN; do
 	reset_args
-	push_args "$DOMAIN"
-	create_nginx_config "$DOMAIN"
+
+	if [[ $DOMAIN == *:* ]]; then
+		AUTH_DOMAIN=${DOMAIN#*:}
+		TARGET_DOMAIN=${DOMAIN%:*}
+	else
+		AUTH_DOMAIN=
+		TARGET_DOMAIN=${DOMAIN}
+	fi
+
+	push_args "$TARGET_DOMAIN" "$AUTH_DOMAIN"
+	create_nginx_config "$TARGET_DOMAIN"
 
 	if ! acme --install-cert --ecc "${BASE_ARGS[@]}"; then
-		info "Issue cert of domain $DOMAIN..."
+		info "Issue cert of domain $TARGET_DOMAIN (auth: $AUTH_DOMAIN)..."
 		acme --issue --dns "dns_$DNS_SERVER" --keylength ec-256 "${BASE_ARGS[@]}" || die "Failed to create cert."
 	fi
 done

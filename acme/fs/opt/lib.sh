@@ -42,12 +42,7 @@ function reset_args() {
 reset_args
 
 function push_args() {
-	local TARGET_DOMAIN=$1 AUTH_DOMAIN=
-
-	if [[ $TARGET_DOMAIN == *:* ]]; then
-		AUTH_DOMAIN=${TARGET_DOMAIN#*:}
-		TARGET_DOMAIN=${TARGET_DOMAIN%:*}
-	fi
+	local TARGET_DOMAIN=$1 AUTH_DOMAIN=$2
 
 	local -r CERT_INSTALL_DIR="/etc/ACME/$TARGET_DOMAIN"
 	mkdir -p "$CERT_INSTALL_DIR"
