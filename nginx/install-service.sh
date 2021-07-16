@@ -46,7 +46,7 @@ unit_fs_tempfs 1M /run
 unit_fs_tempfs 512M /tmp
 unit_fs_bind share/nginx /config.auto
 if ! [[ $DISABLE_SSL ]]; then
-	unit_fs_bind share/ssl /etc/ssl
+	unit_fs_bind share/ssl /etc/ACME
 fi
 shared_sockets_use
 unit_reload_command '/usr/bin/podman exec nginx bash /usr/bin/safe-reload'

@@ -29,7 +29,7 @@ buildah_cache2 "acme" hash_files copy_fs
 
 STEP="配置镜像信息"
 buildah_config "acme" --entrypoint "$(json_array /opt/entrypoint.sh)" --stop-signal=SIGINT \
-	--volume /config --volume /log --volume /etc/ssl \
+	--volume /config --volume /log --volume /etc/ACME \
 	--author "GongT <admin@gongt.me>" --created-by "#MAGIC!" --label name=gongt/acme
 info "settings updated..."
 

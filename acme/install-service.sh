@@ -43,7 +43,7 @@ unit_body TimeoutStartSec 30min
 unit_podman_hostname acme
 unit_podman_arguments "$ENV_PASS"
 unit_body Environment FROM_SERVICE=yes
-unit_fs_bind share/ssl /etc/ssl
+unit_fs_bind share/ssl /etc/ACME
 unit_fs_bind data/acme /opt/data
 unit_fs_bind logs/acme /log
 shared_sockets_use

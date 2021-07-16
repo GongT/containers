@@ -49,7 +49,7 @@ function push_args() {
 		TARGET_DOMAIN=${TARGET_DOMAIN%:*}
 	fi
 
-	local -r CERT_INSTALL_DIR="/etc/ssl/$TARGET_DOMAIN"
+	local -r CERT_INSTALL_DIR="/etc/ACME/$TARGET_DOMAIN"
 	mkdir -p "$CERT_INSTALL_DIR"
 
 	BASE_ARGS+=(
@@ -81,14 +81,14 @@ function create_nginx_config() {
 		DOMAIN_TXT=${DOMAIN_TXT:2}
 	fi
 
-	mkdir -p "/etc/ssl/nginx"
-	local CFG="/etc/ssl/nginx/${DOMAIN_TXT}.conf"
+	mkdir -p "/etc/ACME/nginx"
+	local CFG="/etc/ACME/nginx/${DOMAIN_TXT}.conf"
 
 	info "create nginx config: $CFG"
 	cat <<-NGX_CFG >"$CFG"
-		ssl_certificate "/etc/ssl/live/$DOMAIN/fullchain.pem";
-		ssl_certificate_key "/etc/ssl/live/$DOMAIN/privkey.pem";
-		ssl_trusted_certificate "/etc/ssl/live/$DOMAIN/cert.pem";
+		ssl_certificate "/etc/ACME/live/$DOMAIN/fullchain.pem";
+		ssl_certificate_key "/etc/ACME/live/$DOMAIN/privkey.pem";
+		ssl_trusted_certificate "/etc/ACME/live/$DOMAIN/cert.pem";
 	NGX_CFG
 }
 
@@ -98,8 +98,8 @@ function create_nginx_lagacy_load() {
 		DOMAIN=${DOMAIN:2}
 	fi
 
-	mkdir -p "/etc/ssl/nginx"
-	local CFG="/etc/ssl/nginx/load.conf"
+	mkdir -p "/etc/ACME/nginx"
+	local CFG="/etc/ACME/nginx/load.conf"
 	info "create nginx config: $CFG"
-	echo "include \"/etc/ssl/nginx/${DOMAIN}.conf\";" >"$CFG"
+	echo "include \"/etc/ACME/nginx/${DOMAIN}.conf\";" >"$CFG"
 }

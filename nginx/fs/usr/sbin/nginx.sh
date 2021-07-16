@@ -10,7 +10,7 @@ else
 	echo "resolv.conf did not exists ===="
 fi
 
-mkdir -p /etc/ssl/nginx
+mkdir -p /etc/ACME/nginx
 
 erun() {
 	echo " + $*" >&2
