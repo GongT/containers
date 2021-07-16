@@ -48,12 +48,15 @@ echo "options timeout:999" >>/etc/resolv.conf
 
 case "$DNS_SERVER" in
 cf)
+	info "check dns work for api.cloudflare.com"
 	nslookup api.cloudflare.com
 	;;
 esac
 
 case "$SERVER" in
 letsencrypt)
+	info "register account to letsencrypt"
+	nslookup prod.api.letsencrypt.org
 	replace_config MAIL_TO "$ACCOUNT_EMAIL"
 	replace_config ACCOUNT_EMAIL "$ACCOUNT_EMAIL"
 	acme --register-account
@@ -88,5 +91,5 @@ echo "$RELOAD_SRC" >/opt/nginx-reload.sh
 acme --renew-all || die "Failed initial renew."
 
 sleep 5
-echo 'Ok, everything works well, starting crond...' >&2
+info 'Ok, everything works well, starting crond...'
 /usr/sbin/crond -f -d 6
