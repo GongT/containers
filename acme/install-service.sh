@@ -5,23 +5,31 @@ set -Eeuo pipefail
 cd "$(dirname "$(realpath "${BASH_SOURCE[0]}")")"
 source ../common/functions-install.sh
 
+DNS_SERVER=cf
+SERVER=zerossl
+
 arg_string + STR_DOMAINS domains "list of domain name, eg: www.a.com,www.b.com"
-arg_string + CF_ID id "cloudflare dns account id"
-arg_string + CF_TOKEN token "cloudflare api token"
-arg_string + ACCOUNT_EMAIL m/mail "acme account email"
-arg_string - NOTIFY_MAIL_USER smtp-user "notify smtp username"
-arg_string - NOTIFY_MAIL_PASS smtp-pass "notify smtp password"
-arg_string - NOTIFY_MAIL_HUB smtp-server "notify smtp server url"
+arg_string - DNS_SERVER dns "dns provider name"
+arg_string + DNS_SERVER_PARAMS dns-options "dns provider config environment"
+arg_string + SERVER acme "server selection, defaults to zerossl"
+arg_string + SERVER_PARAMS acme-options "acme server config environment"
+arg_string - NOTIFY_MAIL smtp "notify smtp setting (username:password@smpt.server.com)"
 arg_finish "$@"
+
+mapfile -d ';' -t DNS_SERVER_PARAMS_ARR < <(echo "$DNS_SERVER_PARAMS")
+mapfile -d ';' -t SERVER_PARAMS_ARR < <(echo "$SERVER_PARAMS")
+
+split_url_user_pass_host_port "$NOTIFY_MAIL"
 
 ENV_PASS=$(
 	safe_environment \
-		"CF_Token=$CF_TOKEN" \
-		"CF_Account_ID=$CF_ID" \
-		"ACCOUNT_EMAIL=$ACCOUNT_EMAIL" \
-		"NOTIFY_MAIL_USER=$NOTIFY_MAIL_USER" \
-		"NOTIFY_MAIL_PASS=$NOTIFY_MAIL_PASS" \
-		"NOTIFY_MAIL_HUB=$NOTIFY_MAIL_HUB"
+		"NOTIFY_MAIL_USER=$USERNAME" \
+		"NOTIFY_MAIL_PASS=$PASSWORD" \
+		"NOTIFY_MAIL_HUB=$DOMAIN" \
+		"SERVER=$SERVER" \
+		"DNS_SERVER=$DNS_SERVER" \
+		"${DNS_SERVER_PARAMS_ARR[@]}" \
+		"${SERVER_PARAMS_ARR[@]}"
 )
 
 mapfile -t -d ',' ARR_DOMAINS < <(echo "$STR_DOMAINS")

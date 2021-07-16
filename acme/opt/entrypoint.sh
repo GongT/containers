@@ -45,6 +45,15 @@ if [[ ${MAIL_TO+found} == found ]] && [[ $MAIL_TO ]]; then
 	EOF
 fi
 
+case "$SERVER" in
+zerossl)
+	info "register account to zerossl"
+	acme.sh --register-account --server zerossl \
+		--eab-kid "$EABID" \
+		--eab-hmac-key "$EABKEY"
+	;;
+esac
+
 RELOAD_SRC=$(</opt/nginx-reload.sh)
 cat <<-RELOAD_FAKE >/opt/nginx-reload.sh
 	#!/bin/bash
@@ -59,7 +68,7 @@ for DOMAIN; do
 
 	if ! acme --install-cert --ecc "${BASE_ARGS[@]}"; then
 		info "Issue cert of domain $DOMAIN..."
-		acme --issue --dns dns_cf --keylength ec-256 "${BASE_ARGS[@]}" || die "Failed to create cert."
+		acme --issue --dns "dns_$DNS_SERVER" --keylength ec-256 "${BASE_ARGS[@]}" || die "Failed to create cert."
 	fi
 done
 

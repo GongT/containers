@@ -26,7 +26,7 @@ function acme() {
 
 function reset_args() {
 	BASE_ARGS=(
-		--server zerossl
+		--server "$SERVER"
 		--no-color
 		--config-home "$ACME_SH_CONFIG_HOME"
 		--accountkey "$ACME_SH_CONFIG_HOME/account.key"
