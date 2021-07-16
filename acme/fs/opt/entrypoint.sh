@@ -49,14 +49,14 @@ echo "options timeout:999" >>/etc/resolv.conf
 case "$DNS_SERVER" in
 cf)
 	info "check dns work for api.cloudflare.com"
-	nslookup api.cloudflare.com
+	try_nslookup api.cloudflare.com
 	;;
 esac
 
 case "$SERVER" in
 letsencrypt)
 	info "register account to letsencrypt"
-	nslookup prod.api.letsencrypt.org
+	try_nslookup prod.api.letsencrypt.org
 	replace_config MAIL_TO "$ACCOUNT_EMAIL"
 	replace_config ACCOUNT_EMAIL "$ACCOUNT_EMAIL"
 	acme --register-account

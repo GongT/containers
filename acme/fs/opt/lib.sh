@@ -111,3 +111,9 @@ function create_nginx_lagacy_load() {
 	info "create nginx config: $CFG"
 	echo "include \"/etc/ACME/nginx/${DOMAIN}.conf\";" >"$CFG"
 }
+
+function try_nslookup() {
+	while ! nslookup "$@"; do
+		sleep 5
+	done
+}
