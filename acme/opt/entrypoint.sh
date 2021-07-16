@@ -8,6 +8,13 @@ echo "acme container start: $*"
 source /opt/lib.sh
 
 if [[ $# -eq 0 ]]; then
+	die "missing domain arguments"
+fi
+if [[ ${1} == bash ]]; then
+	exec "$@"
+fi
+
+if [[ $# -eq 0 ]]; then
 	die "empty input param"
 fi
 

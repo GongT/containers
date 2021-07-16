@@ -28,7 +28,7 @@ buildah_cache2 "acme" hash_files copy_fs
 ### 安装acme END
 
 STEP="配置镜像信息"
-buildah_config "acme" --entrypoint '["/bin/bash","/opt/entrypoint.sh"]' --stop-signal=SIGINT \
+buildah_config "acme" --entrypoint '/opt/entrypoint.sh' --stop-signal=SIGINT \
 	--volume /config --volume /log --volume /etc/ssl \
 	--author "GongT <admin@gongt.me>" --created-by "#MAGIC!" --label name=gongt/acme
 info "settings updated..."
