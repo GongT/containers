@@ -30,8 +30,8 @@ for I in "${ARR_DOMAINS[@]}"; do
 	DOMAINS+=($(echo $I))
 done
 
-create_pod_service_unit gongt/certbot-dns
-unit_podman_image gongt/certbot-dns "${DOMAINS[@]}"
+create_pod_service_unit gongt/acme
+unit_podman_image gongt/acme "${DOMAINS[@]}"
 # unit_podman_image_pull never
 network_use_auto
 
@@ -40,11 +40,11 @@ unit_start_notify output "everything works well, starting crond"
 unit_body RestartSec 10s
 unit_body TimeoutStartSec 30min
 
-unit_podman_hostname certbot
+unit_podman_hostname acme
 unit_podman_arguments "$ENV_PASS"
 unit_body Environment FROM_SERVICE=yes
-unit_fs_bind share/letsencrypt /etc/letsencrypt
-unit_fs_bind data/acme.sh /opt/data
-unit_fs_bind logs/acme.sh /log
+unit_fs_bind share/ssl /etc/ssl
+unit_fs_bind data/acme /opt/data
+unit_fs_bind logs/acme /log
 shared_sockets_use
 unit_finish

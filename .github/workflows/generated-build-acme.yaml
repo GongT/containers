@@ -1,4 +1,4 @@
-name: "certbot-dns"
+name: "acme"
 on:
   workflow_dispatch:
     inputs:
@@ -8,15 +8,15 @@ on:
         default: ""
   push:
     paths:
-      - "certbot-dns/**"
-      - "!certbot-dns/install-service.sh"
-      - ".github/workflows/generated-build-certbot-dns.yaml"
+      - "acme/**"
+      - "!acme/install-service.sh"
+      - ".github/workflows/generated-build-acme.yaml"
     # - common
     branches:
       - master
 env:
   NODE_ENV: production
-  PROJECT_NAME: "certbot-dns"
+  PROJECT_NAME: "acme"
 jobs:
   cancel:
     name: Cancel Previous Runs
@@ -65,9 +65,9 @@ jobs:
         uses: actions/cache@v2
         with:
           path: ${{ env.SYSTEM_COMMON_CACHE }}
-          key: common-cache-certbot-dns-${{ hashFiles('certbot-dns') }}
+          key: common-cache-acme-${{ hashFiles('acme') }}
           restore-keys: |
-            common-cache-certbot-dns
+            common-cache-acme
             common-cache-
 
       - name: "从ghcr.io获取上次生成的镜像"

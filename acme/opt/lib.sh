@@ -26,6 +26,7 @@ function acme() {
 
 function reset_args() {
 	BASE_ARGS=(
+		--server zerossl
 		--no-color
 		--config-home "$ACME_SH_CONFIG_HOME"
 		--accountkey "$ACME_SH_CONFIG_HOME/account.key"
@@ -48,19 +49,22 @@ function push_args() {
 		TARGET_DOMAIN=${TARGET_DOMAIN%:*}
 	fi
 
-	local -r CERT_INSTALL_DIR="/etc/letsencrypt/live/$TARGET_DOMAIN"
+	local -r CERT_INSTALL_DIR="/etc/ssl/$TARGET_DOMAIN"
 	mkdir -p "$CERT_INSTALL_DIR"
 
 	BASE_ARGS+=(
 		-d "$TARGET_DOMAIN"
-		--cert-file "${CERT_INSTALL_DIR}/cert.pem"
-		--key-file "${CERT_INSTALL_DIR}/privkey.pem"
-		--fullchain-file "${CERT_INSTALL_DIR}/fullchain.pem"
 	)
 
 	if [[ $AUTH_DOMAIN ]]; then
 		BASE_ARGS+=(--domain-alias "$AUTH_DOMAIN")
 	fi
+
+	BASE_ARGS+=(
+		--cert-file "${CERT_INSTALL_DIR}/cert.pem"
+		--key-file "${CERT_INSTALL_DIR}/privkey.pem"
+		--fullchain-file "${CERT_INSTALL_DIR}/fullchain.pem"
+	)
 }
 
 function load_config() {
@@ -77,13 +81,13 @@ function create_nginx_config() {
 		DOMAIN_TXT=${DOMAIN_TXT:2}
 	fi
 
-	local CFG="/etc/letsencrypt/nginx/${DOMAIN_TXT}.conf"
+	local CFG="/etc/ssl/nginx/${DOMAIN_TXT}.conf"
 
 	info "create nginx config: $CFG"
 	cat <<-NGX_CFG >"$CFG"
-		ssl_certificate "/etc/letsencrypt/live/$DOMAIN/fullchain.pem";
-		ssl_certificate_key "/etc/letsencrypt/live/$DOMAIN/privkey.pem";
-		ssl_trusted_certificate "/etc/letsencrypt/live/$DOMAIN/cert.pem";
+		ssl_certificate "/etc/ssl/live/$DOMAIN/fullchain.pem";
+		ssl_certificate_key "/etc/ssl/live/$DOMAIN/privkey.pem";
+		ssl_trusted_certificate "/etc/ssl/live/$DOMAIN/cert.pem";
 	NGX_CFG
 }
 
@@ -92,7 +96,7 @@ function create_nginx_lagacy_load() {
 	if [[ $DOMAIN == '*.'* ]]; then
 		DOMAIN=${DOMAIN:2}
 	fi
-	local CFG="/etc/letsencrypt/nginx/load.conf"
+	local CFG="/etc/ssl/nginx/load.conf"
 	info "create nginx config: $CFG"
-	echo "include \"/etc/letsencrypt/nginx/${DOMAIN}.conf\";" >"$CFG"
+	echo "include \"/etc/ssl/nginx/${DOMAIN}.conf\";" >"$CFG"
 }
