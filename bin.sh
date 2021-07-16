@@ -2,7 +2,7 @@
 
 set -Eeuo pipefail
 
-CONTROL_SERVICES=(wait-all-fstab.service create-dnsmasq-config.service wait-dns-working.service)
+CONTROL_SERVICES=(wait-all-fstab.service create-dnsmasq-config.service wait-dns-working.service containers-ensure-health.timer)
 
 function die() {
 	echo "$*" >&2
@@ -44,7 +44,7 @@ function usage() {
 
 if [[ $# -eq 0 ]]; then
 	set -x
-	systemctl list-units '*.pod@.service' '*.pod.service' "${CONTROL_SERVICES[@]}" --all --no-pager
+	systemctl list-units --all --no-pager --type=service '*.pod@*.service' '*.pod.service' "${CONTROL_SERVICES[@]}"
 	exit 0
 fi
 
@@ -83,7 +83,7 @@ do_rm() {
 }
 
 do_ls() {
-	systemctl list-unit-files '*.pod@.service' '*.pod.service' --all --no-pager --no-legend | awk '{print $1}' | sed -E 's/\.service$//g'
+	systemctl list-units --all --no-pager --no-legend --type=service '*.pod@*.service' '*.pod.service' | awk '{print $1}' | sed -E 's/\.service$//g' | sort
 }
 
 pull_all() {
