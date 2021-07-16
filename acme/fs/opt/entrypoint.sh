@@ -22,16 +22,15 @@ fi
 info "create account config file..."
 cat <<-EOF >"$ACME_SH_CONFIG_FILE"
 	ACCOUNT_KEY_PATH="$ACME_SH_CONFIG_HOME/account.key"
-	ACCOUNT_EMAIL="$ACCOUNT_EMAIL"
-	LOG_FILE="/log/common.log"
 	LOG_LEVEL=2
 EOF
+
+replace_config LOG_FILE "/log/common.log"
 
 if [[ ${MAIL_TO+found} == found ]] && [[ $MAIL_TO ]]; then
 	info "prepare email notify config..."
 	cat <<-EOF >>"$ACME_SH_CONFIG_FILE"
 		NOTIFY_HOOK="mail"
-		MAIL_TO="$ACCOUNT_EMAIL"
 		MAIL_FROM="$NOTIFY_MAIL_USER"
 	EOF
 
@@ -46,9 +45,14 @@ if [[ ${MAIL_TO+found} == found ]] && [[ $MAIL_TO ]]; then
 fi
 
 case "$SERVER" in
+letsencrypt)
+	replace_config MAIL_TO "$ACCOUNT_EMAIL"
+	replace_config ACCOUNT_EMAIL "$ACCOUNT_EMAIL"
+	acme --register-account
+	;;
 zerossl)
 	info "register account to zerossl"
-	acme.sh --register-account --server zerossl \
+	acme --register-account --server zerossl \
 		--eab-kid "$EABID" \
 		--eab-hmac-key "$EABKEY"
 	;;

@@ -74,6 +74,19 @@ function load_config() {
 	set +a
 }
 
+function replace_config() {
+	local LINE="$1=$2"
+	local ID="$1="
+	if grep -q "$LINE" "$ACME_SH_CONFIG_FILE"; then
+		return
+	fi
+
+	if grep -q "$ID" "$ACME_SH_CONFIG_FILE"; then
+		sed -i "/^$ID/d" "$ACME_SH_CONFIG_FILE"
+	fi
+	echo "$LINE" >>"$ACME_SH_CONFIG_FILE"
+}
+
 function create_nginx_config() {
 	local DOMAIN=$1 DOMAIN_TXT=$1
 

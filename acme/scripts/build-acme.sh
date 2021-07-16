@@ -6,6 +6,7 @@ rm -rf /etc/crontabs /etc/periodic
 mkdir /etc/crontabs
 touch /etc/crontabs/root /root/.bashrc
 
+cd /mnt
 bash acme.sh --install \
 	--home /opt/acme.sh \
 	--config-home "/opt/data" \

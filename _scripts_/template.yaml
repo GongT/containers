@@ -115,7 +115,7 @@ jobs:
         run: bash _scripts_/prepare-secrets.sh
 
       - name: "发布镜像"
-        timeout-minutes: 5
+        timeout-minutes: 2
         shell: bash
         env:
           SECRET_PASSWORD: ${{ secrets.SECRET_PASSWORD }}

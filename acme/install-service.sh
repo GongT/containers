@@ -6,26 +6,28 @@ cd "$(dirname "$(realpath "${BASH_SOURCE[0]}")")"
 source ../common/functions-install.sh
 
 DNS_SERVER=cf
-SERVER=zerossl
+SERVER=letsencrypt
 
 arg_string + STR_DOMAINS domains "list of domain name, eg: www.a.com,www.b.com"
-arg_string - DNS_SERVER dns "dns provider name"
+arg_string - DNS_SERVER dns "dns provider name (default=cf)"
 arg_string + DNS_SERVER_PARAMS dns-options "dns provider config environment"
-arg_string + SERVER acme "server selection, defaults to zerossl"
+arg_string - SERVER acme "server selection (default=letsencrypt)"
 arg_string + SERVER_PARAMS acme-options "acme server config environment"
-arg_string - NOTIFY_MAIL smtp "notify smtp setting (username:password@smpt.server.com)"
+arg_string - NOTIFY_TO alert "alert email sent target"
+arg_string - NOTIFY_SMTP smtp "notify smtp setting (username:password@smpt.server.com)"
 arg_finish "$@"
 
 mapfile -d ';' -t DNS_SERVER_PARAMS_ARR < <(echo "$DNS_SERVER_PARAMS")
 mapfile -d ';' -t SERVER_PARAMS_ARR < <(echo "$SERVER_PARAMS")
 
-split_url_user_pass_host_port "$NOTIFY_MAIL"
+split_url_user_pass_host_port "$NOTIFY_SMTP"
 
 ENV_PASS=$(
 	safe_environment \
 		"NOTIFY_MAIL_USER=$USERNAME" \
 		"NOTIFY_MAIL_PASS=$PASSWORD" \
 		"NOTIFY_MAIL_HUB=$DOMAIN" \
+		"MAIL_TO=$NOTIFY_TO" \
 		"SERVER=$SERVER" \
 		"DNS_SERVER=$DNS_SERVER" \
 		"${DNS_SERVER_PARAMS_ARR[@]}" \
