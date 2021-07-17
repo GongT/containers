@@ -46,24 +46,30 @@ for i in conf.d vhost.d stream.d rtmp.d; do
 done
 
 if [[ -e /etc/resolv.conf ]]; then
-	SYSTEM_RESOLVERS="$(cat /etc/resolv.conf | grep -v '127.0.0.1' | grep nameserver | sed -E 's/^nameserver\s+//g')"
+	SYSTEM_RESOLVERS="$(
+		(grep -v '127.0.0.1' | grep nameserver | sed -E 's/^nameserver\s+//g') </etc/resolv.conf || true
+	)"
 else
 	SYSTEM_RESOLVERS=""
 fi
 mapfile -t SYSTEM_RESOLVERS_ARR < <(echo "$SYSTEM_RESOLVERS")
 {
-	echo -n "resolver "
+	RES=()
 	for I in "${SYSTEM_RESOLVERS_ARR[@]}"; do
+		if [[ ! $I ]]; then
+			continue
+		fi
 		if [[ $I == *:*:* ]]; then
-			echo -n "[$I] "
+			RES+=("[$I]")
 		else
-			echo -n "$I "
+			RES+=("$I")
 		fi
 	done
-	if [[ ${#SYSTEM_RESOLVERS_ARR[@]} -eq 0 ]]; then
-		echo -n "8.8.8.8 223.5.5.5"
+
+	if [[ ${#RES[@]} -eq 0 ]]; then
+		RES=(1.1.1.1 119.29.29.29)
 	fi
-	echo ';'
+	echo "resolver ${RES[*]};"
 } >/config.auto/conf.d/resolver.conf
 
 cat /usr/sbin/reload-nginx.sh >/run/sockets/nginx.reload.sh
