@@ -1,0 +1,5 @@
+bash
+wireguard-tools
+iproute2
+ip6tables
+iptables

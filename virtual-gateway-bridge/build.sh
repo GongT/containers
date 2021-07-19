@@ -6,8 +6,20 @@ cd "$(dirname "$(realpath "${BASH_SOURCE[0]}")")"
 source ../common/functions-build.sh
 
 STEP="安装依赖"
-PKGS=(bash wireguard-tools-wg iproute2 ip6tables iptables)
-make_base_image_by_apk "gongt/alpine-init" "infra-bridge" "${PKGS[@]}"
+make_base_image_by_dnf "infra-bridge" scripts/requirements.lst
+
+STEP="下载init"
+REPO="gongt/init"
+get_download() {
+	http_get_github_release_id "$REPO"
+}
+do_download() {
+	local URL DOWNLOADED
+	URL=$(github_release_asset_download_url linux_amd64)
+	DOWNLOADED=$(download_file_force "$URL")
+	buildah copy --chmod 0777 "$1" "$DOWNLOADED" "/sbin/init"
+}
+buildah_cache2 "infra-bridge" get_download do_download
 
 STEP="下载udp2raw"
 REPO="wangyu-/udp2raw-tunnel"
