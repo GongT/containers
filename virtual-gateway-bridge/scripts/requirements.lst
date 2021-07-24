@@ -1,5 +1,6 @@
 bash
 wireguard-tools
-iproute2
-ip6tables
+iproute
 iptables
+libstdc++
+bind-utils

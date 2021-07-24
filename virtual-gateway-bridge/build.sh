@@ -14,10 +14,10 @@ get_download() {
 	http_get_github_release_id "$REPO"
 }
 do_download() {
-	local URL DOWNLOADED
+	local URL DOWNLOADED CONTAIENR="$1"
 	URL=$(github_release_asset_download_url linux_amd64)
 	DOWNLOADED=$(download_file_force "$URL")
-	buildah copy --chmod 0777 "$1" "$DOWNLOADED" "/sbin/init"
+	xbuildah copy --chmod 0777 "$CONTAIENR" "$DOWNLOADED" "/sbin/init"
 }
 buildah_cache2 "infra-bridge" get_download do_download
 
