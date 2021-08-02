@@ -8,17 +8,20 @@ shopt -s dotglob
 function write_password_cfg() {
 	echo " * write password config"
 	local PWD_FILE="$1"
-	if ! [[ -f "$PWD_FILE" ]]; then
+	if ! [[ -f $PWD_FILE ]]; then
 		echo "Fatal: no .password file, maybe external data dir, you need create it." >&2
 		exit 233
 	fi
 	echo "[client]
 	password = $(<"$PWD_FILE")
 " >/etc/my.cnf.d/98-password.cnf
-	echo "
-\$cfg['ProxyUrl'] = '$PROXY';
-\$cfg['Servers'][\$i]['password'] = '$(<"$PWD_FILE")';
-" >>/etc/phpmyadmin/config.inc.php
+
+	{
+		if [[ "${PROXY:-}" ]]; then
+			echo "\$cfg['ProxyUrl'] = '$PROXY';"
+		fi
+		echo "\$cfg['Servers'][\$i]['password'] = '$(<"$PWD_FILE")';"
+	} >>/etc/phpmyadmin/config.inc.php
 }
 
 if [[ "$(ls /var/lib/mysql | wc -l)" -eq 0 ]]; then
