@@ -6,7 +6,14 @@ cd "$(dirname "$(realpath "${BASH_SOURCE[0]}")")"
 source ../common/functions-build.sh
 
 STEP="安装依赖"
-make_base_image_by_dnf "infra-bridge" scripts/requirements.lst
+buildah_cache_start "fedora"
+function hash_deps() {
+	cat scripts/requirements.lst
+}
+function install_deps() {
+	run_dnf_with_list_file "$1" scripts/requirements.lst
+}
+buildah_cache2 "infra-bridge" hash_deps install_deps
 
 STEP="下载init"
 REPO="gongt/init"
