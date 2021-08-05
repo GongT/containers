@@ -3,13 +3,13 @@
 set -Eeuo pipefail
 
 if [[ "$IPV6" ]]; then
-	TYPE_ARG="-type=AAAA"
+	TYPE_ARG="AAAA"
 else
-	TYPE_ARG="-type=A"
+	TYPE_ARG="A"
 fi
 
 declare -i TRY=0
-while ! nslookup "${TYPE_ARG}" "$REMOTE_SERVER"; do
+while ! dig "$REMOTE_SERVER" "$TYPE_ARG" &>/dev/null; do
 	TRY+=1
 	if [[ $TRY -le 3 ]]; then
 		echo "failed lookup!"
@@ -20,7 +20,7 @@ while ! nslookup "${TYPE_ARG}" "$REMOTE_SERVER"; do
 	fi
 done
 
-REMOTE=$(nslookup "${TYPE_ARG}" "$REMOTE_SERVER" | tail -n+3 | grep Address: | head -1 | awk '{print $2}')
+REMOTE=$(dig +short "$REMOTE_SERVER" "$TYPE_ARG" | head -1)
 if [[ "$IPV6" ]]; then
 	IP="[$REMOTE]"
 else
