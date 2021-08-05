@@ -8,7 +8,11 @@ source ../common/functions-install.sh
 arg_string WG_KEY_PRIVATE pk1 "本地wireguard私钥"
 arg_string WG_KEY_PRIVATE_SERVER pk2 "服务器wireguard私钥"
 arg_string REMOTE_SERVER remote "服务器地址"
+arg_string EXPOSE_PORT=14514 remote-port "服务器端口"
+arg_string WIREGUARD_MTU=1400 mtu "wireguard接口的MTU"
 arg_flag IPV6 6 "使用IPv6而禁用IPv4"
+arg_flag NO_UDP2RAW no-raw "禁用udp2raw"
+arg_flag NO_UDPSPEEDER no-speed "禁用udpspeeder"
 arg_finish "$@"
 
 if [[ "$WG_KEY_PRIVATE" ]]; then
@@ -37,7 +41,11 @@ if [[ $REMOTE_SERVER ]]; then
 			"KEY_PRIVATE=$KEY_PRIVATE" \
 			"SERVER_PUB=$SERVER_PUB" \
 			"REMOTE_SERVER=$REMOTE_SERVER" \
-			"IPV6=$IPV6"
+			"EXPOSE_PORT=$EXPOSE_PORT" \
+			"IPV6=$IPV6" \
+			"NO_UDP2RAW=$NO_UDP2RAW" \
+			"NO_UDPSPEEDER=$NO_UDPSPEEDER" \
+			"WIREGUARD_MTU=$WIREGUARD_MTU"
 	)
 	network_use_gateway
 else

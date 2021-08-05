@@ -1,0 +1,4 @@
+[wireguard]
+arg[]:/bin/bash
+arg[]:/opt/start/wireguard.sh
+signal:USR1

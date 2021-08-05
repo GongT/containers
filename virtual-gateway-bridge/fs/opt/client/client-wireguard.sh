@@ -14,16 +14,16 @@ if ip link show $DEV &>/dev/null; then
 fi
 
 x ip link add dev $DEV type wireguard
-x ip link set $DEV mtu 1100
+x ip link set $DEV mtu "$WIREGUARD_MTU"
 x ip address add "10.233.222.2" dev $DEV
 
 echo -n "$KEY_PRIVATE" >/tmp/keyfile
 
-x wg set $DEV listen-port 22347 private-key /tmp/keyfile
+x wg set $DEV private-key /tmp/keyfile
 x wg set $DEV peer "$SERVER_PUB" \
 	allowed-ips "10.233.222.1" \
 	persistent-keepalive 25 \
-	endpoint "127.0.0.1:22346"
+	endpoint "${WIREGUARD_CONNECT_IP}:${WIREGUARD_CONNECT_PORT}"
 
 x ip link set up dev $DEV
 x ip route add "10.233.222.1" dev $DEV

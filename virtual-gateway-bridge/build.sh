@@ -23,7 +23,7 @@ get_download() {
 do_download() {
 	local URL DOWNLOADED CONTAIENR="$1"
 	URL=$(github_release_asset_download_url linux_amd64)
-	DOWNLOADED=$(download_file_force "$URL")
+	DOWNLOADED=$(perfer_proxy download_file_force "$URL")
 	xbuildah copy --chmod 0777 "$CONTAIENR" "$DOWNLOADED" "/sbin/init"
 }
 buildah_cache2 "infra-bridge" get_download do_download
@@ -37,7 +37,7 @@ do_download() {
 	local URL DOWNLOADED TMPD
 	TMPD=$(create_temp_dir udp2raw)
 	URL=$(github_release_asset_download_url udp2raw_binaries.tar.gz)
-	DOWNLOADED=$(download_file_force "$URL")
+	DOWNLOADED=$(perfer_proxy download_file_force "$URL")
 	decompression_file "$DOWNLOADED" 0 "$TMPD"
 	buildah copy "$1" "$TMPD/udp2raw_amd64" "/usr/bin/udp2raw_amd64"
 }
@@ -52,7 +52,7 @@ do_download() {
 	local URL DOWNLOADED TMPD
 	TMPD=$(create_temp_dir UDPspeeder)
 	URL=$(github_release_asset_download_url speederv2_binaries.tar.gz)
-	DOWNLOADED=$(download_file_force "$URL")
+	DOWNLOADED=$(perfer_proxy download_file_force "$URL")
 	decompression_file "$DOWNLOADED" 0 "$TMPD"
 	buildah copy "$1" "$TMPD/speederv2_amd64" "/usr/bin/speederv2_amd64"
 }

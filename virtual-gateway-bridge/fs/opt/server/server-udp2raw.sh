@@ -14,8 +14,8 @@ exec udp2raw_amd64 \
 	--cipher-mode xor \
 	--auth-mode simple \
 	-s --keep-rule \
-	-l "$LISTEN:14514" \
-	-r 127.0.0.1:50154 \
+	-l "$LISTEN:$UDP2RAW_LISTEN_PORT" \
+	-r "127.0.0.1:$UDP2RAW_CONNECT_PORT" \
 	--raw-mode icmp \
 	--retry-on-error \
 	-a

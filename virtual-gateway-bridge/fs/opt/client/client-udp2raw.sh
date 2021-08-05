@@ -21,15 +21,14 @@ while ! dig "$REMOTE_SERVER" "$TYPE_ARG" &>/dev/null; do
 done
 
 REMOTE=$(dig +short "$REMOTE_SERVER" "$TYPE_ARG" | head -1)
+if [[ ! ${REMOTE:-} ]]; then
+	echo "no valid address for $REMOTE_SERVER" >&2
+	exit 1
+fi
 if [[ "$IPV6" ]]; then
 	IP="[$REMOTE]"
 else
 	IP="$REMOTE"
-fi
-
-if [[ ! ${IP:-} ]]; then
-	echo "no valid address for $REMOTE_SERVER" >&2
-	exit 1
 fi
 
 exec udp2raw_amd64 \
@@ -38,8 +37,8 @@ exec udp2raw_amd64 \
 	--cipher-mode xor \
 	--auth-mode simple \
 	-c \
-	-l 127.0.0.1:22345 \
-	-r "$IP:14514" \
+	-l "127.0.0.1:$UDP2RAW_LISTEN_PORT" \
+	-r "$IP:$UDP2RAW_CONNECT_PORT" \
 	--raw-mode icmp \
 	--retry-on-error \
 	-a

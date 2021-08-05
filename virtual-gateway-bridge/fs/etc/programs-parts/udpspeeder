@@ -1,0 +1,4 @@
+[udpspeeder]
+arg[]:/bin/bash
+arg[]:/opt/start/udpspeeder.sh
+signal:TERM

@@ -19,7 +19,7 @@ x ip address add "10.233.222.1" dev $DEV
 
 echo -n "$KEY_PRIVATE" >/tmp/keyfile
 
-x wg set $DEV listen-port 50155 private-key /tmp/keyfile
+x wg set $DEV listen-port "${WIREGUARD_LISTEN_PORT}" private-key /tmp/keyfile
 x wg set $DEV peer "$CLIENT_PUB" \
 	allowed-ips "10.233.222.2" \
 	persistent-keepalive 25
