@@ -27,6 +27,9 @@ x wg set $DEV peer "$CLIENT_PUB" \
 x ip link set up dev $DEV
 x ip route add "10.233.222.2" dev $DEV
 
+
+set +Eeo pipefail
+
 trap "echo wireguard close ; ip link del $DEV; exit 0" SIGUSR1
 
 while :; do

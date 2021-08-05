@@ -2,6 +2,8 @@
 
 set -Eeuo pipefail
 
+sleep 3
+
 exec speederv2_amd64 \
 	--disable-color \
 	-c \

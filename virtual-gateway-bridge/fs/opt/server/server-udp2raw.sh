@@ -2,6 +2,8 @@
 
 set -Eeuo pipefail
 
+sleep 3
+
 if [[ "$IPV6" ]]; then
 	LISTEN="[::]"
 else
