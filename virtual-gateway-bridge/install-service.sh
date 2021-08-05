@@ -68,5 +68,5 @@ add_network_privilege
 unit_podman_arguments "$ENV_PASS"
 # unit_start_notify output "start worker process"
 # unit_body Restart always
-healthcheck "10s" "12" "/opt/hc.sh"
+healthcheck "10s" "12" "/opt/healthcheck.sh"
 unit_finish
