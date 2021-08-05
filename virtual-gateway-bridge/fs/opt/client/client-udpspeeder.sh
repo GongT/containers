@@ -9,4 +9,4 @@ exec speederv2_amd64 \
 	-r "127.0.0.1:${SPEEDER_CONNECT_PORT}" \
 	-f 20:10 \
 	--mode 0 \
-	--mtu 1200
+	--mtu "$WIREGUARD_MTU"
