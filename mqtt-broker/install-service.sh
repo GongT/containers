@@ -16,8 +16,8 @@ ENV_PASS=$(
 )
 
 create_pod_service_unit gongt/mqtt-broker
-unit_unit After nginx.pod
-unit_unit Requires nginx.pod
+unit_unit After nginx.pod.service
+unit_unit Requires nginx.pod.service
 unit_podman_arguments "$ENV_PASS"
 unit_start_notify output 'mosquitto version'
 network_use_auto
