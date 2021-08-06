@@ -85,7 +85,7 @@ do_rm() {
 }
 
 do_ls() {
-	systemctl list-units --all --no-pager --no-legend --type=service '*.pod@*.service' '*.pod.service' | awk '{print $1}' | sed -E 's/\.service$//g' | sort
+	systemctl list-units --all --no-pager --no-legend --type=service '*.pod@*.service' '*.pod.service' | sed 's/●//g' | awk '{print $1}' | sed -E 's/\.service$//g' | sort
 }
 
 do_refresh() {
