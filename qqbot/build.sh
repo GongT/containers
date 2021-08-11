@@ -56,7 +56,7 @@ merge_local_fs "qqbot"
 
 STEP=配置容器
 buildah_config "qqbot" --cmd "/mirai/start.sh" --stop-signal=SIGINT \
-	--volume /mirai/config \
+	--volume /mirai/config --volume /mirai/data --volume /mirai/logs \
 	--author "GongT <admin@gongt.me>" --created-by "#MAGIC!" --label name=gongt/acme
 
 RESULT=$(create_if_not "qqbot" "$BUILDAH_LAST_IMAGE")
