@@ -2,8 +2,13 @@
 
 set -Eeuo pipefail
 
-java -jar mcl.jar --disable-script announcement
-java -jar mcl.jar --log-level 0 --dry-run
+function x() {
+	echo -e "\e[2m + $*\e[0m" >&2
+	"$@"
+}
+
+x java -jar mcl.jar --disable-script announcement
+x java -jar mcl.jar --log-level 0 --dry-run
 
 if java -version 2>&1 | grep -qi openjdk; then
 	WANT_NUM=6
