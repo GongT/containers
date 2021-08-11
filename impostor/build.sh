@@ -24,7 +24,7 @@ do_download() {
 	URL=$(github_release_asset_download_url_regex '^.*linux-x64.*$')
 	DOWNLOADED=$(perfer_proxy download_file_force "$URL")
 	decompression_file "$DOWNLOADED" 0 "$TMPD"
-	buildah copy "$1" "$TMPD/impostor" "/app"
+	buildah copy "$1" "$TMPD" "/app"
 }
 buildah_cache2 "impostor" get_download do_download
 
