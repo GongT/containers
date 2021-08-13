@@ -26,15 +26,15 @@ download_run_mcl() {
 	SOURCE_DIRECTORY="$(create_temp_dir "mcl")"
 	extract_zip "$DOWNLOADED" "0" "$SOURCE_DIRECTORY"
 
-	local DATA
-	if [[ -e "$SOURCE_DIRECTORY/config.json" ]]; then
-		DATA=$(<"$SOURCE_DIRECTORY/config.json")
-	else
-		DATA='{}'
-	fi
-	DATA=$(echo "$DATA" | jq --arg URL "https://github.com/project-mirai/mirai-repo-mirror" '.mirai_repo = $URL')
-	DATA=$(echo "$DATA" | jq --arg URL "https://repo1.maven.org/maven2/" '.maven_repo = [$URL]')
-	echo "$DATA" >"$SOURCE_DIRECTORY/config.json"
+	# local DATA
+	# if [[ -e "$SOURCE_DIRECTORY/config.json" ]]; then
+	# 	DATA=$(<"$SOURCE_DIRECTORY/config.json")
+	# else
+	# 	DATA='{}'
+	# fi
+	# DATA=$(echo "$DATA" | jq --arg URL "https://github.com/project-mirai/mirai-repo-mirror" '.mirai_repo = $URL')
+	# DATA=$(echo "$DATA" | jq --arg URL "https://repo1.maven.org/maven2/" '.maven_repo = [$URL]')
+	# echo "$DATA" >"$SOURCE_DIRECTORY/config.json"
 
 	buildah copy "$1" "$SOURCE_DIRECTORY" "/mirai"
 	buildah config --workingdir /mirai "$1"
