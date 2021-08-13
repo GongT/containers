@@ -8,7 +8,7 @@
 	"AnnouncementsServer": {
 	  "Enabled": true,
 	  "ListenIp": "127.0.0.1",
-	  "ListenPort": 22025
+	  "ListenPort": 22024
 	},
 	"AntiCheat": {
 		"Enabled": true,
