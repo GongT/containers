@@ -5,6 +5,7 @@ set -Eeuo pipefail
 cd "$(dirname "$(realpath "${BASH_SOURCE[0]}")")"
 source ../common/functions-build.sh
 
+# 安装依赖
 STEP="安装依赖"
 buildah_cache_start "fedora"
 function hash_deps() {
@@ -14,6 +15,7 @@ function install_deps() {
 	run_dnf_with_list_file "$1" scripts/requirements.lst
 }
 buildah_cache2 "infra-bridge" hash_deps install_deps
+# 安装依赖 END
 
 STEP="下载init"
 REPO="gongt/init"

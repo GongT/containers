@@ -19,7 +19,6 @@ STEP="安装cloudflared"
 REPO="cloudflare/cloudflared"
 RELEASE_URL=
 hash_download() {
-	cat scripts/build-acme.sh
 	http_get_github_release_id "$REPO"
 	RELEASE_URL=$(github_release_asset_download_url cloudflared-linux-amd64)
 }
