@@ -42,4 +42,4 @@ else
 	}
 fi
 
-exe cloudflared tunnel run --log-directory /var/log/cloudflared "$NAME"
+exe cloudflared tunnel --log-directory /var/log/cloudflared run "$NAME"

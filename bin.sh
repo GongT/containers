@@ -45,8 +45,8 @@ function usage() {
 }
 
 if [[ $# -eq 0 ]]; then
-	set -x
-	systemctl list-units --all --no-pager --type=service '*.pod@*.service' '*.pod.service' "${CONTROL_SERVICES[@]}"
+	systemctl list-units --no-legend --all --no-pager --type=service '*.pod@*.service' '*.pod.service' "${CONTROL_SERVICES[@]}"
+	systemctl list-unit-files --no-legend --no-pager --state=disabled --type=service '*.pod.service' "${CONTROL_SERVICES[@]}"
 	exit 0
 fi
 
@@ -85,7 +85,10 @@ do_rm() {
 }
 
 do_ls() {
-	systemctl list-units --all --no-pager --no-legend --type=service '*.pod@*.service' '*.pod.service' | sed 's/●//g' | awk '{print $1}' | sed -E 's/\.service$//g' | sort
+	{
+		systemctl list-units --all --no-pager --no-legend --type=service '*.pod@*.service' '*.pod.service' | sed 's/●//g' | awk '{print $1}'
+		systemctl list-unit-files --no-legend --no-pager --state=disabled --type=service '*.pod.service' | awk '{print $1}'
+	} | sed -E 's/\.service$//g' | sort
 }
 
 do_refresh() {
