@@ -13,11 +13,12 @@ ENV_PASS=$(
 		"PROXY=$PROXY"
 )
 
-create_pod_service_unit gongt/cloudflared@
+create_pod_service_unit cloudflared@
+unit_podman_image gongt/cloudflared '%i'
 unit_unit Description "cloudflared - Argo Tunnel"
 network_use_bridge
 unit_podman_arguments "$ENV_PASS"
-unit_start_notify output "start worker process"
+unit_start_notify sleep "5"
 unit_body RestartPreventExitStatus 233
 unit_fs_bind data/cloudflared /root/.cloudflared
 unit_fs_bind logs/cloudflared /var/log/cloudflared
