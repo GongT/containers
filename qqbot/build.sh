@@ -27,7 +27,11 @@ download_run_mcl() {
 	extract_zip "$DOWNLOADED" "0" "$SOURCE_DIRECTORY"
 
 	local DATA
-	DATA=$(<"$SOURCE_DIRECTORY/config.json")
+	if [[ -e "$SOURCE_DIRECTORY/config.json" ]]; then
+		DATA=$(<"$SOURCE_DIRECTORY/config.json")
+	else
+		DATA='{}'
+	fi
 	DATA=$(echo "$DATA" | jq --arg URL "https://github.com/project-mirai/mirai-repo-mirror" '.mirai_repo = $URL')
 	DATA=$(echo "$DATA" | jq --arg URL "https://repo1.maven.org/maven2/" '.maven_repo = [$URL]')
 	echo "$DATA" >"$SOURCE_DIRECTORY/config.json"
@@ -62,7 +66,7 @@ merge_local_fs "qqbot"
 
 STEP=配置容器
 buildah_config "qqbot" --cmd "/mirai/start.sh" --stop-signal=SIGINT \
-	--volume /mirai/config --volume /mirai/data --volume /mirai/logs \
+	--volume /mirai/config --volume /mirai/data --volume /mirai/logs --volume /mirai/bots \
 	--author "GongT <admin@gongt.me>" --created-by "#MAGIC!" --label name=gongt/acme
 
 RESULT=$(create_if_not "qqbot" "$BUILDAH_LAST_IMAGE")

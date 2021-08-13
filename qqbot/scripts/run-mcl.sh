@@ -8,7 +8,7 @@ function x() {
 }
 
 x java -jar mcl.jar --disable-script announcement
-x java -jar mcl.jar --log-level 0 --dry-run
+x java -jar mcl.jar --log-level 0 --dry-run # --disable-progress-bar
 
 if java -version 2>&1 | grep -qi openjdk; then
 	WANT_NUM=6

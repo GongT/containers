@@ -18,7 +18,8 @@ unit_podman_image_pull never
 network_use_auto
 
 unit_fs_bind config/qqbot /mirai/config
-unit_fs_bind data/qqbot /mirai/data
+unit_fs_bind data/qqbot/data /mirai/data
+unit_fs_bind data/qqbot/bots /mirai/bots
 unit_fs_bind logs/qqbot /mirai/logs
 
 unit_finish
