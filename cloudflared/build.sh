@@ -11,7 +11,7 @@ arg_finish "$@"
 
 ### 依赖项目
 STEP="安装依赖项目"
-make_base_image_by_dnf "cloudflared" scripts/build-requirements.lst
+make_base_image_by_dnf "cloudflared" scripts/requirements.lst
 ### 依赖项目 END
 
 ### 安装cloudflared
