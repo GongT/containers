@@ -30,7 +30,7 @@ if [[ $CENSORSHIP == yes ]]; then
 		PUBPORTS+=(59443)
 	fi
 fi
-if [[ -n $PUBLISH ]]; then
+if [[ -n ${PUBLISH:-} ]]; then
 	PUBPORTS+=(${PUBLISH})
 fi
 

@@ -14,8 +14,6 @@ ENV_PASS=$(
 		"https_proxy=http://$PROXY"
 )
 
-network_use_bridge
-
 create_pod_service_unit gongt/wordpress
 unit_depend mariadb.pod.service
 unit_podman_arguments "$ENV_PASS"
