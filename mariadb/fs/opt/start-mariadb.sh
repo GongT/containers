@@ -27,6 +27,12 @@ function write_password_cfg() {
 if [[ "$(ls /var/lib/mysql | wc -l)" -eq 0 ]]; then
 	RAND_PASS=$(echo $RANDOM | md5sum | awk '{print $1}')
 	echo "Database did not exists!"
+
+	mkdir -p /backup/automatic
+	if [[ "$(ls /backup/automatic | wc -l)" -ne 0 ]]; then
+		die "datadir empty, and backup exists, to restore data, see: https://mariadb.com/kb/en/incremental-backup-and-restore-with-mariabackup/#preparing-the-backup"
+	fi
+
 	echo " * create data dir"
 	mariadb-install-db --datadir=/var/lib/mysql-temp --user=root
 	echo " * start temp server"

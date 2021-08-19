@@ -2,26 +2,33 @@
 
 set -Eeuo pipefail
 
-BACKPATH="/backup/$(date +%Y)/$(date +%M)/$(date +%d)"
+cd /backup/automatic
 
-mkdir -p "$BACKPATH"
-for DB in $(mysql -e 'show databases' -s --skip-column-names); do
-	echo -n " * $DB - "
-	if [[ "$DB" = "information_schema" ]] || [[ "$DB" = "performance_schema" ]]; then
-		echo "ignore"
-		continue
-	fi
+STATUS_FILE="/backup/automatic/status.conf"
+if [[ -e $STATUS_FILE ]]; then
+	source "$STATUS_FILE"
+fi
 
-	if [[ "$DB" = '#'* ]]; then
-		echo "ignore"
-		continue
-	fi
+ROOT_FOLDER="/backup/automatic/$(date "+%+4Y-%m")"
+DAY_NUM=$(date "+%d")
+TARGET_FOLDER="$ROOT_FOLDER/$DAY_NUM"
 
-	FILE="$BACKPATH/$DB.sql.7z"
-	echo "backup to $FILE"
+if [[ -e $TARGET_FOLDER ]]; then
+	echo "本日备份已经存在: $TARGET_FOLDER"
+	exit 0
+fi
 
-	if [[ -e "$FILE" ]]; then
-		rm -rf "$FILE"
-	fi
-	mysqldump "$DB" | 7z a -t7z -m0=lzma2 -mx=9 -mfb=64 -md=64m -ms=on -bso0 -bsp0 -si "$FILE"
-done
+if [[ -d ${CURRENT:-} ]] && [[ ${INCREMENT_NUMBER:=0} -le 7 ]]; then
+	echo "本日增量备份 [增量数${INCREMENT_NUMBER}]: $TARGET_FOLDER | 基础: $CURRENT"
+	mariabackup --backup --defaults-group=mysql --user=root "--target-dir=$TARGET_FOLDER" "--incremental-basedir=$CURRENT"
+	INCREMENT_NUMBER=$((INCREMENT_NUMBER + 1))
+else
+	echo "全量备份: $TARGET_FOLDER"
+	mariabackup --backup --defaults-group=mysql --user=root "--target-dir=$TARGET_FOLDER"
+	INCREMENT_NUMBER=1
+fi
+
+{
+	printf "INCREMENT_NUMBER=%q\n" "$INCREMENT_NUMBER"
+	printf "CURRENT=%q\n" "$TARGET_FOLDER"
+} | tee "$STATUS_FILE"
