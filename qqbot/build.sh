@@ -15,7 +15,7 @@ STEP=运行MCL安装mirai
 REPO=iTXTech/mirai-console-loader
 check_mcl() {
 	cat scripts/run-mcl.sh
-	http_get_github_release_id "mamoe/mirai"
+	http_get_github_unstable_release_id "mamoe/mirai"
 	http_get_github_release "$REPO"
 	RELEASE_URL=$(github_release_asset_download_url_regex '.*\.zip')
 	info_note "       * RELEASE_URL=$RELEASE_URL"
