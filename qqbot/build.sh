@@ -21,8 +21,8 @@ check_mcl() {
 	info_note "       * RELEASE_URL=$RELEASE_URL"
 }
 download_run_mcl() {
-	local DOWNLOADED SOURCE_DIRECTORY FILE_NAME="mcl.tar.gz"
-	DOWNLOADED=$(perfer_proxy download_file "$RELEASE_URL" "$FILE_NAME")
+	local DOWNLOADED SOURCE_DIRECTORY
+	DOWNLOADED=$(perfer_proxy download_file_force "$RELEASE_URL")
 	SOURCE_DIRECTORY="$(create_temp_dir "mcl")"
 	extract_zip "$DOWNLOADED" "0" "$SOURCE_DIRECTORY"
 

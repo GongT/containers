@@ -3,9 +3,13 @@ on:
   workflow_dispatch:
     inputs:
       brandNew:
-        description: Skip pull last image
+        description: 跳过拉取上次构建结果
         required: false
         default: ""
+      forceRebuild:
+        description: 强制全部重新构建，无视缓存
+        required: false
+        default: "no"
   push:
     paths:
       - "bttracker/**"
@@ -80,6 +84,7 @@ jobs:
         shell: bash
         timeout-minutes: 30
         env:
+          BUILDAH_FORCE: ${{ github.event.inputs.forceRebuild }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: bash _scripts_/ci-single-build.sh
 
