@@ -15,7 +15,7 @@ unit_unit Description Mirai QQ bot server
 unit_body Restart no
 unit_start_notify output "Login successful"
 
-network_use_auto
+network_use_bridge 56084/tcp
 
 unit_fs_bind config/qqbot /mirai/config
 unit_fs_bind data/qqbot/data /mirai/data
