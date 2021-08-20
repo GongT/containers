@@ -10,10 +10,10 @@ arg_finish
 auto_create_pod_service_unit
 unit_podman_image gongt/qqbot
 unit_unit Description Mirai QQ bot server
-unit_podman_image_pull never
+# unit_podman_image_pull never
 
-# unit_body Restart always
-# unit_start_notify output "network startup complete"
+unit_body Restart no
+unit_start_notify output "Login successful"
 
 network_use_auto
 
