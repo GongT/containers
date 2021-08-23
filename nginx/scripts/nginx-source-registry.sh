@@ -56,6 +56,10 @@ NGX_SRC_PATH+=(modules/ngx_http_geoip2_module)
 NGX_SRC_URL+=(https://github.com/leev/ngx_http_geoip2_module.git)
 NGX_SRC_BRANCH+=(master)
 
+NGX_SRC_PATH+=(modules/nginx-rtmp-module)
+NGX_SRC_URL+=(https://github.com/arut/nginx-rtmp-module.git)
+NGX_SRC_BRANCH+=(master)
+
 NGX_SRC_PATH+=(special-modules/njs)
 NGX_SRC_URL+=(https://github.com/nginx/njs.git)
 NGX_SRC_BRANCH+=(master)
