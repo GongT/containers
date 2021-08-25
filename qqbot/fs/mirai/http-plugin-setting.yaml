@@ -7,6 +7,6 @@ singleMode: true
 cacheSize: 40960
 adapterSettings:
   ws:
-    host: localhost
-    port: 56084
+    host: 0.0.0.0
+    port: 80
     reservedSyncId: -1
