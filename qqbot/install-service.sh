@@ -12,6 +12,8 @@ unit_podman_image gongt/qqbot
 unit_unit Description Mirai QQ bot server
 # unit_podman_image_pull never
 
+unit_podman_arguments -it
+
 unit_body Restart no
 unit_start_notify output "Login successful"
 
