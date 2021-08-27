@@ -21,7 +21,7 @@ function logfile_name() {
 }
 function acme() {
 	info " + /opt/acme.sh/acme.sh $*"
-	bash /opt/acme.sh/acme.sh "${BASE_ARGS[@]}" "$@"
+	bash /opt/acme.sh/acme.sh "$@"
 }
 
 function reset_args() {

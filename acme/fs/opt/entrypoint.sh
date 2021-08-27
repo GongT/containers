@@ -59,7 +59,7 @@ letsencrypt)
 	try_nslookup prod.api.letsencrypt.org
 	replace_config MAIL_TO "$ACCOUNT_EMAIL"
 	replace_config ACCOUNT_EMAIL "$ACCOUNT_EMAIL"
-	acme --register-account
+	acme --register-account --server letsencrypt
 	;;
 zerossl)
 	info "register account to zerossl"
