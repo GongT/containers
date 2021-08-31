@@ -34,7 +34,12 @@ chmod 0700 "$HOME/secrets"
 export REGISTRY_AUTH_FILE="$HOME/secrets/auth.json"
 echo "REGISTRY_AUTH_FILE=${REGISTRY_AUTH_FILE}" >>"$GITHUB_ENV"
 
-JQ '.dockerCreds[] | "echo " + ("log in to "+.url|@json) + "\npodman login " + ("--username="+.username|@json) + " " + ("--password="+.password|@json) + " " + (.url|@json)' \
-	| bash
+SCRIPT=$(JQ '.dockerCreds[] | "echo " + ("log in to "+.url|@json) + "\npodman login " + ("--username="+.username|@json) + " " + ("--password="+.password|@json) + " " + (.url|@json)')
+
+if [[ "${REGISTRY_DOMAIN:-}" ]]; then
+	echo "filter domain $REGISTRY_DOMAIN"
+	SCRIPT=$(echo "$SCRIPT" | grep --fixed-strings "$REGISTRY_DOMAIN")
+fi
+echo "$SCRIPT" | bash -Eeuo pipefail
 
 echo 'Done.'

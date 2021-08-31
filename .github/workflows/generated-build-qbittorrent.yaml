@@ -37,7 +37,7 @@ jobs:
     name: "生成镜像"
     runs-on: ubuntu-latest
     outputs:
-      INDEX_ARRAY: ${{ steps.result.outputs.INDEX_ARRAY }}
+      DOMAIN_ARRAY: ${{ steps.result.outputs.DOMAIN_ARRAY }}
     steps:
       - name: "强制清理项目（如果有）"
         timeout-minutes: 1
@@ -63,7 +63,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SECRET_PASSWORD: ${{ secrets.SECRET_PASSWORD }}
-        run: bash _scripts_/prepare-secrets.sh
+        run: bash _scripts_/prepare-secrets.sh ghcr.io
 
       - name: "缓存下载和软件包数据"
         uses: actions/cache@v2
@@ -100,7 +100,7 @@ jobs:
     needs: build
     strategy:
       matrix:
-        index: ${{ fromJson(needs.build.outputs.INDEX_ARRAY) }}
+        domain: ${{ fromJson(needs.build.outputs.DOMAIN_ARRAY) }}
       fail-fast: false
     steps:
       - name: "获取代码"
@@ -117,11 +117,11 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SECRET_PASSWORD: ${{ secrets.SECRET_PASSWORD }}
-        run: bash _scripts_/prepare-secrets.sh
+        run: bash _scripts_/prepare-secrets.sh ${{ matrix.domain }}
 
       - name: "发布镜像"
         timeout-minutes: 5
         shell: bash
         env:
           SECRET_PASSWORD: ${{ secrets.SECRET_PASSWORD }}
-        run: bash _scripts_/publish_all_targets.sh ${{ matrix.index }}
+        run: bash _scripts_/publish_all_targets.sh ${{ matrix.domain }}

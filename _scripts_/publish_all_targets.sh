@@ -4,7 +4,7 @@ set -Eeuo pipefail
 cd "$(dirname "$(realpath "${BASH_SOURCE[0]}")")"
 
 export TMPDIR="$RUNNER_TEMP"
-INDEX=$1
+BASE=$1
 
 source ../common/functions-build.sh
 
@@ -19,8 +19,8 @@ control_ci group "pull from $PRIMARY"
 podman pull "docker://$PRIMARY/$PROJECT_NAME:latest"
 control_ci groupEnd
 
-BASE=$(JQ ".publish[$INDEX]")
-CMD=(podman push "$PRIMARY/$PROJECT_NAME:latest" "docker://$BASE/$PROJECT_NAME:latest")
+DOMAIN=$(JQ '.publish[] | select(startswith($base))' --arg base "$BASE")
+CMD=(podman push "$PRIMARY/$PROJECT_NAME:latest" "docker://$DOMAIN/$PROJECT_NAME:latest")
 
 declare -i TRY=3
 while [[ $TRY -gt 0 ]]; do

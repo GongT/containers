@@ -3,6 +3,9 @@
 set -Eeuo pipefail
 cd "$(dirname "$(realpath "${BASH_SOURCE[0]}")")"
 
+export TMPDIR="$RUNNER_TEMP"
+source ../common/functions-build.sh
+
 if [[ "${CI:-}" ]] && ! command -v podman &>/dev/null; then
 	sudp apt install podman
 fi
@@ -18,8 +21,20 @@ function JQ() {
 }
 
 PRIMARY=$(JQ '.publish[0]')
-INDEX_ARRAY=$(JQ '.publish | keys | .[1:]')
+mapfile -t URL_ARRAY < <(JQ '.publish[1:][]')
+DOMAIN_ARRAY=()
 
-echo "::set-output name=INDEX_ARRAY::$INDEX_ARRAY"
+echo "publish to:"
+for URL in "${URL_ARRAY[@]}"; do
+	echo " * $URL"
+	split_url_domain_path "$URL"
+	DOMAIN_ARRAY+=("$DOMAIN")
+	echo "   -> $DOMAIN"
+done
+
+DOMAIN_ARRAY_JSON=$(query -n '$ARGS.positional' --args "${DOMAIN_ARRAY[@]}")
+echo "domain array: $DOMAIN_ARRAY_JSON"
+
+echo "::set-output name=DOMAIN_ARRAY::$DOMAIN_ARRAY_JSON"
 
 podman push "$LAST_COMMITED_IMAGE" "docker://$PRIMARY/$PROJECT_NAME:latest"

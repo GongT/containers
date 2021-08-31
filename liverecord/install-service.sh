@@ -11,7 +11,7 @@ arg_finish "$@"
 create_pod_service_unit gongt/liverecord@
 unit_podman_arguments "--env=WATCH_LIVEROOM=%i"
 # unit_start_notify output 'mosquitto version'
-network_use_auto
+network_use_bridge
 unit_body Restart no
 # unit_podman_image_pull never
 unit_fs_bind "/data/Volumes/VideoRecord/bilibili/%i/raw" /data/raw

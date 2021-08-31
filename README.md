@@ -37,4 +37,5 @@ https://github.com/GongT/containers/issues/new
 | acme | https://hub.docker.com/r/gongt/acme | [![acme](https://github.com/GongT/containers/workflows/acme/badge.svg)](https://github.com/GongT/containers/actions?query=workflow%3Aacme) |
 | impostor | https://hub.docker.com/r/gongt/impostor | [![impostor](https://github.com/GongT/containers/workflows/impostor/badge.svg)](https://github.com/GongT/containers/actions?query=workflow%3Aimpostor) |
 | cloudflared | https://hub.docker.com/r/gongt/cloudflared | [![cloudflared](https://github.com/GongT/containers/workflows/cloudflared/badge.svg)](https://github.com/GongT/containers/actions?query=workflow%3Acloudflared) |
+| rabbitmq | https://hub.docker.com/r/gongt/rabbitmq | [![rabbitmq](https://github.com/GongT/containers/workflows/rabbitmq/badge.svg)](https://github.com/GongT/containers/actions?query=workflow%3Arabbitmq) |
 <!-- :StatusTable -->

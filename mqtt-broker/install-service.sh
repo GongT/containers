@@ -20,7 +20,7 @@ unit_unit After nginx.pod.service
 unit_unit Requires nginx.pod.service
 unit_podman_arguments "$ENV_PASS"
 unit_start_notify output 'mosquitto version'
-network_use_auto
+network_use_bridge
 # unit_body Restart no
 # unit_podman_image_pull never
 unit_body ExecStop 'podman exec $CONTAINER_ID bash /opt/stop.sh'
