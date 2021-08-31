@@ -11,7 +11,7 @@ export RABBITMQ_PID_FILE=/run/rmq.pid
 } >>/etc/hosts
 
 rm -f /run/sockets/rabbitmq-management.sock
-socat UNIX-LISTEN:/run/sockets/rabbitmq-management.sock TCP-CONNECT:127.0.0.1:15672 &
+socat "UNIX-LISTEN:/run/sockets/rabbitmq-management.sock,fork" "TCP-CONNECT:127.0.0.1:15672" &
 
 rabbitmq-server &
 
