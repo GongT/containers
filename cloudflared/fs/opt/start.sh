@@ -9,6 +9,8 @@ function x() {
 
 NAME="${1:-}"
 
+echo "VERSION=$(cloudflared --version || true)"
+
 if [[ ! $NAME ]]; then
 	echo "no argument!" >&2
 	exit 233
