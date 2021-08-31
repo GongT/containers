@@ -32,10 +32,10 @@ unit_start_notify output "Startup complete!"
 
 unit_fs_bind data/rabbitmq /var/lib/rabbitmq/mnesia
 unit_fs_bind share/nginx /etc/nginx
-# unit_fs_bind config/rabbitmq /etc/rabbitmq/
+unit_fs_bind share/ssl /etc/ssl
 
 unit_body LimitNOFILE 64000
-network_use_bridge 5672/tcp
+network_use_bridge 5671/tcp
 shared_sockets_use
 
 # healthcheck "30s" "5" "curl --insecure https://127.0.0.1:443"
