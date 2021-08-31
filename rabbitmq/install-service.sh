@@ -24,7 +24,7 @@ ENV_PASS=$(
 create_pod_service_unit gongt/rabbitmq
 unit_unit Description "rabbit mq"
 
-unit_podman_image_pull never
+# unit_podman_image_pull never
 
 unit_podman_arguments "$ENV_PASS"
 
@@ -32,7 +32,7 @@ unit_start_notify output "Startup complete!"
 
 unit_fs_bind data/rabbitmq /var/lib/rabbitmq/mnesia
 unit_fs_bind share/nginx /etc/nginx
-unit_fs_bind share/ssl /etc/ssl
+unit_fs_bind share/ssl /etc/ACME
 
 unit_body LimitNOFILE 64000
 network_use_bridge 5671/tcp
