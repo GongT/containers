@@ -35,7 +35,8 @@ unit_fs_bind share/nginx /etc/nginx
 unit_fs_bind share/ssl /etc/ACME
 
 unit_body LimitNOFILE 64000
-network_use_bridge 5671/tcp
+network_use_nat 5671/tcp
+systemd_slice_type infrastructure
 shared_sockets_use
 
 # healthcheck "30s" "5" "curl --insecure https://127.0.0.1:443"

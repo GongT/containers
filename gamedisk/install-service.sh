@@ -15,6 +15,8 @@ use_full_system_privilege
 unit_fs_bind /dev/mapper /dev/mapper
 unit_start_notify output "tgtd configured"
 
+systemd_slice_type infrastructure
+
 # unit_body Restart always
 network_use_container fiberhost
 unit_finish

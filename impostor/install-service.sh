@@ -15,4 +15,6 @@ unit_start_notify output "Application started."
 
 # unit_body Restart always
 network_use_auto 22023/udp 22024/udp 22025/udp
+systemd_slice_type entertainment
+
 unit_finish

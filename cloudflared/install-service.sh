@@ -16,7 +16,8 @@ ENV_PASS=$(
 create_pod_service_unit cloudflared@
 unit_podman_image gongt/cloudflared '%i'
 unit_unit Description "cloudflared - Argo Tunnel"
-network_use_bridge 40983
+network_use_nat 40983
+systemd_slice_type normal
 unit_podman_arguments "$ENV_PASS"
 unit_start_notify sleep "5"
 unit_body RestartPreventExitStatus 233

@@ -11,6 +11,7 @@ create_pod_service_unit gongt/ethereum-peer
 unit_unit Description ethereum full peer service
 # unit_start_notify output ""
 network_use_auto 30303
+systemd_slice_type idle
 # unit_body Restart no
 unit_body TimeoutStopSec 1min
 unit_fs_bind share/nginx /run/nginx

@@ -14,12 +14,13 @@ unit_podman_image gongt/virtual-gateway
 unit_unit Description virtual machine gateway
 # unit_podman_image_pull never
 
-unit_unit After network-online.target wait-mount.service
+unit_unit After network-online.target
 
 # unit_body Restart always
 unit_start_notify output "network startup complete"
 
 network_use_manual --network=bridge0 --mac-address=86:13:02:8F:76:2A --dns-env=p.a.s.s --dns-env=ns1.he.net
+systemd_slice_type infrastructure
 add_network_privilege
 
 unit_podman_safe_environment \

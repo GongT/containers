@@ -39,6 +39,7 @@ echo "DEFAULT_PASSWORD=$DEFAULT_PASSWORD" | write_file "$CONTAINERS_DATA_PATH/co
 create_pod_service_unit fiber-samba
 unit_podman_hostname samba.fiberhost
 unit_unit Description "samba server in fiber host"
+systemd_slice_type normal
 
 network_use_container fiberhost
 
@@ -51,6 +52,7 @@ unit_podman_hostname $HOSTNAME
 unit_unit Description "standalone samba server"
 
 network_use_manual --network=bridge0 --mac-address=3E:F4:F3:CE:1D:75
+systemd_slice_type infrastructure
 unit_podman_arguments --env=ENABLE_DHCP=yes
 
 commonConfig

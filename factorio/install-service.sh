@@ -34,6 +34,7 @@ function create_one() {
 	unit_podman_arguments "$ENV_PASS" "--env=DIST_TAG=$DIST_TAG" "--env=SERVER_PORT=$PORT"
 
 	network_use_auto "$PORT/udp"
+	systemd_slice_type entertainment
 
 	unit_fs_bind "/data/Volumes/AppData/GameSave/factorio/$DIST_TAG" /data
 	unit_fs_bind "/data/Volumes/AppData/GameSave/factorio/mods" /data/mods

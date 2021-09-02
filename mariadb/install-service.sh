@@ -23,7 +23,8 @@ unit_body OOMScoreAdjust -600
 unit_body Environment "TZ=Asia/Shanghai"
 unit_body LimitNOFILE 16364
 
-network_use_bridge
+network_use_nat
+systemd_slice_type infrastructure
 
 # unit_podman_image_pull never
 # unit_podman_arguments --privileged

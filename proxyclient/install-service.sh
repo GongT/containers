@@ -50,7 +50,8 @@ fi
 unit_depend network-online.target
 unit_fs_bind config/proxyclient /config
 unit_podman_arguments --dns=127.0.0.1
-network_use_bridge 3271/tcp 35353:53/udp
+network_use_nat 3271/tcp 35353:53/udp
+systemd_slice_type normal
 add_network_privilege
 unit_podman_arguments "$ENV_PASS"
 unit_body ExecReload '/usr/bin/podman exec proxyclient bash -c "killall -s SIGHUP dnsmasq"'

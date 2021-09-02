@@ -19,6 +19,7 @@ create_pod_service_unit gongt/bitcoin-peer
 unit_unit Description bitcoin full peer service
 unit_start_notify output "Verifying blocks"
 network_use_auto 8333
+systemd_slice_type idle
 # unit_body Restart no
 unit_body TimeoutStopSec 1min
 # unit_podman_image_pull never
