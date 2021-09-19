@@ -11,7 +11,7 @@
 	  "ListenPort": 22024
 	},
 	"AntiCheat": {
-		"Enabled": true,
+		"Enabled": false,
 		"BanIpFromGame": false
 	},
 	"AuthServer":{
