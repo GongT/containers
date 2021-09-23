@@ -1,4 +1,4 @@
-name: "qbittorrent"
+name: "danmakurecord"
 on:
   workflow_dispatch:
     inputs:
@@ -11,18 +11,18 @@ on:
         required: false
         default: "no"
   schedule:
-    - cron:  '47 19 * * *'
+    - cron:  '47 9 * * *'
   push:
     paths:
-      - "qbittorrent/**"
-      - "!qbittorrent/install-service.sh"
-    #  - ".github/workflows/generated-build-qbittorrent.yaml"
+      - "danmakurecord/**"
+      - "!danmakurecord/install-service.sh"
+    #  - ".github/workflows/generated-build-danmakurecord.yaml"
     # - common
     branches:
       - master
 env:
   NODE_ENV: production
-  PROJECT_NAME: "qbittorrent"
+  PROJECT_NAME: "danmakurecord"
 jobs:
   cancel:
     name: Cancel Previous Runs
@@ -71,9 +71,9 @@ jobs:
         uses: actions/cache@v2
         with:
           path: ${{ env.SYSTEM_COMMON_CACHE }}
-          key: common-cache-qbittorrent-${{ hashFiles('qbittorrent') }}
+          key: common-cache-danmakurecord-${{ hashFiles('danmakurecord') }}
           restore-keys: |
-            common-cache-qbittorrent
+            common-cache-danmakurecord
             common-cache-
 
       - name: "从ghcr.io获取上次生成的镜像"

@@ -10,11 +10,13 @@ on:
         description: 强制全部重新构建，无视缓存
         required: false
         default: "no"
+  schedule:
+    - cron:  '47 16 * * *'
   push:
     paths:
       - "nginx/**"
       - "!nginx/install-service.sh"
-      - ".github/workflows/generated-build-nginx.yaml"
+    #  - ".github/workflows/generated-build-nginx.yaml"
     # - common
     branches:
       - master

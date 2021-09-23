@@ -10,11 +10,13 @@ on:
         description: 强制全部重新构建，无视缓存
         required: false
         default: "no"
+  schedule:
+    - cron:  '47 22 * * *'
   push:
     paths:
       - "wordpress/**"
       - "!wordpress/install-service.sh"
-      - ".github/workflows/generated-build-wordpress.yaml"
+    #  - ".github/workflows/generated-build-wordpress.yaml"
     # - common
     branches:
       - master

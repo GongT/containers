@@ -10,11 +10,13 @@ on:
         description: 强制全部重新构建，无视缓存
         required: false
         default: "no"
+  schedule:
+    - cron:  '47 8 * * *'
   push:
     paths:
       - "bitcoin-peer/**"
       - "!bitcoin-peer/install-service.sh"
-      - ".github/workflows/generated-build-bitcoin-peer.yaml"
+    #  - ".github/workflows/generated-build-bitcoin-peer.yaml"
     # - common
     branches:
       - master

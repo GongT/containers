@@ -10,11 +10,13 @@ on:
         description: 强制全部重新构建，无视缓存
         required: false
         default: "no"
+  schedule:
+    - cron:  '47 18 * * *'
   push:
     paths:
       - "proxyserver-nat/**"
       - "!proxyserver-nat/install-service.sh"
-      - ".github/workflows/generated-build-proxyserver-nat.yaml"
+    #  - ".github/workflows/generated-build-proxyserver-nat.yaml"
     # - common
     branches:
       - master

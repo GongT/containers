@@ -10,11 +10,13 @@ on:
         description: 强制全部重新构建，无视缓存
         required: false
         default: "no"
+  schedule:
+    - cron:  '47 {{cron_hour}} * * *'
   push:
     paths:
       - "{{PROJ}}/**"
       - "!{{PROJ}}/install-service.sh"
-      - "{{thisfile}}"
+    #  - "{{thisfile}}"
     # - common
     branches:
       - master

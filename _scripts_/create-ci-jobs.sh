@@ -5,6 +5,8 @@ set -Eeuo pipefail
 cd "$(dirname "$(realpath "${BASH_SOURCE[0]}")")"
 cd ..
 
+declare -i cron_hour=7
+
 mapfile -d '' -t BUILD_FILES < <(find . -maxdepth 2 -name build.sh -print0)
 
 TABLE="| Container | Link | Build Status |
@@ -16,6 +18,13 @@ for i in "${BUILD_FILES[@]}"; do
 
 	sed "s#{{PROJ}}#$PROJ#g" _scripts_/template.yaml >"$F"
 	sed -i "s#{{thisfile}}#$F#g" "$F"
+
+	if [[ $cron_hour -ge 23 ]]; then
+		cron_hour=0
+	else
+		cron_hour=$((cron_hour + 1))
+	fi
+	sed -i "s#{{cron_hour}}#$cron_hour#g" "$F"
 
 	TABLE+="| $PROJ "
 	TABLE+="| https://hub.docker.com/r/gongt/$PROJ "
