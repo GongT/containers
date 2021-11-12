@@ -40,7 +40,7 @@ merge_local_fs liverecord
 
 STEP="更新配置"
 buildah_config liverecord --entrypoint '["/entrypoint.sh"]' --cmd 'init' \
-	--volume=-/rec --volume=/data/raw --volume=/data/mp4
+	--volume=/data/raw
 
 RESULT=$(create_if_not "liverecord" "$BUILDAH_LAST_IMAGE")
 buildah commit "$RESULT" gongt/liverecord
