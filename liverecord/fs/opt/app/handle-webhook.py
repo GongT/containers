@@ -30,7 +30,7 @@ class Handler(http.server.BaseHTTPRequestHandler):
 
         self.send_header('Content-Type', 'application/json')
         self.end_headers()
-        self.wfile.write("aaaaaaaaaa\n".encode("utf8"))
+        self.wfile.write("=========================\n".encode("utf8"))
         return True
 
 
