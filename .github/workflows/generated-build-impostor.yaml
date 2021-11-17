@@ -11,7 +11,7 @@ on:
         required: false
         default: "no"
   schedule:
-    - cron:  '47 6 * * *'
+    - cron:  '47 19 * * *'
   push:
     paths:
       - "impostor/**"

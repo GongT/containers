@@ -7,7 +7,7 @@ cd ..
 
 declare -i cron_hour=7
 
-mapfile -d '' -t BUILD_FILES < <(find . -maxdepth 2 -name build.sh -print0)
+mapfile -d '' -t BUILD_FILES < <(find . -maxdepth 2 -name build.sh -print0 | sort --zero-terminated --dictionary-order)
 
 TABLE="| Container | Link | Build Status |
 |----:|:----|:----:|

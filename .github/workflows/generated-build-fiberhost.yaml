@@ -11,7 +11,7 @@ on:
         required: false
         default: "no"
   schedule:
-    - cron:  '47 13 * * *'
+    - cron:  '47 16 * * *'
   push:
     paths:
       - "fiberhost/**"
