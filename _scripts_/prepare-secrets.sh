@@ -3,6 +3,8 @@
 set -Eeuo pipefail
 cd "$(dirname "$(realpath "${BASH_SOURCE[0]}")")"
 
+REGISTRY_DOMAIN=${1:-}
+
 export TMPDIR="${RUNNER_TEMP:-$SYSTEM_COMMON_CACHE/tmp}"
 mkdir -p "$TMPDIR"
 if [[ ! ${GITHUB_ENV:-} ]]; then

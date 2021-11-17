@@ -23,6 +23,7 @@ on:
 env:
   NODE_ENV: production
   PROJECT_NAME: "homeassistant"
+  GITHUB_ACTOR: ${{ github.actor }}
 jobs:
   cancel:
     name: Cancel Previous Runs

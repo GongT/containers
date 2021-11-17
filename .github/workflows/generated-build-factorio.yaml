@@ -23,6 +23,7 @@ on:
 env:
   NODE_ENV: production
   PROJECT_NAME: "factorio"
+  GITHUB_ACTOR: ${{ github.actor }}
 jobs:
   cancel:
     name: Cancel Previous Runs
