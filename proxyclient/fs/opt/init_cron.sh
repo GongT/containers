@@ -78,6 +78,7 @@ function run() {
 	fi
 }
 
+sleep 2
 while true; do
 	run
 	sleep 120

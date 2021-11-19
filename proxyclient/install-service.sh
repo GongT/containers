@@ -49,7 +49,7 @@ else
 fi
 unit_depend network-online.target
 unit_fs_bind config/proxyclient /config
-unit_podman_arguments --dns=127.0.0.1
+unit_podman_arguments --dns=h.o.s.t
 network_use_nat 3271/tcp 35353:53/udp
 systemd_slice_type normal
 add_network_privilege
