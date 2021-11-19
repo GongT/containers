@@ -15,7 +15,12 @@ if [[ -e "/etc/resolv.conf" ]]; then
 	if [[ "$DEFAULT_RESOLVE" == 127.0.0.1 ]]; then
 		DEFAULT_RESOLVE=223.5.5.5
 	fi
-	sed -i '/nameserver /d' /etc/resolv.conf
+	NEW_DATA=$(sed '/nameserver /d' /etc/resolv.conf)
+	echo "options timeout:10
+options attempts:5
+options edns0
+options trust-ad
+$NEW_DATA" > /etc/resolv.conf
 fi
 echo "" >> /etc/resolv.conf
 echo "nameserver 127.0.0.1" >> /etc/resolv.conf

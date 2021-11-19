@@ -3,7 +3,7 @@
 set -Eeuo pipefail
 
 function resolveIp() {
-	nslookup -type=A "$1" | tail -n +3 | grep 'Address: ' | sed 's/Address: //g' | head -n1
+	x nslookup -type=A "$1" | tail -n +3 | grep 'Address: ' | sed 's/Address: //g' | head -n1
 }
 
 function x() {
@@ -12,8 +12,8 @@ function x() {
 }
 
 # set basic network
-x ip addr add 10.100.231.213/24 dev eth0
-x ip route add default via 10.100.231.254
+x ip addr add 10.100.230.213/24 dev eth0
+x ip route add default via 10.100.230.254
 echo "basic network setup ok." >&2
 
 # set wireguard
