@@ -1,0 +1,11 @@
+[DHCP]
+arg[]:/bin/busybox
+arg[]:udhcpc
+arg[]:-i
+arg[]:eth0
+arg[]:-n
+arg[]:-R
+arg[]:-f
+arg[]:-r
+arg[]:10.100.230.213
+

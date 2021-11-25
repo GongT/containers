@@ -11,11 +11,6 @@ function x() {
 	"$@"
 }
 
-# set basic network
-x ip addr add 10.100.230.213/24 dev eth0
-x ip route add default via 10.100.230.254
-echo "basic network setup ok." >&2
-
 # set wireguard
 echo "$KEY_PRIVATE" >/tmp/keyfile
 echo "$KEY_SHARE" >/tmp/psk
@@ -58,8 +53,9 @@ fi
 function run() {
 	local IP
 	while true; do
-		IP=$(resolveIp "$TARGE_HOST")
+		IP=$(resolveIp "$TARGE_HOST" || true)
 		if [[ "$IP" ]]; then
+			echo " ... Resolve Host Ok!"
 			break
 		else
 			echo " ... Resolve Host Failed: $TARGE_HOST!" >&2
