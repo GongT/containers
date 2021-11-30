@@ -28,7 +28,7 @@ function create_one() {
 	unit_podman_image gongt/factorio
 	unit_unit Description factorio server
 	unit_data danger
-	unit_body TimeoutStartSec 60s
+	unit_body TimeoutStartSec 300s
 	unit_body RestartPreventExitStatus 66
 	unit_start_notify output "Obtained serverPadlock for serverHash"
 	unit_podman_arguments "$ENV_PASS" "--env=DIST_TAG=$DIST_TAG" "--env=SERVER_PORT=$PORT"

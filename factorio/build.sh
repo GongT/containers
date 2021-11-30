@@ -16,8 +16,9 @@ make_base_image_by_dnf "factorio" source/dependencies.lst
 STEP="下载factorio可执行文件"
 hash_factorio() {
 	local -r DIST_URL="https://factorio.com/get-download/$DIST_TAG/headless/linux64"
-	echo -n "$DIST_TAG::"
-	perfer_proxy http_get_etag "$DIST_URL"
+	local ETAG
+	ETAG=$(perfer_proxy http_get_etag "$DIST_URL")
+	echo -n "$DIST_TAG::$ETAG"
 }
 build_factorio() {
 	local -r CNTR="$1"
@@ -25,7 +26,7 @@ build_factorio() {
 	local -r GAME_ROOT="/opt/factorio/$DIST_TAG"
 	local DOWNLOADED VERSION EXTRACTED
 
-	DOWNLOADED=$(perfer_proxy download_file "$DIST_URL" "${DIST_TAG}.tar.gz")
+	DOWNLOADED=$(perfer_proxy download_file_force "$DIST_URL")
 	EXTRACTED=$(create_temp_dir factorio_binary)
 	extract_tar "$DOWNLOADED" 1 "$EXTRACTED"
 
