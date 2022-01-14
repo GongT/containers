@@ -73,7 +73,7 @@ mapfile -t SYSTEM_RESOLVERS_ARR < <(echo "$SYSTEM_RESOLVERS")
 } >/config.auto/conf.d/resolver.conf
 
 cat /usr/sbin/reload-nginx.sh >/run/sockets/nginx.reload.sh
-rm -f /run/sockets/nginx.reload.sock
+rm -f /run/sockets/nginx.reload.sock /run/sockets/http.sock /run/sockets/https.sock
 
 if [[ -e /config.auto/selfsigned.key ]] && [[ -e /config.auto/selfsigned.crt ]]; then
 	echo "use exists openssl cert..."
