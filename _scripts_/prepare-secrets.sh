@@ -12,7 +12,7 @@ if [[ ! ${GITHUB_ENV:-} ]]; then
 fi
 
 if [[ "${CI:-}" ]]; then
-	sudo apt install jq gnupg podman buildah
+	sudo apt install jq gnupg podman buildah mount
 fi
 
 JSON=$(gpg --quiet --batch --yes --passphrase "$SECRET_PASSWORD" --decrypt build-secrets.json.gpg)
