@@ -62,18 +62,18 @@ fi
 
 create-all-user media_rw "$DEFAULT_PASSWORD"
 
-touch /tmp/username.map
+touch /etc/samba/username.map.generate
 while IFS= read -r LINE; do
 	USERNAME="${LINE%%:*}"
 	PASSWORD="${LINE#*:}"
 	echo "User: $USERNAME, Password: $PASSWORD"
 	if [[ "$PASSWORD" == "$DEFAULT_PASSWORD" ]]; then
-		echo "media_rw = $USERNAME" >> /tmp/username.map
+		echo "media_rw = $USERNAME" >> /etc/samba/username.map.generate
 	else
 		ESCAPE_NAME="${USERNAME/@/_}"
 		if [[ "$ESCAPE_NAME" != "$USERNAME" ]]; then
 			echo "    Escaped: $ESCAPE_NAME"
-			echo "$ESCAPE_NAME = $USERNAME" >> /tmp/username.map
+			echo "$ESCAPE_NAME = $USERNAME" >> /etc/samba/username.map.generate
 		fi
 		create-all-user "$ESCAPE_NAME" "$PASSWORD"
 	fi
