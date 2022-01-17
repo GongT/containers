@@ -7,12 +7,15 @@ datadir = /var/lib/mysql
 
 # LOGGING #
 log-error = /var/log/mariadb/error.log
-slow-query-log-file = /var/log/mariadb/slow.log
+log_warnings = 2
+
+general_log = 0
 general_log_file = /var/log/mariadb/mysql.log
+
 log-queries-not-using-indexes = 1
 slow-query-log = 1
-general_log = 1
-log_warnings = 2
+long_query_time= 5
+slow-query-log-file = /var/log/mariadb/slow.log
 
 # BINARY LOGGING #
 log-bin = /var/lib/mysql/mysql-bin
