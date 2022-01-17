@@ -1,0 +1,20 @@
+/var/log/mariadb/* {
+	missingok
+	notifempty
+	daily
+	minsize 1M
+	maxsize 500M
+	rotate 7
+	# dateext # only use if your logrotate version is compatible with below dateformat
+	dateformat .%Y-%m-%d-%H-%M-%S # only use with logrotate >= 3.9.2
+	compress
+	delaycompress
+	sharedscripts 
+	postrotate
+		# just if mysqld is really running
+		if test -x /usr/bin/mariadb-admin && /usr/bin/mariadb-admin ping &>/dev/null
+		then
+			/usr/bin/mariadb-admin --local flush-error-log flush-engine-log flush-general-log flush-slow-log
+		fi
+	endscript
+}
