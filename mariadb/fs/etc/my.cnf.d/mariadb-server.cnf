@@ -7,7 +7,11 @@
 
 # this is only for the mysqld standalone daemon
 [mysqld]
+bind-address = ::
+skip-name-resolve = ON
 #skip-networking
+connect_timeout = 600
+wait_timeout = 28800
 
 # Galera-related settings
 [galera]

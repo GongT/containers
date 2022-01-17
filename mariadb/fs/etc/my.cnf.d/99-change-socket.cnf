@@ -1,2 +1,3 @@
 [client-server]
+port = 33306
 socket=/run/sockets/mariadb.sock
