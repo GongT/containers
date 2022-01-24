@@ -41,7 +41,7 @@ groupEnd
 cd "$SOURCE/nginx"
 
 export CC_OPT='-O2 -g -pipe -Wall -Werror=format-security -Wp,-D_FORTIFY_SOURCE=2 -Wp,-D_GLIBCXX_ASSERTIONS -fexceptions -fstack-protector-strong -grecord-gcc-switches -m64 -mtune=generic -fasynchronous-unwind-tables -fstack-clash-protection -Wno-error'
-export LD_OPT='-Wl,-z,defs -Wl,-z,now -Wl,-z,relro -Wl,-E'
+export LD_OPT='-lpcre -Wl,-z,defs -Wl,-z,now -Wl,-z,relro -Wl,-E'
 
 MODULES=()
 for REL_FOLDER in ../modules/*/; do
