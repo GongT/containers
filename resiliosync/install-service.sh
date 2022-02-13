@@ -17,7 +17,6 @@ unit_start_notify output 'Features mask has been set to'
 # unit_body Restart always
 unit_fs_bind config/resiliosync /data/config
 unit_fs_bind data/resiliosync /data/state
-unit_fs_bind logs/resiliosync /data/log
 unit_fs_bind /data/Volumes /data/Volumes
 unit_fs_bind share/nginx /run/nginx
 

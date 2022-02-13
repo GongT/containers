@@ -9,4 +9,4 @@ if ! [[ -f $CFG ]]; then
 fi
 
 cd /tmp
-exec rslsync --nodaemon --config "$CFG" --log /data/log/main.log
+exec rslsync --nodaemon --config "$CFG"
