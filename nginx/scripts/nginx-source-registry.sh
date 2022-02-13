@@ -48,9 +48,9 @@ NGX_SRC_PATH+=(modules/ngx_log_if)
 NGX_SRC_URL+=(https://github.com/cfsego/ngx_log_if.git)
 NGX_SRC_BRANCH+=(master)
 
-NGX_SRC_PATH+=(modules/nchan)
-NGX_SRC_URL+=(https://github.com/slact/nchan.git)
-NGX_SRC_BRANCH+=(master)
+# NGX_SRC_PATH+=(modules/nchan)
+# NGX_SRC_URL+=(https://github.com/slact/nchan.git)
+# NGX_SRC_BRANCH+=(master)
 
 NGX_SRC_PATH+=(modules/ngx_http_geoip2_module)
 NGX_SRC_URL+=(https://github.com/leev/ngx_http_geoip2_module.git)

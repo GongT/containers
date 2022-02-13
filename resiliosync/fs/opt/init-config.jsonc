@@ -8,13 +8,14 @@
 	/* set location of pid file */
 	"pid_file": "/tmp/resilio.pid",
 
-	"worker_threads_count": 4,
-	"disk_worker_per_job": true,
-	"disk_low_priority": true,
-	"disk_min_free_space_gb": 10,
+	// "worker_threads_count": 4,
+	// "disk_worker_per_job": true,
+	// "disk_low_priority": true,
+	// "disk_min_free_space_gb": 10,
+	"send_statistics": false,
 
 	/* use UPnP for port mapping */
-	"use_upnp": true,
+	"use_upnp": false,
 
 	/* limits in kB/s. 0 - no limit */
 	"download_limit": 0,
