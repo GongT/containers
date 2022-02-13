@@ -9,7 +9,7 @@ apply_gateway() {
 	else
 		cp -v "/opt/${F}.conf" "${T}"
 	fi
-	echo 'GET /' | nc local:/run/sockets/nginx.reload.sock
+	echo 'GET /' | ncat --unixsock /run/sockets/nginx.reload.sock
 }
 trap 'echo "got SIGINT"' INT
 
@@ -17,7 +17,9 @@ echo "reload nginx..."
 apply_gateway nginx
 
 echo "starting...."
-./rslsync &
+rm -f /run/sockets/resiliosync.sock
+mkdir -p /var/log/nginx/
+nginx &
 wait $!
 
 echo "will shutdown"
