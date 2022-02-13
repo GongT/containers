@@ -1,4 +1,4 @@
-name: "virtual-gateway"
+name: "resiliosync"
 on:
   workflow_dispatch:
     inputs:
@@ -11,18 +11,18 @@ on:
         required: false
         default: "no"
   schedule:
-    - cron:  '47 8 * * *'
+    - cron:  '47 5 * * *'
   push:
     paths:
-      - "virtual-gateway/**"
-      - "!virtual-gateway/install-service.sh"
-    #  - ".github/workflows/generated-build-virtual-gateway.yaml"
+      - "resiliosync/**"
+      - "!resiliosync/install-service.sh"
+    #  - ".github/workflows/generated-build-resiliosync.yaml"
     # - common
     branches:
       - master
 env:
   NODE_ENV: production
-  PROJECT_NAME: "virtual-gateway"
+  PROJECT_NAME: "resiliosync"
   GITHUB_ACTOR: ${{ github.actor }}
 jobs:
   cancel:
@@ -72,9 +72,9 @@ jobs:
         uses: actions/cache@v2
         with:
           path: ${{ env.SYSTEM_COMMON_CACHE }}
-          key: common-cache-virtual-gateway-${{ hashFiles('virtual-gateway') }}
+          key: common-cache-resiliosync-${{ hashFiles('resiliosync') }}
           restore-keys: |
-            common-cache-virtual-gateway
+            common-cache-resiliosync
             common-cache-
 
       - name: "从ghcr.io获取上次生成的镜像"
