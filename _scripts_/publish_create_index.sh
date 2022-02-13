@@ -7,7 +7,7 @@ export TMPDIR="$RUNNER_TEMP"
 source ../common/functions-build.sh
 
 if [[ "${CI:-}" ]] && ! command -v podman &>/dev/null; then
-	sudp apt install podman
+	sudo apt install podman
 fi
 
 JSON=$(gpg --quiet --batch --yes --passphrase "$SECRET_PASSWORD" --decrypt build-secrets.json.gpg)
