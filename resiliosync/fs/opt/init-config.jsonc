@@ -11,7 +11,7 @@
 	"worker_threads_count": 4,
 	"disk_worker_per_job": true,
 	"disk_low_priority": true,
-	"disk_min_free_space_gb": "10",
+	"disk_min_free_space_gb": 10,
 
 	/* use UPnP for port mapping */
 	"use_upnp": true,

@@ -2,10 +2,11 @@
 
 set -e
 
-if ! [[ -f "/data/config/config.json" ]]; then
+CFG=/data/config/config.jsonc
+if ! [[ -f $CFG ]]; then
 	echo "first run."
-	cp /opt/init-config.jsonc /data/config/config.jsonc
+	cp /opt/init-config.jsonc "$CFG"
 fi
 
 cd /tmp
-exec rslsync --nodaemon --config /data/config/config.jsonc --log /data/log/main.log
+exec rslsync --nodaemon --config "$CFG" --log /data/log/main.log
