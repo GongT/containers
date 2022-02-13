@@ -3,7 +3,7 @@
 set -Eeuo pipefail
 
 apply_gateway() {
-	F=$1 T="/run/nginx/vhost.d/nginx.conf"
+	F=$1 T="/run/nginx/vhost.d/ResilioSync.conf"
 	if [ -z "$F" ]; then
 		rm -v "${T}"
 	else
@@ -14,7 +14,7 @@ apply_gateway() {
 trap 'echo "got SIGINT"' INT
 
 echo "reload nginx..."
-apply_gateway resiliosync
+apply_gateway nginx
 
 echo "starting...."
 ./rslsync &
