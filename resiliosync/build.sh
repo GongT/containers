@@ -21,15 +21,7 @@ POST_SCRIPT=cleanup_unused_files make_base_image_by_dnf "resiliosync" scripts/ru
 ### 运行时依赖项目 END
 
 ### sbin/init
-STEP="复制gongt/alpine-init"
-hash_init() {
-	perfer_proxy podman pull gongt/alpine-init
-}
-download_init() {
-	local RESULT="$1"
-	buildah copy "--from=gongt/alpine-init" "$RESULT" "/sbin/init" "/sbin/init"
-}
-buildah_cache2 "resiliosync" hash_init download_init
+download_and_install_x64_init "resiliosync"
 ### sbin/init END
 
 ### 配置文件等
@@ -37,7 +29,7 @@ STEP="复制配置文件"
 merge_local_fs "resiliosync"
 ### 配置文件等 END
 
-buildah_config "resiliosync" --cmd '/sbin/init' --stop-signal SIGINT \
+buildah_config "resiliosync" --cmd '/usr/sbin/init' --stop-signal SIGINT \
 	--author "GongT <admin@gongt.me>" --created-by "#MAGIC!" --label name=gongt/resiliosync
 
 RESULT=$(create_if_not "resiliosync" "$BUILDAH_LAST_IMAGE")
