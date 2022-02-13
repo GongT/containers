@@ -16,9 +16,12 @@ trap 'echo "got SIGINT"' INT
 echo "reload nginx..."
 apply_gateway nginx
 
+trap 'echo "will shutdown" ; nginx -s stop' INT
+
 echo "starting...."
 rm -f /run/sockets/resiliosync.sock
 mkdir -p /var/log/nginx/
+nginx -t
 nginx &
 wait $!
 

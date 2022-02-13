@@ -8,5 +8,6 @@ if ! [[ -f $CFG ]]; then
 	cp /opt/init-config.jsonc "$CFG"
 fi
 
+echo "starting..."
 cd /tmp
 exec rslsync --nodaemon --config "$CFG"
