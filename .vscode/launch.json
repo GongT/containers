@@ -5,14 +5,12 @@
 	"version": "0.2.0",
 	"configurations": [
 		{
-			"type": "node",
-			"request": "attach",
-			"name": "Attach NodeJS",
-			"port": 9229,
+			"type": "bashdb",
+			"request": "launch",
+			"name": "Bash-Debug",
 			"cwd": "${workspaceFolder}",
-			"skipFiles": [
-				"<node_internals>/**"
-			]
-		},
+			"program": "samba/install-bridge.sh",
+			"args": []
+		}
 	]
 }
