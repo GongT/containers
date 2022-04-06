@@ -12,11 +12,18 @@
 	"game_password": "GAME_PASSWORD_HERE",
 	"require_user_verification": true,
 	"ignore_player_limit_for_returning_players": false,
+	"max_upload_in_kilobytes_per_second": 0,
+	"minimum_latency_in_ticks": 240,
+	"max_upload_slots": 5,
 	"autosave_interval": 5,
-	"autosave_slots": 50,
+	"autosave_slots": 100,
 	"afk_autokick_interval": 0,
 	"auto_pause": true,
+	"allow_commands": "admins-only",
 	"only_admins_can_pause_the_game": false,
-	"autosave_only_on_server": true,
-	"admins": [ ]
+	"autosave_only_on_server": false,
+	"admins": [
+		"GongT"
+	],
+	"non_blocking_saving": true
 }
