@@ -42,6 +42,7 @@ merge_local_fs "transmission" scripts/prepare-run.sh
 
 buildah_config "transmission" \
 	--volume /opt/data \
+	--volume /opt/config \
 	--cmd "bash /opt/scripts/start.sh" \
 	--author "GongT <admin@gongt.me>" \
 	--created-by "#MAGIC!" \
