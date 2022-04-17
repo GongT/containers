@@ -46,7 +46,7 @@ buildah_config "transmission" \
 	--cmd "bash /opt/scripts/start.sh" \
 	--author "GongT <admin@gongt.me>" \
 	--created-by "#MAGIC!" \
-	--label name=gongt/qbittorrent
+	--label name=gongt/transmission
 
 RESULT=$(new_container "transmission" "$BUILDAH_LAST_IMAGE")
 buildah commit "$RESULT" gongt/transmission
