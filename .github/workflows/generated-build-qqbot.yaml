@@ -11,7 +11,7 @@ on:
         required: false
         default: "no"
   schedule:
-    - cron:  '47 3 * * *'
+    - cron:  '47 4 21 * *'
   push:
     paths:
       - "qqbot/**"

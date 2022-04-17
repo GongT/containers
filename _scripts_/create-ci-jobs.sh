@@ -5,7 +5,7 @@ set -Eeuo pipefail
 cd "$(dirname "$(realpath "${BASH_SOURCE[0]}")")"
 cd ..
 
-declare -i cron_hour=7
+declare -i cron_day=1
 
 mapfile -d '' -t BUILD_FILES < <(find . -maxdepth 2 -name build.sh -print0 | sort --zero-terminated --dictionary-order)
 
@@ -19,12 +19,12 @@ for i in "${BUILD_FILES[@]}"; do
 	sed "s#{{PROJ}}#$PROJ#g" _scripts_/template.yaml >"$F"
 	sed -i "s#{{thisfile}}#$F#g" "$F"
 
-	if [[ $cron_hour -ge 23 ]]; then
-		cron_hour=0
+	if [[ $cron_day -ge 28 ]]; then
+		cron_day=1
 	else
-		cron_hour=$((cron_hour + 1))
+		cron_day=$((cron_day + 1))
 	fi
-	sed -i "s#{{cron_hour}}#$cron_hour#g" "$F"
+	sed -i "s#{{cron_day}}#$cron_day#g" "$F"
 
 	TABLE+="| $PROJ "
 	TABLE+="| https://hub.docker.com/r/gongt/$PROJ "

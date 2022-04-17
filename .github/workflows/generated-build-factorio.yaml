@@ -11,7 +11,7 @@ on:
         required: false
         default: "no"
   schedule:
-    - cron:  '47 15 * * *'
+    - cron:  '47 4 9 * *'
   push:
     paths:
       - "factorio/**"

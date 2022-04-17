@@ -11,7 +11,7 @@ on:
         required: false
         default: "no"
   schedule:
-    - cron:  '47 5 * * *'
+    - cron:  '47 4 23 * *'
   push:
     paths:
       - "resiliosync/**"

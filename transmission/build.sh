@@ -23,5 +23,6 @@ buildah_config "transmission" \
 	--created-by "#MAGIC!" \
 	--label name=gongt/qbittorrent
 
-buildah commit "$RESULT" gongt/qbittorrent
+RESULT=$(new_container "transmission" "$BUILDAH_LAST_IMAGE")
+buildah commit "$RESULT" gongt/transmission
 info "Done!"

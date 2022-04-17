@@ -2,7 +2,7 @@
 
 set -Eeuo pipefail
 
-bash /opt/_scripts/_reload.sh
+bash /opt/scripts/_reload.sh
 
 touch /data/invalid
 

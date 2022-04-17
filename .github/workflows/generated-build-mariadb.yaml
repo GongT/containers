@@ -11,7 +11,7 @@ on:
         required: false
         default: "no"
   schedule:
-    - cron:  '47 21 * * *'
+    - cron:  '47 4 15 * *'
   push:
     paths:
       - "mariadb/**"

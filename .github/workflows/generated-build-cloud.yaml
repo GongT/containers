@@ -11,7 +11,7 @@ on:
         required: false
         default: "no"
   schedule:
-    - cron:  '47 11 * * *'
+    - cron:  '47 4 5 * *'
   push:
     paths:
       - "cloud/**"
