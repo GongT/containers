@@ -41,6 +41,7 @@ SCRIPT=$(JQ '.dockerCreds[] | "echo " + ("log in to "+.url|@json) + "\npodman lo
 if [[ "${REGISTRY_DOMAIN:-}" ]]; then
 	echo "filter domain $REGISTRY_DOMAIN"
 	SCRIPT=$(echo "$SCRIPT" | grep --fixed-strings "$REGISTRY_DOMAIN")
+	SCRIPT+=$(echo "$SCRIPT" | grep --fixed-strings "ghcr.io")
 fi
 echo "$SCRIPT" | bash -Eeuo pipefail
 
