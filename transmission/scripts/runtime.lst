@@ -1,2 +1,9 @@
+glibc-common
 bash
 curl
+shadow-utils
+libevent
+libnatpmp
+libdeflate
+miniupnpc
+libstdc++
