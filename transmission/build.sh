@@ -19,6 +19,7 @@ BUILDAH_FORCE="$FORCE_DNF" make_base_image_by_dnf "transmission-build" scripts/c
 ### 编译transmission
 STEP="编译transmission"
 download_and_build_github "transmission-build" transmission transmission/transmission
+COMPILE_RESULT_IMAGE="$BUILDAH_LAST_IMAGE"
 ### 编译transmission END
 
 STEP="运行时依赖项目"
