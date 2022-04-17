@@ -14,7 +14,7 @@ STEP="运行时依赖项目"
 make_base_image_by_dnf "transmission" scripts/runtime.lst
 
 STEP="复制文件"
-merge_local_fs "transmission"
+merge_local_fs "transmission" scripts/prepare-run.sh
 
 RESULT=$(create_if_not "qbittorrent-final" "$BUILDAH_LAST_IMAGE")
 buildah config --cmd "bash /opt/scripts/start.sh" --author "GongT <admin@gongt.me>" --created-by "#MAGIC!" --label name=gongt/qbittorrent "$RESULT"
