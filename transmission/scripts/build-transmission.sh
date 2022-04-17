@@ -46,5 +46,5 @@ x cmake \
 	-DCMAKE_BUILD_TYPE=RelWithDebInfo \
 	"${DEFINES[@]}" \
 	-S. "-B$DIST_DIT"
-x cmake --build "$DIST_DIT" --parallel
+x cmake --build "$DIST_DIT"
 x cmake --install "$DIST_DIT" --prefix /opt/dist

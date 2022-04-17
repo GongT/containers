@@ -69,7 +69,7 @@ jobs:
         run: bash _scripts_/prepare-secrets.sh ghcr.io
 
       - name: "缓存下载和软件包数据"
-        uses: actions/cache@v2
+        uses: pat-s/always-upload-cache@v3.0.1
         with:
           path: ${{ env.SYSTEM_COMMON_CACHE }}
           key: common-cache-nginx-${{ hashFiles('nginx') }}
