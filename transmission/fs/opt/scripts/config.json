@@ -1,4 +1,6 @@
 {
+	"anti-brute-force-enabled": true,
+	"anti-brute-force-threshold": 100,
 	"bind-address-ipv4": "0.0.0.0",
 	"bind-address-ipv6": "::",
 	"alt-speed-down": 50,
@@ -13,7 +15,7 @@
 	"cache-size-mb": 32,
 	"encryption": 1,
 	"lpd-enabled": true,
-	"message-level": 3,
+	"message-level": 4,
 	"peer-limit-global": 500,
 	"peer-port": 51413,
 	"peer-port-random-high": 52000,
@@ -32,6 +34,8 @@
 	"rpc-host-whitelist-enabled": false,
 	"rpc-password": "",
 	"rpc-url": "/",
+	"rpc-port": 9091,
+	"rpc-socket-mode": 511,
 	"rpc-whitelist-enabled": false,
 	"ratio-limit-enabled": false,
 	"speed-limit-down": 100,
@@ -59,5 +63,14 @@
 	"script-torrent-done-enabled": false,
 	"script-torrent-done-filename": "",
 	"start-added-torrents": true,
-	"upload-slots-per-torrent": 14
+	"upload-slots-per-torrent": 14,
+	"default-trackers": "https://bittorrent.service.gongt.me:59443",
+	"ratio-limit": 2,
+	"rpc-host-whitelist": "",
+	"rpc-username": "",
+	"rpc-whitelist": "127.0.0.1,::1",
+	"script-torrent-added-enabled": false,
+	"script-torrent-added-filename": "",
+	"script-torrent-done-seeding-enabled": false,
+	"script-torrent-done-seeding-filename": ""
 }

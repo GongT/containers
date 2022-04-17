@@ -29,3 +29,6 @@ mkdir -p /home/media_rw
 chown media_rw:users /home/media_rw
 
 echo 'LANG="zh_CN.utf8"' >/etc/locale.conf
+
+mkdir -p /root/.config
+touch /root/.config/user-dirs.dirs
