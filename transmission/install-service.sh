@@ -12,9 +12,8 @@ unit_data danger
 network_use_auto 51413
 systemd_slice_type idle -101
 
-# unit_start_notify output 'Started transmission'
-unit_fs_bind config/transmission /mnt/config
-unit_fs_bind data/transmission /mnt/data
+unit_start_notify output 'Port Forwarding State changed from "Starting" to "Forwarded"'
+unit_fs_bind data/transmission /opt/data
 unit_fs_bind /data/Volumes /data/Volumes
 unit_fs_bind share/nginx /run/nginx
 

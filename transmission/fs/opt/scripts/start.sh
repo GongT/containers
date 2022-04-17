@@ -2,13 +2,8 @@
 
 set -Eeuo pipefail
 
-T="/run/nginx/vhost.d/qbittorrent.conf"
-cp -v "/opt/scripts/nginx.conf" "$T"
-curl --unix /run/sockets/nginx.reload.sock http://_/
-
-rm -f /mnt/data/settings.json
-ln -s /mnt/data/config.json /mnt/data/settings.json
+bash /opt/_scripts/_reload.sh
 
 touch /data/invalid
 
-exec /usr/bin/transmission-daemon --config-dir /mnt/data --foreground --no-auth
+exec /usr/bin/transmission-daemon --config-dir /opt/data --foreground --no-auth

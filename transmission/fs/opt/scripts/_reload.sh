@@ -3,7 +3,8 @@
 set -Eeuo pipefail
 
 T="/run/nginx/vhost.d/qbittorrent.conf"
-rm -f "$T"
+cp -v "/opt/scripts/nginx.conf" "$T"
 curl --unix /run/sockets/nginx.reload.sock http://_/
 
-kill -s TERM "$(</opt/transmission.pid)"
+rm -f /opt/data/settings.json
+ln -s /opt/scripts/settings.json /opt/data/settings.json
