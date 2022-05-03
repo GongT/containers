@@ -11,7 +11,7 @@ on:
         required: false
         default: "no"
   schedule:
-    - cron:  '47 4 16 * *'
+    - cron:  '47 4 17 * *'
   push:
     paths:
       - "mqtt-broker/**"

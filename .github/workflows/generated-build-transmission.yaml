@@ -11,7 +11,7 @@ on:
         required: false
         default: "no"
   schedule:
-    - cron:  '47 4 25 * *'
+    - cron:  '47 4 26 * *'
   push:
     paths:
       - "transmission/**"
