@@ -3,11 +3,13 @@
 set -Eeuo pipefail
 
 apply_gateway() {
-	F=$1 T="/run/nginx/vhost.d/ResilioSync.conf"
+	F=${1:-} T="/run/nginx/vhost.d/ResilioSync.$PROFILE.conf"
 	if [ -z "$F" ]; then
-		rm -v "${T}"
+		if [[ -e $T ]]; then
+			rm -vf "${T}"
+		fi
 	else
-		cp -v "/opt/${F}.conf" "${T}"
+		sed "s#__PROFILE__#$PROFILE#g" "/opt/${F}.conf" >"${T}"
 	fi
 	echo 'GET /' | ncat --unixsock /run/sockets/nginx.reload.sock
 }
@@ -16,16 +18,19 @@ trap 'echo "got SIGINT"' INT
 echo "reload nginx..."
 apply_gateway nginx
 
-trap 'echo "will shutdown" ; nginx -s stop' INT
+function do_stop() {
+	echo "stop signal"
+	apply_gateway || true
+	echo "byebye."
+	exit 0
+}
+trap do_stop INT
 
 echo "starting...."
-rm -f /run/sockets/resiliosync.sock
+rm -f /run/sockets/resiliosync.$PROFILE.sock
 mkdir -p /var/log/nginx/
+sed -i "s#__PROFILE__#$PROFILE#g" /etc/nginx/nginx.conf
+sed -i "s#__PORT__#$UIPORT#g" /etc/nginx/pass.conf
 nginx -t
 nginx &
 wait $!
-
-echo "will shutdown"
-apply_gateway
-echo "byebye."
-exit 0

@@ -1,6 +1,6 @@
 {
-	"device_name": "Home Server",
-	"listening_port": 35515, // 0 - randomize port
+	"device_name": "GongT's Server",
+	// "listening_port": __PORT__, // 0 - randomize port
 
 	/* storage_path dir contains auxilliary app files if no storage_path field: .sync dir created in current working directory */
 	"storage_path": "/data/state",
@@ -15,7 +15,7 @@
 	"send_statistics": false,
 
 	/* use UPnP for port mapping */
-	"use_upnp": false,
+	"use_upnp": true,
 
 	/* limits in kB/s. 0 - no limit */
 	"download_limit": 0,
@@ -30,7 +30,7 @@
 	// "proxy_password" : "password",
 
 	/* directory_root path defines where the WebUI Folder browser starts (linux only). Default value is / */
-	"directory_root": "/data/Volumes/",
+	"directory_root": "/data/content/",
 
 	/* directory_root_policy defines how directory_root is used (linux only).
 	Valid values are:
@@ -38,7 +38,7 @@
 		"belowroot" - accepts directory_root's subdirectories for 'getdir' and 'adddir' actions,
 		 but denies attempts to use 'adddir' to create directories directly within directory_root
 	Default value is "all". */
-	"directory_root_policy": "belowroot",
+	"directory_root_policy": "all",
 
 	"webui": {
 		"listen": "127.0.0.1:8888", // remove field to disable WebUI
@@ -59,29 +59,11 @@
 		/* dir_whitelist defines which directories can be shown to user or have folders added (linux only)
 		relative paths are relative to directory_root setting */
 		//	,"dir_whitelist" : [ "/home/user/MySharedFolders/personal", "work" ]
-	}
+	},
 
 	/* !!! if you set shared folders in config file WebUI will be DISABLED !!!
 	shared directories specified in config file	override the folders previously added from WebUI. */
-	/*,
-	 "shared_folders" :
-	 [
-	 {
-		 "secret" : "MY_SECRET_1", // required field - use --generate-secret in command line to create new secret
-		 "dir" : "/home/user/resilio/sync_test", // * required field
-		 "use_relay_server" : true, //	use relay server when direct connection fails
-		 "use_tracker" : true,
-		 "search_lan" : true,
-		 "use_sync_trash" : true, // enable SyncArchive to store files deleted on remote devices
-		 "overwrite_changes" : false, // restore modified files to original version, ONLY for Read-Only folders
-		 "selective_sync" : false, // add folder in selective sync mode
-		 "known_hosts" : // specify hosts to attempt connection without additional search
-		 [
-		 "192.168.1.2:44444"
-		 ]
-	 }
-	 ]
- */
+	// "shared_folders": __SHARED_FOLDERS__
 
 	/* Advanced preferences can be added to config file. Info is available at "https://help.getsync.com/hc/en-us/articles/207371636"
  For example see folder_rescan_interval below */
