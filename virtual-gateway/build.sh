@@ -9,7 +9,7 @@ info "starting..."
 
 ### 依赖项目
 STEP="安装系统依赖"
-DEPS=(bash curl util-linux iproute2)
+DEPS=(bash curl util-linux iproute2 iperf3)
 apk_hash() {
 	{
 		cat scripts/install.sh
