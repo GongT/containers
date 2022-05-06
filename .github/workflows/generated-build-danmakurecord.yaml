@@ -3,15 +3,22 @@ on:
   workflow_dispatch:
     inputs:
       brandNew:
+        type: boolean
         description: 跳过拉取上次构建结果
         required: false
-        default: ""
+        default: false
+      forceDnf:
+        type: boolean
+        description: 强制运行dnf
+        required: false
+        default: false
       forceRebuild:
+        type: boolean
         description: 强制全部重新构建，无视缓存
         required: false
-        default: "no"
+        default: false
   schedule:
-    - cron:  '47 9 * * *'
+    - cron:  '47 4 7 * *'
   push:
     paths:
       - "danmakurecord/**"
@@ -23,6 +30,7 @@ on:
 env:
   NODE_ENV: production
   PROJECT_NAME: "danmakurecord"
+  GITHUB_ACTOR: ${{ github.actor }}
 jobs:
   cancel:
     name: Cancel Previous Runs
@@ -68,7 +76,7 @@ jobs:
         run: bash _scripts_/prepare-secrets.sh ghcr.io
 
       - name: "缓存下载和软件包数据"
-        uses: actions/cache@v2
+        uses: pat-s/always-upload-cache@v3.0.1
         with:
           path: ${{ env.SYSTEM_COMMON_CACHE }}
           key: common-cache-danmakurecord-${{ hashFiles('danmakurecord') }}
@@ -87,6 +95,7 @@ jobs:
         timeout-minutes: 30
         env:
           BUILDAH_FORCE: ${{ github.event.inputs.forceRebuild }}
+          FORCE_DNF: ${{ github.event.inputs.forceDnf }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: bash _scripts_/ci-single-build.sh
 

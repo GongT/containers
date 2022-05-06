@@ -3,13 +3,20 @@ on:
   workflow_dispatch:
     inputs:
       brandNew:
+        type: boolean
         description: 跳过拉取上次构建结果
         required: false
-        default: ""
+        default: false
+      forceDnf:
+        type: boolean
+        description: 强制运行dnf
+        required: false
+        default: false
       forceRebuild:
+        type: boolean
         description: 强制全部重新构建，无视缓存
         required: false
-        default: "no"
+        default: false
   schedule:
     - cron:  '47 4 11 * *'
   push:
@@ -88,6 +95,7 @@ jobs:
         timeout-minutes: 30
         env:
           BUILDAH_FORCE: ${{ github.event.inputs.forceRebuild }}
+          FORCE_DNF: ${{ github.event.inputs.forceDnf }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: bash _scripts_/ci-single-build.sh
 
