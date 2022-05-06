@@ -10,7 +10,6 @@
 	--enable-logging \
 	--enable-dht \
 	--enable-encryption \
-	--enable-disk-stats \
 	--disable-examples \
 	--disable-tests \
 	--enable-python-binding \

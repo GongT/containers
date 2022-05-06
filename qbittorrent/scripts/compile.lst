@@ -20,3 +20,4 @@ git
 bash
 ccache
 diffutils
+py3-setuptools
