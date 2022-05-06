@@ -1,0 +1,1 @@
+rabbitmqctl --vhost danmaku  set_parameter shovel danmku-sync '{"ack-mode":"on-confirm","dest-add-forward-headers":false,"src-protocol": "amqp091", "src-uri": "amqp://", "src-queue": "23178720", "dest-protocol": "amqp091", "dest-uri": "amqps://sync:4ea853c691ae6dd979ae1bac86195add@rabbitmq.service.gongt.me:35671/danmaku", "dest-queue": "23178720"}'
