@@ -6,6 +6,6 @@ arg[]:eth0
 arg[]:-n
 arg[]:-R
 arg[]:-f
-arg[]:-r
-arg[]:10.100.230.213
-
+arg[]:-x hostname:shabao-proxy-server
+# arg[]:-r
+# arg[]:10.100.230.213

@@ -51,7 +51,7 @@ unit_depend network-online.target
 unit_fs_bind config/proxyserver /config
 # unit_body Restart always
 
-network_use_manual --network=bridge0 --mac-address=86:13:02:8F:76:2B --dns=h.o.s.t
+network_use_manual --network-backend=cni --network=bridge0 --mac-address=86:13:02:8F:76:2B --dns=h.o.s.t
 systemd_slice_type normal
 add_network_privilege
 
