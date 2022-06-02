@@ -1,11 +1,4 @@
 [DHCP]
-arg[]:/bin/busybox
-arg[]:udhcpc
-arg[]:-i
-arg[]:eth0
-arg[]:-n
-arg[]:-R
-arg[]:-f
-arg[]:-x hostname:shabao-proxy-server
-# arg[]:-r
-# arg[]:10.100.230.213
+arg[]:/bin/bash
+arg[]:-c
+arg[]:/opt/run_dhcp.sh
