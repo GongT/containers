@@ -1,1 +1,0 @@
-https://github.com/GongT/wireguard-config-distribute/releases/download/latest/client
