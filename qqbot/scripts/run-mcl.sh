@@ -7,7 +7,9 @@ function x() {
 	"$@"
 }
 
-x java -jar mcl.jar --disable-script announcement
+x java -jar mcl.jar --list-repo-packages
+x java -jar mcl.jar --show-repos
+x java -jar mcl.jar --disable-module announcement --boot-only --enable-auto-clear
 x java -jar mcl.jar --log-level 0 --dry-run # --disable-progress-bar
 
 if java -version 2>&1 | grep -qi openjdk; then
