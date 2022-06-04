@@ -9,8 +9,9 @@ function x() {
 
 x java -jar mcl.jar --show-repos
 
-x java -jar mcl.jar --boot-only --disable-progress-bar --enable-auto-clear
-x java -jar mcl.jar --log-level 0 --dry-run --disable-progress-bar
+x java -jar mcl.jar --log-level 0 --dry-run --enable-auto-clear --disable-progress-bar
+x java -jar mcl.jar --update-package net.mamoe:mirai-api-http --channel stable-v2 --type plugin --disable-progress-bar
+x java -jar mcl.jar --update-package net.mamoe:chat-command --channel stable --type plugin --disable-progress-bar
 
 if java -version 2>&1 | grep -qi openjdk; then
 	WANT_NUM=6

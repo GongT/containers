@@ -44,24 +44,6 @@ download_run_mcl() {
 buildah_cache2 "qqbot" check_mcl download_run_mcl
 ### 运行MCL安装mirai END
 
-### 运行MCL安装mirai END
-STEP="下载api-http模块"
-REPO="project-mirai/mirai-api-http"
-check_mcl() {
-	http_get_github_release "$REPO"
-	RELEASE_URL=$(github_release_asset_download_url_regex '^.*\.jar$')
-	info_note "       * RELEASE_URL=$RELEASE_URL"
-}
-download_run_mcl() {
-	local DOWNLOADED FILE_NAME
-	FILE_NAME=$(basename "$RELEASE_URL")
-	DOWNLOADED=$(perfer_proxy download_file "$RELEASE_URL" "$FILE_NAME")
-
-	buildah copy "$1" "$DOWNLOADED" "/mirai/plugins"
-}
-buildah_cache2 "qqbot" check_mcl download_run_mcl
-### 运行MCL安装mirai END
-
 STEP=复制文件
 merge_local_fs "qqbot"
 
