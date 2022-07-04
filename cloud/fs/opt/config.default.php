@@ -81,7 +81,6 @@ return array(
 		 'localhost',
 		 'nextcloud.service.gongt.me',
 		 'nextcloud.service.gongt.me:59443',
-		 'nextcloud.services.gongt.me',
 		 'nextcloud.gongt.net',
 	),
 );

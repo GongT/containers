@@ -4,8 +4,9 @@
 		"mads-hartmann.bash-ide-vscode",
 		"timonwong.shellcheck",
 		"coolbear.systemd-unit-file",
-		"william-voyek.vscode-nginx",
-		"rogalmic.bash-debug"
+		"rogalmic.bash-debug",
+		"raynigon.nginx-formatter",
+		"ahmadalli.vscode-nginx-conf"
 	],
 	"unwantedRecommendations": [
 		"ms-vscode.powershell"
