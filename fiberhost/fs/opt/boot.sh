@@ -5,7 +5,7 @@ set -Eeuo pipefail
 set -x
 
 ip link show
-ip set dev "$INTERFACE_NAME" mtu 9000
+ip link set dev "$INTERFACE_NAME" mtu 9000
 
 ip addr replace 127.0.0.1/8 dev lo
 # ip addr replace ::1/128 dev lo
