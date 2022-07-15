@@ -17,7 +17,7 @@ for I in $(seq 1 10); do
 done
 ip route flush dev "$INTERFACE_NAME"
 for I in $(seq 1 10); do
-	ip route add "192.211.$I.0" dev "$INTERFACE_NAME" src "192.211.$I.1"
+	ip route add "192.211.$I.0/255.255.255.0" dev "$INTERFACE_NAME" src "192.211.$I.1"
 done
 # ip addr replace fdfb:fb00:fb00::1/64 dev "$INTERFACE_NAME"
 # ip route replace fdfb:fb00:fb00::/64 dev "$INTERFACE_NAME"
