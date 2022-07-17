@@ -30,3 +30,5 @@ systemd_slice_type infrastructure
 add_network_privilege
 
 unit_finish
+
+install_binary scripts/netns.sh fiberhost-network-namespace

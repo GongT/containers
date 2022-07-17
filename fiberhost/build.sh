@@ -12,7 +12,7 @@ RESULT=$(create_if_not fiber-host-result gongt/alpine-init)
 info "init compile..."
 
 buildah run $(use_alpine_apk_cache) $RESULT apk add -U dnsmasq bash iperf3
-buildah copy $RESULT fs /
+buildah copy "$RESULT" fs /
 info "packages installed..."
 
 buildah config --author "GongT <admin@gongt.me>" --created-by "#MAGIC!" --label name=gongt/fiberhost "$RESULT"
