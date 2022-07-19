@@ -85,6 +85,7 @@ merge_local_fs "nginx"
 
 info_log ""
 
+STEP="配置容器"
 buildah_config "nginx" --cmd '/usr/sbin/nginx.sh' --port 80 --port 443 --port 80/udp --port 443/udp \
 	--volume /config --volume /etc/ACME \
 	--author "GongT <admin@gongt.me>" --created-by "#MAGIC!" --label name=gongt/nginx

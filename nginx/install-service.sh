@@ -12,14 +12,6 @@ arg_string PUBLISH publish "additional publishing ports"
 arg_flag CENSORSHIP censorship "is http/s port unavailable"
 arg_finish "$@"
 
-ENV_PASS=$(
-	safe_environment \
-		"USERNAME=$USERNAME" \
-		"PASSWORD=$PASSWORD" \
-		"CENSORSHIP=$CENSORSHIP" \
-		"DISABLE_SSL=$DISABLE_SSL"
-)
-
 PUBPORTS=(80/tcp 8883/tcp)
 if ! [[ $DISABLE_SSL ]]; then
 	PUBPORTS+=(443)
@@ -38,7 +30,13 @@ create_pod_service_unit gongt/nginx
 unit_unit Description nginx - high performance web server
 network_use_auto "${PUBPORTS[@]}"
 systemd_slice_type normal
-unit_podman_arguments "$ENV_PASS"
+
+environment_variable \
+	"USERNAME=$USERNAME" \
+	"PASSWORD=$PASSWORD" \
+	"CENSORSHIP=$CENSORSHIP" \
+	"DISABLE_SSL=$DISABLE_SSL"
+
 unit_start_notify output "start worker process"
 # unit_body Restart always
 unit_fs_bind data/nginx /data

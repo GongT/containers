@@ -1,5 +1,5 @@
 [submodule "common"]
 	path = common
-	url = git@github.com:GongT/containers-builder.git
+	url = https://github.com/GongT/containers-builder.git
 	branch = master
 	update = rebase

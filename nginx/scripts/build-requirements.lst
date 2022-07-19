@@ -23,3 +23,4 @@ curl
 findutils
 zlib-devel
 unzip
+rpm
