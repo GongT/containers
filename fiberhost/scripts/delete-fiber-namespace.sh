@@ -20,7 +20,7 @@ if ! ip netns exec "$NET_NAMESPACE" ip link set "$INTERFACE_NAME" down &>/dev/nu
 	die "Failed set network interface down"
 fi
 
-for I in $(seq 1 10); do
+for I in $(seq 2 10); do
 	if ! ip netns exec "$NET_NAMESPACE" ip link del "vlan.$I" &>/dev/null; then
 		echo "Failed delete vlan interface $I" >&2
 	fi

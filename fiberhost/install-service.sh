@@ -29,7 +29,7 @@ network_use_manual "--network=ns:/var/run/netns/$NET_NAMESPACE" --dns=127.0.0.1
 systemd_slice_type infrastructure
 add_network_privilege
 
-unit_fs_bind config/fiberhost/ /etc/dnsmasq.d/
+unit_fs_bind config/fiberhost /etc/dnsmasq.d/
 
 unit_finish
 
