@@ -39,6 +39,7 @@ environment_variable \
 
 unit_start_notify output "start worker process"
 # unit_body Restart always
+unit_fs_bind /data/DevelopmentRoot /data/DevelopmentRoot
 unit_fs_bind data/nginx /data
 unit_fs_bind config/nginx /config
 unit_fs_bind logs/nginx /var/log/nginx
