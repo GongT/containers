@@ -1,0 +1,11 @@
+[Unit]
+Description=restart networkd when some interface failed
+After=systemd-networkd.service
+Requires=systemd-networkd.service
+
+[Timer]
+OnActiveSec=30m
+OnUnitInactiveSec=5m
+
+[Install]
+WantedBy=timers.target
