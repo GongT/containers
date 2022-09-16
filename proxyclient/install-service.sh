@@ -25,18 +25,6 @@ source /tmp/load-keys.sh
 
 info "upload settings to router - OK"
 
-ENV_PASS=$(
-	safe_environment \
-		"KEY_ROUTER_PUBLIC=${KEY_ROUTER_PUBLIC}" \
-		"KEY_PRIVATE=${KEY_PRIVATE}" \
-		"KEY_SHARE=${KEY_SHARE}" \
-		"IP_NUMBER=${IP_NUMBER}" \
-		"UDP2RAW_PASSWORD=${UDP2RAW_PASSWORD}" \
-		"ROUTER_PORT=${ROUTER_PORT}" \
-		"UDP2RAW_MODE=${UDP2RAW_MODE}" \
-		"MTU=${MTU}"
-)
-
 create_pod_service_unit gongt/proxyclient
 
 unit_podman_image gongt/proxyclient
@@ -53,11 +41,20 @@ unit_podman_arguments --dns=h.o.s.t
 network_use_nat 3271/tcp 35353:53/udp
 systemd_slice_type normal
 add_network_privilege
-unit_podman_arguments "$ENV_PASS"
 unit_body ExecReload '/usr/bin/podman exec proxyclient bash -c "killall -s SIGHUP dnsmasq"'
 
 healthcheck "3m" 2 "bash /opt/hc.sh"
 healthcheck_start_period 30s
 healthcheck_timeout 60s
+
+unit_podman_safe_environment \
+	"KEY_ROUTER_PUBLIC=${KEY_ROUTER_PUBLIC}" \
+	"KEY_PRIVATE=${KEY_PRIVATE}" \
+	"KEY_SHARE=${KEY_SHARE}" \
+	"IP_NUMBER=${IP_NUMBER}" \
+	"UDP2RAW_PASSWORD=${UDP2RAW_PASSWORD}" \
+	"ROUTER_PORT=${ROUTER_PORT}" \
+	"UDP2RAW_MODE=${UDP2RAW_MODE}" \
+	"MTU=${MTU}"
 
 unit_finish

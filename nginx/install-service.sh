@@ -43,8 +43,8 @@ unit_fs_bind /data/DevelopmentRoot /data/DevelopmentRoot
 unit_fs_bind data/nginx /data
 unit_fs_bind config/nginx /config
 unit_fs_bind logs/nginx /var/log/nginx
-unit_fs_tempfs 1M /run
-unit_fs_tempfs 512M /tmp
+unit_fs_tempfs 8M /run
+# unit_fs_tempfs 512M /tmp
 unit_fs_bind share/nginx /config.auto
 if ! [[ $DISABLE_SSL ]]; then
 	unit_fs_bind share/ssl /etc/ACME

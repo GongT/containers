@@ -8,17 +8,12 @@ source ../common/functions-install.sh
 arg_flag PROXY proxy "use a socks5 proxy to connect remote"
 arg_finish "$@"
 
-ENV_PASS=$(
-	safe_environment \
-		"PROXY=$PROXY"
-)
-
 create_pod_service_unit cloudflared@
 unit_podman_image gongt/cloudflared '%i'
 unit_unit Description "cloudflared - Argo Tunnel"
 network_use_nat 40983
 systemd_slice_type normal
-unit_podman_arguments "$ENV_PASS"
+environment_variable "PROXY=$PROXY"
 unit_start_notify sleep "5"
 unit_body RestartPreventExitStatus 233
 unit_fs_bind data/cloudflared /root/.cloudflared

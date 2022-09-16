@@ -16,19 +16,15 @@ arg_string "$REQUIRED" MACHINE_ID h/machine "Machine Id use for rabbitmq nodenam
 arg_flag NO_SSL no-ssl "Never using SSL"
 arg_finish "$@"
 
-ENV_PASS=$(
-	safe_environment \
-		"RABBITMQ_NODENAME=rabbit@$MACHINE_ID" \
-		"HOSTNAME=$MACHINE_ID" \
-		"NO_SSL=$NO_SSL"
-)
-
 create_pod_service_unit gongt/rabbitmq
 unit_unit Description "rabbit mq"
 
 # unit_podman_image_pull never
 
-unit_podman_arguments "$ENV_PASS"
+unit_podman_safe_environment \
+	"RABBITMQ_NODENAME=rabbit@$MACHINE_ID" \
+	"HOSTNAME=$MACHINE_ID" \
+	"NO_SSL=$NO_SSL"
 
 unit_start_notify output "Startup complete!"
 

@@ -9,12 +9,6 @@ arg_string + USERNAME u "RPC username"
 arg_string + PASSWORD p "RPC password"
 arg_finish "$@"
 
-ENV_PASS=$(
-	safe_environment \
-		"USERNAME=$USERNAME" \
-		"PASSWORD=$PASSWORD"
-)
-
 create_pod_service_unit gongt/bitcoin-peer
 unit_unit Description bitcoin full peer service
 unit_start_notify output "Verifying blocks"
@@ -27,6 +21,10 @@ unit_fs_bind share/nginx /run/nginx
 shared_sockets_provide bittorrent-tracker
 
 add_capability SYS_ADMIN
-unit_podman_arguments "$ENV_PASS" --device=/dev/mapper/cryptocurrency-bitcoin:/dev/xvda1:rw
+
+environment_variable \
+	"USERNAME=$USERNAME" \
+	"PASSWORD=$PASSWORD"
+unit_podman_arguments --device=/dev/mapper/cryptocurrency-bitcoin:/dev/xvda1:rw
 
 unit_finish

@@ -28,18 +28,6 @@ source /tmp/load-keys.sh
 
 info "remote wireguard keys created."
 
-ENV_PASS=$(
-	safe_environment \
-		"KEY_ROUTER_PUBLIC=${KEY_ROUTER_PUBLIC}" \
-		"KEY_PRIVATE=${KEY_PRIVATE}" \
-		"KEY_SHARE=${KEY_SHARE}" \
-		"IP_NUMBER=${IP_NUMBER}" \
-		"UDP2RAW_PASSWORD=${UDP2RAW_PASSWORD}" \
-		"ROUTER_PORT=${ROUTER_PORT}" \
-		"UDP2RAW_MODE=${UDP2RAW_MODE}" \
-		"MTU=${MTU}"
-)
-
 create_pod_service_unit gongt/proxyserver-nat
 unit_unit Description "Proxy Server Behind NAT"
 if [[ "$UDP2RAW_PASSWORD" ]]; then
@@ -59,6 +47,15 @@ healthcheck "3m" 2 "bash /opt/hc.sh"
 healthcheck_start_period 30s
 healthcheck_timeout 60s
 
-unit_podman_arguments "$ENV_PASS"
+unit_podman_safe_environment \
+	"KEY_ROUTER_PUBLIC=${KEY_ROUTER_PUBLIC}" \
+	"KEY_PRIVATE=${KEY_PRIVATE}" \
+	"KEY_SHARE=${KEY_SHARE}" \
+	"IP_NUMBER=${IP_NUMBER}" \
+	"UDP2RAW_PASSWORD=${UDP2RAW_PASSWORD}" \
+	"ROUTER_PORT=${ROUTER_PORT}" \
+	"UDP2RAW_MODE=${UDP2RAW_MODE}" \
+	"MTU=${MTU}"
+
 unit_body ExecReload podman exec proxyserver bash -c "killall -s SIGHUP dnsmasq"
 unit_finish

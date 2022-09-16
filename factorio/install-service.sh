@@ -12,15 +12,6 @@ arg_string + PASSWORD p "factorio online game password"
 arg_string GAME_PASSWORD password "server join password"
 arg_finish "$@"
 
-ENV_PASS=$(
-	safe_environment \
-		"SERVER_TITLE=$SERVER_TITLE" \
-		"SERVER_DESCRIPTION=$SERVER_DESCRIPTION" \
-		"USERNAME=$USERNAME" \
-		"PASSWORD=$PASSWORD" \
-		"GAME_PASSWORD=${GAME_PASSWORD:-}"
-)
-
 function create_one() {
 	local -r SERVICE_NAME="$1" DIST_TAG="$2" PORT="$3"
 
@@ -31,7 +22,7 @@ function create_one() {
 	unit_body TimeoutStartSec 300s
 	unit_body RestartPreventExitStatus 66
 	unit_start_notify output "Obtained serverPadlock for serverHash"
-	unit_podman_arguments "$ENV_PASS" "--env=DIST_TAG=$DIST_TAG" "--env=SERVER_PORT=$PORT"
+	unit_podman_arguments "--env=DIST_TAG=$DIST_TAG" "--env=SERVER_PORT=$PORT"
 
 	network_use_auto "$PORT/udp"
 	systemd_slice_type entertainment
@@ -39,6 +30,14 @@ function create_one() {
 	unit_fs_bind "/data/Volumes/AppData/GameSave/factorio/$DIST_TAG" /data
 	unit_fs_bind "/data/Volumes/AppData/GameSave/factorio/mods" /data/mods
 	unit_fs_tempfs 512M /data/temp
+
+	unit_podman_safe_environment \
+		"SERVER_TITLE=$SERVER_TITLE" \
+		"SERVER_DESCRIPTION=$SERVER_DESCRIPTION" \
+		"USERNAME=$USERNAME" \
+		"PASSWORD=$PASSWORD" \
+		"GAME_PASSWORD=${GAME_PASSWORD:-}"
+
 	unit_finish
 }
 

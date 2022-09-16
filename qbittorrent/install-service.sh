@@ -15,7 +15,6 @@ add_network_privilege
 
 unit_using_systemd
 unit_start_notify output 'Started qBittorrent'
-# unit_podman_arguments "$ENV_PASS"
 # unit_body Restart always
 unit_fs_bind config/qbittorrent /opt/qBittorrent/config
 unit_fs_bind data/qbittorrent /opt/qBittorrent/data

@@ -9,16 +9,9 @@ arg_string + USERNAME u/user "mqtt connect username"
 arg_string + PASSWORD p/password "mqtt connect password"
 arg_finish "$@"
 
-ENV_PASS=$(
-	safe_environment \
-		"USERNAME=$USERNAME" \
-		"PASSWORD=$PASSWORD"
-)
-
 create_pod_service_unit gongt/mqtt-broker
 unit_unit After nginx.pod.service
 unit_unit Requires nginx.pod.service
-unit_podman_arguments "$ENV_PASS"
 unit_start_notify output 'mosquitto version'
 network_use_nat
 systemd_slice_type normal
@@ -29,4 +22,9 @@ unit_fs_bind data/mqtt /data
 unit_fs_bind config/mqtt /settings
 unit_fs_bind share/nginx /run/nginx
 shared_sockets_provide mqtt
+
+unit_podman_safe_environment \
+	"USERNAME=$USERNAME" \
+	"PASSWORD=$PASSWORD"
+
 unit_finish

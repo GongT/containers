@@ -22,18 +22,6 @@ mapfile -d ';' -t SERVER_PARAMS_ARR < <(echo "$SERVER_PARAMS")
 
 split_url_user_pass_host_port "$NOTIFY_SMTP"
 
-ENV_PASS=$(
-	safe_environment \
-		"NOTIFY_MAIL_USER=$USERNAME" \
-		"NOTIFY_MAIL_PASS=$PASSWORD" \
-		"NOTIFY_MAIL_HUB=$DOMAIN" \
-		"MAIL_TO=$NOTIFY_TO" \
-		"SERVER=$SERVER" \
-		"DNS_SERVER=$DNS_SERVER" \
-		"${DNS_SERVER_PARAMS_ARR[@]}" \
-		"${SERVER_PARAMS_ARR[@]}"
-)
-
 mapfile -t -d ',' ARR_DOMAINS < <(echo "$STR_DOMAINS")
 DOMAINS=()
 for I in "${ARR_DOMAINS[@]}"; do
@@ -41,6 +29,17 @@ for I in "${ARR_DOMAINS[@]}"; do
 done
 
 create_pod_service_unit gongt/acme
+
+environment_variable \
+	"NOTIFY_MAIL_USER=$USERNAME" \
+	"NOTIFY_MAIL_PASS=$PASSWORD" \
+	"NOTIFY_MAIL_HUB=$DOMAIN" \
+	"MAIL_TO=$NOTIFY_TO" \
+	"SERVER=$SERVER" \
+	"DNS_SERVER=$DNS_SERVER" \
+	"${DNS_SERVER_PARAMS_ARR[@]}" \
+	"${SERVER_PARAMS_ARR[@]}"
+
 unit_podman_image gongt/acme "${DOMAINS[@]}"
 # unit_podman_image_pull never
 network_use_nat
@@ -52,7 +51,6 @@ unit_body RestartSec 10s
 unit_body TimeoutStartSec 30min
 
 unit_podman_hostname acme
-unit_podman_arguments "$ENV_PASS"
 unit_body Environment FROM_SERVICE=yes
 unit_fs_bind share/ssl /etc/ACME
 unit_fs_bind data/acme /opt/data

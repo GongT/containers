@@ -5,18 +5,14 @@ set -Eeuo pipefail
 cd "$(dirname "$(realpath "${BASH_SOURCE[0]}")")"
 source ../common/functions-install.sh
 
-arg_string   PROXY proxy "http proxy url (x.x.x.x:xxx)"
+arg_string PROXY proxy "http proxy url (x.x.x.x:xxx)"
 arg_finish "$@"
-
-ENV_PASS=$(
-	safe_environment \
-		"http_proxy=http://$PROXY" \
-		"https_proxy=http://$PROXY"
-)
 
 create_pod_service_unit gongt/wordpress
 unit_depend mariadb.pod.service
-unit_podman_arguments "$ENV_PASS"
+environment_variable \
+	"http_proxy=http://$PROXY" \
+	"https_proxy=http://$PROXY"
 unit_fs_bind data/wordpress /data
 unit_fs_bind share/nginx /run/nginx
 shared_sockets_provide word-press

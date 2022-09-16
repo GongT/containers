@@ -36,36 +36,31 @@ unit_unit Description "bridge remote http/https connection to local"
 if [[ ${REMOTE_SERVER:-} ]]; then
 	info "客户端模式"
 	SERVER_PUB=$(echo "$KEY_PRIVATE_SRV" | wg pubkey)
-	ENV_PASS=$(
-		safe_environment \
-			"KEY_PRIVATE=$KEY_PRIVATE" \
-			"SERVER_PUB=$SERVER_PUB" \
-			"REMOTE_SERVER=$REMOTE_SERVER" \
-			"EXPOSE_PORT=$EXPOSE_PORT" \
-			"IPV6=$IPV6" \
-			"NO_UDP2RAW=$NO_UDP2RAW" \
-			"NO_UDPSPEEDER=$NO_UDPSPEEDER" \
-			"WIREGUARD_MTU=$WIREGUARD_MTU"
-	)
+	environment_variable \
+		"KEY_PRIVATE=$KEY_PRIVATE" \
+		"SERVER_PUB=$SERVER_PUB" \
+		"REMOTE_SERVER=$REMOTE_SERVER" \
+		"EXPOSE_PORT=$EXPOSE_PORT" \
+		"IPV6=$IPV6" \
+		"NO_UDP2RAW=$NO_UDP2RAW" \
+		"NO_UDPSPEEDER=$NO_UDPSPEEDER" \
+		"WIREGUARD_MTU=$WIREGUARD_MTU"
 	network_use_gateway
 else
 	info "服务器模式"
 	CLIENT_PUB=$(echo "$KEY_PRIVATE" | wg pubkey)
-	ENV_PASS=$(
-		safe_environment \
-			"KEY_PRIVATE=$KEY_PRIVATE_SRV" \
-			"CLIENT_PUB=$CLIENT_PUB" \
-			"EXPOSE_PORT=$EXPOSE_PORT" \
-			"IPV6=$IPV6" \
-			"NO_UDP2RAW=$NO_UDP2RAW" \
-			"NO_UDPSPEEDER=$NO_UDPSPEEDER" \
-			"WIREGUARD_MTU=$WIREGUARD_MTU"
-	)
+	environment_variable \
+		"KEY_PRIVATE=$KEY_PRIVATE_SRV" \
+		"CLIENT_PUB=$CLIENT_PUB" \
+		"EXPOSE_PORT=$EXPOSE_PORT" \
+		"IPV6=$IPV6" \
+		"NO_UDP2RAW=$NO_UDP2RAW" \
+		"NO_UDPSPEEDER=$NO_UDPSPEEDER" \
+		"WIREGUARD_MTU=$WIREGUARD_MTU"
 	network_use_host
 fi
 
 add_network_privilege
-unit_podman_arguments "$ENV_PASS"
 # unit_start_notify output "start worker process"
 # unit_body Restart always
 healthcheck "10s" "12" "/opt/healthcheck.sh"
