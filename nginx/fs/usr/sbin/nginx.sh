@@ -47,8 +47,8 @@ done
 
 if [[ -e /etc/resolv.conf ]]; then
 	SYSTEM_RESOLVERS="$(
-		(grep -v '127.0.0.1' | grep nameserver | sed -E 's/^nameserver\s+//g') </etc/resolv.conf || true
-	)"
+		cat /etc/resolv.conf | grep -v '^#' | grep -v '127.0.0.1' | grep nameserver | sed -E 's/^nameserver\s+//g'
+	)" || true
 else
 	SYSTEM_RESOLVERS=""
 fi
