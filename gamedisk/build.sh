@@ -15,13 +15,21 @@ STEP="install iscsi-tgtd"
 make_base_image_by_dnf "fedora-tgtd" source/dependencies.lst
 ### TGTD END
 
-RESULT=$(create_if_not gamedisk-tgtd-result $BUILDAH_LAST_IMAGE)
+### init
+download_and_install_x64_init "fedora-tgtd"
+### init END
 
-buildah copy "$RESULT" fs /
+### 复制文件
+STEP="复制文件"
+merge_local_fs "fedora-tgtd"
+### 安装acme END
 
-buildah config --cmd '/opt/start.sh' --stop-signal SIGINT "$RESULT"
-buildah config --author "GongT <admin@gongt.me>" --created-by "#MAGIC!" --label name=gongt/gamedisk "$RESULT"
+STEP="配置镜像信息"
+buildah_config "fedora-tgtd" --stop-signal SIGINT \
+	--volume /var/lib/dhclient \
+	--author "GongT <admin@gongt.me>" --created-by "#MAGIC!" --label name=gongt/gamedisk
 info "settings update..."
 
+RESULT=$(create_if_not "gamedisk" "$BUILDAH_LAST_IMAGE")
 buildah commit "$RESULT" gongt/gamedisk
 info "Done!"

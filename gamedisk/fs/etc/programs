@@ -1,0 +1,14 @@
+[tgtd]
+arg[]:/bin/bash
+arg[]:/opt/start.sh
+signal:SIGINT
+
+[iperf]
+arg[]:/usr/bin/iperf3
+arg[]:--server
+arg[]:--port
+arg[]:33233
+
+[dhcp]
+arg[]:/usr/sbin/dhclient
+arg[]:-d
