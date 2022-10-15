@@ -1,4 +1,4 @@
 glibc
 sed
 bash
-busybox
+busybox-shared

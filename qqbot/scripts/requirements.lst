@@ -1,4 +1,4 @@
 coreutils
 bash
 java-latest-openjdk-headless
-busybox
+busybox-shared
