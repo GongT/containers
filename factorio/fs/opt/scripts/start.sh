@@ -17,7 +17,7 @@ fi
 
 cp -vfr "/opt/factorio/skel/." "$GAME_INST"
 
-TITLE_VERSION=$("$GAME_BIN" --version | busybox head -n1 | sed 's/^Version: //g' | sed -E 's/,.+$//g' | sed 's/(//g')
+TITLE_VERSION=$("$GAME_BIN" --version | head -n1 | sed 's/^Version: //g' | sed -E 's/,.+$//g' | sed 's/(//g')
 
 sed -i "s/GATE_SERVER_TITLE/$SERVER_TITLE [$DIST_TAG $TITLE_VERSION]/g; s/GAME_SERVER_DESCRIPTION/$SERVER_DESCRIPTION/g" /opt/server-settings.json
 sed -i "s/LOGIN_USERNAME_HERE/$USERNAME/g; s/LOGIN_PASSWORD_HERE/$PASSWORD/g" /opt/server-settings.json
