@@ -27,8 +27,8 @@ function create_one() {
 	network_use_auto "$PORT/udp"
 	systemd_slice_type entertainment
 
-	unit_fs_bind "/data/Volumes/AppData/GameSave/factorio/$DIST_TAG" /data
-	unit_fs_bind "/data/Volumes/AppData/GameSave/factorio/mods" /data/mods
+	unit_fs_bind "/data/Volumes/GameDisk/GameSave/factorio/$DIST_TAG" /data
+	unit_fs_bind "/data/Volumes/GameDisk/GameSave/factorio/mods" /data/mods
 	unit_fs_tempfs 512M /data/temp
 
 	unit_podman_safe_environment \
