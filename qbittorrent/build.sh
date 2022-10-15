@@ -15,7 +15,7 @@ info "starting..."
 ### 编译时依赖项目
 STEP="编译时依赖项目"
 hash_compile_deps() {
-	dnf_hash_version scripts/compile.lst
+	dnf_list_version scripts/compile.lst
 }
 install_compile_deps() {
 	info "dnf install..."
