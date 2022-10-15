@@ -4,7 +4,7 @@ set -Eeuo pipefail
 
 declare -r GAME_ROOT=/opt/factorio
 if ! [[ "${DIST_TAG:-}" ]]; then
-	declare -r DIST_TAG="stable"
+	declare -xr DIST_TAG="stable"
 fi
 declare -r GAME_INST="$GAME_ROOT/$DIST_TAG"
 declare -r SAVE_FILE="/data/map.zip"
@@ -15,6 +15,8 @@ if ! [[ -e $SAVE_FILE ]]; then
 	exit 66
 fi
 
+cp -vfr "/opt/factorio/skel/." "$GAME_INST"
+
 TITLE_VERSION=$("$GAME_BIN" --version | busybox head -n1 | sed 's/^Version: //g' | sed -E 's/,.+$//g' | sed 's/(//g')
 
 sed -i "s/GATE_SERVER_TITLE/$SERVER_TITLE [$DIST_TAG $TITLE_VERSION]/g; s/GAME_SERVER_DESCRIPTION/$SERVER_DESCRIPTION/g" /opt/server-settings.json
@@ -24,6 +26,13 @@ if [[ "$GAME_PASSWORD" ]]; then
 else
 	sed -i "/GAME_PASSWORD_HERE/d" /opt/server-settings.json
 fi
+
+sed -i "s/RCON_PORT/$RCON_PORT/g" "$GAME_INST/config/config.ini"
+
+if [[ ! $PROXY_SERVER ]]; then
+	PROXY_SERVER=
+fi
+sed -i "s/PROXY_SERVER/$PROXY_SERVER/g" "$GAME_INST/config/config.ini"
 
 {
 	if [[ "${RESOLVE_OPTIONS:-}" ]]; then

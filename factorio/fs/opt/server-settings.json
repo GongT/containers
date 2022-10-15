@@ -21,7 +21,7 @@
 	"auto_pause": true,
 	"allow_commands": "admins-only",
 	"only_admins_can_pause_the_game": false,
-	"autosave_only_on_server": false,
+	"autosave_only_on_server": true,
 	"admins": [
 		"GongT"
 	],
