@@ -13,7 +13,7 @@ API_LIST=()
 if [[ $NET_TYPE -eq 6 ]]; then
 	API_LIST+=(http://checkip.dns.he.net https://api6.ipify.org)
 else
-	API_LIST+=(http://show-my-ip.gongt.me https://api.ipify.org)
+	API_LIST+=(http://checkip.dns.he.net https://api.ipify.org)
 fi
 
 function call_curl() {
