@@ -8,8 +8,8 @@ source ../common/functions-build.sh
 BUILDAH_LAST_IMAGE="node:alpine"
 
 STEP="复制应用文件并安装依赖"
-mkdir -p "$SYSTEM_COMMON_CACHE/npm"
-merge_local_fs "bttracker" "--volume=$SYSTEM_COMMON_CACHE/npm:/root/.npm" scripts/npm-install.sh
+mkdir -p "$SYSTEM_COMMON_CACHE/nodejs/npm"
+merge_local_fs "bttracker" "--volume=$SYSTEM_COMMON_CACHE/nodejs/npm:/root/nodejs/.npm" scripts/npm-install.sh
 
 buildah_config "bttracker" --entrypoint '' --cmd 'node --unhandled-rejections=strict /data/app/lib/main.js' \
 	--stop-signal SIGINT --volume /data/store \

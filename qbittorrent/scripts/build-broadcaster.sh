@@ -6,8 +6,8 @@ function x() {
 }
 
 export GO111MODULE="auto"
-export GOCACHE="$SYSTEM_COMMON_CACHE/golang"
-export GOMODCACHE="$SYSTEM_COMMON_CACHE/golang.mod"
+export GOCACHE="$SYSTEM_COMMON_CACHE/golang/cache"
+export GOMODCACHE="$SYSTEM_COMMON_CACHE/golang/mod"
 export GOPATH=/go
 export GOPROXY="https://proxy.golang.org"
 export PATH="$GOPATH/bin:$PATH"

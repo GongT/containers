@@ -35,6 +35,6 @@ done
 DOMAIN_ARRAY_JSON=$(query -n '$ARGS.positional' --args "${DOMAIN_ARRAY[@]}")
 echo "domain array: $DOMAIN_ARRAY_JSON"
 
-echo "name=DOMAIN_ARRAY::$DOMAIN_ARRAY_JSON" >>"$GITHUB_OUTPUT"
+echo "DOMAIN_ARRAY=$DOMAIN_ARRAY_JSON" >>"$GITHUB_OUTPUT"
 
 podman push "$LAST_COMMITED_IMAGE" "docker://$PRIMARY/$PROJECT_NAME:latest"
