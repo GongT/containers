@@ -1,4 +1,4 @@
-name: "proxyclient"
+name: "dandan-api"
 on:
   workflow_dispatch:
     inputs:
@@ -18,18 +18,18 @@ on:
         required: false
         default: false
   schedule:
-    - cron:  '47 4 20 * *'
+    - cron:  '47 4 7 * *'
   push:
     paths:
-      - "proxyclient/**"
-      - "!proxyclient/install-service.sh"
-    #  - ".github/workflows/generated-build-proxyclient.yaml"
+      - "dandan-api/**"
+      - "!dandan-api/install-service.sh"
+    #  - ".github/workflows/generated-build-dandan-api.yaml"
     # - common
     branches:
       - master
 env:
   NODE_ENV: production
-  PROJECT_NAME: "proxyclient"
+  PROJECT_NAME: "dandan-api"
   GITHUB_ACTOR: ${{ github.actor }}
 jobs:
   cancel:
@@ -79,9 +79,9 @@ jobs:
         uses: pat-s/always-upload-cache@v3.0.1
         with:
           path: ${{ env.SYSTEM_COMMON_CACHE }}
-          key: common-cache-proxyclient-${{ hashFiles('proxyclient') }}
+          key: common-cache-dandan-api-${{ hashFiles('dandan-api') }}
           restore-keys: |
-            common-cache-proxyclient
+            common-cache-dandan-api
             common-cache-
 
       - name: "从ghcr.io获取上次生成的镜像"
