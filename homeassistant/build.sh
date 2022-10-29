@@ -84,7 +84,7 @@ buildah_cache "qbittorrent" hash_program_files copy_program_files
 
 ### 配置文件等
 hash_supporting_files() {
-	tar -c -f- scripts/prepare-run.sh fs | md5sum
+	tar -c -f- scripts/prepare-run.sh fs
 }
 copy_supporting_files() {
 	info "supporting files copy to target..."

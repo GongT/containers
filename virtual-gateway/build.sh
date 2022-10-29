@@ -11,10 +11,8 @@ info "starting..."
 STEP="安装系统依赖"
 DEPS=(bash curl util-linux iproute2 iperf3)
 apk_hash() {
-	{
-		cat scripts/install.sh
-		echo "${DEPS[*]} dhclient"
-	} | md5sum
+	cat scripts/install.sh
+	echo "${DEPS[*]} dhclient"
 }
 apk_install() {
 	local CONTAINER

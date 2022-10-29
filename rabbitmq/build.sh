@@ -26,7 +26,7 @@ buildah_cache2 "rabbitmq" hash_download do_download
 
 ### 配置文件等
 STEP="复制配置文件"
-tar c -v --owner=0 --group=0 --mtime='UTC 2000-01-01' --sort=name "fs" | md5sum
+# tar c -v --owner=0 --group=0 --mtime='UTC 2000-01-01' --sort=name "fs" | md5sum
 merge_local_fs "rabbitmq"
 ### 配置文件等 END
 
