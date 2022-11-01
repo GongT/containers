@@ -5,7 +5,7 @@ flock -n -E 233 /tmp/ddns-v6-inprogress \
 RET=$?
 
 if [[ $RET -eq 233 ]]; then
-	echo "(4) DDNS in progress, skip this time." >&2
+	echo "(6) DDNS in progress, skip this time." >&2
 	exit 0
 fi
 
