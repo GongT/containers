@@ -15,6 +15,8 @@ if [[ "${CI:-}" ]]; then
 	sudo apt install jq gnupg podman buildah mount
 fi
 
+sudo cp "../90-myregistry.conf" /etc/containers/registries.conf.d/
+
 JSON=$(gpg --quiet --batch --yes --passphrase "$SECRET_PASSWORD" --decrypt build-secrets.json.gpg)
 
 function query() {
