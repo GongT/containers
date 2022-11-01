@@ -6,7 +6,7 @@ cd "$(dirname "$(realpath "${BASH_SOURCE[0]}")")"
 cd ..
 
 is_allowed() {
-	local BLACKLIST=(bitcoin-peer ethereum-peer virtual-gateway-bridge proxyclient dandan-api nodered homeassistant proxyserver-nat)
+	local BLACKLIST=(bitcoin-peer ethereum-peer virtual-gateway-bridge proxyclient dandan-api danmakurecord nodered homeassistant proxyserver-nat)
 	local match="$1" e
 	for e in "${BLACKLIST[@]}"; do
 		if [[ $e == "$match" ]]; then
