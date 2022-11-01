@@ -37,4 +37,5 @@ echo "domain array: $DOMAIN_ARRAY_JSON"
 
 echo "DOMAIN_ARRAY=$DOMAIN_ARRAY_JSON" >>"$GITHUB_OUTPUT"
 
+echo "publish to primary: $PRIMARY/$PROJECT_NAME:latest"
 podman push "$LAST_COMMITED_IMAGE" "docker://$PRIMARY/$PROJECT_NAME:latest"
