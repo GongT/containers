@@ -5,6 +5,16 @@ set -Eeuo pipefail
 cd "$(dirname "$(realpath "${BASH_SOURCE[0]}")")"
 cd ..
 
+is_allowed() {
+	local BLACKLIST=(bitcoin-peer ethereum-peer virtual-gateway-bridge proxyclient dandan-api nodered homeassistant proxyserver-nat)
+	local match="$1" e
+	for e in "${BLACKLIST[@]}"; do
+		if [[ $e == "$match" ]]; then
+			return 1
+		fi
+	done
+}
+
 declare -i cron_day=1
 
 mapfile -d '' -t BUILD_FILES < <(find . -maxdepth 2 -name build.sh -print0 | sort --zero-terminated --dictionary-order)
@@ -14,6 +24,11 @@ TABLE="| Container | Link | Build Status |
 "
 for i in "${BUILD_FILES[@]}"; do
 	PROJ=$(basename "$(dirname "$i")")
+
+	if ! is_allowed "$PROJ"; then
+		continue
+	fi
+
 	F=".github/workflows/generated-build-$PROJ.yaml"
 
 	sed "s#{{PROJ}}#$PROJ#g" _scripts_/template.yaml >"$F"
