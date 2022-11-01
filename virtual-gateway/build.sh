@@ -16,7 +16,7 @@ apk_hash() {
 }
 apk_install() {
 	local CONTAINER
-	CONTAINER=$(new_container "$1" "gongt/alpine-init")
+	CONTAINER=$(new_container "$1" "registry.gongt.me/gongt/init")
 	buildah run $(use_alpine_apk_cache) "$CONTAINER" sh -s- -- "${DEPS[@]}" <scripts/install.sh
 }
 buildah_cache "infra-build" apk_hash apk_install

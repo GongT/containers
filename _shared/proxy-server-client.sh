@@ -8,7 +8,7 @@ pushd "$(dirname "$(realpath "${BASH_SOURCE[0]}")")" &>/dev/null
 ### 编译依赖项目
 STEP="安装编译依赖"
 DEPS=(bash gcc git make g++ musl-dev linux-headers)
-make_base_image_by_apk "gongt/alpine-init" "$PCS_CACHE_BRANCH" "${DEPS[@]}"
+make_base_image_by_apk "registry.gongt.me/gongt/init" "$PCS_CACHE_BRANCH" "${DEPS[@]}"
 ### 编译依赖项目 END
 
 ### 编译udp2raw

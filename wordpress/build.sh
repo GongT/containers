@@ -6,13 +6,13 @@ cd "$(dirname "$(realpath "${BASH_SOURCE[0]}")")"
 source ../common/functions-build.sh
 
 info "starting..."
-RESULT=$(create_if_not wordpress-worker gongt/alpine-init)
+RESULT=$(create_if_not wordpress-worker registry.gongt.me/gongt/init)
 
 ### 依赖项目
 STEP="安装系统依赖"
 declare -a DEPS
 mapfile -t DEPS < <(cat scripts/deps.lst)
-make_base_image_by_apk gongt/alpine-init "wordpress-build" "${DEPS[@]}"
+make_base_image_by_apk registry.gongt.me/gongt/init "wordpress-build" "${DEPS[@]}"
 ### 依赖项目 END
 
 RESULT=$(create_if_not wordpress-worker "$BUILDAH_LAST_IMAGE")

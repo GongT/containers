@@ -10,7 +10,7 @@ source ../_shared/proxy-server-client.sh
 ### 依赖项目
 STEP="安装系统依赖"
 DEPS=(bash wireguard-tools-wg dnsmasq privoxy)
-make_base_image_by_apk "gongt/alpine-init" "proxyclient" "${DEPS[@]}" <scripts/post-install.sh
+make_base_image_by_apk "registry.gongt.me/gongt/init" "proxyclient" "${DEPS[@]}" <scripts/post-install.sh
 ### 依赖项目 END
 
 ### 复制编译结果

@@ -13,13 +13,13 @@ make_base_image_by_apk "docker.io/registry" "docker-registry" libstdc++
 ### 依赖 END
 
 ### sbin/init
-STEP="复制gongt/alpine-init"
+STEP="复制registry.gongt.me/gongt/init"
 hash_init() {
-	perfer_proxy podman pull gongt/alpine-init
+	perfer_proxy podman pull registry.gongt.me/gongt/init
 }
 download_init() {
 	local RESULT="$1"
-	buildah copy "--from=gongt/alpine-init" "$RESULT" "/sbin/init" "/sbin/init"
+	buildah copy "--from=registry.gongt.me/gongt/init" "$RESULT" "/sbin/init" "/sbin/init"
 }
 buildah_cache2 "docker-registry" hash_init download_init
 ### sbin/init END
