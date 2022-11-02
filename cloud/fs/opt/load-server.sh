@@ -17,4 +17,4 @@ cp -vu /opt/auto.config.php config/auto.config.php
 
 chown -R media_rw:users config /var/lib/nextcloud/apps /var/log/nextcloud
 
-exec /usr/sbin/php-fpm7 --nodaemonize --force-stderr --allow-to-run-as-root
+exec /usr/sbin/php-fpm81 --nodaemonize --force-stderr --allow-to-run-as-root

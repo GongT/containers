@@ -10,7 +10,7 @@ arg[]:6
 signal:kill
 
 [phpmyadmin]
-arg[]:/usr/sbin/php-fpm7
+arg[]:/usr/sbin/php-fpm81
 arg[]:--nodaemonize
 arg[]:--force-stderr
 arg[]:--allow-to-run-as-root
