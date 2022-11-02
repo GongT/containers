@@ -1,0 +1,10 @@
+[Unit]
+Description=cron job for nextcloud
+
+[Service]
+Type=oneshot
+RemainAfterExit=no
+User=media_rw
+Group=users
+ExecStart=/bin/php -d memory_limit=2G /usr/share/nextcloud/cron.php
+EnvironmentFile=/etc/environment

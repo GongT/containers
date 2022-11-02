@@ -15,7 +15,7 @@ return array(
 	'apps_paths' => array(
 		// Read-only location for apps shipped with Nextcloud and installed by apk.
 		0 => array(
-			'path' => '/usr/share/webapps/nextcloud/apps',
+			'path' => '/usr/share/nextcloud/apps',
 			'url' => '/apps',
 			'writable' => false,
 		),
@@ -47,10 +47,10 @@ return array(
 		'OC\Preview\TXT',
 		'OC\Preview\MarkDown'
 	),
-	'memcache.local' => '\OC\Memcache\APCu',
+	'memcache.local' => '\OC\Memcache\Redis',
 	'memcache.locking' => '\OC\Memcache\Redis',
 	'redis' => array(
-		'host' => '/tmp/redis.sock',
+		'host' => '/run/redis.sock',
 		'port' => 0,
 		'dbindex' => 0,
 		'timeout' => 1.5,

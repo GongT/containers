@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+
+set -Eeuo pipefail
+
+sudo -u media_rw /bin/bash /opt/occ-user.sh -- "$@"

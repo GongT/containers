@@ -9,21 +9,32 @@ info "starting..."
 
 ### 依赖项目
 STEP="安装系统依赖"
-declare -a DEPS
-mapfile -t DEPS < <(cat scripts/deps.lst)
-make_base_image_by_apk registry.gongt.me/gongt/init "nextcloud" "${DEPS[@]}"
+POST_SCRIPT=$(<scripts/clean-install.sh) \
+	make_base_image_by_dnf "nextcloud" scripts/deps.lst
 ### 依赖项目 END
 
-RESULT=$(create_if_not cloud-worker "$BUILDAH_LAST_IMAGE")
+setup_systemd "nextcloud"
 
-buildah run "$RESULT" sh < scripts/build-script.sh
-info "install complete..."
-
-buildah copy "$RESULT" fs /
+merge_local_fs "nextcloud"
 info "copy config files complete..."
 
-buildah config --author "GongT <admin@gongt.me>" --created-by "#MAGIC!" --label name=gongt/cloud "$RESULT"
+STEP="安装"
+function hash_install_script() {
+	hash_path scripts/build-script.sh
+}
+function run_install_script() {
+	buildah run "--volume=$(pwd)/scripts/build-script.sh:/tmp/build-script" "$1" bash '/tmp/build-script'
+}
+buildah_cache2 "nextcloud" hash_install_script run_install_script
+
+STEP="配置镜像"
+buildah_config "nextcloud" \
+	--author "GongT <admin@gongt.me>" \
+	--created-by "#MAGIC!!" \
+	--label name=gongt/cloud
+
 info "settings updated..."
 
+RESULT=$(create_if_not "cloud" "$BUILDAH_LAST_IMAGE")
 buildah commit "$RESULT" gongt/cloud
 info "Done!"

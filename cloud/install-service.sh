@@ -15,8 +15,9 @@ unit_data danger
 environment_variable \
 	"PROXY=$PROXY" \
 	"SMTP_PASSWORD=$SMTP_PASSWORD"
+unit_using_systemd
 unit_fs_bind data/cloud/apps /var/lib/nextcloud/apps
-unit_fs_bind config/cloud /usr/share/webapps/nextcloud/config
+unit_fs_bind config/cloud /usr/share/nextcloud/config
 unit_fs_bind logs/cloud /var/log/nextcloud
 unit_fs_bind /data/Volumes/AppData/NextCloud /data
 unit_fs_bind /data/Volumes /drives

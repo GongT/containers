@@ -1,25 +1,14 @@
-#!/bin/sh
+#!/usr/bin/env bash
 
-set -e
+set -Eeuo pipefail
 
-mkdir -p /var/lib/nginx/logs /run/nginx
-
-deluser nextcloud || true
-adduser -h /var/lib/nextcloud -s /sbin/nologin -G users -D -H -u 100 media_rw || true
-
-if [[ -L /usr/share/webapps/nextcloud/config ]]; then
-	rm -f /usr/share/webapps/nextcloud/config
-else
-	rm -rf /usr/share/webapps/nextcloud/config
+if id nextcloud 2>/dev/null; then
+	userdel nextcloud
 fi
-mkdir -p /usr/share/webapps/nextcloud/config
 
-AA='"$@"'
-echo "#!/bin/sh
-cd /usr/share/webapps/nextcloud
-su -s /bin/sh media_rw -c 'php -d memory_limit=2G occ $AA' -- -- $AA
-" > /usr/bin/occ
-chmod a+x /usr/bin/occ
+groupadd --force --gid 100 users
+useradd --no-create-home --home-dir /var/lib/nextcloud --shell /sbin/nologin --no-user-group --gid users --uid 100 media_rw
 
-echo '<?php echo phpinfo();
-' >/usr/share/webapps/nextcloud/updater/phpinfo.php
+chown 100:100 /var/lib/nextcloud -R
+
+systemctl enable nginx.service php-fpm.service redis.service nextcloud-clean.timer

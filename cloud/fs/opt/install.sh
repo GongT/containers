@@ -1,7 +1,7 @@
 #!/bin/sh
 
 set -eu
-cd /usr/share/webapps/nextcloud
+cd /usr/share/nextcloud
 
 echo_run() {
 	echo "$*"
