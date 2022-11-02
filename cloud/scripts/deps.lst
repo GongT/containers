@@ -2,6 +2,7 @@ nginx
 redis
 nextcloud
 php81-fpm
+php81-xml
 php81-pdo_mysql
 php81-pecl-apcu
 php81-exif
