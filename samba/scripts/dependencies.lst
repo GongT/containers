@@ -6,3 +6,4 @@ samba-common-tools
 iproute
 iputils
 passwd
+glibc-gconv-extra

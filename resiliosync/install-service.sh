@@ -9,7 +9,7 @@ arg_finish "$@"
 
 function common() {
 	local PROFILE=$1
-	local -i PORT="$RANDOM + 20000"
+	local -i PORT=$2
 	unit_podman_image gongt/resiliosync
 	# unit_data danger
 
@@ -34,6 +34,6 @@ function common() {
 
 create_pod_service_unit beatsaber-music-sync
 unit_unit Description 'BeatSaber Music Packs Sync'
-common "beatsaber"
+common "beatsaber" 35515
 unit_fs_bind /data/Volumes/GameDisk/Download/BeatSaber /data/content
 unit_finish
