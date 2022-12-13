@@ -14,6 +14,4 @@ network_use_nat
 systemd_slice_type normal
 # unit_podman_image_pull never
 unit_fs_bind data/docker-registry /var/lib/registry
-unit_podman_arguments --env="REGISTRY_HTTP_ADDR=/run/sockets/docker-registry.sock" \
-	--env="REGISTRY_HTTP_NET=unix"
 unit_finish
