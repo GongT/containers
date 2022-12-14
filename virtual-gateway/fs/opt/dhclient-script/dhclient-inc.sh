@@ -62,6 +62,7 @@ PREINIT | PREINIT6)
 			sleep 1
 		done
 	fi
+	ip link set "$interface" mtu 1485
 	;;
 RENEW | REBIND | RENEW6 | REBIND6)
 	dump_env

@@ -9,7 +9,7 @@ create_pod_service_unit gongt/transmission
 unit_unit Description transmission
 unit_data danger
 
-network_use_auto 51413
+network_use_auto 43070
 systemd_slice_type idle -101
 
 unit_start_notify output "State changed from 'Starting' to"
