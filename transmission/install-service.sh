@@ -12,7 +12,7 @@ unit_data danger
 network_use_auto 43070
 systemd_slice_type idle -101
 
-unit_start_notify output "State changed from 'Starting' to"
+# unit_start_notify output "State changed from 'Starting' to"
 unit_fs_bind data/transmission /opt/data
 unit_fs_bind config/transmission /opt/config
 unit_fs_bind /data/Volumes /data/Volumes

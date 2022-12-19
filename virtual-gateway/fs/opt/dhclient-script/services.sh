@@ -42,23 +42,44 @@ declare -a CONFIG_ARGS=(
 	-pf "/var/run/dhclient$NET_TYPE.pid"
 )
 
-/usr/sbin/dhclient \
-	-v \
-	"-$NET_TYPE" \
-	-d \
-	-1 \
-	-i \
-	"${CONFIG_ARGS[@]}" \
-	"${ENVS[@]}" \
-	"$interface" &
-PID=$!
+declare -i RETRY=0
+while true; do
+	/usr/sbin/dhclient \
+		-v \
+		"-$NET_TYPE" \
+		-d \
+		-1 \
+		-i \
+		"${CONFIG_ARGS[@]}" \
+		"${ENVS[@]}" \
+		"$interface" &
+	PID=$!
 
-export PID
-echo "PID=$PID"
+	export PID
+	echo "PID=$PID"
 
-set +Ee
-wait $PID
-RET=$?
+	set +Ee
+	wait $PID
+	RET=$?
 
-echo "wait done (code $RET)... bye bye~"
-exit $RET
+	echo -n "wait done (code $RET)..."
+
+	# 2 is not got ip
+	if [[ $RET -eq 2 ]] && [[ $RETRY -lt 5 ]]; then
+		RETRY="$RETRY + 1"
+		echo "retry ($RETRY) in 5s..."
+		sleep 5
+		continue
+	fi
+
+	echo "bye bye~"
+
+	if [[ $NET_TYPE == 6 ]]; then
+		echo "halt~ (disable ipv6)"
+		bash /opt/wait-net/delete.sh "$NET_TYPE"
+		sleep infinity
+	else
+		echo "bye bye~"
+		exit $RET
+	fi
+done

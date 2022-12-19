@@ -22,6 +22,7 @@ function common() {
 
 	unit_fs_bind "config/resiliosync/$PROFILE" /data/config
 	unit_fs_bind "data/resiliosync/$PROFILE" /data/state
+	unit_fs_bind "logs/resiliosync/$PROFILE" /var/log
 
 	mkdir -p "$CONTAINERS_DATA_PATH/config/resiliosync/$PROFILE"
 	cp "profiles/$PROFILE.sh" "$CONTAINERS_DATA_PATH/config/resiliosync/$PROFILE/profile.sh"
