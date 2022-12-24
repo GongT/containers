@@ -1,0 +1,15 @@
+[Match]
+Name=*
+Kind=veth
+
+[Link]
+RequiredForOnline=yes
+
+[Network]
+Description=Default Network
+DHCP=yes
+
+[DHCPv4]
+SendHostname=yes
+ClientIdentifier=mac
+SendRelease=yes

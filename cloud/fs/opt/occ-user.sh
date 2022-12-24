@@ -5,6 +5,6 @@ set -Eeuo pipefail
 cd /usr/share/nextcloud
 
 set -a
-source /etc/environment
+source /run/.userenvironments
 
 exec php -d memory_limit=2G occ "$@"

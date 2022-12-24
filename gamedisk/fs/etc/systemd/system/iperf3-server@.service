@@ -1,0 +1,10 @@
+[Unit]
+Description=iperf3 server on %i
+After=tgtd.service
+
+[Install]
+WantedBy=multi-user.target
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/iperf3 --server --port %i

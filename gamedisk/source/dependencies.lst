@@ -1,3 +1,4 @@
 scsi-target-utils
 iperf3
-dhclient
+systemd-networkd
+iproute

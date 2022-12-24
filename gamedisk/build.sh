@@ -10,18 +10,18 @@ arg_finish "$@"
 
 info "starting..."
 
+export BUILDAH_LAST_IMAGE=$(podman pull fedora:latest)
+
 ### TGTD
 STEP="install iscsi-tgtd"
 make_base_image_by_dnf "fedora-tgtd" source/dependencies.lst
 ### TGTD END
 
-### init
-download_and_install_x64_init "fedora-tgtd"
-### init END
+setup_systemd "fedora-tgtd"
 
 ### 复制文件
 STEP="复制文件"
-merge_local_fs "fedora-tgtd"
+merge_local_fs "fedora-tgtd" source/post-copy.sh
 ### 安装acme END
 
 STEP="配置镜像信息"
