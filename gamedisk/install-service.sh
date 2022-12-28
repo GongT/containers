@@ -20,7 +20,7 @@ unit_start_notify output "tgtd configured"
 
 systemd_slice_type infrastructure
 unit_using_systemd
-add_capability SYS_ADMIN
+# add_capability SYS_ADMIN
 add_network_privilege
 use_full_system_privilege
 

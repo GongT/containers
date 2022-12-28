@@ -26,7 +26,6 @@ merge_local_fs "fedora-tgtd" source/post-copy.sh
 
 STEP="配置镜像信息"
 buildah_config "fedora-tgtd" --stop-signal SIGINT \
-	--volume /var/lib/dhclient \
 	--author "GongT <admin@gongt.me>" --created-by "#MAGIC!" --label name=gongt/gamedisk
 info "settings update..."
 
