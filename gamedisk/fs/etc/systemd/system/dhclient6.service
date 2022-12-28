@@ -1,7 +1,5 @@
 [Unit]
 Description=dhclient v6
-RequiredBy=network-online.target
-Before=network-online.target
 
 [Install]
 WantedBy=multi-user.target
@@ -9,6 +7,6 @@ WantedBy=multi-user.target
 [Service]
 Type=forking
 PIDFile=/var/run/dhclient6.pid
-ExecStart=/usr/sbin/dhclient -v -6 -pf /var/run/dhclient6.pid
+ExecStart=-/usr/sbin/dhclient -v -6 -pf /var/run/dhclient6.pid
 ExecStop=/usr/sbin/dhclient -v -6 -r -pf /var/run/dhclient6.pid
 Restart=always
