@@ -18,7 +18,7 @@ unit_start_notify output 'Started qBittorrent'
 # unit_body Restart always
 unit_fs_bind config/qbittorrent /opt/qBittorrent/config
 unit_fs_bind data/qbittorrent /opt/qBittorrent/data
-unit_fs_bind data/qbittorrent/HOME /root
+unit_volume qbittorrent-home /home/media_rw
 unit_fs_bind /data/Volumes /data/Volumes
 unit_fs_bind share/nginx /run/nginx
 
