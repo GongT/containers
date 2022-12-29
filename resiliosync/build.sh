@@ -12,17 +12,12 @@ info "starting..."
 
 ### 运行时依赖项目
 STEP="运行时依赖项目"
-cleanup_unused_files() {
-	local RESULT=$1
-	delete_rpm_files "$RESULT"
-	buildah run "$RESULT" bash -c "rm -rf /etc/nginx"
-}
 dnf_add_repo_string resilio '[resilio-sync]
 name=Resilio Sync
 baseurl=https://linux-packages.resilio.com/resilio-sync/rpm/$basearch
 enabled=1
 gpgcheck=0'
-POST_SCRIPT=cleanup_unused_files make_base_image_by_dnf "resiliosync" scripts/runtime.lst
+POST_SCRIPT=$(<scripts/post-install.sh) make_base_image_by_dnf "resiliosync" scripts/runtime.lst
 ### 运行时依赖项目 END
 
 ### sbin/init

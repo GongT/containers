@@ -27,15 +27,15 @@ install_compile_deps() {
 BUILDAH_FORCE="$FORCE_DNF" buildah_cache "qbittorrent-build" hash_compile_deps install_compile_deps
 ### 编译时依赖项目 END
 
-### 编译libtorrent
-STEP="编译libtorrent"
-download_and_build_github qbittorrent-build libtorrent arvidn/libtorrent RC_1_2
-### 编译libtorrent END
+# ### 编译libtorrent
+# STEP="编译libtorrent"
+# download_and_build_github qbittorrent-build libtorrent arvidn/libtorrent RC_1_2
+# ### 编译libtorrent END
 
-### 编译qbittorrent!
-STEP="编译qbittorrent"
-download_and_build_github qbittorrent-build qbittorrent qbittorrent/qBittorrent
-### 编译qbittorrent! END
+# ### 编译qbittorrent!
+# STEP="编译qbittorrent"
+# download_and_build_github qbittorrent-build qbittorrent qbittorrent/qBittorrent
+# ### 编译qbittorrent! END
 
 ### 编译remote-shell
 STEP="编译remote-shell"
@@ -46,12 +46,7 @@ COMPILE_RESULT_IMAGE="$BUILDAH_LAST_IMAGE"
 
 ### 运行时依赖项目
 STEP="运行时依赖项目"
-cleanup_unused_files() {
-	local RESULT=$1
-	delete_rpm_files "$RESULT"
-	buildah run "$RESULT" bash -c "rm -rf /etc/nginx /etc/privoxy"
-}
-POST_SCRIPT=cleanup_unused_files make_base_image_by_dnf "qbittorrent" scripts/runtime.lst
+POST_SCRIPT=$(<scripts/post-install-cleanup.sh) make_base_image_by_dnf "qbittorrent" scripts/runtime.lst
 ### 运行时依赖项目 END
 
 ### 编译好的qbt
@@ -66,24 +61,17 @@ copy_program_files() {
 buildah_cache2 "qbittorrent" hash_program_files copy_program_files
 ### 编译好的qbt END
 
+setup_systemd "qbittorrent"
+
 ### 配置文件等
 STEP="复制配置文件"
-hash_supporting_files() {
-	tar -c -f- scripts/prepare-run.sh fs
-}
-copy_supporting_files() {
-	info "supporting files copy to target..."
-	local RESULT
-	RESULT=$(new_container "$1" "$BUILDAH_LAST_IMAGE")
-	buildah copy "$RESULT" fs /
-	buildah run "$RESULT" bash <"scripts/prepare-run.sh"
-}
-buildah_cache "qbittorrent" hash_supporting_files copy_supporting_files
+merge_local_fs "qbittorrent" "scripts/prepare-run.sh"
 ### 配置文件等 END
 
-RESULT=$(create_if_not "qbittorrent-final" "$BUILDAH_LAST_IMAGE")
-buildah config --cmd "$FEDORA_SYSTEMD_COMMAND" --author "GongT <admin@gongt.me>" --created-by "#MAGIC!" --label name=gongt/qbittorrent "$RESULT"
+STEP="配置镜像信息"
+buildah_config qbittorrent --author "GongT <admin@gongt.me>" --created-by "#MAGIC!" --label name=gongt/qbittorrent
 info "settings update..."
 
+RESULT=$(create_if_not "qbittorrent" "$BUILDAH_LAST_IMAGE")
 buildah commit "$RESULT" gongt/qbittorrent
 info "Done!"
