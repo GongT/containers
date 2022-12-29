@@ -1,6 +1,5 @@
 [Unit]
 Description=qBittorrent
-After=network-online.target
 Requires=xvnc0.service i3.service
 After=xvnc0.service i3.service
 

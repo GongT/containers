@@ -30,8 +30,7 @@ chown media_rw:users /home/media_rw
 
 echo 'LANG="zh_CN.utf8"' >/etc/locale.conf
 
-systemctl mask getty@tty1 systemd-logind systemd-networkd-wait-online systemd-hostnamed
-systemctl enable dhclient xvnc0 i3 privoxy nginx update-self-ip update-self-ip.timer
+systemctl enable dhclient dhclient6 xvnc0 i3 privoxy nginx update-self-ip update-self-ip.timer
 systemctl enable qbittorrent
 
 mkdir -p /etc/systemd/system/console-getty.service.d

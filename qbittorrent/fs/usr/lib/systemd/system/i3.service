@@ -1,6 +1,6 @@
 [Unit]
 Description=qBittorrent NOX i3 wm
-After=network-online.target xvnc0.service
+After=xvnc0.service
 Requires=xvnc0.service
 
 [Service]

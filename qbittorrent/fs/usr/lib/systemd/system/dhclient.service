@@ -1,8 +1,9 @@
 [Unit]
 Description=dhclient v4
-RequiredBy=network-online.target
-Before=network-online.target qbittorrent.service update-self-ip.service
-Wants=dhclient6.service
+Before=qbittorrent.service update-self-ip.service
+
+[Install]
+WantedBy=multi-user.target
 
 [Service]
 Type=forking
@@ -10,6 +11,3 @@ PIDFile=/var/run/dhclient4.pid
 ExecStart=/usr/sbin/dhclient -v -4 -pf /var/run/dhclient4.pid
 ExecStop=/usr/sbin/dhclient -v -4 -r -pf /var/run/dhclient4.pid
 Restart=always
-
-[Install]
-WantedBy=network-online.target

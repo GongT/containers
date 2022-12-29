@@ -1,6 +1,9 @@
 [Unit]
 Description=dhclient v6 (wants by v4)
 
+[Install]
+WantedBy=multi-user.target
+
 [Service]
 Type=forking
 PIDFile=/var/run/dhclient6.pid

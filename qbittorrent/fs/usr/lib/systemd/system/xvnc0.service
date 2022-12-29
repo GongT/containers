@@ -1,7 +1,6 @@
 [Unit]
 Description=XVNC Daemon
-After=network-online.target
-Requires=network-online.target
+After=dhclient.service
 
 [Service]
 Type=simple
