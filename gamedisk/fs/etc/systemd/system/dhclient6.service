@@ -1,8 +1,5 @@
 [Unit]
-Description=dhclient v6
-
-[Install]
-WantedBy=multi-user.target
+Description=dhclient v6 (wants by v4)
 
 [Service]
 Type=forking

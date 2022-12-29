@@ -2,6 +2,7 @@
 Description=dhclient v4
 RequiredBy=network-online.target
 Before=network-online.target
+Wants=dhclient6.service
 
 [Install]
 WantedBy=multi-user.target

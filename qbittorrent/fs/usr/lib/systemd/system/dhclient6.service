@@ -1,5 +1,5 @@
 [Unit]
-Description=dhclient v6
+Description=dhclient v6 (wants by v4)
 
 [Service]
 Type=forking
@@ -7,6 +7,3 @@ PIDFile=/var/run/dhclient6.pid
 ExecStart=-/usr/sbin/dhclient -v -6 -pf /var/run/dhclient6.pid
 ExecStop=/usr/sbin/dhclient -v -6 -r -pf /var/run/dhclient6.pid
 Restart=always
-
-[Install]
-WantedBy=network-online.target

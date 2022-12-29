@@ -2,6 +2,7 @@
 Description=dhclient v4
 RequiredBy=network-online.target
 Before=network-online.target qbittorrent.service update-self-ip.service
+Wants=dhclient6.service
 
 [Service]
 Type=forking
