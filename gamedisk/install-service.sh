@@ -16,7 +16,7 @@ unit_unit Require 'dev-mapper-scsi\x2dgame.device'
 environment_variable "DISK_TO_USE=/dev/mapper/scsi-game"
 
 unit_fs_bind /dev/mapper /dev/mapper
-unit_start_notify output "tgtd configured"
+unit_start_notify output "TGTD-COMPLETE-START"
 
 systemd_slice_type infrastructure
 unit_using_systemd
