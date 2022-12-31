@@ -2,7 +2,7 @@
 Description=update myself ip address to nginx proxy
 
 [Timer]
-OnActiveSec=2m
+OnCalendar=*-*-* *:0/5:00
 
 [Install]
 WantedBy=timers.target

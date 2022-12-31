@@ -14,14 +14,15 @@ systemd_slice_type idle -100
 add_network_privilege
 
 unit_using_systemd
-unit_start_notify output 'Started qBittorrent'
+unit_start_notify output 'Started qbittorrent.service'
 # unit_body Restart always
 unit_fs_bind config/qbittorrent /opt/qBittorrent/config
 unit_fs_bind data/qbittorrent /opt/qBittorrent/data
-unit_volume qbittorrent-home /home/media_rw
+unit_fs_bind data/qbittorrent/HOME /home/media_rw
 unit_fs_bind /data/Volumes /data/Volumes
 unit_fs_bind share/nginx /run/nginx
 
+unit_body TimeoutStartSec 2min
 unit_podman_arguments --env="LANG=zh_CN.utf8"
 shared_sockets_provide qbittorrent-admin
 

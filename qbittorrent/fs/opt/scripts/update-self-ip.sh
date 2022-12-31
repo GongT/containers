@@ -27,5 +27,5 @@ mkdir -p /var/log/nginx
 if [[ "$FIRST" ]]; then
 	nginx -t
 else
-	systemctl restart nginx
+	systemctl restart nginx --no-block
 fi
