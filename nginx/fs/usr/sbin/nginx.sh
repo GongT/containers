@@ -102,6 +102,13 @@ fi
 
 remove-ssl
 
+if [[ -e /config/conf.d/default_server.conf ]]; then
+	cat /config/conf.d/default_server.conf >/etc/nginx/conf.d/90-default_server.conf
+fi
+if ! [[ -e /config/conf.d/default_server.example.conf ]]; then
+	cat /etc/nginx/conf.d/90-default_server.conf >/config/conf.d/default_server.example.conf
+fi
+
 /usr/sbin/nginx -t || {
 	echo "===================================="
 	echo "!! Failed test nginx config files !!"
