@@ -39,6 +39,7 @@ merge_local_fs "acme"
 STEP="配置镜像信息"
 buildah_config "acme" --entrypoint "$(json_array /opt/entrypoint.sh)" --stop-signal=SIGINT \
 	--volume /opt/data --volume /log --volume /etc/ACME \
+	--env "LE_CONFIG_HOME=/opt/data" \
 	--author "GongT <admin@gongt.me>" --created-by "#MAGIC!" --label name=gongt/acme
 info "settings updated..."
 

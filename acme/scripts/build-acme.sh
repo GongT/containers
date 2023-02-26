@@ -13,3 +13,6 @@ bash acme.sh --install \
 	--accountemail "admin@example.com" \
 	--accountkey "/opt/data/account.key" \
 	--accountconf "/opt/data/account.conf"
+
+ln -s /opt/data /root/.acme.sh
+

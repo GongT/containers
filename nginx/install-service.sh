@@ -38,6 +38,7 @@ environment_variable \
 	"DISABLE_SSL=$DISABLE_SSL"
 
 unit_start_notify output "start worker process"
+unit_body TimeoutStartSec 2min
 # unit_body Restart always
 unit_fs_bind /data/DevelopmentRoot /data/DevelopmentRoot
 unit_fs_bind data/nginx /data
