@@ -12,7 +12,7 @@ unit_unit Description "iSCSI target daemon for game disk"
 unit_data danger
 
 unit_unit After 'dev-mapper-scsi\x2dgame.device'
-unit_unit Require 'dev-mapper-scsi\x2dgame.device'
+unit_unit Requires 'dev-mapper-scsi\x2dgame.device'
 environment_variable "DISK_TO_USE=/dev/mapper/scsi-game"
 
 unit_fs_bind /dev/mapper /dev/mapper

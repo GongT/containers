@@ -13,4 +13,3 @@ if ! grep -q -- media_rw /etc/passwd; then
 fi
 
 systemctl enable smb nmb prepare systemd-networkd always-online.timer
-systemctl disable systemd-networkd-wait-online.service

@@ -14,7 +14,7 @@ unit_podman_arguments "--env=WATCH_LIVEROOM=%i"
 network_use_nat
 systemd_slice_type normal
 
-unit_body Restart no
+unit_body Restart on-failure
 # unit_podman_image_pull never
 unit_fs_bind "/data/Volumes/VideoRecord/bilibili/%i/raw" /data/raw
 mapfile -t -d ',' SYSTEM_AUTO_ENABLE < <(echo -n "$LIVE_ROOMS")
