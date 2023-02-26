@@ -7,3 +7,4 @@ iproute
 iputils
 passwd
 glibc-gconv-extra
+dhcp-client
