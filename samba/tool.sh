@@ -17,7 +17,6 @@ function commonConfig() {
 	unit_data danger
 
 	unit_using_systemd
-	add_capability SYS_ADMIN
 
 	unit_start_notify output "smb service startup complete"
 
@@ -32,5 +31,7 @@ function commonConfig() {
 
 	unit_reload_command '/usr/bin/podman exec $CONTAINER_ID /usr/bin/reload-samba'
 
-	add_network_privilege
+	# add_network_privilege
+	# add_capability SYS_ADMIN
+	use_full_system_privilege # TODO
 }
