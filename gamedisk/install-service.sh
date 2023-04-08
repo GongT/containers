@@ -11,9 +11,9 @@ unit_podman_image gongt/gamedisk
 unit_unit Description "iSCSI target daemon for game disk"
 unit_data danger
 
-unit_unit After 'dev-mapper-scsi\x2dgame.device'
-unit_unit Requires 'dev-mapper-scsi\x2dgame.device'
-environment_variable "DISK_TO_USE=/dev/mapper/scsi-game"
+unit_unit After 'dev-mapper-game\x2dscsi.device'
+unit_unit Requires 'dev-mapper-game\x2dscsi.device'
+environment_variable "DISK_TO_USE=/dev/mapper/game-scsi"
 
 unit_fs_bind /dev/mapper /dev/mapper
 unit_start_notify output "TGTD-COMPLETE-START"
@@ -26,3 +26,4 @@ use_full_system_privilege
 
 network_use_manual --network=bridge0 --mac-address=3E:F4:F3:CE:1D:80
 unit_finish
+

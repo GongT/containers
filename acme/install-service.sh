@@ -50,6 +50,9 @@ unit_start_notify output "everything works well, starting crond"
 unit_body RestartSec 10s
 unit_body TimeoutStartSec 30min
 
+unit_unit After 'dnsmasq.device'
+unit_unit Requires 'dnsmasq.device'
+
 unit_podman_hostname acme
 unit_body Environment FROM_SERVICE=yes
 unit_fs_bind share/ssl /etc/ACME
