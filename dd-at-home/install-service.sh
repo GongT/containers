@@ -13,5 +13,5 @@ network_use_auto
 systemd_slice_type idle
 
 unit_body Restart on-failure
-unit_podman_image_pull never
+# unit_podman_image_pull never
 unit_finish
