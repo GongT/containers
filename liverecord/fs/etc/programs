@@ -1,5 +1,5 @@
 [hook]
-arg[]: /usr/bin/python3.7
+arg[]: /usr/bin/python3
 arg[]: -u
 arg[]: /opt/app/handle-webhook.py
 signal: INT
