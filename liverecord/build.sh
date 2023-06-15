@@ -7,7 +7,7 @@ source ../common/functions-build.sh
 
 arg_finish "$@"
 
-buildah_cache_start ghcr.io/bililive/bililiverecorder
+buildah_cache_start ghcr.io/bililiverecorder/bililiverecorder
 
 STEP="安装系统依赖"
 function hash_deps() {
