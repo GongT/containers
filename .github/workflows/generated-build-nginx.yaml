@@ -18,7 +18,7 @@ on:
         required: false
         default: false
   schedule:
-    - cron:  '47 4 14 * *'
+    - cron:  '47 4 15 * *'
   push:
     paths:
       - "nginx/**"

@@ -1,4 +1,4 @@
-name: "mqtt-broker"
+name: "dd-at-home"
 on:
   workflow_dispatch:
     inputs:
@@ -18,18 +18,18 @@ on:
         required: false
         default: false
   schedule:
-    - cron:  '47 4 14 * *'
+    - cron:  '47 4 6 * *'
   push:
     paths:
-      - "mqtt-broker/**"
-      - "!mqtt-broker/install-service.sh"
-    #  - ".github/workflows/generated-build-mqtt-broker.yaml"
+      - "dd-at-home/**"
+      - "!dd-at-home/install-service.sh"
+    #  - ".github/workflows/generated-build-dd-at-home.yaml"
     # - common
     branches:
       - master
 env:
   NODE_ENV: production
-  PROJECT_NAME: "mqtt-broker"
+  PROJECT_NAME: "dd-at-home"
   GITHUB_ACTOR: ${{ github.actor }}
 jobs:
   cancel:
@@ -84,9 +84,9 @@ jobs:
             ${{ env.SYSTEM_COMMON_CACHE }}/pip
             ${{ env.SYSTEM_COMMON_CACHE }}/nodejs
             ${{ env.SYSTEM_COMMON_CACHE }}/CCACHE
-          key: common-cache-mqtt-broker-${{ hashFiles('mqtt-broker') }}
+          key: common-cache-dd-at-home-${{ hashFiles('dd-at-home') }}
           restore-keys: |
-            common-cache-mqtt-broker
+            common-cache-dd-at-home
             common-cache-
 
       - name: "从ghcr.io获取上次生成的镜像"

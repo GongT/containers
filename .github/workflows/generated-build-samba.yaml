@@ -18,7 +18,7 @@ on:
         required: false
         default: false
   schedule:
-    - cron:  '47 4 19 * *'
+    - cron:  '47 4 20 * *'
   push:
     paths:
       - "samba/**"
