@@ -45,6 +45,18 @@
 		"RecordDanmakuSuperChat": {
 			"HasValue": true,
 			"Value": true
+		},
+		"SaveStreamCover": {
+			"HasValue": true,
+			"Value": true
+		},
+		"FlvProcessorSplitOnScriptTag": {
+			"HasValue": true,
+			"Value": true
+		},
+		"NetworkTransportAllowedAddressFamily": {
+			"HasValue": true,
+			"Value": 1
 		}
 	},
 	"rooms": [
