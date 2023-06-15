@@ -33,4 +33,4 @@ STEP="更新配置"
 buildah_config ddathome --cmd '/opt/DDatHome'
 
 RESULT=$(create_if_not "ddathome" "$BUILDAH_LAST_IMAGE")
-buildah commit "$RESULT" gongt/ddathome
+buildah commit "$RESULT" gongt/dd-at-home

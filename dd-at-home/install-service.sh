@@ -8,7 +8,6 @@ source ../common/functions-install.sh
 arg_finish "$@"
 
 create_pod_service_unit gongt/dd-at-home
-unit_podman_image gongt/ddathome
 network_use_auto
 systemd_slice_type idle
 
