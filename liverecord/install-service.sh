@@ -10,7 +10,7 @@ arg_finish "$@"
 
 create_pod_service_unit gongt/liverecord@
 unit_podman_arguments "--env=WATCH_LIVEROOM=%i"
-# unit_start_notify output 'mosquitto version'
+unit_start_notify output '弹幕服务器已连接'
 network_use_nat
 systemd_slice_type normal
 
