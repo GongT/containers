@@ -14,8 +14,8 @@ unit_start_notify output '弹幕服务器已连接'
 systemd_slice_type normal
 environment_variable "LIVE_ROOMS=$LIVE_ROOMS"
 
-# unit_body Restart on-failure
-unit_podman_image_pull never
+unit_body Restart on-failure
+# unit_podman_image_pull never
 
 network_use_bridge
 unit_fs_bind share/nginx /run/nginx
