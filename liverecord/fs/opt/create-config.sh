@@ -22,3 +22,20 @@ for ROOM in "${ARR_ROOMS[@]}"; do
 done
 
 echo "$FILE_DATA" >/data/config.json
+
+{
+	if [[ "${RESOLVE_OPTIONS-}" ]]; then
+		echo "options $RESOLVE_OPTIONS"
+	fi
+	if [[ "${RESOLVE_SEARCH-}" ]]; then
+		echo "options $RESOLVE_SEARCH"
+	fi
+	if [[ "${NSS-}" ]]; then
+		mapfile -d ' ' -t NSS < <(echo "$NSS")
+		for NS in "${NSS[@]}"; do
+			echo "nameserver $NS"
+		done
+	else
+		echo "nameserver 223.5.5.5"
+	fi
+} >/etc/resolv.conf

@@ -3,7 +3,7 @@
 set -Eeuo pipefail
 
 declare -r GAME_ROOT=/opt/factorio
-if ! [[ "${DIST_TAG:-}" ]]; then
+if ! [[ "${DIST_TAG-}" ]]; then
 	declare -xr DIST_TAG="stable"
 fi
 declare -r GAME_INST="$GAME_ROOT/$DIST_TAG"
@@ -35,19 +35,20 @@ fi
 sed -i "s/PROXY_SERVER/$PROXY_SERVER/g" "$GAME_INST/config/config.ini"
 
 {
-	if [[ "${RESOLVE_OPTIONS:-}" ]]; then
+	if [[ "${RESOLVE_OPTIONS-}" ]]; then
 		echo "options $RESOLVE_OPTIONS"
 	fi
-	if [[ "${RESOLVE_SEARCH:-}" ]]; then
+	if [[ "${RESOLVE_SEARCH-}" ]]; then
 		echo "options $RESOLVE_SEARCH"
 	fi
-	if [[ "${NSS:-}" ]]; then
+	if [[ "${NSS-}" ]]; then
 		mapfile -d ' ' -t NSS < <(echo "$NSS")
 		for NS in "${NSS[@]}"; do
 			echo "nameserver $NS"
 		done
+	else
+		echo "nameserver 8.8.8.8"
 	fi
-	echo "nameserver 8.8.8.8"
 } >/etc/resolv.conf
 
 exec "$GAME_BIN" \

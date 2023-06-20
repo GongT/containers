@@ -48,7 +48,7 @@
 		},
 		"NetworkTransportAllowedAddressFamily": {
 			"HasValue": true,
-			"Value": 1
+			"Value": -1
 		},
 		"TimingApiTimeout" :{
 			"HasValue": true,
