@@ -14,7 +14,7 @@ function hash_deps() {
 	cat scripts/install-deps.sh
 }
 function install_deps() {
-	perfer_proxy buildah run $(use_debian_apt_cache) "$1" bash <scripts/install-deps.sh
+	perfer_proxy buildah run $(use_apt_cache liverecord) "$1" bash <scripts/install-deps.sh
 }
 buildah_cache2 liverecord hash_deps install_deps
 
@@ -39,8 +39,8 @@ STEP="复制文件系统"
 merge_local_fs liverecord
 
 STEP="更新配置"
-buildah_config liverecord --entrypoint '["/entrypoint.sh"]' --cmd 'init' \
-	--volume=/data/raw
+buildah_config liverecord --entrypoint '["/bin/bash", "-c"]' --cmd '/entrypoint.sh' \
+	--volume=/data/records
 
 RESULT=$(create_if_not "liverecord" "$BUILDAH_LAST_IMAGE")
 buildah commit "$RESULT" gongt/liverecord

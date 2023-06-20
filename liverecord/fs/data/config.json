@@ -2,13 +2,9 @@
 	"$schema":"https://raw.githubusercontent.com/BililiveRecorder/BililiveRecorder/dev/configV3.schema.json",
 	"version": 3,
 	"global": {
-		"WebHookUrlsV2": {
-			"HasValue": true,
-			"Value": "http://127.0.0.1:12450/webhook"
-		},
 		"FileNameRecordTemplate": {
 			"HasValue": true,
-			"Value": "raw/[{{ \"now\" | time_zone: \"Asia/Shanghai\" | format_date: \"yyyyMMdd_HHmmss\" }}]{{ title }}.{{ partIndex | format_number: \"000\" }}.flv"
+			"Value": "records/{{ roomId }}/raw/[{{ \"now\" | time_zone: \"Asia/Shanghai\" | format_date: \"yyyyMMdd_HHmmss\" }}]{{ title }}.{{ partIndex | format_number: \"000\" }}.flv"
 		},
 		"CuttingMode": {
 			"HasValue": true,
@@ -21,10 +17,6 @@
 		"RecordMode": {
 			"HasValue": true,
 			"Value": 0
-		},
-		"TimingStreamRetry": {
-			"HasValue": true,
-			"Value": 500
 		},
 		"RecordDanmaku": {
 			"HasValue": true,
@@ -57,6 +49,26 @@
 		"NetworkTransportAllowedAddressFamily": {
 			"HasValue": true,
 			"Value": 1
+		},
+		"TimingApiTimeout" :{
+			"HasValue": true,
+			"Value": 2500
+		},
+		"TimingStreamRetry" :{
+			"HasValue": true,
+			"Value": 500
+		},
+		"TimingStreamConnect" :{
+			"HasValue": true,
+			"Value": 10000
+		},
+		"TimingDanmakuRetry" :{
+			"HasValue": true,
+			"Value": 500
+		},
+		"TimingWatchdogTimeout" :{
+			"HasValue": true,
+			"Value": 10000
 		}
 	},
 	"rooms": [

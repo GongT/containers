@@ -1,10 +1,15 @@
-[hook]
-arg[]: /usr/bin/python3
-arg[]: -u
-arg[]: /opt/app/handle-webhook.py
-signal: INT
+# [hook]
+# arg[]: /usr/bin/python3
+# arg[]: -u
+# arg[]: /opt/app/handle-webhook.py
+# signal: INT
 
 [record]
 arg[]: /bin/bash
 arg[]: /opt/start-record.sh
 signal: TERM
+
+[nginx]
+arg[]: /bin/bash
+arg[]: /opt/start-nginx.sh
+signal: INT
