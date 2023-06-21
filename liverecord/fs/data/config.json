@@ -46,6 +46,10 @@
 			"HasValue": true,
 			"Value": true
 		},
+		"NetworkTransportUseSystemProxy": {
+		  "HasValue": true,
+		  "Value": true
+		},
 		"NetworkTransportAllowedAddressFamily": {
 			"HasValue": true,
 			"Value": -1

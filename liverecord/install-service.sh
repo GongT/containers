@@ -11,8 +11,13 @@ arg_finish "$@"
 create_pod_service_unit gongt/liverecord
 unit_start_notify output '弹幕服务器已连接'
 
+PROXY=()
+for I in http_proxy https_proxy all_proxy HTTP_PROXY HTTPS_PROXY ALL_PROXY; do
+	PROXY+=("$I=http://proxy-server.:3271")
+done
+
 systemd_slice_type normal
-environment_variable "LIVE_ROOMS=$LIVE_ROOMS"
+environment_variable "LIVE_ROOMS=$LIVE_ROOMS" "${PROXY[@]}"
 unit_podman_arguments '--dns-env=p.a.s.s'
 
 unit_body Restart on-failure
