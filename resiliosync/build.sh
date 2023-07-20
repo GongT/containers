@@ -31,7 +31,7 @@ get_download() {
 }
 do_download() {
 	local URL DOWNLOADED CONTAIENR="$1"
-	URL=$(github_release_asset_download_url_regex linux)
+	URL=$(github_release_asset_download_url_regex linux_amd64)
 	DOWNLOADED=$(perfer_proxy download_file_force "$URL")
 	xbuildah copy --chmod 0777 "$CONTAIENR" "$DOWNLOADED" "/usr/bin/hjson"
 }
