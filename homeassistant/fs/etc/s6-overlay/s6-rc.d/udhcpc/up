@@ -1,0 +1,3 @@
+#!/command/execlineb -P
+
+udhcpc -i eth0 -p /tmp/udhcpc.pid -R -b

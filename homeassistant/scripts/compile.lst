@@ -1,0 +1,17 @@
+python3
+python3-devel
+bash
+tzdata
+autoconf
+gcc
+gcc-c++
+bluez-libs-devel
+libffi-devel
+openssl-devel
+libjpeg-turbo-devel
+zlib-devel
+openjpeg2-devel
+libtiff-devel
+ffmpeg-free
+lapack-devel
+coreutils

@@ -1,0 +1,14 @@
+#!/bin/bash
+
+set -Eeuo pipefail
+
+mkdir -p /config/custom_components
+mount -t tmpfs tmpfs /config/custom_components
+
+for ZIP in /plugins/*.zip; do
+
+	NAME=$(basename "$ZIP" .zip)
+	echo "extract plugin: $NAME"
+	unzip -q "$ZIP" -d "/config/custom_components/$NAME"
+
+done
