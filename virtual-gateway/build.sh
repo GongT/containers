@@ -16,7 +16,7 @@ pacman_hash() {
 	echo "${DEPS[*]}"
 }
 pacman_install() {
-	buildah run $(use_pacman_cache) "$1" "bash" "-c" "pacman --noconfirm -S ${DEPS[*]}"
+	buildah run $(use_pacman_cache) "$1" "bash" "-c" "pacman --noconfirm -Syu ${DEPS[*]}"
 }
 buildah_cache2 "infra-build" pacman_hash pacman_install
 ### 依赖项目 END
