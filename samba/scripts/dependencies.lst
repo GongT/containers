@@ -1,10 +1,5 @@
 systemd
-systemd-networkd
 bash
 samba
-samba-common-tools
-iproute
+iproute2
 iputils
-passwd
-glibc-gconv-extra
-dhcp-client

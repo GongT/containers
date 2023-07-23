@@ -10,15 +10,7 @@ info "starting..."
 buildah_cache_start "archlinux:latest"
 
 ### 依赖项目
-STEP="安装系统依赖"
-DEPS=(curl iperf3 systemd)
-pacman_hash() {
-	echo "${DEPS[*]}"
-}
-pacman_install() {
-	buildah run $(use_pacman_cache) "$1" "bash" "-c" "pacman --noconfirm -Syu ${DEPS[*]}"
-}
-buildah_cache2 "infra-build" pacman_hash pacman_install
+make_base_image_by_pacman "infra-build" curl iperf3 systemd
 ### 依赖项目 END
 
 ### 配置文件等

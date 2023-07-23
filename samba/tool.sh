@@ -28,10 +28,11 @@ function commonConfig() {
 	unit_fs_bind /data/DevelopmentRoot /mountpoints/DevelopmentRoot
 	unit_fs_bind config/samba /opt/config
 	unit_fs_bind logs/samba /var/log/samba
+	unit_fs_tempfs /var/run
 
 	unit_reload_command '/usr/bin/podman exec $CONTAINER_ID /usr/bin/reload-samba'
 
-	# add_network_privilege
+	add_network_privilege
 	# add_capability SYS_ADMIN
-	use_full_system_privilege # TODO
+	# use_full_system_privilege # TODO
 }
