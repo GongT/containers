@@ -30,10 +30,12 @@ get_download() {
 	http_get_github_release_id "$REPO"
 }
 do_download() {
-	local URL DOWNLOADED CONTAIENR="$1"
+	local URL DOWNLOADED CONTAIENR="$1" TMPD
 	URL=$(github_release_asset_download_url_regex linux_amd64)
 	DOWNLOADED=$(perfer_proxy download_file_force "$URL")
-	xbuildah copy --chmod 0777 "$CONTAIENR" "$DOWNLOADED" "/usr/bin/hjson"
+	TMPD=$(create_temp_dir unzip)
+	tar xf "$DOWNLOADED" -C "$TMPD"
+	xbuildah copy --chmod 0777 "$CONTAIENR" "$TMPD/hjson" "/usr/bin/hjson"
 }
 buildah_cache2 "resiliosync" get_download do_download
 ### hjson END
