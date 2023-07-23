@@ -9,7 +9,7 @@ arg_string PROXY proxy "http proxy url (x.x.x.x:xxx)"
 arg_finish "$@"
 
 create_pod_service_unit gongt/wordpress
-unit_depend mariadb.pod.service
+unit_unit After nginx.pod.service mariadb.pod.service
 environment_variable \
 	"http_proxy=http://$PROXY" \
 	"https_proxy=http://$PROXY"

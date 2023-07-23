@@ -11,6 +11,7 @@ unit_unit Documentation https://docs.docker.com/registry/configuration/
 unit_fs_bind share/nginx /run/nginx
 shared_sockets_provide docker-registry
 network_use_nat
+unit_unit After nginx.pod.service
 systemd_slice_type normal
 # unit_podman_image_pull never
 unit_fs_bind data/docker-registry /var/lib/registry

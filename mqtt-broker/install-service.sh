@@ -11,7 +11,6 @@ arg_finish "$@"
 
 create_pod_service_unit gongt/mqtt-broker
 unit_unit After nginx.pod.service
-unit_unit Requires nginx.pod.service
 unit_start_notify output 'mosquitto version'
 network_use_nat
 systemd_slice_type normal
