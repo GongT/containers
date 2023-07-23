@@ -1,4 +1,0 @@
-#!/bin/sh
-
-bash /opt/ddns/v6.sh
-echo "<DDNS6> return $?" >&2

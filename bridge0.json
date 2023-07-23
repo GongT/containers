@@ -1,0 +1,13 @@
+{
+	"name": "bridge0",
+	"id": "f458a556dddecb341e1d79a36bfbcde4754ad2a63f3c50ead8da285057f4adec",
+	"driver": "bridge",
+	"network_interface": "bridge0",
+	"subnets": [],
+	"ipv6_enabled": true,
+	"internal": false,
+	"dns_enabled": false,
+	"ipam_options": {
+		"driver": "none"
+	}
+}

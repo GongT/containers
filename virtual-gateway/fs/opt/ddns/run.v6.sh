@@ -6,9 +6,7 @@ cd "$(dirname "$(realpath "${BASH_SOURCE[0]}")")"
 export NET_TYPE=6
 source ddns-inc.sh
 
-bash /opt/wait-net/wait.sh
-
-mapfile -t CURRENT_IP_OUTPUT < <(ip addr | grep inet6 | grep global | grep -v deprecated | awk '{print $2}' | sed -E 's#/\d+$##g' | sort -u -)
+mapfile -t CURRENT_IP_OUTPUT < <(ip addr | grep inet6 | grep global | grep -v deprecated | awk '{print $2}' | sed -E 's#/[0-9]+$##g' | sort -u -)
 
 pecho "interface ip address:"
 for i in "${CURRENT_IP_OUTPUT[@]}"; do

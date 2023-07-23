@@ -1,0 +1,9 @@
+[Unit]
+Description=startup signal
+After=ddns.timer
+Requires=ddns.timer systemd-networkd.service
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+ExecStart=/bin/bash -c "SYSTEM_STARTUP_COMPLETE"
