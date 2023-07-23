@@ -9,4 +9,4 @@ WantedBy=multi-user.target
 [Service]
 Type=oneshot
 RemainAfterExit=yes
-ExecStart=/bin/bash -c "SYSTEM_STARTUP_COMPLETE"
+ExecStart=/bin/bash -c "echo SYSTEM_STARTUP_COMPLETE"
