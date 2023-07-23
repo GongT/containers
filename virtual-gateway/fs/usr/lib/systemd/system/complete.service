@@ -3,6 +3,9 @@ Description=startup signal
 After=ddns.timer
 Requires=ddns.timer systemd-networkd.service
 
+[Install]
+WantedBy=multi-user.target
+
 [Service]
 Type=oneshot
 RemainAfterExit=yes
