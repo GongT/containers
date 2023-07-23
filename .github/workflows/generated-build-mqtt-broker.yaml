@@ -35,6 +35,7 @@ jobs:
   cancel:
     name: Cancel Previous Runs
     runs-on: ubuntu-latest
+    needs: build
     steps:
       - name: cancel running workflows
         timeout-minutes: 5
