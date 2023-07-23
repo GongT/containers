@@ -21,6 +21,7 @@ environment_variable "LIVE_ROOMS=$LIVE_ROOMS" "${PROXY[@]}"
 unit_podman_arguments '--dns-env=p.a.s.s'
 
 unit_body Restart on-failure
+unit_body TimeoutStartSec 2min
 # unit_podman_image_pull never
 
 network_use_bridge
