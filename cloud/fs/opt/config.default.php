@@ -50,7 +50,7 @@ return array(
 	'memcache.local' => '\OC\Memcache\Redis',
 	'memcache.locking' => '\OC\Memcache\Redis',
 	'redis' => array(
-		'host' => '/run/redis.sock',
+		'host' => '/tmp/redis.sock',
 		'port' => 0,
 		'dbindex' => 0,
 		'timeout' => 1.5,
