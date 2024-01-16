@@ -11,7 +11,7 @@ arg_finish "$@"
 
 info "starting..."
 
-export BUILDAH_LAST_IMAGE=$(podman pull fedora:latest)
+buildah_cache_start "fedora:$FEDORA_VERSION"
 
 STEP="运行时依赖项目"
 dnf_install "transmission" scripts/runtime.lst
