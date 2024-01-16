@@ -7,3 +7,10 @@ environment
 .env
 github_token
 .vscode/local-history
+/lib
+/temp
+node_modules
+
+
+### builder
+.github/secrets.json

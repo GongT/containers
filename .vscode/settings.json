@@ -1,21 +1,19 @@
 {
 	"git.detectSubmodules": false,
-	"quicktask.enableShell": true,
-	"files.associations": {
-		"*.conflist": "json"
-	},
+	"files.associations": {},
 	"files.watcherExclude": {
 		"**/nginx/source/**": true,
 		"**/wordpress/fs/project/**": true
 	},
 	"[javascript]": {
-		"editor.defaultFormatter": "vscode.typescript-language-features"
+		"editor.defaultFormatter": "esbenp.prettier-vscode"
 	},
 	"[typescript]": {
-		"editor.defaultFormatter": "vscode.typescript-language-features"
+		"editor.defaultFormatter": "esbenp.prettier-vscode"
 	},
 	"[json]": {
-		"editor.defaultFormatter": "vscode.json-language-features"
+		"editor.defaultFormatter": "esbenp.prettier-vscode"
 	},
 	"shellformat.flag": "-s -ln=bash -bn",
+	// "json.schemaDownload.enable": false
 }

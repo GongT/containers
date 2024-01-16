@@ -2,13 +2,16 @@
 
 set -Eeuo pipefail
 
-T="/run/nginx/vhost.d/transmission.conf"
-cp -v "/opt/scripts/nginx.conf" "$T"
-curl --unix /run/sockets/nginx.reload.sock http://_/
+chmod a+w /var/run
 
 if ! [[ -f /opt/config/config.json ]]; then
 	echo "{}" >/opt/config/config.json
 fi
 
-rm -f /opt/data/settings.json
+if [[ -f /opt/data/settings.json ]]; then
+	rm -f /opt/data/settings.json
+fi
+
 jq -s '.[0] * .[1]' /opt/scripts/config.json /opt/config/config.json >/opt/data/settings.json
+
+touch /data/invalid

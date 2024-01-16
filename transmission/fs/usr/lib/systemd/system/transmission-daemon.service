@@ -1,0 +1,45 @@
+[Unit]
+Description=Transmission BitTorrent Daemon
+Requires=nginx-attach.service
+After=nginx-attach.service systemd-networkd.target
+
+[Service]
+User=media_rw
+Group=users
+Type=notify-reload
+ExecStartPre=+/bin/bash /opt/scripts/start-pre.sh
+ExecStart=/usr/bin/transmission-daemon --paused --foreground --log-level=error --config-dir /opt/data --no-auth --pid-file /var/run/transmission.pid
+ExecStartPost=/bin/bash -c "echo SYSTEM_STARTUP_COMPLETE"
+TimeoutStartSec=30s
+TimeoutStopSec=2min
+Restart=on-abort
+RestartSec=10s
+RestartMode=direct
+
+# Hardening
+CapabilityBoundingSet=
+DevicePolicy=closed
+KeyringMode=private
+LockPersonality=true
+NoNewPrivileges=true
+MemoryDenyWriteExecute=true
+PrivateTmp=false
+PrivateDevices=true
+ProtectClock=true
+ProtectKernelLogs=true
+# ProtectControlGroups=true
+ProtectKernelModules=true
+# ProtectSystem=true
+ProtectKernelTunables=true
+ProtectProc=invisible
+RestrictNamespaces=true
+RestrictSUIDSGID=true
+RestrictAddressFamilies=AF_UNIX AF_INET AF_INET6
+RestrictRealtime=true
+SystemCallFilter=@system-service
+SystemCallArchitectures=native
+# SystemCallErrorNumber=EPERM
+ReadWritePaths=/opt/data
+
+[Install]
+WantedBy=multi-user.target

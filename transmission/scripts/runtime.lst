@@ -1,10 +1,9 @@
-glibc-common
 bash
 curl
-shadow-utils
-libevent
-libnatpmp
-libdeflate
 miniupnpc
-libstdc++
 jq
+systemd
+systemd-networkd
+transmission-daemon
+transmission-cli
+nginx
