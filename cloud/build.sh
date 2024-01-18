@@ -2,8 +2,6 @@
 
 set -Eeuo pipefail
 
-declare -xr FEDORA_VERSION=rawhide
-
 cd "$(dirname "$(realpath "${BASH_SOURCE[0]}")")"
 source ../common/functions-build.sh
 
