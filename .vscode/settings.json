@@ -15,5 +15,6 @@
 		"editor.defaultFormatter": "esbenp.prettier-vscode"
 	},
 	"shellformat.flag": "-s -ln=bash -bn",
+	"prettier.resolveGlobalModules": true,
 	// "json.schemaDownload.enable": false
 }

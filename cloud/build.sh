@@ -7,10 +7,12 @@ source ../common/functions-build.sh
 
 info "starting..."
 
+buildah_cache_start "fedora:$FEDORA_VERSION"
+
 ### 依赖项目
 STEP="安装系统依赖"
 POST_SCRIPT=$(<scripts/clean-install.sh) \
-	make_base_image_by_dnf "nextcloud" scripts/deps.lst
+	dnf_install "nextcloud" scripts/deps.lst
 ### 依赖项目 END
 
 setup_systemd "nextcloud"

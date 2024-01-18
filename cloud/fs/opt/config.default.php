@@ -1,10 +1,7 @@
 <?php
 
 return array(
-	'logfile' => '/var/log/nextcloud/main.log',
-	'logdateformat' => '',
 	'dbtableprefix' => '',
-	'mysql.utf8mb4' => true,
 	'default_language' => 'zh_CN',
 	'default_locale' => 'zh_CN',
 	'knowledgebaseenabled' => false,
@@ -12,20 +9,6 @@ return array(
 	'session_lifetime' => 60 * 60 * 24 * 30,
 	'session_keepalive' => false,
 	'token_auth_enforced' => false,
-	'apps_paths' => array(
-		// Read-only location for apps shipped with Nextcloud and installed by apk.
-		0 => array(
-			'path' => '/usr/share/nextcloud/apps',
-			'url' => '/apps',
-			'writable' => false,
-		),
-		// Writable location for apps installed from AppStore.
-		1 => array(
-			'path' => '/var/lib/nextcloud/apps',
-			'url' => '/apps-appstore',
-			'writable' => true,
-		),
-	),
 	'trashbin_retention_obligation' => '7,30',
 	'connectivity_check_domains' => array('google.com'),
 	'updatechecker' => false,
@@ -45,15 +28,7 @@ return array(
 		'OC\Preview\XBitmap',
 		'OC\Preview\MP3',
 		'OC\Preview\TXT',
-		'OC\Preview\MarkDown'
-	),
-	'memcache.local' => '\OC\Memcache\Redis',
-	'memcache.locking' => '\OC\Memcache\Redis',
-	'redis' => array(
-		'host' => '/tmp/redis.sock',
-		'port' => 0,
-		'dbindex' => 0,
-		'timeout' => 1.5,
+		'OC\Preview\MarkDown',
 	),
 	'blacklisted_files' => array(
 		'.htaccess',
@@ -62,7 +37,7 @@ return array(
 		'found.000',
 		'System Volume Information',
 		'OneDriveTemp',
-		'thumbs.db'
+		'thumbs.db',
 	),
 	'config_is_read_only' => false,
 	'mail_domain' => 'gongt.me',
@@ -76,11 +51,7 @@ return array(
 	'mail_smtpauth' => true,
 	'mail_smtpauthtype' => 'LOGIN',
 	'debug' => true,
-	'trusted_domains' =>
-	array(
-		 'localhost',
-		 'nextcloud.service.gongt.me',
-		 'nextcloud.service.gongt.me:59443',
-		 'nextcloud.gongt.net',
+	'trusted_domains' => array(
+		'localhost',
 	),
 );
