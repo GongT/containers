@@ -20,6 +20,7 @@ function commonConfig() {
 
 	unit_start_notify output "smb service startup complete"
 
+	unit_body TimeoutStartSec 5min
 	unit_podman_image gongt/samba
 	unit_podman_arguments --env="DEFAULT_PASSWORD=$DEFAULT_PASSWORD"
 

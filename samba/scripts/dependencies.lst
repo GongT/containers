@@ -3,3 +3,5 @@ bash
 samba
 iproute2
 iputils
+dhclient
+vim
