@@ -28,7 +28,7 @@ function commonConfig() {
 	unit_fs_bind /data/DevelopmentRoot /mountpoints/DevelopmentRoot
 	unit_fs_bind config/samba /opt/config
 	unit_fs_bind logs/samba /var/log/samba
-	unit_fs_tempfs /var/run
+	unit_fs_tempfs 1G /var/run
 
 	add_network_privilege
 	# add_capability SYS_ADMIN
