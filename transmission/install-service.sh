@@ -42,7 +42,7 @@ INSTANCE_NAME=anime
 TARGET=/data/Volumes/Anime
 create_it
 
-MAC_ADDRESS=f0:dd:7a:90:46:ba
+MAC_ADDRESS=f0:dd:7a:90:46:b6
 INSTANCE_NAME=software
 TARGET=/data/Volumes/UserData
 create_it

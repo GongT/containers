@@ -20,4 +20,4 @@ sed "s/{instance}/$INSTANCE_NAME/g" </opt/scripts/nginx.conf >"/run/nginx/vhost.
 
 bash /run/sockets/nginx.reload.sh
 
-# chown -R media_rw:users /data
+chown -R media_rw:users /opt
