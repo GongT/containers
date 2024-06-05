@@ -1,9 +1,0 @@
-bash
-curl
-miniupnpc
-jq
-systemd
-systemd-networkd
-transmission-daemon
-transmission-cli
-nginx

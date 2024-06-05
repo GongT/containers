@@ -6,12 +6,13 @@ cd "$(dirname "$(realpath "${BASH_SOURCE[0]}")")"
 source ../common/functions-build.sh
 
 arg_flag FORCE f/force "force re-download binary"
-arg_flag FORCE_DNF dnf "force dnf install"
 arg_finish "$@"
 
 info "starting..."
 
-buildah_cache_start "fedora:$FEDORA_VERSION"
+### 依赖项目
+make_base_image_by_pacman "transmission" scripts/dependencies.lst
+### 依赖项目 END
 
 STEP="运行时依赖项目"
 dnf_install "transmission" scripts/runtime.lst

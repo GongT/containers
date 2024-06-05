@@ -1,0 +1,8 @@
+bash
+curl
+jq
+systemd
+iproute2
+iputils
+dhclient
+transmission-cli

@@ -15,6 +15,7 @@ create_it() {
 
 	unit_using_systemd
 	add_network_privilege
+	use_full_system_privilege
 	network_use_manual --network=bridge0 "--mac-address=$MAC_ADDRESS"
 	systemd_slice_type idle -101
 
