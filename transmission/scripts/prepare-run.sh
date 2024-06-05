@@ -4,8 +4,9 @@ set -Eeuo pipefail
 
 function ensure_user() {
 	local U_ID=$1 U_NAME=$2 G_ID=$3
-	if cat /etc/passwd | grep -- "$U_NAME" | grep -q -- ":$U_ID:$G_ID:"; then
-		echo "Group $U_NAME exists with id $U_ID"
+	if grep -q -- "$U_NAME" /etc/passwd; then
+		echo "Group $U_NAME exists: $(grep -- "$U_NAME" /etc/passwd)"
+		usermod --gid "$G_ID" --uid "$U_ID" "$U_NAME"
 	else
 		useradd --gid "$G_ID" --no-create-home --no-user-group --uid "$U_ID" "$U_NAME"
 		echo "Created $U_NAME."
@@ -14,11 +15,12 @@ function ensure_user() {
 
 function ensure_group() {
 	local G_ID=$1 G_NAME=$2
-	if cat /etc/group | grep -- "$G_NAME" | grep -q -- ":$G_ID:"; then
-		echo "Group $G_NAME exists with id $G_ID"
+	if grep -q -- "$G_NAME" /etc/group; then
+		echo "Group $G_NAME exists: $(grep -- "$G_NAME" /etc/group)"
+		groupmod -g "$G_ID" "$G_NAME"
 	else
 		groupadd -g "$G_ID" "$G_NAME"
-		echo "Created $G_NAME."
+		echo "Created group $G_NAME."
 	fi
 }
 
