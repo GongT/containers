@@ -10,17 +10,17 @@ arg_string + SMTP_PASSWORD smtp_pass "SMTP config (pass)"
 arg_finish "$@"
 
 create_pod_service_unit gongt/cloud
-unit_unit Requires mariadb.pod.service
+unit_unit Requires mariadb.pod.service data-NextCloud.mount
+unit_unit After nginx.pod.service mariadb.pod.service data-NextCloud.mount 
 unit_data danger
 environment_variable \
 	"PROXY=$PROXY" \
 	"SMTP_PASSWORD=$SMTP_PASSWORD"
 unit_using_systemd
-unit_unit After nginx.pod.service mariadb.pod.service
 unit_fs_bind data/cloud/apps /var/lib/nextcloud/apps
 unit_fs_bind config/cloud /usr/share/nextcloud/config
 unit_fs_bind logs/cloud /var/log/nextcloud
-unit_fs_bind /data/Volumes/AppData/NextCloud /data
+unit_fs_bind /data/NextCloud /data
 unit_fs_bind /data/Volumes /drives
 shared_sockets_provide next-cloud
 network_use_nat

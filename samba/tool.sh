@@ -32,6 +32,6 @@ function commonConfig() {
 	unit_fs_tempfs 1G /var/run
 
 	add_network_privilege
-	# add_capability SYS_ADMIN
+	add_capability SYS_ADMIN
 	# use_full_system_privilege # TODO
 }
