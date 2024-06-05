@@ -31,4 +31,4 @@ chown media_rw:users /home/media_rw
 mkdir -p /root/.config
 touch /root/.config/user-dirs.dirs
 
-systemctl enable transmission-daemon.service systemd-networkd.service
+systemctl enable transmission-daemon.service systemd-networkd.service chown-data.service

@@ -4,14 +4,20 @@ set -Eeuo pipefail
 
 chmod a+w /var/run
 
-if ! [[ -f /opt/config/config.json ]]; then
-	echo "{}" >/opt/config/config.json
+if ! [[ -f "/opt/config/$INSTANCE_NAME.json" ]]; then
+	echo "{}" >"/opt/config/$INSTANCE_NAME.json"
 fi
 
 if [[ -f /opt/data/settings.json ]]; then
-	rm -f /opt/data/settings.json
+	unlink /opt/data/settings.json
 fi
 
-jq -s '.[0] * .[1]' /opt/scripts/config.json /opt/config/config.json >/opt/data/settings.json
+sed "s/{instance}/$INSTANCE_NAME/g" </opt/scripts/config.json >/tmp/config.json
 
-touch /data/invalid
+jq -s '.[0] * .[1]' /tmp/config.json "/opt/config/$INSTANCE_NAME.json" >/opt/data/settings.json
+
+sed "s/{instance}/$INSTANCE_NAME/g" </opt/scripts/nginx.conf >"/run/nginx/vhost.d/transmission-$INSTANCE_NAME.conf"
+
+bash /run/sockets/nginx.reload.sh
+
+# chown -R media_rw:users /data

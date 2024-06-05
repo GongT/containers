@@ -15,6 +15,7 @@ TimeoutStopSec=2min
 Restart=on-abort
 RestartSec=10s
 RestartMode=direct
+EnvironmentFile=/run/.userenvironments
 
 [Install]
 WantedBy=multi-user.target

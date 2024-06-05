@@ -1,0 +1,13 @@
+[Unit]
+Description=set /data owner
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/chown -R media_rw:users /data
+TimeoutStartSec=10min
+Restart=on-abort
+RestartSec=1min
+RestartMode=direct
+
+[Install]
+WantedBy=multi-user.target
