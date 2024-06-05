@@ -11,11 +11,9 @@ arg_finish "$@"
 info "starting..."
 
 ### 依赖项目
+STEP="运行时依赖项目"
 make_base_image_by_pacman "transmission" scripts/dependencies.lst
 ### 依赖项目 END
-
-STEP="运行时依赖项目"
-dnf_install "transmission" scripts/runtime.lst
 
 setup_systemd "transmission" \
 	nginx_config=/opt/scripts/nginx.conf nginx_attach
