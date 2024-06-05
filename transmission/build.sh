@@ -15,8 +15,7 @@ STEP="运行时依赖项目"
 make_base_image_by_pacman "transmission" scripts/dependencies.lst
 ### 依赖项目 END
 
-setup_systemd "transmission" \
-	nginx_config=/opt/scripts/nginx.conf nginx_attach
+setup_systemd "transmission" nginx_attach
 
 STEP="复制文件"
 merge_local_fs "transmission" scripts/prepare-run.sh

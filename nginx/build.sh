@@ -66,8 +66,8 @@ COMPILE_RESULT_IMAGE="$BUILDAH_LAST_IMAGE"
 ### 编译! END
 
 ### 编译好的nginx
-buildah_cache_start "gongt/glibc:bash"
-STEP="复制Nginx到glibc镜像中"
+make_base_image_by_pacman "nginx" scripts/runtime-requirements.lst
+STEP="复制Nginx到镜像中"
 hash_program_files() {
 	echo "$COMPILE_RESULT_IMAGE"
 	cat "scripts/prepare-run.sh"

@@ -1,0 +1,16 @@
+[Unit]
+Description=prepare to run
+Before=nginx-attach.service
+
+[Service]
+Type=oneshot
+RemainAfterExit=true
+ExecStart=/bin/bash /opt/scripts/prepare.sh
+ExecStop=/bin/bash /opt/scripts/start-pre.sh
+TimeoutStartSec=10min
+Restart=on-abort
+RestartSec=1min
+RestartMode=direct
+
+[Install]
+WantedBy=multi-user.target

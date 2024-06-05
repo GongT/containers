@@ -7,7 +7,6 @@ After=nginx-attach.service systemd-networkd.target
 User=media_rw
 Group=users
 Type=notify-reload
-ExecStartPre=+/bin/bash /opt/scripts/start-pre.sh
 ExecStart=/usr/bin/transmission-daemon --paused --foreground --log-level=error --config-dir /opt/data --no-auth --pid-file /var/run/transmission.pid
 ExecStartPost=/bin/bash -c "echo SYSTEM_STARTUP_COMPLETE"
 TimeoutStartSec=30s
