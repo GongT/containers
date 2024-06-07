@@ -77,7 +77,7 @@ copy_program_files() {
 }
 buildah_cache2 "nginx" hash_program_files copy_program_files
 ### 编译好的nginx END
- 
+
 ### 配置文件等
 STEP="复制配置文件"
 merge_local_fs "nginx"
