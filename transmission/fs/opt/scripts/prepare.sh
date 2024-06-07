@@ -16,6 +16,6 @@ sed "s/{instance}/$INSTANCE_NAME/g" </opt/scripts/config.json >/tmp/config.json
 
 jq -s '.[0] * .[1]' /tmp/config.json "/opt/config/$INSTANCE_NAME.json" >/opt/data/settings.json
 
-sed "s/{instance}/$INSTANCE_NAME/g" </opt/scripts/nginx.conf >"/opt/nginx.conf"
+sed "s/{instance}/$INSTANCE_NAME/g" </opt/scripts/nginx.template.conf >"/opt/nginx.conf"
 
 chown -R media_rw:users /opt
