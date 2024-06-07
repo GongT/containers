@@ -11,4 +11,4 @@ done
 collect_dist_binary_dependencies
 collect_binary_dependencies /usr/bin/htpasswd
 collect_dist_root
-copy_collected_dependencies
+copy_collected_files
