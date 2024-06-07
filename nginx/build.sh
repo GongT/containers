@@ -92,4 +92,4 @@ healthcheck "30s" "5" "curl --insecure https://127.0.0.1:443"
 
 RESULT=$(create_if_not nginx "$BUILDAH_LAST_IMAGE")
 buildah commit "$RESULT" gongt/nginx
-info_log "Done"
+info_log "Done."
