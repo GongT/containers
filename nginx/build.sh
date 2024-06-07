@@ -83,8 +83,6 @@ STEP="复制配置文件"
 merge_local_fs "nginx"
 ### 配置文件等 END
 
-info_log ""
-
 STEP="配置容器"
 buildah_config "nginx" --cmd '/usr/sbin/nginx.sh' --port 80 --port 443 --port 80/udp --port 443/udp \
 	--volume /config --volume /etc/ACME \
@@ -94,3 +92,4 @@ healthcheck "30s" "5" "curl --insecure https://127.0.0.1:443"
 
 RESULT=$(create_if_not nginx "$BUILDAH_LAST_IMAGE")
 buildah commit "$RESULT" gongt/nginx
+info_log "Done"
