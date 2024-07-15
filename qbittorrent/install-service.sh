@@ -22,6 +22,8 @@ unit_fs_bind data/qbittorrent/HOME /home/media_rw
 unit_fs_bind /data/Volumes /data/Volumes
 unit_fs_bind share/nginx /run/nginx
 
+unit_unit RequiresMountsFor /data/Volumes/H /data/Volumes/Anime
+
 unit_body TimeoutStartSec 2min
 unit_podman_arguments --env="LANG=zh_CN.utf8"
 shared_sockets_provide qbittorrent-admin

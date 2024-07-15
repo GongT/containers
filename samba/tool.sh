@@ -31,6 +31,14 @@ function commonConfig() {
 	unit_fs_bind logs/samba /var/log/samba
 	unit_fs_tempfs 1G /var/run
 
+	unit_unit RequiresMountsFor \
+		/data/Volumes/H \
+		/data/Volumes/Anime \
+		/data/Volumes/BigCache \
+		/data/Volumes/GameDisk \
+		/data/Volumes/UserData \
+		/data/Volumes/VideoRecord
+
 	add_network_privilege
 	add_capability SYS_ADMIN
 	# use_full_system_privilege # TODO
