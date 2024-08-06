@@ -30,8 +30,9 @@ download_src() {
 	SOURCE_DIRECTORY=$(create_temp_dir "opentracker")
 	download_git_result_copy "$SOURCE_DIRECTORY/opentracker" "opentracker" "master"
 
-	cd "$SOURCE_DIRECTORY"
+	pushd "$SOURCE_DIRECTORY" &>/dev/null
 	cvs -d :pserver:cvs@cvs.fefe.de:/cvs -z9 co "libowfat"
+	popd &>/dev/null
 
 	buildah copy "$BUILDER" "$SOURCE_DIRECTORY" "/opt/projects"
 }
