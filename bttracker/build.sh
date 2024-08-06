@@ -30,9 +30,11 @@ download_src() {
 	SOURCE_DIRECTORY=$(create_temp_dir "opentracker")
 	download_git_result_copy "$SOURCE_DIRECTORY/opentracker" "opentracker" "master"
 
+	control_ci group " * cvs download libowfat..."
 	pushd "$SOURCE_DIRECTORY" &>/dev/null
 	cvs -d :pserver:cvs@cvs.fefe.de:/cvs -z9 co "libowfat"
 	popd &>/dev/null
+	control_ci groupEnd
 
 	buildah copy "$BUILDER" "$SOURCE_DIRECTORY" "/opt/projects"
 }
@@ -64,7 +66,7 @@ STEP="复制配置文件"
 merge_local_fs "bttracker"
 
 STEP="配置容器"
-buildah_config "bttracker" --entrypoint '/usr/bin/bash' --cmd '/opt/scripts/start.sh' --stop-signal SIGINT
+buildah_config "bttracker" --entrypoint '/usr/bin/bash' --shell '/usr/bin/bash' --cmd '/opt/scripts/run.sh' --stop-signal SIGINT --env "DEBUG=yes"
 info "settings updated..."
 
 RESULT=$(create_if_not "bttracker" "$BUILDAH_LAST_IMAGE")

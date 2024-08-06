@@ -10,7 +10,7 @@ unit_unit Description bttracker
 # unit_body Restart always
 # unit_podman_image_pull never
 
-unit_start_notify output "::load:complete::"
+unit_start_notify sleep 5
 network_use_auto 6969/udp 6969/tcp
 systemd_slice_type idle
 
