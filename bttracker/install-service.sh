@@ -11,7 +11,7 @@ unit_unit Description bttracker
 # unit_podman_image_pull never
 
 unit_start_notify sleep 5
-network_use_auto 6969/udp 6969/tcp
+network_use_auto 43079/udp 43079/tcp
 systemd_slice_type idle
 
 unit_finish
