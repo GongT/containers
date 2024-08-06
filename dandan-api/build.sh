@@ -13,7 +13,7 @@ STEP="复制文件系统"
 merge_local_fs "dandan-api"
 
 STEP="更新配置"
-buildah_config "dandan-api" --entrypoint '/bin/bash' --cmd '/data/start.sh'
+buildah_config "dandan-api" --entrypoint "$(json_array /bin/bash)" --cmd '/data/start.sh'
 
 RESULT=$(create_if_not "dandan-api" "$BUILDAH_LAST_IMAGE")
 buildah commit "$RESULT" gongt/dandan-api

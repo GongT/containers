@@ -66,7 +66,7 @@ STEP="复制配置文件"
 merge_local_fs "bttracker"
 
 STEP="配置容器"
-buildah_config "bttracker" --entrypoint '/usr/bin/bash' --shell '/usr/bin/bash' --cmd '/opt/scripts/run.sh' --stop-signal SIGINT --env "DEBUG=yes"
+buildah_config "bttracker" --entrypoint "$(json_array /usr/bin/bash)" --shell '/usr/bin/bash' --cmd '/opt/scripts/run.sh' --stop-signal SIGINT --env "DEBUG=yes"
 info "settings updated..."
 
 RESULT=$(create_if_not "bttracker" "$BUILDAH_LAST_IMAGE")
