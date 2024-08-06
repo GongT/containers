@@ -45,7 +45,6 @@ hash_build() {
 run_build() {
 	local SOURCE_DIRECTORY=no
 	info_log "compile opentracker!"
-	buildah copy "$1" "/data/DevelopmentRoot/erdgeist.org/libowfat" "/opt/projects/libowfat"
 	run_compile opentracker "$1" "scripts/compile-opentracker.sh"
 }
 buildah_cache2 "bttracker-build" hash_build run_build
