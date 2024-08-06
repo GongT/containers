@@ -3,3 +3,7 @@ listen.tcp_udp 0.0.0.0:6969
 access.proxy 10.0.0.0/8
 access.proxy 192.0.0.0/8
 access.proxy 127.0.0.0/8
+
+access.stats 10.0.0.0/8
+access.stats 192.0.0.0/8
+access.stats 127.0.0.0/8

@@ -4,4 +4,4 @@ set -Eeuo pipefail
 
 T="/run/nginx/vhost.d/qbittorrent.conf"
 cp -v "/opt/scripts/nginx.conf" "$T"
-curl --unix /run/sockets/nginx.reload.sock http://_/
+curl --unix-socket /run/sockets/nginx.reload.sock http://_/
