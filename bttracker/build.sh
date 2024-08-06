@@ -24,9 +24,11 @@ download_src(){
 	local BUILDER="$1" SOURCE_DIRECTORY
 
 	SOURCE_DIRECTORY=$(create_temp_dir "opentracker")
-	download_git_result_copy "$SOURCE_DIRECTORY" "opentracker" "master"
+	download_git_result_copy "$SOURCE_DIRECTORY/opentracker" "opentracker" "master"
 
-	buildah copy "$BUILDER" "$SOURCE_DIRECTORY" "/opt/projects/opentracker"
+	cvs -d :pserver:cvs@cvs.fefe.de:/cvs -z9 co "$SOURCE_DIRECTORY/libowfat"
+
+	buildah copy "$BUILDER" "$SOURCE_DIRECTORY" "/opt/projects"
 }
 BUILDAH_FORCE="$FORCE" buildah_cache2 "bttracker-build" hash_src download_src
 
