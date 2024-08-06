@@ -1,10 +1,11 @@
+# master
 # https://www.iana.org/assignments/media-types/media-types.xhtml
 types {
 	text/html html htm shtml;
 	text/css css;
 	text/csv csv;
 	text/xml xml;
-	text/javascript js jsx;
+	text/javascript js jsx mjs cjs;
 	text/typescript ts tsx;
 	text/mathml mml;
 	text/plain txt;

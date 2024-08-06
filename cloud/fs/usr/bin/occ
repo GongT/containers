@@ -2,4 +2,9 @@
 
 set -Eeuo pipefail
 
-sudo -u media_rw /bin/bash /opt/occ-user.sh -- "$@"
+cd /usr/share/nextcloud
+
+set -a
+source /run/.userenvironments
+
+sudo --preserve-env -u media_rw php -d memory_limit=2G occ "$@"
