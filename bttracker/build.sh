@@ -17,7 +17,7 @@ STEP="安装编译依赖"
 dnf_install "bttracker-build" scripts/build-deps.lst
 
 if is_ci; then
-	apt install cvs
+	sudo apt install cvs
 fi
 
 STEP="下载源码"
