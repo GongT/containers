@@ -16,11 +16,15 @@ BUILDAH_LAST_IMAGE="fedora"
 STEP="安装编译依赖"
 dnf_install "bttracker-build" scripts/build-deps.lst
 
+if is_ci; then
+	apt install cvs
+fi
+
 STEP="下载源码"
 hash_src() {
 	download_git "git://erdgeist.org/opentracker" "opentracker" "master"
 }
-download_src(){
+download_src() {
 	local BUILDER="$1" SOURCE_DIRECTORY
 
 	SOURCE_DIRECTORY=$(create_temp_dir "opentracker")
@@ -54,7 +58,6 @@ copy_program_files() {
 	buildah copy "--from=$COMPILE_RESULT_IMAGE" "$1" "/opt/dist" "/usr"
 }
 buildah_cache2 "bttracker" hash_program_files copy_program_files
-
 
 STEP="复制配置文件"
 merge_local_fs "bttracker"
