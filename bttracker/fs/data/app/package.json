@@ -1,8 +1,0 @@
-{
-	"name":"my-tracker",
-	"type": "commonjs",
-	"private":true,
-	"dependencies": {
-		"bittorrent-tracker": "^9.15.0"
-	}
-}

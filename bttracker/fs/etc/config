@@ -1,0 +1,5 @@
+listen.udp.workers 4
+listen.tcp_udp 0.0.0.0:6969
+access.proxy 10.0.0.0/8
+access.proxy 192.0.0.0/8
+access.proxy 127.0.0.0/8

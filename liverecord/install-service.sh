@@ -17,7 +17,7 @@ for I in http_proxy https_proxy all_proxy HTTP_PROXY HTTPS_PROXY ALL_PROXY; do
 done
 
 systemd_slice_type normal
-environment_variable "LIVE_ROOMS=$LIVE_ROOMS" "${PROXY[@]}"
+environment_variable "LIVE_ROOMS=$LIVE_ROOMS" "${PROXY[@]}" "BREC_HTTP_OPEN_ACCESS=yes"
 unit_podman_arguments '--dns-env=p.a.s.s'
 
 unit_body Restart on-failure

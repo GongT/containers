@@ -1,0 +1,5 @@
+gcc
+make
+zlib-ng-devel
+zlib-ng-compat-devel
+cvs
