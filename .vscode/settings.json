@@ -5,6 +5,9 @@
 		"**/nginx/source/**": true,
 		"**/wordpress/fs/project/**": true
 	},
+	"search.exclude": {
+		"/.github": true,
+	},
 	"[javascript]": {
 		"editor.defaultFormatter": "esbenp.prettier-vscode"
 	},
