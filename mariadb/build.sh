@@ -5,15 +5,20 @@ set -Eeuo pipefail
 cd "$(dirname "$(realpath "${BASH_SOURCE[0]}")")"
 source ../common/functions-build.sh
 
-### 依赖
-DEPS=(mariadb mariadb-client mariadb-backup bash phpmyadmin php81-fpm nginx p7zip logrotate)
-make_base_image_by_apk "registry.gongt.me/gongt/init" "mariadb" "${DEPS[@]}" <scripts/build-script.sh
-RESULT=$(create_if_not mariadb-worker registry.gongt.me/gongt/init)
-### 依赖 END
+info "starting..."
+buildah_cache_start "fedora:$FEDORA_VERSION"
 
-merge_local_fs "mariadb"
+### 依赖项目
+STEP="安装系统依赖"
+POST_SCRIPT=$(<scripts/clean-install.sh) \
+	dnf_install "mariadb" scripts/deps.lst
+### 依赖项目 END
 
-buildah_config "mariadb" --cmd '/sbin/init' \
+setup_systemd "mariadb" nginx_attach
+
+merge_local_fs "mariadb" scripts/post-install.sh
+
+buildah_config "mariadb" \
 	--volume /var/lib/mysql --volume /var/log --port 3306 --stop-signal SIGINT \
 	--author "GongT <admin@gongt.me>" --created-by "#MAGIC!" --label name=gongt/mariadb
 

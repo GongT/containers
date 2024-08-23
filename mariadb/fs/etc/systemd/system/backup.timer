@@ -1,0 +1,10 @@
+[Unit]
+Description=auto backup mariadb data
+
+[Install]
+WantedBy=timers.target
+
+[Timer]
+OnBootSec=10min
+OnUnitInactiveSec=1d
+OnUnitActiveSec=1d

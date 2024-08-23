@@ -1,0 +1,8 @@
+[Unit]
+Description=auto backup mariadb data
+
+[Service]
+Type=oneshot
+RemainAfterExit=no
+ExecStart=/bin/bash /opt/backup-database.sh
+EnvironmentFile=/run/.userenvironments

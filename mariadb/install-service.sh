@@ -13,11 +13,12 @@ unit_podman_image gongt/mariadb init
 unit_podman_hostname mysql
 unit_data danger
 
-unit_start_notify output '/usr/bin/mariadbd .+ starting as process '
+# unit_start_notify output '/usr/bin/mariadbd .+ starting as process '
 unit_body OOMScoreAdjust -600
 unit_body Environment "TZ=Asia/Shanghai"
 unit_body LimitNOFILE 16364
 
+unit_using_systemd
 network_use_nat
 systemd_slice_type infrastructure
 

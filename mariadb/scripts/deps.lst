@@ -1,0 +1,10 @@
+phpMyAdmin
+php-fpm
+php-cli
+nginx
+p7zip
+logrotate
+mariadb-server
+mariadb
+mariadb-backup
+mariadb-server-utils

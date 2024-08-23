@@ -17,11 +17,12 @@ function write_password_cfg() {
 " >/etc/my.cnf.d/98-password.cnf
 
 	{
-		if [[ "${PROXY:-}" ]]; then
+		if [[ "${PROXY-}" ]]; then
 			echo "\$cfg['ProxyUrl'] = '$PROXY';"
 		fi
 		echo "\$cfg['Servers'][\$i]['password'] = '$(<"$PWD_FILE")';"
-	} >>/etc/phpmyadmin/config.inc.php
+	} >>/etc/phpMyAdmin/config.inc.php
+	echo "   - ok."
 }
 
 if [[ "$(ls /var/lib/mysql | wc -l)" -eq 0 ]]; then
@@ -65,27 +66,12 @@ if [[ "$(ls /var/lib/mysql | wc -l)" -eq 0 ]]; then
 	mv /var/lib/mysql-temp/* /var/lib/mysql/
 	echo "Complete init database."
 else
+	echo "Database already inited."
 	write_password_cfg /var/lib/mysql/.password
+	chown mysql:mysql /var/lib/mysql -R
 fi
 
-trap "echo 'GOT SIGUSR1, MARIADB SERVER WILL SHUTDOWN.' ; bash /opt/stop-mariadb.sh" USR1 INT
+mkdir -p /var/log/mariadb
+chown mysql:mysql /var/log/mariadb -R
 
-/usr/bin/mariadbd --user=root --skip-name-resolve --socket /run/sockets/mariadb.sock &
-W=$!
-echo "Mariadb is running... PID=$W"
-
-set +e
-while true; do
-	wait $W
-	RET=$?
-	if [[ $RET -eq 138 ]]; then # errno 138: Interrupt by signal
-		continue                   # must wait for mariadbd to really exit
-	elif [[ $? -eq 127 ]]; then
-		echo "mariadbd quit with unknown code."
-		break # pid not exists, it already quit by some reason
-	else
-		echo "mariadbd quit with code $RET"
-		break
-	fi
-done
-echo "Done."
+echo "prepare done."
