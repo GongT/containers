@@ -51,7 +51,9 @@ if ! [[ $DISABLE_SSL ]]; then
 	unit_fs_bind share/ssl /etc/ACME
 fi
 shared_sockets_use
-unit_reload_command '/usr/bin/podman exec nginx bash /usr/bin/safe-reload'
+unit_body ExecReload '/usr/bin/podman exec nginx bash /usr/bin/safe-reload'
+unit_body ExecStop '/usr/bin/podman exec nginx bash /usr/bin/safe-reload'
+unit_body RestartPreventExitStatus 127
 
 healthcheck "30s" "5" "curl --insecure https://127.0.0.1:443"
 

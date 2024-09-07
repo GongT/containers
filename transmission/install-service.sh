@@ -20,7 +20,6 @@ create_it() {
 	systemd_slice_type idle -101
 
 	environment_variable "INSTANCE_NAME=$INSTANCE_NAME"
-	# unit_reload_command '/usr/bin/podman exec $CONTAINER_ID /usr/bin/bash /opt/scripts/reload.sh'
 	# unit_body ExecStop '/usr/bin/podman exec $CONTAINER_ID /usr/bin/bash /opt/scripts/stop.sh'
 
 	# unit_podman_arguments --env="LANG=zh_CN.utf8"
