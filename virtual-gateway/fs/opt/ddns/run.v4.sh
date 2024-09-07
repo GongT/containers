@@ -18,6 +18,6 @@ pecho "  * $CURRENT_IP"
 
 exit_if_same "$CURRENT_IP"
 
-ddns_script
+ddns_script "$NET_TYPE" "$CURRENT_IP"
 
 save_current_ip "$CURRENT_IP"

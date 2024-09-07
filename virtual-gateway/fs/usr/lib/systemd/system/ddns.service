@@ -1,8 +1,15 @@
 [Unit]
 Description=check ip change, and run ddns
+After=systemd-networkd.service
+StartLimitBurst=5
+StartLimitIntervalSec=10min
 
 [Service]
 Type=oneshot
 RemainAfterExit=no
 ExecStart=/bin/bash "/opt/ddns/run.sh"
 EnvironmentFile=/run/.userenvironments
+
+RestartPreventExitStatus=66
+Restart=on-failure
+RestartSec=10s

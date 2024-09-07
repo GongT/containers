@@ -5,8 +5,11 @@ set -Eeuo pipefail
 cd "$(dirname "$(realpath "${BASH_SOURCE[0]}")")"
 source ../common/functions-install.sh
 
-arg_string + DDNS_HOST h/host "ddns host FQDN"
-arg_string + DDNS_KEY k/key "ddns api key"
+arg_string + CF_TOKEN token "cloudflare api token"
+arg_string + CF_ZONE_ID zone "cloudflare dns zone"
+arg_string + CF_RECORD_ID4 4 "record id"
+arg_string + CF_RECORD_ID6 6 "record id"
+arg_string + HOST_NAME h/host "full domain name"
 arg_finish "$@"
 
 auto_create_pod_service_unit
@@ -27,9 +30,11 @@ add_network_privilege
 use_full_system_privilege
 
 unit_podman_safe_environment \
-	"DDNS_KEY=${DDNS_KEY}" \
-	"DDNS_HOST=${DDNS_HOST}"
-
+	"CF_TOKEN=${CF_TOKEN}" \
+	"CF_ZONE_ID=${CF_ZONE_ID}" \
+	"CF_RECORD_ID4=${CF_RECORD_ID4}" \
+	"CF_RECORD_ID6=${CF_RECORD_ID6}" \
+	"HOST_NAME=${HOST_NAME}"
 unit_fs_bind data/virtual-gateway /storage
 
 unit_finish

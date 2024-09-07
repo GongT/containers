@@ -31,7 +31,7 @@ exit_if_same "$CURRENT_IP"
 
 pecho "current ip address is: $CURRENT_IP"
 
-ddns_script
+ddns_script "$NET_TYPE" "$CURRENT_IP"
 
 save_current_ip "${CURRENT_IP}"
 save_current_ip_list "${CURRENT_IP_OUTPUT[@]}"

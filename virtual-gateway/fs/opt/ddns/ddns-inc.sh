@@ -17,9 +17,9 @@ else
 fi
 
 function call_curl() {
-	pecho "  - /usr/bin/curl --no-progress-meter -$NET_TYPE $1" >&2
+	pecho "  - /usr/bin/curl -$NET_TYPE $1" >&2
 	local OUT
-	OUT=$(/usr/bin/curl --no-progress-meter -$NET_TYPE "$1")
+	OUT=$(/usr/bin/curl --proxy "" --no-progress-meter -$NET_TYPE "$1")
 	if [[ $NET_TYPE == 4 ]]; then
 		OUT=$(echo "$OUT" | grep -oE '[0-9]+.[0-9]+.[0-9]+.[0-9]+')
 	else
@@ -65,16 +65,42 @@ function x() {
 }
 
 function ddns_script() {
+	local NET_TYPE=$1 IP_ADDR=$2 TYPE BODY
+
+	if [[ $NET_TYPE == 6 ]]; then
+		TYPE=AAAA
+	else
+		TYPE=A
+	fi
+
+	local RECORD_ID_NAME="CF_RECORD_ID$NET_TYPE"
+	local RECORD_ID=${!RECORD_ID_NAME}
+
+	BODY=$(
+		jq -n '{"type":$TYPE,"name":$HOST_NAME,"content":$IP_ADDR,"ttl":300,"proxied":false,"comment":"DDNS@gateway"}' \
+			--arg TYPE "$TYPE" \
+			--arg IP_ADDR "$IP_ADDR" \
+			--arg HOST_NAME "$HOST_NAME"
+	)
+
 	pecho "request update api..."
-	while true; do
-		sleep 1
-		if x /usr/bin/curl --no-progress-meter "-$NET_TYPE" "https://dyn.dns.he.net/nic/update" \
-			-d "hostname=${DDNS_HOST}" \
-			-d "password=${DDNS_KEY}"; then
-			break
-		fi
-	done
-	pecho ""
+	x curl --no-progress-meter -X PUT "https://api.cloudflare.com/client/v4/zones/${CF_ZONE_ID}/dns_records/${RECORD_ID}" \
+		-H "Authorization: Bearer ${CF_TOKEN}" \
+		-H "Content-Type: application/json" \
+		--data "$BODY" \
+		--output "/tmp/output.json"
+
+	jq '.' "/tmp/output.json"
+
+	local ret
+	ret=$(jq '.success' "/tmp/output.json")
+	if [[ $ret != 'true' ]]; then
+		pecho "failed update"
+		exit 1
+	else
+		pecho "successfull update"
+	fi
+
 	pecho "update done."
 }
 

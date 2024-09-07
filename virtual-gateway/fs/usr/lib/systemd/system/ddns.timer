@@ -1,10 +1,9 @@
 [Unit]
-Description=run ddns every 10 min
-After=systemd-networkd.service
+Description=run ddns every 5 min
 
 [Install]
 WantedBy=timers.target
 
 [Timer]
-OnUnitInactiveSec=10min
+OnUnitInactiveSec=5min
 OnBootSec=10s

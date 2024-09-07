@@ -10,7 +10,7 @@ info "starting..."
 buildah_cache_start "archlinux:latest"
 
 ### 依赖项目
-make_base_image_by_pacman "infra-build" curl iperf3 systemd
+make_base_image_by_pacman "infra-build" curl iperf3 systemd jq ipcalc
 ### 依赖项目 END
 
 ### 配置文件等
