@@ -7,44 +7,49 @@ echo "acme container start: $*"
 # shellcheck source=./lib.sh
 source /opt/lib.sh
 
+chmod a+x /opt/curl
+
 if [[ $# -eq 0 ]]; then
 	die "missing domain arguments"
 fi
-if [[ ${1} == bash ]]; then
-	exec "$@"
-fi
 
-if [[ $# -eq 0 ]]; then
-	die "empty input param"
-fi
+export HTTP_PROXY="$PROXY" HTTPS_PROXY="$PROXY" ALL_PROXY="$PROXY"
+export http_proxy="$PROXY" https_proxy="$PROXY" all_proxy="$PROXY"
 
 ## prepare acme.sh config
 info "create account config file..."
-cat <<-EOF >"$ACME_SH_CONFIG_FILE"
-	ACCOUNT_KEY_PATH="$ACME_SH_CONFIG_HOME/account.key"
-	LOG_LEVEL=2
+mkdir -p "$LE_WORKING_DIR"
+cat <<-EOF >"$ACCOUNT_CONF_PATH"
+	DEFAULT_ACME_SERVER="$SERVER"
+	ACCOUNT_KEY_PATH='/opt/data/account.key'
+	ACCOUNT_EMAIL='${ACCOUNT_EMAIL:-"admin@example.com"}'
+	USER_AGENT='containers/acme(https://github.com/gongt/containers)'
+	USER_PATH='/usr/bin:/usr/local/bin'
+	LOG_FILE='/log/common.log'
 EOF
 
-replace_config LOG_FILE "/log/common.log"
+export CA_HOME="/opt/data/ca"
+export CERT_HOME="/opt/data/certs"
 
-if [[ ${MAIL_TO+found} == found ]] && [[ $MAIL_TO ]]; then
+if [[ ${SMTP_TO+found} == found ]] && [[ $SMTP_TO ]]; then
 	info "prepare email notify config..."
-	cat <<-EOF >>"$ACME_SH_CONFIG_FILE"
-		NOTIFY_HOOK="mail"
-		MAIL_FROM="$NOTIFY_MAIL_USER"
-	EOF
 
-	echo "root:$NOTIFY_MAIL_USER" >/etc/ssmtp/revaliases
-	cat <<-EOF >/etc/ssmtp/ssmtp.conf
-		UseTLS=Yes
-		UseSTARTTLS=Yes
-		mailhub=$NOTIFY_MAIL_HUB
-		AuthUser=$NOTIFY_MAIL_USER
-		AuthPass=$NOTIFY_MAIL_PASS
+	export SMTP_FROM="$SMTP_USERNAME"
+	export SMTP_SECURE='tls'
+	export SMTP_TIMEOUT='30'
+	export SMTP_BIN='/usr/bin/python3'
+
+	cat <<-EOF >"$ACCOUNT_CONF_PATH"
+		NOTIFY_LEVEL='2'
+		NOTIFY_HOOK='smtp'
 	EOF
 fi
 
-echo "options timeout:999" >>/etc/resolv.conf
+echo "options timeout:99" >>/etc/resolv.conf
+
+if [[ ${1} == bash ]]; then
+	exec "$@"
+fi
 
 case "$DNS_SERVER" in
 cf)
@@ -57,23 +62,17 @@ case "$SERVER" in
 letsencrypt)
 	info "register account to letsencrypt"
 	try_nslookup prod.api.letsencrypt.org
-	replace_config MAIL_TO "$ACCOUNT_EMAIL"
-	replace_config ACCOUNT_EMAIL "$ACCOUNT_EMAIL"
-	acme --register-account --server letsencrypt
+	acme --update-account --server letsencrypt || acme --register-account --server letsencrypt
 	;;
 zerossl)
 	info "register account to zerossl"
-	acme --register-account --server zerossl \
+	acme --update-account --server zerossl || acme --register-account --server zerossl \
 		--eab-kid "$EABID" \
 		--eab-hmac-key "$EABKEY"
 	;;
 esac
 
-RELOAD_SRC=$(</opt/nginx-reload.sh)
-cat <<-RELOAD_FAKE >/opt/nginx-reload.sh
-	#!/bin/bash
-	echo "reload temporary disabled..."
-RELOAD_FAKE
+export TEMP_DISABLE_RELOAD=1
 
 create_nginx_lagacy_load "$1"
 for DOMAIN; do
@@ -92,13 +91,18 @@ for DOMAIN; do
 
 	if ! acme --install-cert --ecc "${BASE_ARGS[@]}"; then
 		info "Issue cert of domain $TARGET_DOMAIN (auth: $AUTH_DOMAIN)..."
-		acme --issue --dns "dns_$DNS_SERVER" --keylength ec-256 "${BASE_ARGS[@]}" || die "Failed to create cert."
+		acme --issue --dns "dns_$DNS_SERVER" "${BASE_ARGS[@]}" || die "Failed to create cert."
 	fi
 done
 
-echo "$RELOAD_SRC" >/opt/nginx-reload.sh
+export TEMP_DISABLE_RELOAD=
 acme --renew-all || die "Failed initial renew."
 
 sleep 5
-info 'Ok, everything works well, starting crond...'
-/usr/sbin/crond -f -d 6
+info 'Ok, everything works well.'
+
+while true; do
+	sleep 1d
+	info "wakeup call acme"
+	acme --renew-all || true
+done

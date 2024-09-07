@@ -1,0 +1,18 @@
+#!/bin/bash
+
+echo -ne "\x1B[2m>> curl" >&2
+for I in "${@}"; do
+	echo -n " '$I'" >&2
+done
+echo -e "\x1B[0m" >&2
+
+while true; do
+	/usr/bin/curl "$@"
+	R=$?
+	echo -e "\x1B[2mcurl return $R\x1B[0m" >&2
+	if [[ $R -eq 35 ]]; then
+		continue
+	fi
+
+	break
+done

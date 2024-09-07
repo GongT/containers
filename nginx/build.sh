@@ -20,7 +20,8 @@ fi
 
 ### 编译时依赖项目
 STEP="安装编译时依赖项目"
-make_base_image_by_dnf "nginx-build" scripts/build-requirements.lst
+buildah_cache_start "fedora:$FEDORA_VERSION"
+dnf_install "nginx-build"  scripts/build-requirements.lst
 ### 编译时依赖项目 END
 
 ### 编译!

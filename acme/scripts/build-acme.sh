@@ -2,17 +2,10 @@
 
 set -Eeuo pipefail
 
-rm -rf /etc/crontabs /etc/periodic
-mkdir /etc/crontabs
-touch /etc/crontabs/root /root/.bashrc
-
 cd /mnt
-bash acme.sh --install \
+bash acme.sh --install --nocron --no-profile \
 	--home /opt/acme.sh \
 	--config-home "/opt/data" \
 	--accountemail "admin@example.com" \
 	--accountkey "/opt/data/account.key" \
 	--accountconf "/opt/data/account.conf"
-
-ln -s /opt/data /root/.acme.sh
-

@@ -1,0 +1,6 @@
+ca-certificates
+bash
+curl
+openssl
+python3
+bind-utils

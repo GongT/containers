@@ -13,14 +13,18 @@ arg_string - DNS_SERVER dns "dns provider name (default=cf)"
 arg_string + DNS_SERVER_PARAMS dns-options "dns provider config environment"
 arg_string - SERVER acme "server selection (default=letsencrypt)"
 arg_string + SERVER_PARAMS acme-options "acme server config environment"
-arg_string - NOTIFY_TO alert "alert email sent target"
-arg_string - NOTIFY_SMTP smtp "notify smtp setting (username:password@smpt.server.com)"
+arg_string - SMTP_TO alert "alert email sent target"
+arg_string - NOTIFY_SMTP smtp "notify smtp setting (username:password@smpt.server.com:port)"
 arg_finish "$@"
 
 mapfile -d ';' -t DNS_SERVER_PARAMS_ARR < <(echo "$DNS_SERVER_PARAMS")
 mapfile -d ';' -t SERVER_PARAMS_ARR < <(echo "$SERVER_PARAMS")
 
 split_url_user_pass_host_port "$NOTIFY_SMTP"
+SMTP_USERNAME="$USERNAME"
+SMTP_PASSWORD="$PASSWORD"
+SMTP_HOST_NAME="$HOST_NAME"
+SMTP_PORT_NUMBER="$PORT_NUMBER"
 
 mapfile -t -d ',' ARR_DOMAINS < <(echo "$STR_DOMAINS")
 DOMAINS=()
@@ -31,12 +35,14 @@ done
 create_pod_service_unit gongt/acme
 
 environment_variable \
-	"NOTIFY_MAIL_USER=$USERNAME" \
-	"NOTIFY_MAIL_PASS=$PASSWORD" \
-	"NOTIFY_MAIL_HUB=$DOMAIN" \
-	"MAIL_TO=$NOTIFY_TO" \
+	"SMTP_USERNAME=$SMTP_USERNAME" \
+	"SMTP_PASSWORD=$SMTP_PASSWORD" \
+	"SMTP_HOST=$SMTP_HOST_NAME" \
+	"SMTP_PORT=$SMTP_PORT_NUMBER" \
+	"SMTP_TO=$SMTP_TO" \
 	"SERVER=$SERVER" \
 	"DNS_SERVER=$DNS_SERVER" \
+	"PROXY=$PROXY" \
 	"${DNS_SERVER_PARAMS_ARR[@]}" \
 	"${SERVER_PARAMS_ARR[@]}"
 
@@ -45,12 +51,10 @@ unit_podman_image gongt/acme "${DOMAINS[@]}"
 network_use_nat
 systemd_slice_type normal
 
-unit_start_notify output "everything works well, starting crond"
+unit_start_notify output "everything works well"
 # unit_body Restart no
 unit_body RestartSec 10s
 unit_body TimeoutStartSec 30min
-
-unit_unit After dnsmasq.service systemd-resolved.service
 
 unit_podman_hostname acme
 unit_body Environment FROM_SERVICE=yes
