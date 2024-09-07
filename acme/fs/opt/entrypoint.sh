@@ -99,7 +99,8 @@ export TEMP_DISABLE_RELOAD=
 acme --renew-all || die "Failed initial renew."
 
 sleep 5
-info 'Ok, everything works well.'
+echo 'Ok, everything works well.'
+echo -e '\n\n'
 
 while true; do
 	sleep 1d
