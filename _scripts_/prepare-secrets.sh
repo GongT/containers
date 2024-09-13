@@ -3,15 +3,15 @@
 set -Eeuo pipefail
 cd "$(dirname "$(realpath "${BASH_SOURCE[0]}")")"
 
-REGISTRY_DOMAIN=${1:-}
+REGISTRY_DOMAIN=${1-}
 
 export TMPDIR="${RUNNER_TEMP:-$SYSTEM_COMMON_CACHE/tmp}"
 mkdir -p "$TMPDIR"
-if [[ ! ${GITHUB_ENV:-} ]]; then
+if [[ ! ${GITHUB_ENV-} ]]; then
 	GITHUB_ENV="$TMPDIR/github-env-fake"
 fi
 
-if [[ "${CI:-}" ]]; then
+if [[ "${CI-}" ]]; then
 	sudo apt install jq gnupg podman buildah mount
 fi
 
@@ -40,7 +40,7 @@ echo "REGISTRY_AUTH_FILE=${REGISTRY_AUTH_FILE}" >>"$GITHUB_ENV"
 
 SCRIPT=$(JQ '.dockerCreds[] | "echo " + ("log in to "+.url|@json) + "\npodman login " + ("--username="+.username|@json) + " " + ("--password="+.password|@json) + " " + (.url|@json)')
 
-if [[ "${REGISTRY_DOMAIN:-}" ]]; then
+if [[ "${REGISTRY_DOMAIN-}" ]]; then
 	echo "filter domain $REGISTRY_DOMAIN"
 	O_SCRIPT="$SCRIPT"
 

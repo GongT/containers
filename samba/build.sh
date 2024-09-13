@@ -9,13 +9,14 @@ arg_flag FORCE_DNF dnf "force dnf install"
 arg_finish
 
 ### 依赖项目
-make_base_image_by_pacman "infra-build" scripts/dependencies.lst
+fork_archlinux "samba" scripts/dependencies.lst
 ### 依赖项目 END
-
-setup_systemd "samba"
 
 STEP="复制配置文件"
 merge_local_fs "samba" "scripts/prepare.sh"
+
+setup_systemd "samba" \
+	enable UNITS="smb.service nmb.service prepare.service systemd-networkd.service"
 
 buildah_config "samba" \
 	--volume=/mountpoints --volume=/drives --volume=/opt/config \
