@@ -5,8 +5,6 @@ set -Eeuo pipefail
 cd "$(dirname "$(realpath "${BASH_SOURCE[0]}")")"
 source ../common/functions-build.sh
 
-unset PROXY
-
 arg_flag FORCE_DNF dnf "force reinstall dependencies"
 arg_flag FORCE f/force "force rebuild nginx source code"
 arg_finish "$@"
@@ -14,7 +12,8 @@ arg_finish "$@"
 BUILDAH_LAST_IMAGE="fedora"
 
 STEP="安装编译依赖"
-dnf_install "bttracker-build" scripts/build-deps.lst
+dnf_use_environment
+dnf_install_step "bttracker-build" scripts/build-deps.lst
 
 if is_ci; then
 	sudo apt install cvs
@@ -38,7 +37,7 @@ download_src() {
 
 	buildah copy "$BUILDER" "$SOURCE_DIRECTORY" "/opt/projects"
 }
-BUILDAH_FORCE="$FORCE" buildah_cache2 "bttracker-build" hash_src download_src
+BUILDAH_FORCE="$FORCE" buildah_cache "bttracker-build" hash_src download_src
 
 STEP="编译"
 hash_build() {
@@ -49,7 +48,7 @@ run_build() {
 	info_log "compile opentracker!"
 	run_compile opentracker "$1" "scripts/compile-opentracker.sh"
 }
-buildah_cache2 "bttracker-build" hash_build run_build
+buildah_cache "bttracker-build" hash_build run_build
 COMPILE_RESULT_IMAGE="$BUILDAH_LAST_IMAGE"
 
 STEP="复制编译结果"
@@ -60,7 +59,7 @@ hash_program_files() {
 copy_program_files() {
 	buildah copy "--from=$COMPILE_RESULT_IMAGE" "$1" "/opt/dist" "/usr"
 }
-buildah_cache2 "bttracker" hash_program_files copy_program_files
+buildah_cache "bttracker" hash_program_files copy_program_files
 
 STEP="复制配置文件"
 merge_local_fs "bttracker"
@@ -69,6 +68,5 @@ STEP="配置容器"
 buildah_config "bttracker" --entrypoint "$(json_array /usr/bin/bash)" --shell '/usr/bin/bash' --cmd '/opt/scripts/run.sh' --stop-signal SIGINT --env "DEBUG=yes"
 info "settings updated..."
 
-RESULT=$(create_if_not "bttracker" "$BUILDAH_LAST_IMAGE")
-buildah commit "$RESULT" gongt/bttracker
+buildah_finalize_image "bttracker" gongt/bttracker
 info "Done!"

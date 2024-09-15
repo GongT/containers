@@ -20,8 +20,7 @@ hash_compile_deps() {
 install_compile_deps() {
 	info "dnf install..."
 	local TARGET="$1" RESULT
-	RESULT=$(new_container "$TARGET" fedora)
-	run_dnf_with_list_file "$RESULT" scripts/compile.lst
+	run_dnf_with_list_file "$TARGET" scripts/compile.lst
 	info "dnf install complete..."
 }
 BUILDAH_FORCE="$FORCE_DNF" buildah_cache "qbittorrent-build" hash_compile_deps install_compile_deps
@@ -46,7 +45,8 @@ COMPILE_RESULT_IMAGE="$BUILDAH_LAST_IMAGE"
 
 ### 运行时依赖项目
 STEP="运行时依赖项目"
-POST_SCRIPT=$(<scripts/post-install-cleanup.sh) make_base_image_by_dnf "qbittorrent" scripts/runtime.lst
+dnf_use_environment
+dnf_install_step "qbittorrent" scripts/runtime.lst scripts/post-install-cleanup.sh
 ### 运行时依赖项目 END
 
 ### 编译好的qbt
@@ -58,7 +58,7 @@ copy_program_files() {
 	info "program copy to target..."
 	buildah copy --from "$COMPILE_RESULT_IMAGE" "$1" "/opt/dist" /usr
 }
-buildah_cache2 "qbittorrent" hash_program_files copy_program_files
+buildah_cache "qbittorrent" hash_program_files copy_program_files
 ### 编译好的qbt END
 
 setup_systemd "qbittorrent"
@@ -72,6 +72,5 @@ STEP="配置镜像信息"
 buildah_config qbittorrent --author "GongT <admin@gongt.me>" --created-by "#MAGIC!" --label name=gongt/qbittorrent
 info "settings update..."
 
-RESULT=$(create_if_not "qbittorrent" "$BUILDAH_LAST_IMAGE")
-buildah commit "$RESULT" gongt/qbittorrent
+buildah_finalize_image "qbittorrent" gongt/qbittorrent
 info "Done!"

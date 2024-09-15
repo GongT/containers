@@ -17,7 +17,7 @@ unit_unit Description "standalone samba server"
 
 add_network_privilege
 network_use_veth bridge0
-unit_podman_arguments --mac-address=3E:F4:F3:CE:1D:75
+podman_engine_params --mac-address=3E:F4:F3:CE:1D:75
 
 unit_body Restart no
 unit_data danger

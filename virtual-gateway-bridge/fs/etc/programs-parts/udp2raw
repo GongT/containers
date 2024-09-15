@@ -1,4 +1,0 @@
-[udp2raw]
-arg[]:/bin/bash
-arg[]:/opt/start/udp2raw.sh
-signal:TERM

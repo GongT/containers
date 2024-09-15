@@ -7,12 +7,12 @@ source ../common/functions-build.sh
 
 info "starting..."
 
-buildah_cache_start "fedora:$FEDORA_VERSION"
+buildah_cache_start "fedora-minimal"
 
 ### 依赖项目
 STEP="安装系统依赖"
-POST_SCRIPT=$(<scripts/clean-install.sh) \
-	dnf_install "nextcloud" scripts/deps.lst
+dnf_use_environment
+dnf_install_step "nextcloud" scripts/deps.lst scripts/clean-install.sh
 ### 依赖项目 END
 
 setup_systemd "nextcloud"
@@ -27,7 +27,7 @@ function hash_install_script() {
 function run_install_script() {
 	buildah run "--volume=$(pwd)/scripts/build-script.sh:/tmp/build-script" "$1" bash '/tmp/build-script'
 }
-buildah_cache2 "nextcloud" hash_install_script run_install_script
+buildah_cache "nextcloud" hash_install_script run_install_script
 
 STEP="配置镜像"
 buildah_config "nextcloud" \
@@ -37,6 +37,5 @@ buildah_config "nextcloud" \
 
 info "settings updated..."
 
-RESULT=$(create_if_not "cloud" "$BUILDAH_LAST_IMAGE")
-buildah commit "$RESULT" gongt/cloud
+buildah_finalize_image "cloud" gongt/cloud
 info "Done!"

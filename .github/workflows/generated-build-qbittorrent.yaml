@@ -18,16 +18,17 @@ on:
         required: false
         default: false
   schedule:
-    - cron:  '47 4 16 * *'
+    - cron:  '47 4 13 * *'
   push:
     paths:
       - "qbittorrent/**"
       - "!qbittorrent/install-service.sh"
     #  - ".github/workflows/generated-build-qbittorrent.yaml"
-    # - common
+    #  - common
     branches:
       - master
 env:
+  AUTHOR: GongT <admin@gongt.me>
   NODE_ENV: production
   PROJECT_NAME: "qbittorrent"
   GITHUB_ACTOR: ${{ github.actor }}
@@ -77,7 +78,7 @@ jobs:
         run: bash _scripts_/prepare-secrets.sh ghcr.io
 
       - name: "缓存下载和软件包数据"
-        uses: pat-s/always-upload-cache@v3.0.1
+        uses: pat-s/always-upload-cache@v3.0.11
         with:
           path: |
             ${{ env.SYSTEM_COMMON_CACHE }}/Download
@@ -96,14 +97,97 @@ jobs:
         timeout-minutes: 1
         run: ./_scripts_/retry.sh podman pull "docker://ghcr.io/gongt/$PROJECT_NAME"
 
-      - name: "运行构建过程"
-        shell: bash
-        timeout-minutes: 30
-        env:
+
+      - env:
           BUILDAH_FORCE: ${{ github.event.inputs.forceRebuild }}
           FORCE_DNF: ${{ github.event.inputs.forceDnf }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          _BUILDSCRIPT_RUN_STEP_: qbittorrent-build:1
+        id: step_1
+        name: '运行构建过程: 编译时依赖项目'
         run: bash _scripts_/ci-single-build.sh
+        shell: bash
+        timeout-minutes: 5
+      - env:
+          BUILDAH_FORCE: ${{ github.event.inputs.forceRebuild }}
+          FORCE_DNF: ${{ github.event.inputs.forceDnf }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          _BUILDSCRIPT_RUN_STEP_: qbittorrent-build:2
+        id: step_2
+        name: '运行构建过程: 编译remote-shell（下载）'
+        run: bash _scripts_/ci-single-build.sh
+        shell: bash
+        timeout-minutes: 5
+      - env:
+          BUILDAH_FORCE: ${{ github.event.inputs.forceRebuild }}
+          FORCE_DNF: ${{ github.event.inputs.forceDnf }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          _BUILDSCRIPT_RUN_STEP_: qbittorrent-build:3
+        id: step_3
+        name: '运行构建过程: 编译remote-shell（编译）'
+        run: bash _scripts_/ci-single-build.sh
+        shell: bash
+        timeout-minutes: 5
+      - env:
+          BUILDAH_FORCE: ${{ github.event.inputs.forceRebuild }}
+          FORCE_DNF: ${{ github.event.inputs.forceDnf }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          _BUILDSCRIPT_RUN_STEP_: qbittorrent:1
+        id: step_1
+        name: '运行构建过程: 运行时依赖项目'
+        run: bash _scripts_/ci-single-build.sh
+        shell: bash
+        timeout-minutes: 5
+      - env:
+          BUILDAH_FORCE: ${{ github.event.inputs.forceRebuild }}
+          FORCE_DNF: ${{ github.event.inputs.forceDnf }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          _BUILDSCRIPT_RUN_STEP_: qbittorrent:2
+        id: step_2
+        name: '运行构建过程: 复制编译结果文件'
+        run: bash _scripts_/ci-single-build.sh
+        shell: bash
+        timeout-minutes: 5
+      - env:
+          BUILDAH_FORCE: ${{ github.event.inputs.forceRebuild }}
+          FORCE_DNF: ${{ github.event.inputs.forceDnf }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          _BUILDSCRIPT_RUN_STEP_: qbittorrent:3
+        id: step_3
+        name: '运行构建过程: 配置镜像中的systemd'
+        run: bash _scripts_/ci-single-build.sh
+        shell: bash
+        timeout-minutes: 5
+      - env:
+          BUILDAH_FORCE: ${{ github.event.inputs.forceRebuild }}
+          FORCE_DNF: ${{ github.event.inputs.forceDnf }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          _BUILDSCRIPT_RUN_STEP_: qbittorrent:4
+        id: step_4
+        name: '运行构建过程: 复制配置文件'
+        run: bash _scripts_/ci-single-build.sh
+        shell: bash
+        timeout-minutes: 5
+      - env:
+          BUILDAH_FORCE: ${{ github.event.inputs.forceRebuild }}
+          FORCE_DNF: ${{ github.event.inputs.forceDnf }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          _BUILDSCRIPT_RUN_STEP_: qbittorrent:5
+        id: step_5
+        name: '运行构建过程: 配置镜像信息'
+        run: bash _scripts_/ci-single-build.sh
+        shell: bash
+        timeout-minutes: 5
+      - env:
+          BUILDAH_FORCE: ${{ github.event.inputs.forceRebuild }}
+          FORCE_DNF: ${{ github.event.inputs.forceDnf }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          _BUILDSCRIPT_RUN_STEP_: qbittorrent:6
+        id: step_6
+        name: '运行构建过程: Finalize'
+        run: bash _scripts_/ci-single-build.sh
+        shell: bash
+        timeout-minutes: 5
 
       - id: result
         name: "输出状态"

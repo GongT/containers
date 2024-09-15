@@ -4,18 +4,13 @@ set -Eeuo pipefail
 
 cd "$(dirname "$(realpath "${BASH_SOURCE[0]}")")"
 cd ..
-
-is_allowed() {
-	local BLACKLIST=(bitcoin-peer ethereum-peer virtual-gateway-bridge proxyclient dandan-api danmakurecord nodered homeassistant proxyserver-nat)
-	local match="$1" e
-	for e in "${BLACKLIST[@]}"; do
-		if [[ $e == "$match" ]]; then
-			return 1
-		fi
-	done
-}
+source common/package/include.sh
+printf '\ec'
 
 declare -i cron_day=1
+declare -r TEMPLATE="_scripts_/template.yaml"
+declare -r TMPOUT="/tmp/output.txt"
+mkdir -p ".github/workflows"
 
 mapfile -d '' -t BUILD_FILES < <(find . -maxdepth 2 -name build.sh -print0 | sort --zero-terminated --dictionary-order)
 
@@ -23,23 +18,48 @@ TABLE="| Container | Link | Build Status |
 |----:|:----|:----:|
 "
 for i in "${BUILD_FILES[@]}"; do
-	PROJ=$(basename "$(dirname "$i")")
-
-	if ! is_allowed "$PROJ"; then
+	if [[ -e $(realpath -m "$i/../disabled") ]]; then
 		continue
 	fi
 
-	F=".github/workflows/generated-build-$PROJ.yaml"
+	PROJ=$(basename "$(dirname "$i")")
+	OUTPUT=".github/workflows/generated-build-$PROJ.yaml"
 
-	sed "s#{{PROJ}}#$PROJ#g" _scripts_/template.yaml >"$F"
-	sed -i "s#{{thisfile}}#$F#g" "$F"
+	save_cursor_position
+	printf "\e[?1049h\e[1;1H 🔶 %s\n" "${PROJ}" >&2
+	trap 'printf "\e[?1049l\n\e[J"; restore_cursor_position' EXIT
+	if bash "common/split-into-steps.sh" "$i" "$TEMPLATE" >"$OUTPUT" 2> >(tee "${TMPOUT}" >&2); then
+		printf '\e[?1049l\e[J' >&2
+		restore_cursor_position
+		trap - EXIT
+		printf " ✅ %s: ok.\n" "${PROJ}" >&2
+	else
+		printf '\e[?1049l\e[J' >&2
+		restore_cursor_position
+		trap - EXIT
+
+		MESG=""
+		printf -v MESG "\e[38;5;9m ❌ %s failed! \e[2m(./common/split-into-steps.sh %s %s > %s)\e[0m" "${PROJ}" "$i" "$TEMPLATE" "$OUTPUT"
+
+		echo "${MESG}" >&2
+		cat "${TMPOUT}" >&2
+		echo "${MESG}" >&2
+
+		unlink "${TMPOUT}"
+		exit 1
+	fi
+
+	CONTENT=$(<"${OUTPUT}")
+	CONTENT=${CONTENT//"{{PROJ}}"/"$PROJ"}
+	CONTENT=${CONTENT//"{{thisfile}}"/"$OUTPUT"}
+	CONTENT=${CONTENT//"{{cron_day}}"/"$cron_day"}
+	echo "${CONTENT}" >"${OUTPUT}"
 
 	if [[ $cron_day -ge 28 ]]; then
 		cron_day=1
 	else
 		cron_day=$((cron_day + 1))
 	fi
-	sed -i "s#{{cron_day}}#$cron_day#g" "$F"
 
 	TABLE+="| $PROJ "
 	TABLE+="| https://hub.docker.com/r/gongt/$PROJ "

@@ -12,7 +12,7 @@ info "starting..."
 
 ### 依赖项目
 STEP="运行时依赖项目"
-make_base_image_by_pacman "transmission" scripts/dependencies.lst
+fork_archlinux "transmission" scripts/dependencies.lst
 ### 依赖项目 END
 
 setup_systemd "transmission" nginx_attach
@@ -27,6 +27,5 @@ buildah_config "transmission" \
 	--created-by "#MAGIC!" \
 	--label name=gongt/transmission
 
-RESULT=$(new_container "transmission" "$BUILDAH_LAST_IMAGE")
-buildah commit "$RESULT" gongt/transmission
+buildah_finalize_image "transmission" gongt/transmission
 info "Done!"

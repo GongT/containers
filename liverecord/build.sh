@@ -16,7 +16,7 @@ function hash_deps() {
 function install_deps() {
 	perfer_proxy buildah run $(use_apt_cache liverecord) "$1" bash <scripts/install-deps.sh
 }
-buildah_cache2 liverecord hash_deps install_deps
+buildah_cache liverecord hash_deps install_deps
 
 # 安装依赖
 STEP="下载init"
@@ -32,7 +32,7 @@ _download_init() {
 	buildah copy "$TGT" "$DOWNLOADED" "/usr/sbin/init"
 	buildah run "$TGT" chmod 0777 "/usr/sbin/init"
 }
-buildah_cache2 liverecord _hash_init _download_init
+buildah_cache liverecord _hash_init _download_init
 # 安装依赖 END
 
 STEP="复制文件系统"
@@ -42,5 +42,4 @@ STEP="更新配置"
 buildah_config liverecord --entrypoint '["/bin/bash", "-c"]' --cmd '/entrypoint.sh' \
 	--volume=/data/records
 
-RESULT=$(create_if_not "liverecord" "$BUILDAH_LAST_IMAGE")
-buildah commit "$RESULT" gongt/liverecord
+buildah_finalize_image "liverecord" gongt/liverecord

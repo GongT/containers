@@ -9,7 +9,8 @@ arg_finish "$@"
 
 ### 依赖项目
 STEP="安装系统依赖"
-make_base_image_by_dnf "factorio" source/dependencies.lst
+dnf_use_environment
+dnf_install_step "factorio" source/dependencies.lst
 ### 依赖项目 END
 
 ### 下载安装
@@ -39,8 +40,8 @@ build_factorio() {
 	info "Factorio $VERSION"
 }
 
-DIST_TAG="stable" buildah_cache2 "factorio" hash_factorio build_factorio
-# DIST_TAG="latest" buildah_cache2 "factorio" hash_factorio build_factorio
+DIST_TAG="stable" buildah_cache "factorio" hash_factorio build_factorio
+# DIST_TAG="latest" buildah_cache "factorio" hash_factorio build_factorio
 ### 下载安装 END
 
 merge_local_fs "factorio"
@@ -49,7 +50,6 @@ buildah_config "factorio" --cmd '/opt/scripts/start.sh' --port 34197 --stop-sign
 	--author "GongT <admin@gongt.me>" --created-by "#MAGIC!" --label name=gongt/factorio
 info "settings update..."
 
-RESULT=$(create_if_not "factorio" "$BUILDAH_LAST_IMAGE")
-buildah commit "$RESULT" gongt/factorio
+buildah_finalize_image "factorio" gongt/factorio
 
 info "Done!"

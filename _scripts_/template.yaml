@@ -24,10 +24,11 @@ on:
       - "{{PROJ}}/**"
       - "!{{PROJ}}/install-service.sh"
     #  - "{{thisfile}}"
-    # - common
+    #  - common
     branches:
       - master
 env:
+  AUTHOR: GongT <admin@gongt.me>
   NODE_ENV: production
   PROJECT_NAME: "{{PROJ}}"
   GITHUB_ACTOR: ${{ github.actor }}
@@ -96,14 +97,16 @@ jobs:
         timeout-minutes: 1
         run: ./_scripts_/retry.sh podman pull "docker://ghcr.io/gongt/$PROJECT_NAME"
 
+      ### BUILD_SCTION START ###
       - name: "运行构建过程"
         shell: bash
-        timeout-minutes: 30
+        timeout-minutes: 5
         env:
           BUILDAH_FORCE: ${{ github.event.inputs.forceRebuild }}
           FORCE_DNF: ${{ github.event.inputs.forceDnf }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: bash _scripts_/ci-single-build.sh
+      ### BUILD_SCTION END ###
 
       - id: result
         name: "输出状态"

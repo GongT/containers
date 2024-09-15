@@ -21,4 +21,4 @@ tlds_update() {
 
 	buildah copy "$1" "$TMPF" "${SAVE_TO:-/etc/dnsmasq.d/iana.conf}"
 }
-buildah_cache2 "$1" tlds_etag tlds_update
+buildah_cache "$1" tlds_etag tlds_update

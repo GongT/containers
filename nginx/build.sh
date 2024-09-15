@@ -5,8 +5,6 @@ set -Eeuo pipefail
 cd "$(dirname "$(realpath "${BASH_SOURCE[0]}")")"
 source ../common/functions-build.sh
 
-unset PROXY
-
 arg_flag FORCE_DNF dnf "force reinstall dependencies"
 arg_flag FORCE f/force "force rebuild nginx source code"
 arg_finish "$@"
@@ -20,8 +18,9 @@ fi
 
 ### 编译时依赖项目
 STEP="安装编译时依赖项目"
-buildah_cache_start "fedora:$FEDORA_VERSION"
-dnf_install "nginx-build"  scripts/build-requirements.lst
+buildah_cache_start "fedora-minimal"
+dnf_use_environment
+dnf_install_step "nginx-build" scripts/build-requirements.lst
 ### 编译时依赖项目 END
 
 ### 编译!
@@ -51,7 +50,7 @@ build_nginx() {
 
 	buildah copy "$BUILDER" "$SOURCE_DIRECTORY" "/opt/projects/nginx"
 }
-BUILDAH_FORCE="$FORCE" buildah_cache2 "nginx-build" hash_nginx build_nginx
+BUILDAH_FORCE="$FORCE" buildah_cache "nginx-build" hash_nginx build_nginx
 
 STEP="编译Nginx源码"
 hash_build() {
@@ -62,12 +61,12 @@ run_build() {
 	info_log "(re-)building nginx and modules"
 	run_compile nginx "$1" "scripts/build-nginx.sh"
 }
-buildah_cache2 "nginx-build" hash_build run_build
+buildah_cache "nginx-build" hash_build run_build
 COMPILE_RESULT_IMAGE="$BUILDAH_LAST_IMAGE"
 ### 编译! END
 
 ### 编译好的nginx
-make_base_image_by_pacman "nginx" scripts/runtime-requirements.lst
+fork_archlinux "nginx" scripts/runtime-requirements.lst
 STEP="复制Nginx到镜像中"
 hash_program_files() {
 	echo "$COMPILE_RESULT_IMAGE"
@@ -76,7 +75,7 @@ hash_program_files() {
 copy_program_files() {
 	run_install "$COMPILE_RESULT_IMAGE" "$1" "nginx" "scripts/prepare-run.sh"
 }
-buildah_cache2 "nginx" hash_program_files copy_program_files
+buildah_cache "nginx" hash_program_files copy_program_files
 ### 编译好的nginx END
 
 ### 配置文件等
@@ -89,8 +88,7 @@ buildah_config "nginx" --cmd '/usr/sbin/nginx.sh' --port 80 --port 443 --port 80
 	--volume /config --volume /etc/ACME \
 	--author "GongT <admin@gongt.me>" --created-by "#MAGIC!" --label name=gongt/nginx
 
-healthcheck "30s" "5" "curl --insecure https://127.0.0.1:443"
+# healthcheck "30s" "5" "curl --insecure https://127.0.0.1:443"
 
-RESULT=$(create_if_not nginx "$BUILDAH_LAST_IMAGE")
-buildah commit "$RESULT" gongt/nginx
+buildah_finalize_image nginx gongt/nginx
 info_log "Done."

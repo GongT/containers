@@ -7,7 +7,8 @@ source ../common/functions-build.sh
 
 ### 安装依赖
 STEP=安装依赖
-make_base_image_by_dnf "qqbot" "scripts/requirements.lst"
+dnf_use_environment
+dnf_install_step "qqbot" "scripts/requirements.lst"
 ### 安装依赖 END
 
 ### 运行MCL安装mirai END
@@ -41,7 +42,7 @@ download_run_mcl() {
 	buildah config --workingdir /mirai "$1"
 	buildah run --network=host "$1" bash <scripts/run-mcl.sh
 }
-buildah_cache2 "qqbot" check_mcl download_run_mcl
+buildah_cache "qqbot" check_mcl download_run_mcl
 ### 运行MCL安装mirai END
 
 STEP=复制文件
@@ -52,6 +53,5 @@ buildah_config "qqbot" --cmd "/mirai/start.sh" --stop-signal=SIGINT \
 	--volume /mirai/config --volume /mirai/data --volume /mirai/logs --volume /mirai/bots \
 	--author "GongT <admin@gongt.me>" --created-by "#MAGIC!" --label name=gongt/acme
 
-RESULT=$(create_if_not "qqbot" "$BUILDAH_LAST_IMAGE")
-buildah commit "$RESULT" gongt/qqbot
+buildah_finalize_image "qqbot" gongt/qqbot
 info "Done!"

@@ -1,4 +1,0 @@
-[DHCP]
-arg[]:/bin/bash
-arg[]:-c
-arg[]:/opt/run_dhcp.sh

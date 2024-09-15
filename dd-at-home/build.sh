@@ -7,7 +7,7 @@ source ../common/functions-build.sh
 
 arg_finish "$@"
 
-buildah_cache_start "fedora:$FEDORA_VERSION"
+buildah_cache_start "fedora-minimal"
 
 # 安装依赖
 REPO=dd-center/DDatHome-go
@@ -23,7 +23,7 @@ _download_client() {
 	buildah copy "$TGT" "$DOWNLOADED" "/opt/DDatHome"
 	buildah run "$TGT" chmod 0777 "/opt/DDatHome"
 }
-buildah_cache2 ddathome _hash_client _download_client
+buildah_cache ddathome _hash_client _download_client
 # 安装依赖 END
 
 STEP="复制文件系统"
@@ -32,5 +32,4 @@ merge_local_fs ddathome
 STEP="更新配置"
 buildah_config ddathome --cmd '/opt/DDatHome'
 
-RESULT=$(create_if_not "ddathome" "$BUILDAH_LAST_IMAGE")
-buildah commit "$RESULT" gongt/dd-at-home
+buildah_finalize_image "ddathome" gongt/dd-at-home

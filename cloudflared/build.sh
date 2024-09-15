@@ -5,13 +5,12 @@ set -Eeuo pipefail
 cd "$(dirname "$(realpath "${BASH_SOURCE[0]}")")"
 source ../common/functions-build.sh
 
-unset PROXY
-
 arg_finish "$@"
 
 ### 依赖项目
 STEP="安装依赖项目"
-make_base_image_by_dnf "cloudflared" scripts/requirements.lst
+dnf_use_environment
+dnf_install_step "cloudflared" scripts/requirements.lst
 ### 依赖项目 END
 
 ### 安装cloudflared
@@ -28,7 +27,7 @@ do_download() {
 	buildah copy "$TGT" "$DOWNLOADED" "/usr/bin/cloudflared"
 	buildah run "$TGT" chmod 0777 "/usr/bin/cloudflared"
 }
-buildah_cache2 "cloudflared" hash_download do_download
+buildah_cache "cloudflared" hash_download do_download
 ### 安装cloudflared END
 
 ### 配置文件等
@@ -44,5 +43,4 @@ buildah_config "cloudflared" --entrypoint "$(json_array /opt/start.sh)" \
 
 # healthcheck "30s" "5" "curl --insecure https://127.0.0.1:443"
 
-RESULT=$(create_if_not cloudflared "$BUILDAH_LAST_IMAGE")
-buildah commit "$RESULT" gongt/cloudflared
+buildah_finalize_image cloudflared gongt/cloudflared

@@ -3,9 +3,10 @@
 	"files.associations": {},
 	"files.watcherExclude": {
 		"**/nginx/source/**": true,
-		"**/wordpress/fs/project/**": true
+		"**/wordpress/fs/project/**": true,
 	},
 	"search.exclude": {
+		"/.lab": true,
 		"/.github": true,
 	},
 	"[javascript]": {

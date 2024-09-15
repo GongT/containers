@@ -21,7 +21,7 @@ download_init() {
 	local RESULT="$1"
 	buildah copy "--from=registry.gongt.me/gongt/init" "$RESULT" "/sbin/init" "/sbin/init"
 }
-buildah_cache2 "docker-registry" hash_init download_init
+buildah_cache "docker-registry" hash_init download_init
 ### sbin/init END
 
 info "copy files..."
@@ -33,6 +33,5 @@ buildah_config "docker-registry" --cmd '/sbin/init' --stop-signal=SIGINT \
 	"--env=REGISTRY_HTTP_NET=unix" \
 	--author "GongT <admin@gongt.me>" --created-by "#MAGIC!" --label name=gongt/docker-registry
 
-RESULT=$(create_if_not registry-worker "$BUILDAH_LAST_IMAGE")
-buildah commit "$RESULT" gongt/docker-registry
+buildah_finalize_image docker-registry gongt/docker-registry
 info "Done!"

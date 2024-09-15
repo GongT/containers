@@ -5,11 +5,9 @@ set -Eeuo pipefail
 cd "$(dirname "$(realpath "${BASH_SOURCE[0]}")")"
 source ../common/functions-build.sh
 
-unset PROXY
-
 arg_finish "$@"
 
-buildah_cache_start rabbitmq:management-alpine
+buildah_cache_start "fedora-minimal"
 
 ### 依赖项目
 STEP="依赖项目"
@@ -21,7 +19,7 @@ do_download() {
 	apk_install "$1" "${PKGS[@]}"
 	buildah run "$1" rm -rf /etc/rabbitmq
 }
-buildah_cache2 "rabbitmq" hash_download do_download
+buildah_cache "rabbitmq" hash_download do_download
 ### 依赖项目 END
 
 ### 配置文件等
@@ -42,5 +40,4 @@ buildah_config "rabbitmq" \
 
 # healthcheck "30s" "5" "curl --insecure https://127.0.0.1:443"
 
-RESULT=$(create_if_not rabbitmq "$BUILDAH_LAST_IMAGE")
-buildah commit "$RESULT" gongt/rabbitmq
+buildah_finalize_image rabbitmq gongt/rabbitmq

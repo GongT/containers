@@ -7,7 +7,8 @@ source ../common/functions-build.sh
 
 ### 依赖项目
 STEP="安装编译依赖"
-make_base_image_by_dnf "btc-build" scripts/dependencies.lst
+dnf_use_environment
+dnf_install_step "btc-build" scripts/dependencies.lst
 ### 依赖项目 END
 
 ### 下载&编译
@@ -17,7 +18,7 @@ BUILT_IMAGE="$BUILDAH_LAST_IMAGE"
 ### 下载&编译 END
 
 ### 复制文件
-buildah_cache_start "gongt/glibc:bash"
+buildah_cache_start "fedora-minimal"
 
 STEP="复制编译结果和依赖文件到目标容器"
 hash_program_files() {
@@ -41,7 +42,7 @@ copy_program_files() {
 
 	buildah config --label "bitcoind-version=$VERSION" "$RESULT"
 }
-buildah_cache2 "btc" hash_program_files copy_program_files
+buildah_cache "btc" hash_program_files copy_program_files
 ### 复制文件 END
 
 ### 复制fs
@@ -52,6 +53,5 @@ merge_local_fs "btc"
 buildah_config "btc" --cmd '/opt/start.sh' --port 8332 --port 8333 --port 8332/udp --port 8333/udp \
 	--author "GongT <admin@gongt.me>" --created-by "#MAGIC!" --label name=gongt/bitcoin-peer
 
-RESULT=$(new_container "btc" "$BUILDAH_LAST_IMAGE")
-buildah commit "$RESULT" gongt/bitcoin-peer
+buildah_finalize_image "btc" gongt/bitcoin-peer
 info "Done!"

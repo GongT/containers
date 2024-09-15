@@ -7,8 +7,9 @@ source ../common/functions-build.sh
 
 ### 依赖项目
 STEP="安装系统依赖"
-buildah_cache_start "fedora:$FEDORA_VERSION"
-dnf_install "acme" scripts/deps.lst
+buildah_cache_start "fedora-minimal"
+dnf_use_environment
+dnf_install_step "acme" scripts/deps.lst
 ### 依赖项目 END
 
 ### 安装acme
@@ -28,7 +29,7 @@ do_acme() {
 
 	buildah run "--volume=$MNT:/mnt" "$1" bash <scripts/build-acme.sh
 }
-buildah_cache2 "acme" hash_acme do_acme
+buildah_cache "acme" hash_acme do_acme
 ### 安装acme END
 
 ### 复制文件
@@ -42,6 +43,5 @@ buildah_config "acme" --entrypoint "$(json_array /opt/entrypoint.sh)" --stop-sig
 	--author "GongT <admin@gongt.me>" --created-by "#MAGIC!" --label name=gongt/acme
 info "settings updated..."
 
-RESULT=$(create_if_not "acme" "$BUILDAH_LAST_IMAGE")
-buildah commit "$RESULT" gongt/acme
+buildah_finalize_image "acme" gongt/acme
 info "Done!"

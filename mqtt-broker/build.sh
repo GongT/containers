@@ -16,7 +16,7 @@ hash_fs_files() {
 copy_fs_files() {
 	buildah copy "$1" fs /
 }
-buildah_cache2 mqtt hash_fs_files copy_fs_files
+buildah_cache mqtt hash_fs_files copy_fs_files
 ### 复制文件 END
 
 buildah_config "mqtt" \
@@ -28,5 +28,4 @@ buildah_config "mqtt" \
 	--created-by "#MAGIC!" \
 	--label name=gongt/mqtt-broker
 
-RESULT=$(create_if_not "mqtt-commit" "$BUILDAH_LAST_IMAGE")
-buildah commit "$RESULT" gongt/mqtt-broker
+buildah_finalize_image "mqtt" gongt/mqtt-broker

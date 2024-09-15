@@ -52,7 +52,6 @@ if ! [[ $DISABLE_SSL ]]; then
 fi
 shared_sockets_use
 unit_body ExecReload '/usr/bin/podman exec nginx bash /usr/bin/safe-reload'
-unit_body ExecStop '/usr/bin/podman exec nginx bash /usr/bin/safe-reload'
 unit_body RestartPreventExitStatus 127
 
 healthcheck "30s" "5" "curl --insecure https://127.0.0.1:443"

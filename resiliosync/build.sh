@@ -12,12 +12,8 @@ info "starting..."
 
 ### 运行时依赖项目
 STEP="运行时依赖项目"
-dnf_add_repo_string resilio '[resilio-sync]
-name=Resilio Sync
-baseurl=https://linux-packages.resilio.com/resilio-sync/rpm/$basearch
-enabled=1
-gpgcheck=0'
-POST_SCRIPT=$(<scripts/post-install.sh) make_base_image_by_dnf "resiliosync" scripts/runtime.lst
+dnf_use_environment --repo=scripts/resilio.repo
+dnf_install_step "resiliosync" scripts/runtime.lst scripts/post-install.sh
 ### 运行时依赖项目 END
 
 ### sbin/init
@@ -37,7 +33,7 @@ do_download() {
 	tar xf "$DOWNLOADED" -C "$TMPD"
 	xbuildah copy --chmod 0777 "$CONTAIENR" "$TMPD/hjson" "/usr/bin/hjson"
 }
-buildah_cache2 "resiliosync" get_download do_download
+buildah_cache "resiliosync" get_download do_download
 ### hjson END
 
 ### 配置文件等
@@ -48,6 +44,5 @@ merge_local_fs "resiliosync"
 buildah_config "resiliosync" --cmd '/opt/init.sh' --stop-signal SIGINT \
 	--author "GongT <admin@gongt.me>" --created-by "#MAGIC!" --label name=gongt/resiliosync
 
-RESULT=$(create_if_not "resiliosync" "$BUILDAH_LAST_IMAGE")
-buildah commit "$RESULT" gongt/resiliosync
+buildah_finalize_image "resiliosync" gongt/resiliosync
 info "Done!"

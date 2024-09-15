@@ -10,11 +10,12 @@ arg_finish "$@"
 
 info "starting..."
 
-export BUILDAH_LAST_IMAGE=$(podman pull fedora:latest)
+buildah_cache_start "fedora-minimal"
 
 ### TGTD
 STEP="install iscsi-tgtd"
-make_base_image_by_dnf "fedora-tgtd" source/dependencies.lst
+dnf_use_environment
+dnf_install_step "fedora-tgtd" source/dependencies.lst
 ### TGTD END
 
 setup_systemd "fedora-tgtd"
@@ -29,6 +30,5 @@ buildah_config "fedora-tgtd" --stop-signal SIGINT \
 	--author "GongT <admin@gongt.me>" --created-by "#MAGIC!" --label name=gongt/gamedisk
 info "settings update..."
 
-RESULT=$(create_if_not "gamedisk" "$BUILDAH_LAST_IMAGE")
-buildah commit "$RESULT" gongt/gamedisk
+buildah_finalize_image "gamedisk" gongt/gamedisk
 info "Done!"

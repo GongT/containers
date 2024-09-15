@@ -10,7 +10,8 @@ arg_finish "$@"
 
 ### .Net
 STEP="安装.Net"
-make_base_image_by_dnf "impostor" scripts/dependencies.lst
+dnf_use_environment
+dnf_install_step "impostor" scripts/dependencies.lst
 ### .Net
 
 STEP="下载Impostor"
@@ -26,7 +27,7 @@ do_download() {
 	decompression_file "$DOWNLOADED" 0 "$TMPD"
 	buildah copy "$1" "$TMPD" "/app"
 }
-buildah_cache2 "impostor" get_download do_download
+buildah_cache "impostor" get_download do_download
 
 STEP="复制配置文件"
 merge_local_fs "impostor"
@@ -38,6 +39,5 @@ buildah_config "impostor" \
 	--created-by "#MAGIC!" \
 	--label name=gongt/impostor
 
-RESULT=$(create_if_not impostor-result "$BUILDAH_LAST_IMAGE")
-buildah commit "$RESULT" gongt/impostor
+buildah_finalize_image impostor gongt/impostor
 info "Done!"
