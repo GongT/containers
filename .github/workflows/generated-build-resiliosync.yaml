@@ -41,7 +41,7 @@ env:
 jobs:
   cancel:
     name: Cancel Previous Runs
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     needs: build
     steps:
       - name: cancel running workflows
@@ -53,7 +53,7 @@ jobs:
 
   build:
     name: "生成镜像"
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     outputs:
       DOMAIN_ARRAY: ${{ steps.result.outputs.DOMAIN_ARRAY }}
     steps:
@@ -151,7 +151,7 @@ jobs:
         run: bash _scripts_/publish_create_index.sh
 
   publish:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     needs: build
     strategy:
       matrix:
