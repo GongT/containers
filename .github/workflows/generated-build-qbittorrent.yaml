@@ -104,63 +104,63 @@ jobs:
           _BUILDSCRIPT_RUN_STEP_: qbittorrent-build:1
         id: step_1
         name: '运行构建过程: 编译时依赖项目'
-        run: bash _scripts_/ci-single-build.sh
+        run: bash "${SOURCE_FILE}"
         shell: bash
         timeout-minutes: 5
       - env:
           _BUILDSCRIPT_RUN_STEP_: qbittorrent-build:2
         id: step_2
         name: '运行构建过程: 编译remote-shell（下载）'
-        run: bash _scripts_/ci-single-build.sh
+        run: bash "${SOURCE_FILE}"
         shell: bash
         timeout-minutes: 5
       - env:
           _BUILDSCRIPT_RUN_STEP_: qbittorrent-build:3
         id: step_3
         name: '运行构建过程: 编译remote-shell（编译）'
-        run: bash _scripts_/ci-single-build.sh
+        run: bash "${SOURCE_FILE}"
         shell: bash
         timeout-minutes: 5
       - env:
           _BUILDSCRIPT_RUN_STEP_: qbittorrent:1
         id: step_1
         name: '运行构建过程: 运行时依赖项目'
-        run: bash _scripts_/ci-single-build.sh
+        run: bash "${SOURCE_FILE}"
         shell: bash
         timeout-minutes: 5
       - env:
           _BUILDSCRIPT_RUN_STEP_: qbittorrent:2
         id: step_2
         name: '运行构建过程: 复制编译结果文件'
-        run: bash _scripts_/ci-single-build.sh
+        run: bash "${SOURCE_FILE}"
         shell: bash
         timeout-minutes: 5
       - env:
           _BUILDSCRIPT_RUN_STEP_: qbittorrent:3
         id: step_3
         name: '运行构建过程: 配置镜像中的systemd'
-        run: bash _scripts_/ci-single-build.sh
+        run: bash "${SOURCE_FILE}"
         shell: bash
         timeout-minutes: 5
       - env:
           _BUILDSCRIPT_RUN_STEP_: qbittorrent:4
         id: step_4
         name: '运行构建过程: 复制配置文件'
-        run: bash _scripts_/ci-single-build.sh
+        run: bash "${SOURCE_FILE}"
         shell: bash
         timeout-minutes: 5
       - env:
           _BUILDSCRIPT_RUN_STEP_: qbittorrent:5
         id: step_5
         name: '运行构建过程: 配置镜像信息'
-        run: bash _scripts_/ci-single-build.sh
+        run: bash "${SOURCE_FILE}"
         shell: bash
         timeout-minutes: 5
       - env:
           _BUILDSCRIPT_RUN_STEP_: qbittorrent:6
         id: step_6
         name: '运行构建过程: Finalize'
-        run: bash _scripts_/ci-single-build.sh
+        run: bash "${SOURCE_FILE}"
         shell: bash
         timeout-minutes: 5
 

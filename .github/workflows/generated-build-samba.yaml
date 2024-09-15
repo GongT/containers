@@ -104,35 +104,35 @@ jobs:
           _BUILDSCRIPT_RUN_STEP_: samba:1
         id: step_1
         name: '运行构建过程: 安装系统依赖:'
-        run: bash _scripts_/ci-single-build.sh
+        run: bash "${SOURCE_FILE}"
         shell: bash
         timeout-minutes: 5
       - env:
           _BUILDSCRIPT_RUN_STEP_: samba:2
         id: step_2
         name: '运行构建过程: 复制配置文件'
-        run: bash _scripts_/ci-single-build.sh
+        run: bash "${SOURCE_FILE}"
         shell: bash
         timeout-minutes: 5
       - env:
           _BUILDSCRIPT_RUN_STEP_: samba:3
         id: step_3
         name: '运行构建过程: 配置镜像中的systemd'
-        run: bash _scripts_/ci-single-build.sh
+        run: bash "${SOURCE_FILE}"
         shell: bash
         timeout-minutes: 5
       - env:
           _BUILDSCRIPT_RUN_STEP_: samba:4
         id: step_4
         name: '运行构建过程: No Name Stage'
-        run: bash _scripts_/ci-single-build.sh
+        run: bash "${SOURCE_FILE}"
         shell: bash
         timeout-minutes: 5
       - env:
           _BUILDSCRIPT_RUN_STEP_: samba:5
         id: step_5
         name: '运行构建过程: Finalize'
-        run: bash _scripts_/ci-single-build.sh
+        run: bash "${SOURCE_FILE}"
         shell: bash
         timeout-minutes: 5
 

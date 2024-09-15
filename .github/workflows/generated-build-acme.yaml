@@ -104,35 +104,35 @@ jobs:
           _BUILDSCRIPT_RUN_STEP_: acme:1
         id: step_1
         name: '运行构建过程: 安装系统依赖'
-        run: bash _scripts_/ci-single-build.sh
+        run: bash "${SOURCE_FILE}"
         shell: bash
         timeout-minutes: 5
       - env:
           _BUILDSCRIPT_RUN_STEP_: acme:2
         id: step_2
         name: '运行构建过程: 安装acme.sh'
-        run: bash _scripts_/ci-single-build.sh
+        run: bash "${SOURCE_FILE}"
         shell: bash
         timeout-minutes: 5
       - env:
           _BUILDSCRIPT_RUN_STEP_: acme:3
         id: step_3
         name: '运行构建过程: 复制文件'
-        run: bash _scripts_/ci-single-build.sh
+        run: bash "${SOURCE_FILE}"
         shell: bash
         timeout-minutes: 5
       - env:
           _BUILDSCRIPT_RUN_STEP_: acme:4
         id: step_4
         name: '运行构建过程: 配置镜像信息'
-        run: bash _scripts_/ci-single-build.sh
+        run: bash "${SOURCE_FILE}"
         shell: bash
         timeout-minutes: 5
       - env:
           _BUILDSCRIPT_RUN_STEP_: acme:5
         id: step_5
         name: '运行构建过程: Finalize'
-        run: bash _scripts_/ci-single-build.sh
+        run: bash "${SOURCE_FILE}"
         shell: bash
         timeout-minutes: 5
 

@@ -104,56 +104,56 @@ jobs:
           _BUILDSCRIPT_RUN_STEP_: nginx-build:1
         id: step_1
         name: '运行构建过程: 安装编译时依赖项目'
-        run: bash _scripts_/ci-single-build.sh
+        run: bash "${SOURCE_FILE}"
         shell: bash
         timeout-minutes: 5
       - env:
           _BUILDSCRIPT_RUN_STEP_: nginx-build:2
         id: step_2
         name: '运行构建过程: 下载Nginx源码'
-        run: bash _scripts_/ci-single-build.sh
+        run: bash "${SOURCE_FILE}"
         shell: bash
         timeout-minutes: 5
       - env:
           _BUILDSCRIPT_RUN_STEP_: nginx-build:3
         id: step_3
         name: '运行构建过程: 编译Nginx源码'
-        run: bash _scripts_/ci-single-build.sh
+        run: bash "${SOURCE_FILE}"
         shell: bash
         timeout-minutes: 5
       - env:
           _BUILDSCRIPT_RUN_STEP_: nginx:1
         id: step_1
         name: '运行构建过程: 安装系统依赖:'
-        run: bash _scripts_/ci-single-build.sh
+        run: bash "${SOURCE_FILE}"
         shell: bash
         timeout-minutes: 5
       - env:
           _BUILDSCRIPT_RUN_STEP_: nginx:2
         id: step_2
         name: '运行构建过程: 复制Nginx到镜像中'
-        run: bash _scripts_/ci-single-build.sh
+        run: bash "${SOURCE_FILE}"
         shell: bash
         timeout-minutes: 5
       - env:
           _BUILDSCRIPT_RUN_STEP_: nginx:3
         id: step_3
         name: '运行构建过程: 复制配置文件'
-        run: bash _scripts_/ci-single-build.sh
+        run: bash "${SOURCE_FILE}"
         shell: bash
         timeout-minutes: 5
       - env:
           _BUILDSCRIPT_RUN_STEP_: nginx:4
         id: step_4
         name: '运行构建过程: 配置容器'
-        run: bash _scripts_/ci-single-build.sh
+        run: bash "${SOURCE_FILE}"
         shell: bash
         timeout-minutes: 5
       - env:
           _BUILDSCRIPT_RUN_STEP_: nginx:5
         id: step_5
         name: '运行构建过程: Finalize'
-        run: bash _scripts_/ci-single-build.sh
+        run: bash "${SOURCE_FILE}"
         shell: bash
         timeout-minutes: 5
 
