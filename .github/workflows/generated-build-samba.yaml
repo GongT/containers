@@ -28,10 +28,16 @@ on:
     branches:
       - master
 env:
+
+  SOURCE_FILE: samba/build.sh
+  PROJECT_DIR: samba
+  BUILDAH_FORCE: ${{ github.event.inputs.forceRebuild }}
+  FORCE_DNF: ${{ github.event.inputs.forceDnf }}
   AUTHOR: GongT <admin@gongt.me>
   NODE_ENV: production
   PROJECT_NAME: "samba"
   GITHUB_ACTOR: ${{ github.actor }}
+  REWRITE_IMAGE_NAME: build.local/dist/samba
 jobs:
   cancel:
     name: Cancel Previous Runs
@@ -82,10 +88,6 @@ jobs:
         with:
           path: |
             ${{ env.SYSTEM_COMMON_CACHE }}/Download
-            ${{ env.SYSTEM_COMMON_CACHE }}/golang
-            ${{ env.SYSTEM_COMMON_CACHE }}/pip
-            ${{ env.SYSTEM_COMMON_CACHE }}/nodejs
-            ${{ env.SYSTEM_COMMON_CACHE }}/CCACHE
           key: common-cache-samba-${{ hashFiles('samba') }}
           restore-keys: |
             common-cache-samba
@@ -99,53 +101,38 @@ jobs:
 
 
       - env:
-          BUILDAH_FORCE: ${{ github.event.inputs.forceRebuild }}
-          FORCE_DNF: ${{ github.event.inputs.forceDnf }}
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           _BUILDSCRIPT_RUN_STEP_: samba:1
         id: step_1
         name: '运行构建过程: 安装系统依赖:'
-        run: bash _scripts_/ci-single-build.sh "$samba:$1"
+        run: bash _scripts_/ci-single-build.sh
         shell: bash
         timeout-minutes: 5
       - env:
-          BUILDAH_FORCE: ${{ github.event.inputs.forceRebuild }}
-          FORCE_DNF: ${{ github.event.inputs.forceDnf }}
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           _BUILDSCRIPT_RUN_STEP_: samba:2
         id: step_2
         name: '运行构建过程: 复制配置文件'
-        run: bash _scripts_/ci-single-build.sh "$samba:$2"
+        run: bash _scripts_/ci-single-build.sh
         shell: bash
         timeout-minutes: 5
       - env:
-          BUILDAH_FORCE: ${{ github.event.inputs.forceRebuild }}
-          FORCE_DNF: ${{ github.event.inputs.forceDnf }}
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           _BUILDSCRIPT_RUN_STEP_: samba:3
         id: step_3
         name: '运行构建过程: 配置镜像中的systemd'
-        run: bash _scripts_/ci-single-build.sh "$samba:$3"
+        run: bash _scripts_/ci-single-build.sh
         shell: bash
         timeout-minutes: 5
       - env:
-          BUILDAH_FORCE: ${{ github.event.inputs.forceRebuild }}
-          FORCE_DNF: ${{ github.event.inputs.forceDnf }}
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           _BUILDSCRIPT_RUN_STEP_: samba:4
         id: step_4
         name: '运行构建过程: No Name Stage'
-        run: bash _scripts_/ci-single-build.sh "$samba:$4"
+        run: bash _scripts_/ci-single-build.sh
         shell: bash
         timeout-minutes: 5
       - env:
-          BUILDAH_FORCE: ${{ github.event.inputs.forceRebuild }}
-          FORCE_DNF: ${{ github.event.inputs.forceDnf }}
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           _BUILDSCRIPT_RUN_STEP_: samba:5
         id: step_5
         name: '运行构建过程: Finalize'
-        run: bash _scripts_/ci-single-build.sh "$samba:$5"
+        run: bash _scripts_/ci-single-build.sh
         shell: bash
         timeout-minutes: 5
 

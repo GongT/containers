@@ -1,4 +1,4 @@
-name: "{{PROJ}}"
+name: "cloud"
 on:
   workflow_dispatch:
     inputs:
@@ -18,12 +18,12 @@ on:
         required: false
         default: false
   schedule:
-    - cron:  '47 4 {{cron_day}} * *'
+    - cron:  '47 4 2 * *'
   push:
     paths:
-      - "{{PROJ}}/**"
-      - "!{{PROJ}}/install-service.sh"
-    #  - "{{thisfile}}"
+      - "cloud/**"
+      - "!cloud/install-service.sh"
+    #  - ".github/workflows/generated-build-cloud.yaml"
     #  - common
     branches:
       - master
@@ -35,8 +35,9 @@ env:
   FORCE_DNF: ${{ github.event.inputs.forceDnf }}
   AUTHOR: GongT <admin@gongt.me>
   NODE_ENV: production
-  PROJECT_NAME: "{{PROJ}}"
+  PROJECT_NAME: "cloud"
   GITHUB_ACTOR: ${{ github.actor }}
+  REWRITE_IMAGE_NAME: build.local/dist/cloud
 jobs:
   cancel:
     name: Cancel Previous Runs
@@ -87,9 +88,9 @@ jobs:
         with:
           path: |
             ${{ env.SYSTEM_COMMON_CACHE }}/Download
-          key: common-cache-{{PROJ}}-${{ hashFiles('{{PROJ}}') }}
+          key: common-cache-cloud-${{ hashFiles('cloud') }}
           restore-keys: |
-            common-cache-{{PROJ}}
+            common-cache-cloud
             common-cache-
 
       # - name: "从ghcr.io获取上次生成的镜像"
@@ -179,4 +180,3 @@ jobs:
         env:
           SECRET_PASSWORD: ${{ secrets.SECRET_PASSWORD }}
         run: bash _scripts_/publish_all_targets.sh ${{ matrix.domain }}
-
