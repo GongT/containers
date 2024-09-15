@@ -30,5 +30,5 @@ buildah_config "fedora-tgtd" --stop-signal SIGINT \
 	--author "GongT <admin@gongt.me>" --created-by "#MAGIC!" --label name=gongt/gamedisk
 info "settings update..."
 
-buildah_finalize_image "gamedisk" gongt/gamedisk
+buildah_finalize_image "fedora-tgtd" gongt/gamedisk
 info "Done!"

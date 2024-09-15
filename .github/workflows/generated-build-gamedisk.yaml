@@ -129,8 +129,8 @@ jobs:
         shell: bash
         timeout-minutes: 5
       - env:
-          _BUILDSCRIPT_RUN_STEP_: gamedisk:1
-        id: step_1
+          _BUILDSCRIPT_RUN_STEP_: fedora-tgtd:5
+        id: step_5
         name: '运行构建过程: Finalize'
         run: bash "${SOURCE_FILE}"
         shell: bash
