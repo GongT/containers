@@ -5,21 +5,20 @@
 		"**/nginx/source/**": true,
 		"**/wordpress/fs/project/**": true,
 	},
+	"files.readonlyInclude": {
+		".github/workflows/*": true
+	},
 	"search.exclude": {
 		"/.lab": true,
 		"/.github": true,
+		"common/.scripts": true,
+		"common/cli": true,
+		"common/tests": true,
 	},
-	"[javascript]": {
-		"editor.defaultFormatter": "esbenp.prettier-vscode"
-	},
-	"[typescript]": {
-		"editor.defaultFormatter": "esbenp.prettier-vscode"
-	},
-	"[json]": {
-		"editor.defaultFormatter": "esbenp.prettier-vscode"
+	"[jsonc]": {
+		"editor.defaultFormatter": "vscode.json-language-features"
 	},
 	"shellformat.flag": "-s -ln=bash -bn",
-	"prettier.resolveGlobalModules": true,
 	// "json.schemaDownload.enable": false,
 	"bashIde.includeAllWorkspaceSymbols": true
 }

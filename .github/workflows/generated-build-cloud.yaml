@@ -1,4 +1,4 @@
-name: "cloud"
+name: "{{PROJ}}"
 on:
   workflow_dispatch:
     inputs:
@@ -18,19 +18,24 @@ on:
         required: false
         default: false
   schedule:
-    - cron:  '47 4 2 * *'
+    - cron:  '47 4 {{cron_day}} * *'
   push:
     paths:
-      - "cloud/**"
-      - "!cloud/install-service.sh"
-    #  - ".github/workflows/generated-build-cloud.yaml"
+      - "{{PROJ}}/**"
+      - "!{{PROJ}}/install-service.sh"
+    #  - "{{thisfile}}"
     #  - common
     branches:
       - master
 env:
+
+  SOURCE_FILE: cloud/build.sh
+  PROJECT_DIR: cloud
+  BUILDAH_FORCE: ${{ github.event.inputs.forceRebuild }}
+  FORCE_DNF: ${{ github.event.inputs.forceDnf }}
   AUTHOR: GongT <admin@gongt.me>
   NODE_ENV: production
-  PROJECT_NAME: "cloud"
+  PROJECT_NAME: "{{PROJ}}"
   GITHUB_ACTOR: ${{ github.actor }}
 jobs:
   cancel:
@@ -82,26 +87,19 @@ jobs:
         with:
           path: |
             ${{ env.SYSTEM_COMMON_CACHE }}/Download
-            ${{ env.SYSTEM_COMMON_CACHE }}/golang
-            ${{ env.SYSTEM_COMMON_CACHE }}/pip
-            ${{ env.SYSTEM_COMMON_CACHE }}/nodejs
-            ${{ env.SYSTEM_COMMON_CACHE }}/CCACHE
-          key: common-cache-cloud-${{ hashFiles('cloud') }}
+          key: common-cache-{{PROJ}}-${{ hashFiles('{{PROJ}}') }}
           restore-keys: |
-            common-cache-cloud
+            common-cache-{{PROJ}}
             common-cache-
 
-      - name: "从ghcr.io获取上次生成的镜像"
-        shell: bash
-        if: github.event.inputs.brandNew == ''
-        timeout-minutes: 1
-        run: ./_scripts_/retry.sh podman pull "docker://ghcr.io/gongt/$PROJECT_NAME"
+      # - name: "从ghcr.io获取上次生成的镜像"
+      #   shell: bash
+      #   if: github.event.inputs.brandNew == ''
+      #   timeout-minutes: 1
+      #   run: ./_scripts_/retry.sh podman pull "docker://ghcr.io/gongt/$PROJECT_NAME"
 
 
       - env:
-          BUILDAH_FORCE: ${{ github.event.inputs.forceRebuild }}
-          FORCE_DNF: ${{ github.event.inputs.forceDnf }}
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           _BUILDSCRIPT_RUN_STEP_: nextcloud:1
         id: step_1
         name: '运行构建过程: 安装系统依赖'
@@ -109,9 +107,6 @@ jobs:
         shell: bash
         timeout-minutes: 5
       - env:
-          BUILDAH_FORCE: ${{ github.event.inputs.forceRebuild }}
-          FORCE_DNF: ${{ github.event.inputs.forceDnf }}
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           _BUILDSCRIPT_RUN_STEP_: nextcloud:2
         id: step_2
         name: '运行构建过程: 配置镜像中的systemd'
@@ -119,9 +114,6 @@ jobs:
         shell: bash
         timeout-minutes: 5
       - env:
-          BUILDAH_FORCE: ${{ github.event.inputs.forceRebuild }}
-          FORCE_DNF: ${{ github.event.inputs.forceDnf }}
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           _BUILDSCRIPT_RUN_STEP_: nextcloud:3
         id: step_3
         name: '运行构建过程: 复制文件'
@@ -129,9 +121,6 @@ jobs:
         shell: bash
         timeout-minutes: 5
       - env:
-          BUILDAH_FORCE: ${{ github.event.inputs.forceRebuild }}
-          FORCE_DNF: ${{ github.event.inputs.forceDnf }}
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           _BUILDSCRIPT_RUN_STEP_: nextcloud:4
         id: step_4
         name: '运行构建过程: 安装'
@@ -139,9 +128,6 @@ jobs:
         shell: bash
         timeout-minutes: 5
       - env:
-          BUILDAH_FORCE: ${{ github.event.inputs.forceRebuild }}
-          FORCE_DNF: ${{ github.event.inputs.forceDnf }}
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           _BUILDSCRIPT_RUN_STEP_: nextcloud:5
         id: step_5
         name: '运行构建过程: 配置镜像'
@@ -149,9 +135,6 @@ jobs:
         shell: bash
         timeout-minutes: 5
       - env:
-          BUILDAH_FORCE: ${{ github.event.inputs.forceRebuild }}
-          FORCE_DNF: ${{ github.event.inputs.forceDnf }}
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           _BUILDSCRIPT_RUN_STEP_: cloud:1
         id: step_1
         name: '运行构建过程: Finalize'
@@ -196,3 +179,4 @@ jobs:
         env:
           SECRET_PASSWORD: ${{ secrets.SECRET_PASSWORD }}
         run: bash _scripts_/publish_all_targets.sh ${{ matrix.domain }}
+

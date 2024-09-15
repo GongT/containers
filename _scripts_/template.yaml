@@ -28,10 +28,13 @@ on:
     branches:
       - master
 env:
+  BUILDAH_FORCE: ${{ github.event.inputs.forceRebuild }}
+  FORCE_DNF: ${{ github.event.inputs.forceDnf }}
   AUTHOR: GongT <admin@gongt.me>
   NODE_ENV: production
   PROJECT_NAME: "{{PROJ}}"
   GITHUB_ACTOR: ${{ github.actor }}
+  REWRITE_IMAGE_NAME: build.local/dist/{{PROJ}}
 jobs:
   cancel:
     name: Cancel Previous Runs
@@ -82,29 +85,23 @@ jobs:
         with:
           path: |
             ${{ env.SYSTEM_COMMON_CACHE }}/Download
-            ${{ env.SYSTEM_COMMON_CACHE }}/golang
-            ${{ env.SYSTEM_COMMON_CACHE }}/pip
-            ${{ env.SYSTEM_COMMON_CACHE }}/nodejs
-            ${{ env.SYSTEM_COMMON_CACHE }}/CCACHE
           key: common-cache-{{PROJ}}-${{ hashFiles('{{PROJ}}') }}
           restore-keys: |
             common-cache-{{PROJ}}
             common-cache-
 
-      - name: "从ghcr.io获取上次生成的镜像"
-        shell: bash
-        if: github.event.inputs.brandNew == ''
-        timeout-minutes: 1
-        run: ./_scripts_/retry.sh podman pull "docker://ghcr.io/gongt/$PROJECT_NAME"
+      # - name: "从ghcr.io获取上次生成的镜像"
+      #   shell: bash
+      #   if: github.event.inputs.brandNew == ''
+      #   timeout-minutes: 1
+      #   run: ./_scripts_/retry.sh podman pull "docker://ghcr.io/gongt/$PROJECT_NAME"
 
       ### BUILD_SCTION START ###
       - name: "运行构建过程"
         shell: bash
         timeout-minutes: 5
         env:
-          BUILDAH_FORCE: ${{ github.event.inputs.forceRebuild }}
-          FORCE_DNF: ${{ github.event.inputs.forceDnf }}
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          # GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: bash _scripts_/ci-single-build.sh
       ### BUILD_SCTION END ###
 

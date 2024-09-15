@@ -91,11 +91,11 @@ jobs:
             common-cache-liverecord
             common-cache-
 
-      - name: "从ghcr.io获取上次生成的镜像"
-        shell: bash
-        if: github.event.inputs.brandNew == ''
-        timeout-minutes: 1
-        run: ./_scripts_/retry.sh podman pull "docker://ghcr.io/gongt/$PROJECT_NAME"
+      # - name: "从ghcr.io获取上次生成的镜像"
+      #   shell: bash
+      #   if: github.event.inputs.brandNew == ''
+      #   timeout-minutes: 1
+      #   run: ./_scripts_/retry.sh podman pull "docker://ghcr.io/gongt/$PROJECT_NAME"
 
 
       - env:
@@ -105,7 +105,7 @@ jobs:
           _BUILDSCRIPT_RUN_STEP_: liverecord:1
         id: step_1
         name: '运行构建过程: 安装系统依赖'
-        run: bash _scripts_/ci-single-build.sh
+        run: bash _scripts_/ci-single-build.sh "$liverecord:$1"
         shell: bash
         timeout-minutes: 5
       - env:
@@ -115,7 +115,7 @@ jobs:
           _BUILDSCRIPT_RUN_STEP_: liverecord:2
         id: step_2
         name: '运行构建过程: 下载init'
-        run: bash _scripts_/ci-single-build.sh
+        run: bash _scripts_/ci-single-build.sh "$liverecord:$2"
         shell: bash
         timeout-minutes: 5
       - env:
@@ -125,7 +125,7 @@ jobs:
           _BUILDSCRIPT_RUN_STEP_: liverecord:3
         id: step_3
         name: '运行构建过程: 复制文件系统'
-        run: bash _scripts_/ci-single-build.sh
+        run: bash _scripts_/ci-single-build.sh "$liverecord:$3"
         shell: bash
         timeout-minutes: 5
       - env:
@@ -135,7 +135,7 @@ jobs:
           _BUILDSCRIPT_RUN_STEP_: liverecord:4
         id: step_4
         name: '运行构建过程: 更新配置'
-        run: bash _scripts_/ci-single-build.sh
+        run: bash _scripts_/ci-single-build.sh "$liverecord:$4"
         shell: bash
         timeout-minutes: 5
       - env:
@@ -145,7 +145,7 @@ jobs:
           _BUILDSCRIPT_RUN_STEP_: liverecord:5
         id: step_5
         name: '运行构建过程: Finalize'
-        run: bash _scripts_/ci-single-build.sh
+        run: bash _scripts_/ci-single-build.sh "$liverecord:$5"
         shell: bash
         timeout-minutes: 5
 

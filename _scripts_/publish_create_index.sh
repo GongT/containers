@@ -4,7 +4,7 @@ set -Eeuo pipefail
 cd "$(dirname "$(realpath "${BASH_SOURCE[0]}")")"
 
 export TMPDIR="$RUNNER_TEMP"
-source ../common/functions-build.sh
+source ../common/package/include.sh
 
 if [[ "${CI:-}" ]] && ! command -v podman &>/dev/null; then
 	sudo apt install podman
@@ -38,4 +38,4 @@ echo "domain array: $DOMAIN_ARRAY_JSON"
 echo "DOMAIN_ARRAY=$DOMAIN_ARRAY_JSON" >>"$GITHUB_OUTPUT"
 
 echo "publish to primary: $PRIMARY/$PROJECT_NAME:latest"
-podman push "$LAST_COMMITED_IMAGE" "docker://$PRIMARY/$PROJECT_NAME:latest"
+xpodman push "$LAST_COMMITED_IMAGE" "docker://$PRIMARY/$PROJECT_NAME:latest"

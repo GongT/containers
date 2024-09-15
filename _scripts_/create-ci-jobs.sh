@@ -33,6 +33,7 @@ for i in "${BUILD_FILES[@]}"; do
 		restore_cursor_position
 		trap - EXIT
 		printf " ✅ %s: ok.\n" "${PROJ}" >&2
+		printf "     \e[2mbash %q %q %q > %q" "common/split-into-steps.sh" "$i" "$TEMPLATE" "$OUTPUT"
 	else
 		printf '\e[?1049l\e[J' >&2
 		restore_cursor_position
