@@ -38,8 +38,8 @@ echo "domain array: $DOMAIN_ARRAY_JSON"
 echo "DOMAIN_ARRAY=$DOMAIN_ARRAY_JSON" >>"$GITHUB_OUTPUT"
 
 # echo "::group::DIVE" >&2
-# dive "$LAST_COMMITED_IMAGE" --source podman
+# dive "$LAST_BUILT_IMAGE_ID" --source podman
 # echo "::endgroup::" >&2
 
 echo "publish to primary: $PRIMARY/$PROJECT_NAME:latest"
-xpodman push "$LAST_COMMITED_IMAGE" "docker://$PRIMARY/$PROJECT_NAME:latest"
+xpodman push "$LAST_BUILT_IMAGE_ID" "docker://$PRIMARY/$PROJECT_NAME:latest"

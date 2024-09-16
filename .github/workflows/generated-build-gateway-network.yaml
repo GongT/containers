@@ -95,31 +95,31 @@ jobs:
 
 
       - env:
-          _BUILDSCRIPT_RUN_STEP_: 1:network
+          _BUILDSCRIPT_RUN_STEP_: network:1
         id: network_step_1
         name: '运行构建过程: 安装系统依赖:'
         run: _scripts_/ci-single-build.sh
         timeout-minutes: 5
       - env:
-          _BUILDSCRIPT_RUN_STEP_: 2:network
+          _BUILDSCRIPT_RUN_STEP_: network:2
         id: network_step_2
         name: '运行构建过程: 复制配置文件'
         run: _scripts_/ci-single-build.sh
         timeout-minutes: 5
       - env:
-          _BUILDSCRIPT_RUN_STEP_: 3:network
+          _BUILDSCRIPT_RUN_STEP_: network:3
         id: network_step_3
         name: '运行构建过程: 配置镜像中的systemd'
         run: _scripts_/ci-single-build.sh
         timeout-minutes: 5
       - env:
-          _BUILDSCRIPT_RUN_STEP_: 4:network
+          _BUILDSCRIPT_RUN_STEP_: network:4
         id: network_step_4
         name: '运行构建过程: 配置容器'
         run: _scripts_/ci-single-build.sh
         timeout-minutes: 5
       - env:
-          _BUILDSCRIPT_RUN_STEP_: 5:network
+          _BUILDSCRIPT_RUN_STEP_: network:5
         id: network_step_5
         name: '运行构建过程: Finalize'
         run: _scripts_/ci-single-build.sh

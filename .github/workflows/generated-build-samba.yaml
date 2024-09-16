@@ -95,31 +95,31 @@ jobs:
 
 
       - env:
-          _BUILDSCRIPT_RUN_STEP_: 1:samba
+          _BUILDSCRIPT_RUN_STEP_: samba:1
         id: samba_step_1
         name: '运行构建过程: 安装系统依赖:'
         run: _scripts_/ci-single-build.sh
         timeout-minutes: 5
       - env:
-          _BUILDSCRIPT_RUN_STEP_: 2:samba
+          _BUILDSCRIPT_RUN_STEP_: samba:2
         id: samba_step_2
         name: '运行构建过程: 复制配置文件'
         run: _scripts_/ci-single-build.sh
         timeout-minutes: 5
       - env:
-          _BUILDSCRIPT_RUN_STEP_: 3:samba
+          _BUILDSCRIPT_RUN_STEP_: samba:3
         id: samba_step_3
         name: '运行构建过程: 配置镜像中的systemd'
         run: _scripts_/ci-single-build.sh
         timeout-minutes: 5
       - env:
-          _BUILDSCRIPT_RUN_STEP_: 4:samba
+          _BUILDSCRIPT_RUN_STEP_: samba:4
         id: samba_step_4
         name: '运行构建过程: 配置容器'
         run: _scripts_/ci-single-build.sh
         timeout-minutes: 5
       - env:
-          _BUILDSCRIPT_RUN_STEP_: 5:samba
+          _BUILDSCRIPT_RUN_STEP_: samba:5
         id: samba_step_5
         name: '运行构建过程: Finalize'
         run: _scripts_/ci-single-build.sh
