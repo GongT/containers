@@ -95,32 +95,32 @@ jobs:
 
 
       - env:
-          _BUILDSCRIPT_RUN_STEP_: infra-build:1
-        id: step_1
+          _BUILDSCRIPT_RUN_STEP_: 1:infra-build
+        id: infra_build_step_1
         name: '运行构建过程: 安装系统依赖:'
         run: _scripts_/ci-single-build.sh
         timeout-minutes: 5
       - env:
-          _BUILDSCRIPT_RUN_STEP_: infra-build:2
-        id: step_2
+          _BUILDSCRIPT_RUN_STEP_: 2:infra-build
+        id: infra_build_step_2
         name: '运行构建过程: 复制配置文件'
         run: _scripts_/ci-single-build.sh
         timeout-minutes: 5
       - env:
-          _BUILDSCRIPT_RUN_STEP_: infra-build:3
-        id: step_3
+          _BUILDSCRIPT_RUN_STEP_: 3:infra-build
+        id: infra_build_step_3
         name: '运行构建过程: 配置镜像中的systemd'
         run: _scripts_/ci-single-build.sh
         timeout-minutes: 5
       - env:
-          _BUILDSCRIPT_RUN_STEP_: infra-build:4
-        id: step_4
+          _BUILDSCRIPT_RUN_STEP_: 4:infra-build
+        id: infra_build_step_4
         name: '运行构建过程: 配置容器'
         run: _scripts_/ci-single-build.sh
         timeout-minutes: 5
       - env:
-          _BUILDSCRIPT_RUN_STEP_: infra-result:1
-        id: step_1
+          _BUILDSCRIPT_RUN_STEP_: 1:infra-result
+        id: infra_result_step_1
         name: '运行构建过程: Finalize'
         run: _scripts_/ci-single-build.sh
         timeout-minutes: 5
