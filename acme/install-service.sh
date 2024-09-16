@@ -29,7 +29,7 @@ SMTP_PORT_NUMBER="$PORT_NUMBER"
 mapfile -t -d ',' ARR_DOMAINS < <(echo "$STR_DOMAINS")
 DOMAINS=()
 for I in "${ARR_DOMAINS[@]}"; do
-	DOMAINS+=($(echo $I))
+	DOMAINS+=("$(trim "$I")")
 done
 
 create_pod_service_unit gongt/acme
@@ -46,13 +46,16 @@ environment_variable \
 	"${DNS_SERVER_PARAMS_ARR[@]}" \
 	"${SERVER_PARAMS_ARR[@]}"
 
-unit_podman_image gongt/acme "${DOMAINS[@]}"
+unit_podman_image gongt/acme
+unit_podman_cmdline "${DOMAINS[@]}"
+
 # unit_podman_image_pull never
-network_use_nat
+# unit_body Restart no
+
+network_use_auto
 systemd_slice_type normal
 
 unit_start_notify output "everything works well"
-# unit_body Restart no
 unit_body RestartSec 10s
 unit_body TimeoutStartSec 30min
 
