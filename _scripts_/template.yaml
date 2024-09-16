@@ -23,7 +23,7 @@ on:
     paths:
       - "{{PROJ}}/**"
       - "!{{PROJ}}/install-service.sh"
-    #  - "{{thisfile}}"
+      - "{{thisfile}}"
     #  - common
     branches:
       - master

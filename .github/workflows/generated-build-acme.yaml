@@ -23,7 +23,7 @@ on:
     paths:
       - "acme/**"
       - "!acme/install-service.sh"
-    #  - ".github/workflows/generated-build-acme.yaml"
+      - ".github/workflows/generated-build-acme.yaml"
     #  - common
     branches:
       - master
