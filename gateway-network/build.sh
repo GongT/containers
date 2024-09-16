@@ -19,8 +19,8 @@ merge_local_fs "infra-build"
 setup_systemd "infra-build" \
 	enable UNITS="systemd-networkd.service systemd-resolved.service ddns.timer"
 
-buildah_config "infra-build" --author "GongT <admin@gongt.me>" --label name=gongt/virtual-gateway
+buildah_config "infra-build" --author "GongT <admin@gongt.me>" --label name=gongt/gateway-network
 info "settings update..."
 
-buildah_finalize_image "infra-result" gongt/virtual-gateway
+buildah_finalize_image "infra-result" gongt/gateway-network
 info "Done!"

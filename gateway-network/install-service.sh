@@ -13,7 +13,7 @@ arg_string + HOST_NAME h/host "full domain name"
 arg_finish "$@"
 
 create_pod_service_unit gateway-network
-unit_podman_image gongt/virtual-gateway
+unit_podman_image gongt/gateway-network
 unit_unit Description virtual machine gateway
 unit_unit After network-online.target
 
@@ -31,6 +31,6 @@ unit_podman_safe_environment \
 	"CF_RECORD_ID4=${CF_RECORD_ID4}" \
 	"CF_RECORD_ID6=${CF_RECORD_ID6}" \
 	"HOST_NAME=${HOST_NAME}"
-unit_fs_bind data/virtual-gateway /storage
+unit_fs_bind data/gateway-network /storage
 
 unit_finish

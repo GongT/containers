@@ -1,4 +1,4 @@
-name: "{{PROJECT_NAME}}"
+name: "samba"
 on:
   workflow_dispatch:
     inputs:
@@ -18,23 +18,26 @@ on:
         required: false
         default: false
   schedule:
-    - cron:  '47 4 {{cron_day}} * *'
+    - cron:  '47 4 1 * *'
   push:
     paths:
-      - "{{PROJECT_NAME}}/**"
-      - "!{{PROJECT_NAME}}/install-service.sh"
-      - "{{thisfile}}"
+      - "samba/**"
+      - "!samba/install-service.sh"
+      - ".github/workflows/generated-build-samba.yaml"
     #  - common
     branches:
       - master
 env:
+
+  SOURCE_FILE: samba/build.sh
+  PROJECT_DIR: samba
   BUILDAH_FORCE: ${{ github.event.inputs.forceRebuild }}
   FORCE_DNF: ${{ github.event.inputs.forceDnf }}
   AUTHOR: GongT <admin@gongt.me>
   NODE_ENV: production
-  PROJECT_NAME: "{{PROJECT_NAME}}"
+  PROJECT_NAME: "samba"
   GITHUB_ACTOR: ${{ github.actor }}
-  REWRITE_IMAGE_NAME: build.local/dist/{{PROJECT_NAME}}
+  REWRITE_IMAGE_NAME: build.local/dist/samba
 jobs:
   cancel:
     name: Cancel Previous Runs
@@ -80,9 +83,9 @@ jobs:
       #   with:
       #     path: |
       #       ${{ env.SYSTEM_COMMON_CACHE }}/Download
-      #     key: common-cache-{{PROJECT_NAME}}-${{ hashFiles('{{PROJECT_NAME}}') }}
+      #     key: common-cache-samba-${{ hashFiles('samba') }}
       #     restore-keys: |
-      #       common-cache-{{PROJECT_NAME}}
+      #       common-cache-samba
       #       common-cache-
 
       # - name: "从ghcr.io获取上次生成的镜像"
@@ -90,13 +93,37 @@ jobs:
       #   timeout-minutes: 1
       #   run: ./_scripts_/retry.sh podman pull "docker://ghcr.io/gongt/$PROJECT_NAME"
 
-      ### BUILD_SCTION START ###
-      - name: "运行构建过程"
-        timeout-minutes: 5
-        env:
-          # GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - env:
+          _BUILDSCRIPT_RUN_STEP_: samba:1
+        id: step_1
+        name: '运行构建过程: 安装系统依赖:'
         run: _scripts_/ci-single-build.sh
-      ### BUILD_SCTION END ###
+        timeout-minutes: 5
+      - env:
+          _BUILDSCRIPT_RUN_STEP_: samba:2
+        id: step_2
+        name: '运行构建过程: 复制配置文件'
+        run: _scripts_/ci-single-build.sh
+        timeout-minutes: 5
+      - env:
+          _BUILDSCRIPT_RUN_STEP_: samba:3
+        id: step_3
+        name: '运行构建过程: 配置镜像中的systemd'
+        run: _scripts_/ci-single-build.sh
+        timeout-minutes: 5
+      - env:
+          _BUILDSCRIPT_RUN_STEP_: samba:4
+        id: step_4
+        name: '运行构建过程: 配置容器'
+        run: _scripts_/ci-single-build.sh
+        timeout-minutes: 5
+      - env:
+          _BUILDSCRIPT_RUN_STEP_: samba:5
+        id: step_5
+        name: '运行构建过程: Finalize'
+        run: _scripts_/ci-single-build.sh
+        timeout-minutes: 5
 
       - id: result
         name: "输出状态"
