@@ -60,19 +60,8 @@ jobs:
     outputs:
       DOMAIN_ARRAY: ${{ steps.result.outputs.DOMAIN_ARRAY }}
     steps:
-      - name: "强制清理项目（如果有）"
-        timeout-minutes: 1
-        shell: bash
-        run: |
-          if [[ -e ".git" ]]; then
-            echo "force cleanup project!"
-            git reset --hard --recurse-submodule || true
-            git clean -ffdx || true
-            git submodule foreach bash -c "git clean -ffdx" || true
-          fi
-
       - name: "获取代码"
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         timeout-minutes: 1
         with:
           submodules: "recursive"
@@ -128,7 +117,7 @@ jobs:
       fail-fast: false
     steps:
       - name: "获取代码"
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         timeout-minutes: 1
         with:
           submodules: "recursive"
