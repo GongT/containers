@@ -56,7 +56,7 @@ jobs:
     runs-on: ubuntu-24.04
     container:
       image: ghcr.io/gongt/buildbase:latest
-      options: --privileged
+      options: --privileged --tmpfs /run --tmpfs /tmp --pull=always
     outputs:
       DOMAIN_ARRAY: ${{ steps.result.outputs.DOMAIN_ARRAY }}
     steps:
