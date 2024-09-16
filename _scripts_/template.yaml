@@ -54,6 +54,9 @@ jobs:
     container:
       image: ghcr.io/gongt/buildbase:latest
       options: --privileged --tmpfs /run --tmpfs /tmp --pull=always
+    defaults:
+      run:
+        shell: bash
     outputs:
       DOMAIN_ARRAY: ${{ steps.result.outputs.DOMAIN_ARRAY }}
     steps:
