@@ -51,6 +51,9 @@ jobs:
   build:
     name: "生成镜像"
     runs-on: ubuntu-24.04
+    container:
+      image: ghcr.io/gongt/buildbase:latest
+      options: --privileged
     outputs:
       DOMAIN_ARRAY: ${{ steps.result.outputs.DOMAIN_ARRAY }}
     steps:
@@ -80,15 +83,15 @@ jobs:
           SECRET_PASSWORD: ${{ secrets.SECRET_PASSWORD }}
         run: bash _scripts_/prepare-secrets.sh ghcr.io
 
-      - name: "缓存下载和软件包数据"
-        uses: pat-s/always-upload-cache@v3.0.11
-        with:
-          path: |
-            ${{ env.SYSTEM_COMMON_CACHE }}/Download
-          key: common-cache-{{PROJ}}-${{ hashFiles('{{PROJ}}') }}
-          restore-keys: |
-            common-cache-{{PROJ}}
-            common-cache-
+      # - name: "缓存下载和软件包数据"
+      #   uses: pat-s/always-upload-cache@v3.0.11
+      #   with:
+      #     path: |
+      #       ${{ env.SYSTEM_COMMON_CACHE }}/Download
+      #     key: common-cache-{{PROJ}}-${{ hashFiles('{{PROJ}}') }}
+      #     restore-keys: |
+      #       common-cache-{{PROJ}}
+      #       common-cache-
 
       # - name: "从ghcr.io获取上次生成的镜像"
       #   shell: bash
@@ -102,7 +105,7 @@ jobs:
         timeout-minutes: 5
         env:
           # GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: bash "${SOURCE_FILE}"
+        run: _scripts_/ci-single-build.sh
       ### BUILD_SCTION END ###
 
       - id: result

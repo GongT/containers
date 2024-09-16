@@ -7,10 +7,9 @@ cd ..
 source common/package/include.sh
 printf '\ec'
 
-declare -i cron_day=1
+declare -xi cron_day=1
 declare -r TEMPLATE="_scripts_/template.yaml"
-declare -r TMPOUT="/tmp/output.txt"
-mkdir -p ".github/workflows"
+declare -r TMPOUT="/tmp/thisfile.txt"
 
 mapfile -d '' -t BUILD_FILES < <(find . -maxdepth 2 -name build.sh -print0 | sort --zero-terminated --dictionary-order)
 
@@ -22,25 +21,26 @@ for i in "${BUILD_FILES[@]}"; do
 		continue
 	fi
 
-	PROJ=$(basename "$(dirname "$i")")
-	OUTPUT=".github/workflows/generated-build-$PROJ.yaml"
+	export PROJ=$(basename "$(dirname "$i")")
+	export thisfile=".github/workflows/generated-build-$PROJ.yaml"
 
 	save_cursor_position
 	printf "\e[?1049h\e[1;1H 🔶 %s\n" "${PROJ}" >&2
 	trap 'printf "\e[?1049l\n\e[J"; restore_cursor_position' EXIT
-	if bash "common/split-into-steps.sh" "$i" "$TEMPLATE" >"$OUTPUT" 2> >(tee "${TMPOUT}" >&2); then
+	CMDS=(bash "common/split-into-steps.sh" "$i" "$TEMPLATE" "$thisfile")
+	if "${CMDS[@]}" &> >(tee "${TMPOUT}" >&2); then
 		printf '\e[?1049l\e[J' >&2
 		restore_cursor_position
 		trap - EXIT
 		printf " ✅ %s: ok.\n" "${PROJ}" >&2
-		printf "     \e[2mbash %q %q %q > %q\n\n" "common/split-into-steps.sh" "$i" "$TEMPLATE" "$OUTPUT"
+		printf "     \e[2m%s\n\n" "${CMDS[*]}"
 	else
 		printf '\e[?1049l\e[J' >&2
 		restore_cursor_position
 		trap - EXIT
 
 		MESG=""
-		printf -v MESG "\e[38;5;9m ❌ %s failed! \e[2m(./common/split-into-steps.sh %s %s > %s)\e[0m" "${PROJ}" "$i" "$TEMPLATE" "$OUTPUT"
+		printf -v MESG "\e[38;5;9m ❌ %s failed! \e[2m(%s)\e[0m" "${PROJ}" "${CMDS[*]}"
 
 		echo "${MESG}" >&2
 		cat "${TMPOUT}" >&2
@@ -49,12 +49,6 @@ for i in "${BUILD_FILES[@]}"; do
 		unlink "${TMPOUT}"
 		exit 1
 	fi
-
-	CONTENT=$(<"${OUTPUT}")
-	CONTENT=${CONTENT//"{{PROJ}}"/"$PROJ"}
-	CONTENT=${CONTENT//"{{thisfile}}"/"$OUTPUT"}
-	CONTENT=${CONTENT//"{{cron_day}}"/"$cron_day"}
-	echo "${CONTENT}" >"${OUTPUT}"
 
 	if [[ $cron_day -ge 28 ]]; then
 		cron_day=1
@@ -67,6 +61,7 @@ for i in "${BUILD_FILES[@]}"; do
 	TABLE+="| [![$PROJ](https://github.com/GongT/containers/workflows/$PROJ/badge.svg)](https://github.com/GongT/containers/actions?query=workflow%3A$PROJ)"
 	TABLE+=" |"
 	TABLE+=$'\n'
+	exit 0
 done
 
 DATA=$(sed -n "/StatusTable:/{p; :a; N; /:StatusTable/!ba; s/.*\n/__TABLE_BODY__/}; p" README.md)
