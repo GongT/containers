@@ -65,6 +65,7 @@ jobs:
         shell: bash
         run: |
           if [[ -e ".git" ]]; then
+            echo "force cleanup project!"
             git reset --hard --recurse-submodule || true
             git clean -ffdx || true
             git submodule foreach bash -c "git clean -ffdx" || true
