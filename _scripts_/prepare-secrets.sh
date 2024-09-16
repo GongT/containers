@@ -35,6 +35,9 @@ echo "DOCKER_CACHE_CENTER=${DOCKER_CACHE_CENTER}" >>"$GITHUB_ENV"
 echo "SYSTEM_COMMON_CACHE=${SYSTEM_COMMON_CACHE:=$HOME/cache}" >>"$GITHUB_ENV"
 mkdir -p "$SYSTEM_COMMON_CACHE"
 
+export REGISTRY_AUTH_FILE="/etc/containers/auth.json"
+echo "REGISTRY_AUTH_FILE=${REGISTRY_AUTH_FILE}" >>"$GITHUB_ENV"
+
 SCRIPT=$(JQ '.dockerCreds[] | "echo " + ("log in to "+.url|@json) + "\npodman login " + ("--username="+.username|@json) + " " + ("--password="+.password|@json) + " " + (.url|@json)')
 
 if [[ "${REGISTRY_DOMAIN-}" ]]; then
