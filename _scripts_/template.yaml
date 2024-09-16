@@ -69,7 +69,6 @@ jobs:
           fetch-depth: 2
 
       - name: "初始化登录信息和基本环境"
-        shell: bash
         timeout-minutes: 2
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -87,14 +86,12 @@ jobs:
       #       common-cache-
 
       # - name: "从ghcr.io获取上次生成的镜像"
-      #   shell: bash
       #   if: github.event.inputs.brandNew == ''
       #   timeout-minutes: 1
       #   run: ./_scripts_/retry.sh podman pull "docker://ghcr.io/gongt/$PROJECT_NAME"
 
       ### BUILD_SCTION START ###
       - name: "运行构建过程"
-        shell: bash
         timeout-minutes: 5
         env:
           # GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -103,7 +100,6 @@ jobs:
 
       - id: result
         name: "输出状态"
-        shell: bash
         env:
           SECRET_PASSWORD: ${{ secrets.SECRET_PASSWORD }}
         run: bash _scripts_/publish_create_index.sh
@@ -115,6 +111,12 @@ jobs:
       matrix:
         domain: ${{ fromJson(needs.build.outputs.DOMAIN_ARRAY) }}
       fail-fast: false
+    container:
+      image: ghcr.io/gongt/buildbase:latest
+      options: --privileged --tmpfs /run --tmpfs /tmp --pull=always
+    defaults:
+      run:
+        shell: bash
     steps:
       - name: "获取代码"
         uses: actions/checkout@v4
@@ -125,7 +127,6 @@ jobs:
           fetch-depth: 2
 
       - name: "初始化登录信息和基本环境"
-        shell: bash
         timeout-minutes: 2
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -134,7 +135,6 @@ jobs:
 
       - name: "发布镜像"
         timeout-minutes: 5
-        shell: bash
         env:
           SECRET_PASSWORD: ${{ secrets.SECRET_PASSWORD }}
         run: bash _scripts_/publish_all_targets.sh ${{ matrix.domain }}
