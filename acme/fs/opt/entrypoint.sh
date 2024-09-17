@@ -102,6 +102,7 @@ sleep 5
 echo 'Ok, everything works well.'
 echo -e '\n\n'
 
+trap 'echo "got sigint, exiting."; exit' INT
 while true; do
 	sleep 1d
 	info "wakeup call acme"

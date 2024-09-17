@@ -10,7 +10,7 @@ arg_finish "$@"
 
 info "starting..."
 
-buildah_cache_start "fedora-minimal"
+buildah_cache_start "registry.fedoraproject.org/fedora-minimal"
 
 ### TGTD
 STEP="install iscsi-tgtd"

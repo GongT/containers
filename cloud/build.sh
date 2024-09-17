@@ -7,7 +7,7 @@ source ../common/functions-build.sh
 
 info "starting..."
 
-buildah_cache_start "fedora-minimal"
+buildah_cache_start "registry.fedoraproject.org/fedora-minimal"
 
 ### 依赖项目
 STEP="安装系统依赖"

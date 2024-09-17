@@ -18,7 +18,7 @@ fi
 
 ### 编译时依赖项目
 STEP="安装编译时依赖项目"
-buildah_cache_start "fedora-minimal"
+buildah_cache_start "registry.fedoraproject.org/fedora"
 dnf_use_environment
 dnf_install_step "nginx-build" scripts/build-requirements.lst
 ### 编译时依赖项目 END
@@ -66,7 +66,7 @@ COMPILE_RESULT_IMAGE="$BUILDAH_LAST_IMAGE"
 ### 编译! END
 
 ### 编译好的nginx
-fork_archlinux "nginx" scripts/runtime-requirements.lst
+buildah_cache_start "nginx" scripts/runtime-requirements.lst
 STEP="复制Nginx到镜像中"
 hash_program_files() {
 	echo "$COMPILE_RESULT_IMAGE"

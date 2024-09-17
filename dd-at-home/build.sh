@@ -7,7 +7,7 @@ source ../common/functions-build.sh
 
 arg_finish "$@"
 
-buildah_cache_start "fedora-minimal"
+buildah_cache_start "registry.fedoraproject.org/fedora-minimal"
 
 # 安装依赖
 REPO=dd-center/DDatHome-go
