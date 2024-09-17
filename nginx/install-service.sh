@@ -50,7 +50,6 @@ if ! [[ $DISABLE_SSL ]]; then
 	unit_fs_bind share/ssl /etc/ACME
 fi
 shared_sockets_provide http https
-unit_body ExecReload '/usr/bin/podman exec nginx bash /usr/bin/safe-reload'
 unit_body RestartPreventExitStatus 127
 
 unit_finish

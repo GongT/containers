@@ -94,6 +94,9 @@ healthcheck_retry 2
 healthcheck_startup 30s
 healthcheck_timeout 5s
 
+custom_reload_command bash /usr/bin/safe-reload
+custom_stop_command bash /usr/sbin/graceful-shutdown.sh
+
 STEP="配置容器"
 buildah_config "nginx" --cmd '/usr/sbin/nginx.sh' --port 80 --port 443 --port 80/udp --port 443/udp \
 	--volume /config --volume /etc/ACME \
