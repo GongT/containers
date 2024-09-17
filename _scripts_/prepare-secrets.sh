@@ -11,12 +11,6 @@ if [[ ! ${GITHUB_ENV-} ]]; then
 	GITHUB_ENV="$TMPDIR/github-env-fake"
 fi
 
-if [[ "${CI-}" ]]; then
-	DIVE_VERSION=$(curl -sL "https://api.github.com/repos/wagoodman/dive/releases/latest" | grep '"tag_name":' | sed -E 's/.*"v([^"]+)".*/\1/')
-	curl -OL "https://github.com/wagoodman/dive/releases/download/v${DIVE_VERSION}/dive_${DIVE_VERSION}_linux_amd64.rpm"
-	dnf install -y --nodocs --setopt=install_weak_deps=False "dive_${DIVE_VERSION}_linux_amd64.rpm" jq gnupg podman buildah skopeo wget
-fi
-
 # sudo cp "./_scripts_/80-myregistry.conf" /etc/containers/registries.conf.d/
 
 JSON=$(gpg --quiet --batch --yes --passphrase "$SECRET_PASSWORD" --decrypt build-secrets.json.gpg)
