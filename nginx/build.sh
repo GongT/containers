@@ -70,7 +70,7 @@ buildah_cache "nginx-build" hash_build run_build
 BUILT_RESULT=$(get_last_image_id)
 
 ### 编译好的nginx
-buildah_cache_start "registry.fedoraproject.org/fedora"
+buildah_cache_start "registry.fedoraproject.org/fedora-minimal"
 dnf_use_environment
 dnf_install_step "nginx" scripts/runtime-requirements.lst
 STEP="复制Nginx到镜像中"
