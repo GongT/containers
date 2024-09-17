@@ -8,7 +8,7 @@ source ../common/functions-install.sh
 arg_finish
 
 auto_create_pod_service_unit
-unit_podman_image gongt/qqbot
+unit_podman_image registry.gongt.me/gongt/qqbot
 unit_unit Description Mirai QQ bot server
 # unit_podman_image_pull never
 

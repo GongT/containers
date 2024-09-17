@@ -10,7 +10,7 @@ arg_string + HOSTNAME h/hostname "samba hostname"
 arg_finish "$@"
 
 auto_create_pod_service_unit
-unit_podman_image gongt/samba
+unit_podman_image registry.gongt.me/gongt/samba
 
 unit_podman_hostname "$HOSTNAME"
 unit_unit Description "standalone samba server"

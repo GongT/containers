@@ -10,7 +10,7 @@ arg_finish "$@"
 function common() {
 	local PROFILE=$1
 	local -i PORT=$2
-	unit_podman_image gongt/resiliosync
+	unit_podman_image registry.gongt.me/gongt/resiliosync
 	# unit_data danger
 
 	network_use_auto "$PORT"

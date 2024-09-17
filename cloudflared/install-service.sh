@@ -9,7 +9,7 @@ arg_flag PROXY proxy "use a socks5 proxy to connect remote"
 arg_finish "$@"
 
 create_pod_service_unit cloudflared@
-unit_podman_image gongt/cloudflared '%i'
+unit_podman_image registry.gongt.me/gongt/cloudflared '%i'
 unit_unit Description "cloudflared - Argo Tunnel"
 network_use_nat 40983
 systemd_slice_type normal

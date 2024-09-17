@@ -20,7 +20,7 @@ arg_finish "$@"
 declare -i RCON_PORT="$PORT - 34197 + 27015"
 
 create_pod_service_unit factorio
-unit_podman_image gongt/factorio
+unit_podman_image registry.gongt.me/gongt/factorio
 unit_unit Description factorio server
 unit_data danger
 unit_body TimeoutStartSec 300s

@@ -13,7 +13,7 @@ arg_string + HOST_NAME h/host "full domain name"
 arg_finish "$@"
 
 create_pod_service_unit gateway-network
-unit_podman_image gongt/gateway-network
+unit_podman_image registry.gongt.me/gongt/gateway-network
 unit_unit Description virtual machine gateway
 unit_unit After network-online.target
 

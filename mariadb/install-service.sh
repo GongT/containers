@@ -9,7 +9,7 @@ arg_string PROXY proxy "http proxy url (x.x.x.x:xxx)"
 arg_finish "$@"
 
 create_pod_service_unit gongt/mariadb
-unit_podman_image gongt/mariadb init
+unit_podman_image registry.gongt.me/gongt/mariadb init
 unit_podman_hostname mysql
 unit_data danger
 

@@ -6,7 +6,7 @@ cd "$(dirname "$(realpath "${BASH_SOURCE[0]}")")"
 source ../common/functions-install.sh
 
 auto_create_pod_service_unit
-unit_podman_image gongt/gamedisk
+unit_podman_image registry.gongt.me/gongt/gamedisk
 # unit_podman_image_pull never
 unit_unit Description "iSCSI target daemon for game disk"
 unit_data danger
@@ -26,4 +26,3 @@ use_full_system_privilege
 
 network_use_manual --network=bridge0 --mac-address=3E:F4:F3:CE:1D:80
 unit_finish
-

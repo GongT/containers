@@ -46,7 +46,7 @@ environment_variable \
 	"${DNS_SERVER_PARAMS_ARR[@]}" \
 	"${SERVER_PARAMS_ARR[@]}"
 
-unit_podman_image gongt/acme
+unit_podman_image registry.gongt.me/gongt/acme
 unit_podman_cmdline "${DOMAINS[@]}"
 
 # unit_podman_image_pull never

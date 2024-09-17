@@ -8,7 +8,7 @@ source ../common/functions-install.sh
 arg_finish "$@"
 
 create_pod_service_unit homeassistant
-unit_podman_image gongt/homeassistant
+unit_podman_image registry.gongt.me/gongt/homeassistant
 unit_unit Description Open source home automation that puts local control and privacy first.
 network_use_manual --network=br-lan --mac-address=4C:3A:8E:97:25:53 --dns=10.0.0.1
 unit_podman_image_pull never

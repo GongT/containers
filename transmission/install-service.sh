@@ -7,7 +7,7 @@ source ../common/functions-install.sh
 
 create_it() {
 	create_pod_service_unit "transmission-$INSTANCE_NAME"
-	unit_podman_image gongt/transmission
+	unit_podman_image registry.gongt.me/gongt/transmission
 	# unit_podman_image_pull never
 	unit_unit Description transmission
 

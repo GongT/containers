@@ -6,7 +6,7 @@ cd "$(dirname "$(realpath "${BASH_SOURCE[0]}")")"
 source ../common/functions-install.sh
 
 auto_create_pod_service_unit
-unit_podman_image gongt/impostor
+unit_podman_image registry.gongt.me/gongt/impostor
 unit_unit Description "impostor among us server"
 unit_data danger
 
