@@ -22,13 +22,13 @@ if [[ $CENSORSHIP == yes ]]; then
 		PUBPORTS+=(59443)
 	fi
 fi
-if [[ -n ${PUBLISH:-} ]]; then
+if [[ -n ${PUBLISH-} ]]; then
 	PUBPORTS+=(${PUBLISH})
 fi
 
 create_pod_service_unit gongt/nginx
 unit_unit Description nginx - high performance web server
-network_use_auto "${PUBPORTS[@]}"
+network_use_pod gateway
 systemd_slice_type normal
 
 environment_variable \
@@ -37,35 +37,36 @@ environment_variable \
 	"CENSORSHIP=$CENSORSHIP" \
 	"DISABLE_SSL=$DISABLE_SSL"
 
-unit_start_notify output "start worker process"
-unit_body TimeoutStartSec 2min
-# unit_body Restart always
+unit_start_notify socket
+
 unit_fs_bind /data/DevelopmentRoot /data/DevelopmentRoot
 unit_fs_bind data/nginx /data
 unit_fs_bind config/nginx /config
 unit_fs_bind logs/nginx /var/log/nginx
 unit_fs_tempfs 8M /run
-# unit_fs_tempfs 512M /tmp
+unit_fs_tempfs 2G /tmp
 unit_fs_bind share/nginx /config.auto
 if ! [[ $DISABLE_SSL ]]; then
 	unit_fs_bind share/ssl /etc/ACME
 fi
-shared_sockets_use
+shared_sockets_provide http https
 unit_body ExecReload '/usr/bin/podman exec nginx bash /usr/bin/safe-reload'
 unit_body RestartPreventExitStatus 127
 
-healthcheck "30s" "5" "curl --insecure https://127.0.0.1:443"
-
 unit_finish
 
-write_file /etc/logrotate.d/nginx <<-LOGR
-	/data/AppData/logs/nginx/*.log {
-	    weekly
-	    missingok
-	    notifempty
-	    sharedscripts
-	    rotate 2
-	    compress
-	    delaycompress
-	}
-LOGR
+LOGROTATE='
+/data/AppData/logs/nginx/*.log {
+	weekly
+	missingok
+	notifempty
+	sharedscripts
+	rotate 2
+	compress
+	delaycompress
+}
+'
+
+if is_root; then
+	write_file /etc/logrotate.d/nginx "${LOGROTATE}"
+fi

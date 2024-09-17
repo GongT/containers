@@ -27,14 +27,17 @@ dnf_install_step "nginx-build" scripts/build-requirements.lst
 STEP="下载Nginx源码"
 hash_nginx() {
 	# 下载代码
+	control_ci group "download and hash source code"
 	local INDEX URL BRANCH NAME
 	for INDEX in "${!NGX_SRC_URL[@]}"; do
 		URL="${NGX_SRC_URL[$INDEX]}"
 		BRANCH="${NGX_SRC_BRANCH[$INDEX]}"
 		NAME="${NGX_SRC_PATH[$INDEX]}"
 		NAME="${NAME////_}"
-		download_git "$URL" "$NAME" "$BRANCH"
+		download_git "$URL" "$NAME" "$BRANCH" >&2
+		hash_git_result "$NAME" "$BRANCH"
 	done
+	control_ci groupEnd
 }
 build_nginx() {
 	local BUILDER="$1" SOURCE_DIRECTORY
@@ -48,7 +51,7 @@ build_nginx() {
 		download_git_result_copy "$SOURCE_DIRECTORY/$CPATH" "$NAME" "$BRANCH"
 	done
 
-	buildah copy "$BUILDER" "$SOURCE_DIRECTORY" "/opt/projects/nginx"
+	buildah copy --quiet "$BUILDER" "$SOURCE_DIRECTORY" "/opt/projects/nginx"
 }
 BUILDAH_FORCE="$FORCE" buildah_cache "nginx-build" hash_nginx build_nginx
 
@@ -62,18 +65,20 @@ run_build() {
 	run_compile nginx "$1" "scripts/build-nginx.sh"
 }
 buildah_cache "nginx-build" hash_build run_build
-COMPILE_RESULT_IMAGE="$BUILDAH_LAST_IMAGE"
 ### 编译! END
 
+BUILT_RESULT=$(get_last_image_id)
+
 ### 编译好的nginx
-buildah_cache_start "nginx" scripts/runtime-requirements.lst
+buildah_cache_start "registry.fedoraproject.org/fedora"
+dnf_use_environment
+dnf_install_step "nginx" scripts/runtime-requirements.lst
 STEP="复制Nginx到镜像中"
 hash_program_files() {
-	echo "$COMPILE_RESULT_IMAGE"
 	cat "scripts/prepare-run.sh"
 }
 copy_program_files() {
-	run_install "$COMPILE_RESULT_IMAGE" "$1" "nginx" "scripts/prepare-run.sh"
+	run_install "$BUILT_RESULT" "$1" "nginx" "scripts/prepare-run.sh"
 }
 buildah_cache "nginx" hash_program_files copy_program_files
 ### 编译好的nginx END
@@ -82,6 +87,12 @@ buildah_cache "nginx" hash_program_files copy_program_files
 STEP="复制配置文件"
 merge_local_fs "nginx"
 ### 配置文件等 END
+
+healthcheck /usr/sbin/healthcheck.sh
+healthcheck_interval 60s
+healthcheck_retry 2
+healthcheck_startup 30s
+healthcheck_timeout 5s
 
 STEP="配置容器"
 buildah_config "nginx" --cmd '/usr/sbin/nginx.sh' --port 80 --port 443 --port 80/udp --port 443/udp \

@@ -10,7 +10,6 @@ github_token
 /lib
 /temp
 node_modules
-common
 
 ### builder
 .github/secrets.json
