@@ -27,4 +27,4 @@ network_use_nat
 systemd_slice_type normal
 unit_finish
 
-install_binary scripts/occ.sh
+install_global_binary scripts/occ.sh

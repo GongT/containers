@@ -36,4 +36,4 @@ unit_podman_safe_environment "PROXY=${PROXY-}"
 
 unit_finish
 
-install_global_binary "$(realpath "scripts/host-mysql.sh")" "mysql"
+install_binary "$(realpath "scripts/host-mysql.sh")" "mysql"
