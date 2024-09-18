@@ -26,7 +26,8 @@ if [[ -n ${PUBLISH-} ]]; then
 	PUBPORTS+=(${PUBLISH})
 fi
 
-create_pod_service_unit gongt/nginx
+create_pod_service_unit nginx
+unit_podman_image registry.gongt.me/gongt/nginx
 unit_unit Description nginx - high performance web server
 network_use_pod gateway
 systemd_slice_type normal

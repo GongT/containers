@@ -1,4 +1,4 @@
-name: "cloud"
+name: "nextcloud"
 on:
   workflow_dispatch:
     inputs:
@@ -21,23 +21,23 @@ on:
     - cron:  '47 4 1 * *'
   push:
     paths:
-      - "cloud/**"
-      - "!cloud/install-service.sh"
-      - ".github/workflows/generated-build-cloud.yaml"
+      - "nextcloud/**"
+      - "!nextcloud/install-service.sh"
+      - ".github/workflows/generated-build-nextcloud.yaml"
     #  - common
     branches:
       - master
 env:
 
-  SOURCE_FILE: cloud/build.sh
-  PROJECT_DIR: cloud
+  SOURCE_FILE: nextcloud/build.sh
+  PROJECT_DIR: nextcloud
   BUILDAH_FORCE: ${{ github.event.inputs.forceRebuild }}
   FORCE_DNF: ${{ github.event.inputs.forceDnf }}
   AUTHOR: GongT <admin@gongt.me>
   NODE_ENV: production
-  PROJECT_NAME: "cloud"
+  PROJECT_NAME: "nextcloud"
   GITHUB_ACTOR: ${{ github.actor }}
-  REWRITE_IMAGE_NAME: build.local/dist/cloud
+  REWRITE_IMAGE_NAME: build.local/dist/nextcloud
 jobs:
   cancel:
     name: Cancel Previous Runs
@@ -83,9 +83,9 @@ jobs:
       #   with:
       #     path: |
       #       ${{ env.SYSTEM_COMMON_CACHE }}/Download
-      #     key: common-cache-cloud-${{ hashFiles('cloud') }}
+      #     key: common-cache-nextcloud-${{ hashFiles('nextcloud') }}
       #     restore-keys: |
-      #       common-cache-cloud
+      #       common-cache-nextcloud
       #       common-cache-
 
       # - name: "从ghcr.io获取上次生成的镜像"
