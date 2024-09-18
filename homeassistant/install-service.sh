@@ -19,7 +19,6 @@ unit_start_notify output "service legacy-services successfully started"
 unit_fs_bind config/homeassistant /config
 
 unit_volume homeassistant /run/nginx/config
-shared_sockets_use
 
 unit_podman_safe_environment "LANG=${LANG:-zh_CN.UTF-8}"
 

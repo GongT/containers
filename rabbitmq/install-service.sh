@@ -40,7 +40,6 @@ else
 	network_use_auto 35671/tcp
 fi
 systemd_slice_type infrastructure
-shared_sockets_use
 
 # healthcheck "30s" "5" "curl --insecure https://127.0.0.1:443"
 

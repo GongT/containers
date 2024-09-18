@@ -103,8 +103,7 @@ echo 'Ok, everything works well.'
 echo -e '\n\n'
 
 trap 'echo "got sigint, exiting."; exit' INT
-while true; do
-	sleep 1d
+while sleep 1d; do
 	info "wakeup call acme"
 	acme --renew-all || true
 done
