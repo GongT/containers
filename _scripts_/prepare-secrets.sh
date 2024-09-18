@@ -49,7 +49,7 @@ echo 'Done.'
 cd ../common
 if git status | grep -qF 'working tree clean'; then
 	git checkout master
-	git pull
+	git pull --force
 else
 	echo "common folder not clean" >&2
 	echo "::error ::common folder not clean" >&2
