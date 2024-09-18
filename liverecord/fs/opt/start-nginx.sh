@@ -11,7 +11,7 @@ apply_gateway() {
 	else
 		cp -v "/opt/${F}.conf" "${T}"
 	fi
-	curl --unix /run/nginx/sockets/nginx.reload.sock http://_/ || true
+	curl --unix /run/sockets/nginx.reload.sock http://_/ || true
 }
 trap 'echo "got SIGINT"' INT
 

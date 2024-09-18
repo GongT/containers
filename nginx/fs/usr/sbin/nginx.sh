@@ -72,8 +72,7 @@ mapfile -t SYSTEM_RESOLVERS_ARR < <(echo "$SYSTEM_RESOLVERS")
 	echo "resolver ${RES[*]};"
 } >/config/conf.d/resolver.conf
 
-cat /usr/sbin/reload-nginx.sh >/run/nginx/sockets/nginx.reload.sh
-rm -f /run/nginx/sockets/nginx.reload.sock /run/nginx/sockets/http.sock /run/nginx/sockets/https.sock
+cat /usr/sbin/reload-nginx.sh >/run/sockets/nginx.reload.sh
 
 if [[ -e /config/selfsigned.key ]] && [[ -e /config/selfsigned.crt ]]; then
 	echo "use exists openssl cert..."
@@ -86,7 +85,8 @@ else
 fi
 
 if [[ -e /config/dhparam.pem ]]; then
-	if ! grep -v 'ssl_dhparam ' /etc/nginx/params/ssl_params; then
+	echo "good, found dhparam.pem"
+	if ! grep -qv 'ssl_dhparam ' /etc/nginx/params/ssl_params; then
 		echo "ssl_dhparam /config/dhparam.pem;" >>/etc/nginx/params/ssl_params
 		echo "ssl_dhparam /config/dhparam.pem;" >>/etc/nginx/params/ssl_params_stream
 	fi

@@ -16,8 +16,8 @@ if [[ "$NO_SSL" ]]; then
 	mv /etc/rabbitmq/rabbitmq.unsafe.conf /etc/rabbitmq/rabbitmq.conf
 fi
 
-rm -f /run/nginx/sockets/rabbitmq-management.sock
-socat "UNIX-LISTEN:/run/nginx/sockets/rabbitmq-management.sock,fork" "TCP-CONNECT:127.0.0.1:15672" &
+rm -f /run/sockets/rabbitmq-management.sock
+socat "UNIX-LISTEN:/run/sockets/rabbitmq-management.sock,fork" "TCP-CONNECT:127.0.0.1:15672" &
 
 echo "starting..." >&2
 rabbitmq-server &
@@ -29,12 +29,12 @@ echo "Startup complete!"
 echo "PID=$(<"$RABBITMQ_PID_FILE")"
 
 cp /opt/nginx-server.conf /etc/nginx/vhost.d/rabbitmq-management.conf
-bash /run/nginx/sockets/nginx.reload.sh
+bash /run/sockets/nginx.reload.sh
 
 function quitfn() {
 	rm -f /etc/nginx/vhost.d/rabbitmq-management.conf
-	bash /run/nginx/sockets/nginx.reload.sh
-	rm -f /run/nginx/sockets/rabbitmq-management.sock
+	bash /run/sockets/nginx.reload.sh
+	rm -f /run/sockets/rabbitmq-management.sock
 	rabbitmqctl shutdown
 }
 

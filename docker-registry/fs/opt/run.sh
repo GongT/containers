@@ -9,7 +9,7 @@ apply_gateway() {
 	else
 		cp -v "/opt/${F}.conf" "${T}"
 	fi
-	echo 'GET /' | nc local:/run/nginx/sockets/nginx.reload.sock
+	echo 'GET /' | nc local:/run/sockets/nginx.reload.sock
 }
 trap 'echo "got SIGINT"' INT
 
