@@ -16,13 +16,13 @@ dnf_use_environment
 dnf_install_step "fedora-tgtd" source/dependencies.lst source/post-install.sh
 ### TGTD END
 
-setup_systemd "fedora-tgtd" \
-	enable REQUIRE="tgtd.service" WANT="iperf3-server@33233.service"
-
 ### 复制文件
 STEP="复制文件"
 merge_local_fs "fedora-tgtd"
 ### 安装acme END
+
+setup_systemd "fedora-tgtd" \
+	enable REQUIRE="tgtd.service" WANT="iperf3-server@33233.service"
 
 STEP="配置镜像信息"
 buildah_config "fedora-tgtd" --label name=gongt/gamedisk
