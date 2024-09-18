@@ -41,6 +41,7 @@ fastcgi_param HTTP_HOST $http_host;
 fastcgi_param HOST $host;
 fastcgi_param HTTP2 $rproxy_http2;
 fastcgi_param HTTP3 $rproxy_http3;
+fastcgi_param Early-Data $ssl_early_data;
 fastcgi_hide_header X-H2;
 fastcgi_hide_header X-H3;
 

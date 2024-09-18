@@ -8,4 +8,5 @@ grpc_set_header X-Forwarded-Proto    $rproxy_protocol;
 grpc_set_header X-Server-Addr        $rproxy_server_addr;
 grpc_set_header X-Server-Port        $rproxy_server_port;
 grpc_set_header X-Compressing        "yes";
-grpc_set_header Host $domain;
+grpc_set_header Early-Data           $ssl_early_data;
+grpc_set_header Host                 $domain;

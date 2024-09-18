@@ -12,3 +12,4 @@ proxy_set_header X-Forwarded-Proto    $rproxy_protocol;
 proxy_set_header X-Server-Addr        $rproxy_server_addr;
 proxy_set_header X-Server-Port        $rproxy_server_port;
 proxy_set_header X-Compressing        "yes";
+proxy_set_header Early-Data           $ssl_early_data;
