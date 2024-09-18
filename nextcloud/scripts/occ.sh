@@ -2,6 +2,9 @@
 
 source "../common/package/include.sh"
 
-use_normal
-
-exec podman exec -it "$(get_container_id)" /usr/bin/occ "$@"
+CID="$(get_container_id)"
+set -x
+exec podman exec --user media_rw:users \
+	--workdir=/usr/share/nextcloud \
+	-it "${CID}" \
+	/usr/bin/php -d memory_limit=2G occ "$@"
