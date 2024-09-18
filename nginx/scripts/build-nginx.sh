@@ -12,6 +12,8 @@ indent_stream make MULTILIB=lib64 PREFIX=/usr -j
 indent_stream make MULTILIB=lib64 PREFIX=/usr "INSTALL_INC=$LUAJIT_INC" "INSTALL_JITLIB=$ARTIFACT_PREFIX/usr/share/lua/5.1" install
 dedent
 
+
+## BEGIN of resty libs
 rm -f /usr/bin/lua
 ln -s luajit /usr/bin/lua # for following build steps
 
@@ -19,8 +21,8 @@ mapfile -t LIB_PS < <(find "$SOURCE/resty/" -maxdepth 1 -mindepth 1 -type d)
 for LIB_P in "${LIB_PS[@]}"; do
 	cd "$LIB_P"
 	info "=== install '$(pwd)'..."
-	indent_stream make "DESTDIR=$ARTIFACT_PREFIX" LUA_LIB_DIR=/usr/share/lua/5.1 PREFIX=/usr
-	indent_stream make "DESTDIR=$ARTIFACT_PREFIX" LUA_LIB_DIR=/usr/share/lua/5.1 PREFIX=/usr install
+	indent_stream make "DESTDIR=$ARTIFACT_PREFIX" LUA_LIB_DIR=/usr/share/lua/5.1 "LUA_INCLUDE_DIR=${SOURCE}/luajit2/src" PREFIX=/usr
+	indent_stream make "DESTDIR=$ARTIFACT_PREFIX" LUA_LIB_DIR=/usr/share/lua/5.1 "LUA_INCLUDE_DIR=${SOURCE}/luajit2/src" PREFIX=/usr install
 	dedent
 done
 
