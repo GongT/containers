@@ -2,7 +2,7 @@
 
 set -Eeuo pipefail
 
-rm -f /run/sockets/mqtt.sock
+rm -f /run/nginx/sockets/mqtt.sock
 
 bash /opt/nginx-control.sh start
 

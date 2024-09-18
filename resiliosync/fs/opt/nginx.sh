@@ -3,7 +3,7 @@
 set -Eeuo pipefail
 
 apply_gateway() {
-	F=${1:-} T="/run/nginx/vhost.d/ResilioSync.$PROFILE.conf"
+	F=${1:-} T="/run/nginx/config/vhost.d/ResilioSync.$PROFILE.conf"
 	if [ -z "$F" ]; then
 		if [[ -e $T ]]; then
 			rm -vf "${T}"
@@ -11,7 +11,7 @@ apply_gateway() {
 	else
 		sed "s#__PROFILE__#$PROFILE#g" "/opt/${F}.conf" >"${T}"
 	fi
-	echo 'GET /' | ncat --unixsock /run/sockets/nginx.reload.sock
+	echo 'GET /' | ncat --unixsock /run/nginx/sockets/nginx.reload.sock
 }
 trap 'echo "got SIGINT"' INT
 
@@ -27,7 +27,7 @@ function do_stop() {
 trap do_stop INT
 
 echo "starting...."
-rm -f /run/sockets/resiliosync.$PROFILE.sock
+rm -f /run/nginx/sockets/resiliosync.$PROFILE.sock
 mkdir -p /var/log/nginx/
 sed -i "s#__PROFILE__#$PROFILE#g" /etc/nginx/nginx.conf
 sed -i "s#__PORT__#$UIPORT#g" /etc/nginx/pass.conf

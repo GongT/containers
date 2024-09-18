@@ -39,9 +39,9 @@ for i in conf.d vhost.d stream.d rtmp.d; do
 		echo "create /config/$i folder..." >&2
 		mkdir -p "/config/$i"
 	fi
-	if ! [[ -e "/config.auto/$i" ]]; then
-		echo "create /config.auto/$i folder..." >&2
-		mkdir -p "/config.auto/$i"
+	if ! [[ -e "/run/nginx/config/$i" ]]; then
+		echo "create /run/nginx/config/$i folder..." >&2
+		mkdir -p "/run/nginx/config/$i"
 	fi
 done
 
@@ -70,18 +70,18 @@ mapfile -t SYSTEM_RESOLVERS_ARR < <(echo "$SYSTEM_RESOLVERS")
 		RES=(1.1.1.1 119.29.29.29)
 	fi
 	echo "resolver ${RES[*]};"
-} >/config.auto/conf.d/resolver.conf
+} >/config/conf.d/resolver.conf
 
-cat /usr/sbin/reload-nginx.sh >/run/sockets/nginx.reload.sh
-rm -f /run/sockets/nginx.reload.sock /run/sockets/http.sock /run/sockets/https.sock
+cat /usr/sbin/reload-nginx.sh >/run/nginx/sockets/nginx.reload.sh
+rm -f /run/nginx/sockets/nginx.reload.sock /run/nginx/sockets/http.sock /run/nginx/sockets/https.sock
 
-if [[ -e /config.auto/selfsigned.key ]] && [[ -e /config.auto/selfsigned.crt ]]; then
+if [[ -e /config/selfsigned.key ]] && [[ -e /config/selfsigned.crt ]]; then
 	echo "use exists openssl cert..."
 else
 	echo "create openssl cert..."
 	openssl req -x509 -nodes -days 365 -newkey rsa:2048 -batch \
-		-keyout "/config.auto/selfsigned.key" \
-		-out "/config.auto/selfsigned.crt"
+		-keyout "/config/selfsigned.key" \
+		-out "/config/selfsigned.crt"
 	echo "done..."
 fi
 
@@ -103,10 +103,14 @@ fi
 remove-ssl
 
 if [[ -e /config/conf.d/default_server.conf ]]; then
+	echo "using provided default server."
 	cat /config/conf.d/default_server.conf >/etc/nginx/conf.d/90-default_server.conf
-fi
-if ! [[ -e /config/conf.d/default_server.conf.example ]]; then
-	cat /etc/nginx/conf.d/90-default_server.conf >/config/conf.d/default_server.conf.example
+else
+	echo "create builtin default server."
+	if ! [[ -e /config/conf.d/default_server.conf.example ]]; then
+		echo "create default server example file."
+		cat /etc/nginx/conf.d/90-default_server.conf >/config/conf.d/default_server.conf.example
+	fi
 fi
 
 /usr/sbin/nginx -t || {
@@ -117,6 +121,8 @@ fi
 }
 
 sleep 1
+
+bash /usr/sbin/auto-reloader.sh &
 
 echo "[***] running nginx." >&2
 exec /usr/sbin/nginx

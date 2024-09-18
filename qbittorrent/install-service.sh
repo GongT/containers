@@ -20,7 +20,7 @@ unit_fs_bind config/qbittorrent /opt/qBittorrent/config
 unit_fs_bind data/qbittorrent /opt/qBittorrent/data
 unit_fs_bind data/qbittorrent/HOME /home/media_rw
 unit_fs_bind /data/Volumes /data/Volumes
-unit_fs_bind share/nginx /run/nginx
+
 
 unit_unit RequiresMountsFor /data/Volumes/H /data/Volumes/Anime
 

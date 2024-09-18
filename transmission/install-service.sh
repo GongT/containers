@@ -32,7 +32,7 @@ create_it() {
 	unit_fs_bind "data/transmission.$INSTANCE_NAME" /opt/data
 	unit_fs_bind config/transmission /opt/config
 	unit_fs_bind "$TARGET" /data
-	unit_fs_bind share/nginx /run/nginx
+	
 
 	unit_finish
 }

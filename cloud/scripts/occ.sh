@@ -1,3 +1,7 @@
 #!/bin/sh
 
-podman exec -it cloud /usr/bin/occ "$@"
+source "../common/package/include.sh"
+
+use_normal
+
+exec podman exec -it "$(get_container_id)" /usr/bin/occ "$@"

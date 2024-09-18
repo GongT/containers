@@ -10,6 +10,6 @@ mkdir -p /etc/nginx /etc/php-fpm.d
 
 rm -rf /etc/my.cnf.d
 
-mkdir -p /var/lib/nginx/logs /run/nginx
+mkdir -p /var/lib/nginx/logs /run/nginx/config
 
 sed -i '/SET lc_messages/d' /usr/share/phpMyAdmin/./libraries/classes/DatabaseInterface.php

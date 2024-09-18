@@ -5,13 +5,13 @@ set -Eeuo pipefail
 PROJ=liverecord
 
 apply_gateway() {
-	local F=$1 T="/run/nginx/vhost.d/${PROJ}.conf"
+	local F=$1 T="/run/nginx/config/vhost.d/${PROJ}.conf"
 	if [ -z "$F" ]; then
 		rm -v "${T}"
 	else
 		cp -v "/opt/${F}.conf" "${T}"
 	fi
-	curl --unix /run/sockets/nginx.reload.sock http://_/ || true
+	curl --unix /run/nginx/sockets/nginx.reload.sock http://_/ || true
 }
 trap 'echo "got SIGINT"' INT
 

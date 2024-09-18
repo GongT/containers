@@ -4,7 +4,7 @@ set -Eeuo pipefail
 
 cd "$INSTALL_TARGET"
 
-for D in config var/log/nginx run tmp config.auto etc/ssl run/sockets etc/nginx; do
+for D in config var/log/nginx run tmp config.auto etc/ssl run/nginx/sockets etc/nginx; do
 	mkdir -p "${D}"
 done
 

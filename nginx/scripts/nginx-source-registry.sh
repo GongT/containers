@@ -72,6 +72,10 @@ NGX_SRC_PATH+=(luajit2)
 NGX_SRC_URL+=(https://github.com/openresty/luajit2.git)
 NGX_SRC_BRANCH+=(v2.1-agentzh)
 
+NGX_SRC_PATH+=(resty/lua-resty-string)
+NGX_SRC_URL+=(https://github.com/openresty/lua-resty-string.git)
+NGX_SRC_BRANCH+=(master)
+
 NGX_SRC_PATH+=(resty/lua-resty-lrucache)
 NGX_SRC_URL+=(https://github.com/openresty/lua-resty-lrucache.git)
 NGX_SRC_BRANCH+=(master)
@@ -86,6 +90,10 @@ NGX_SRC_BRANCH+=(master)
 
 NGX_SRC_PATH+=(resty/lua-resty-signal)
 NGX_SRC_URL+=(https://github.com/openresty/lua-resty-signal.git)
+NGX_SRC_BRANCH+=(master)
+
+NGX_SRC_PATH+=(resty/lua-cjson)
+NGX_SRC_URL+=(https://github.com/openresty/lua-cjson.git)
 NGX_SRC_BRANCH+=(master)
 
 NGX_SRC_PATH+=(resty/lua-resty-shell)

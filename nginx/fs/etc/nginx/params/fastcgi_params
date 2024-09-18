@@ -40,7 +40,9 @@ fastcgi_param SERVER_NAME $server_name;
 fastcgi_param HTTP_HOST $http_host;
 fastcgi_param HOST $host;
 fastcgi_param HTTP2 $rproxy_http2;
+fastcgi_param HTTP3 $rproxy_http3;
 fastcgi_hide_header X-H2;
+fastcgi_hide_header X-H3;
 
 proxy_set_header X-Forwarded-For      $proxy_add_x_forwarded_for;
 proxy_set_header X-Forwarded-Proto    $rproxy_protocol;

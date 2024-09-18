@@ -25,7 +25,7 @@ unit_body TimeoutStartSec 2min
 # unit_podman_image_pull never
 
 network_use_bridge
-unit_fs_bind share/nginx /run/nginx
+
 shared_sockets_provide liverecord
 
 unit_fs_bind "/data/Volumes/VideoRecord/bilibili" /data/records

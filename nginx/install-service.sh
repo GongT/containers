@@ -45,7 +45,6 @@ unit_fs_bind config/nginx /config
 unit_fs_bind logs/nginx /var/log/nginx
 unit_fs_tempfs 8M /run
 unit_fs_tempfs 2G /tmp
-unit_fs_bind share/nginx /config.auto
 if ! [[ $DISABLE_SSL ]]; then
 	unit_fs_bind share/ssl /etc/ACME
 fi

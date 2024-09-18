@@ -24,3 +24,4 @@ findutils
 zlib-devel
 unzip
 rpm
+luarocks

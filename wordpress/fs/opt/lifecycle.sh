@@ -3,13 +3,13 @@
 PROJ=wordpress
 
 apply_gateway() {
-	local F=$1 T="/run/nginx/vhost.d/${PROJ}.conf"
+	local F=$1 T="/run/nginx/config/vhost.d/${PROJ}.conf"
 	if [ -z "$F" ] ; then
 		rm -v "${T}"
 	else
 		cp -v "/opt/${F}.conf" "${T}"
 	fi
-	echo 'GET /' | nc local:/run/sockets/nginx.reload.sock
+	echo 'GET /' | nc local:/run/nginx/sockets/nginx.reload.sock
 }
 
 apply_gateway bridge
@@ -34,7 +34,7 @@ wait $!
 
 echo "wakeup."
 
-rm -vf /run/sockets/word-press.sock
+rm -vf /run/nginx/sockets/word-press.sock
 
 apply_gateway down
 

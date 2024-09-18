@@ -27,7 +27,7 @@ unit_fs_tempfs 512M /tmp
 unit_fs_bind logs/mariadb /var/log/mariadb
 unit_fs_bind data/mariadb /var/lib/mysql
 unit_fs_bind /data/Backup/mariadb /backup
-unit_fs_bind share/nginx /run/nginx
+
 
 network_use_auto 33306/tcp
 shared_sockets_provide mariadb php-my-admin

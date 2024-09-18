@@ -14,7 +14,7 @@ network_use_auto 30303
 systemd_slice_type idle
 # unit_body Restart no
 unit_body TimeoutStopSec 1min
-unit_fs_bind share/nginx /run/nginx
+
 shared_sockets_provide ethereum-tracker
 
 add_capability SYS_ADMIN

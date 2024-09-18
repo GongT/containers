@@ -11,7 +11,7 @@ $i = 0;
 /* Server: localhost [1] */
 $i++;
 $cfg['Servers'][$i]['verbose'] = 'localhost';
-$cfg['Servers'][$i]['socket'] = '/run/sockets/mariadb.sock';
+$cfg['Servers'][$i]['socket'] = '/run/nginx/sockets/mariadb.sock';
 $cfg['Servers'][$i]['auth_type'] = 'config';
 $cfg['Servers'][$i]['user'] = 'root';
 // $cfg['Servers'][$i]['password'] <-- auto

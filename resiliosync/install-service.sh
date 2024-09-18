@@ -28,7 +28,7 @@ function common() {
 	cp "profiles/$PROFILE.sh" "$CONTAINERS_DATA_PATH/config/resiliosync/$PROFILE/profile.sh"
 
 	shared_sockets_provide "resiliosync.$PROFILE"
-	unit_fs_bind share/nginx /run/nginx
+	
 
 	unit_podman_arguments --env="LANG=zh_CN.utf8" --env="PORT=$PORT" --env="PROFILE=$PROFILE"
 }

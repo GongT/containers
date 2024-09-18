@@ -2,8 +2,8 @@
 
 set -Eeuo pipefail
 
-declare -r MY_CONFIG=/run/nginx/stream.d/mqtt.conf
-declare -r NGINX_RELOADER=/run/sockets/nginx.reload.sh
+declare -r MY_CONFIG=/run/nginx/config/stream.d/mqtt.conf
+declare -r NGINX_RELOADER=/run/nginx/sockets/nginx.reload.sh
 
 if [[ -e $NGINX_RELOADER ]]; then
 	if [[ $1 == start ]]; then

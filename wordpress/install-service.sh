@@ -5,7 +5,6 @@ set -Eeuo pipefail
 cd "$(dirname "$(realpath "${BASH_SOURCE[0]}")")"
 source ../common/functions-install.sh
 
-arg_string PROXY proxy "http proxy url (x.x.x.x:xxx)"
 arg_finish "$@"
 
 create_pod_service_unit gongt/wordpress
@@ -14,7 +13,7 @@ environment_variable \
 	"http_proxy=http://$PROXY" \
 	"https_proxy=http://$PROXY"
 unit_fs_bind data/wordpress /data
-unit_fs_bind share/nginx /run/nginx
+
 shared_sockets_provide word-press
 network_use_nat
 systemd_slice_type normal

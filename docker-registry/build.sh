@@ -29,7 +29,7 @@ info "copy files..."
 merge_local_fs "docker-registry"
 
 buildah_config "docker-registry" --cmd '/sbin/init' --stop-signal=SIGINT \
-	"--env=REGISTRY_HTTP_ADDR=/run/sockets/docker-registry.sock" \
+	"--env=REGISTRY_HTTP_ADDR=/run/nginx/sockets/docker-registry.sock" \
 	"--env=REGISTRY_HTTP_NET=unix" \
 	--author "GongT <admin@gongt.me>" --created-by "#MAGIC!" --label name=gongt/docker-registry
 

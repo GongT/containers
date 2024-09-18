@@ -8,7 +8,8 @@ REGISTRY_DOMAIN=${1-}
 export TMPDIR="${RUNNER_TEMP:-$SYSTEM_COMMON_CACHE/tmp}"
 mkdir -p "$TMPDIR"
 if [[ ! ${GITHUB_ENV-} ]]; then
-	GITHUB_ENV="$TMPDIR/github-env-fake"
+	echo "not in github actions."
+	exit 1
 fi
 
 # sudo cp "./_scripts_/80-myregistry.conf" /etc/containers/registries.conf.d/
@@ -44,3 +45,12 @@ fi
 echo "$SCRIPT" | bash -Eeuo pipefail
 
 echo 'Done.'
+
+cd ../common
+if git status | grep -qF 'working tree clean'; then
+	git checkout master
+	git pull
+else
+	echo "common folder not clean" >&2
+	echo "::error ::common folder not clean" >&2
+fi

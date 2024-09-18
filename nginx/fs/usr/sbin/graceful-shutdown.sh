@@ -5,5 +5,5 @@ echo "#!/bin/sh
 echo 'nginx container is not running...' >&2
 
 
-" >/run/sockets/nginx.reload.sh
-rm -f /run/sockets/nginx.reload.sock /run/sockets/http.sock /run/sockets/https.sock
+" >/run/nginx/sockets/nginx.reload.sh
+rm -f /run/nginx/sockets/nginx.reload.sock /run/nginx/sockets/http.sock /run/nginx/sockets/https.sock

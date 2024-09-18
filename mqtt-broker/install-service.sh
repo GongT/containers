@@ -19,7 +19,7 @@ systemd_slice_type normal
 unit_body ExecStop '/usr/bin/podman exec $CONTAINER_ID bash /opt/stop.sh'
 unit_fs_bind data/mqtt /data
 unit_fs_bind config/mqtt /settings
-unit_fs_bind share/nginx /run/nginx
+
 shared_sockets_provide mqtt
 
 unit_podman_safe_environment \

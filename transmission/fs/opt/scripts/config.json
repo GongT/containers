@@ -26,7 +26,7 @@
 	"queue-stalled-minutes": 3,
 	"seed-queue-enabled": false,
 	"seed-queue-size": 10,
-	"rpc-bind-address": "unix:/run/sockets/transmission.{instance}.sock",
+	"rpc-bind-address": "unix:/run/nginx/sockets/transmission.{instance}.sock",
 	"rpc-enabled": true,
 	"rpc-authentication-required": false,
 	"rpc-host-whitelist-enabled": false,

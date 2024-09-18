@@ -5,7 +5,6 @@ set -Eeuo pipefail
 cd "$(dirname "$(realpath "${BASH_SOURCE[0]}")")"
 source ../common/functions-install.sh
 
-arg_flag PROXY proxy "use a socks5 proxy to connect remote"
 arg_finish "$@"
 
 create_pod_service_unit cloudflared@
