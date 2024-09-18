@@ -16,7 +16,7 @@ STEP="复制配置文件"
 merge_local_fs "samba" "scripts/prepare.sh"
 
 setup_systemd "samba" \
-	enable UNITS="smb.service nmb.service prepare.service systemd-networkd.service"
+	enable REQUIRE="smb.service" WANT="nmb.service"
 
 buildah_config "samba" \
 	--volume=/mountpoints --volume=/drives --volume=/opt/config \
