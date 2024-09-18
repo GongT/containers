@@ -10,8 +10,9 @@ arg_finish "$@"
 
 unit_start_notify socket
 
-create_pod_service_unit gongt/cloud
-unit_unit After nginx.pod.service mariadb.pod.service
+create_pod_service_unit nextcloud
+unit_podman_image registry.gongt.me/gongt/nextcloud
+unit_unit After mariadb.pod.service
 unit_data danger
 environment_variable \
 	"PROXY=$PROXY" \

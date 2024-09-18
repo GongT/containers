@@ -100,7 +100,7 @@ custom_stop_command bash /usr/sbin/graceful-shutdown.sh
 STEP="配置容器"
 buildah_config "nginx" --cmd '/usr/sbin/nginx.sh' --port 80 --port 443 --port 80/udp --port 443/udp \
 	--volume /config --volume /etc/ACME \
-	"--label=${LABELID_USE_NGINX_ATTACH}=yes" "--volume=/run/nginx/config" "--volume=/run/sockets" \
+	"--label=${LABELID_USE_NGINX_ATTACH}=yes" "--volume=/run/nginx" "--volume=/run/sockets" \
 	--author "GongT <admin@gongt.me>" --created-by "#MAGIC!" --label name=gongt/nginx
 
 buildah_finalize_image nginx gongt/nginx

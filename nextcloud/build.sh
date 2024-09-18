@@ -18,7 +18,7 @@ dnf_install_step "nextcloud" scripts/deps.lst scripts/clean-install.sh
 merge_local_fs "nextcloud"
 
 setup_systemd "nextcloud" \
-	enable "UNITS=nginx.service php-fpm.service nextcloud-clean.timer redis.service" \
+	enable "REQUIRE=nginx.service php-fpm.service nextcloud-clean.timer redis.service" \
 	nginx_attach "NGINX_CONFIG="
 
 buildah_config "nextcloud" \

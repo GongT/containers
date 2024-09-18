@@ -29,6 +29,8 @@ fi
 create_pod_service_unit nginx
 unit_podman_image registry.gongt.me/gongt/nginx
 unit_unit Description nginx - high performance web server
+unit_unit After gateway-network.pod.service
+
 network_use_pod gateway
 systemd_slice_type normal
 
@@ -49,7 +51,7 @@ unit_fs_tempfs 2G /tmp
 if ! [[ $DISABLE_SSL ]]; then
 	unit_fs_bind share/ssl /etc/ACME
 fi
-shared_sockets_provide http https
+shared_sockets_provide http https nginx.reload
 unit_body RestartPreventExitStatus 127
 
 unit_finish

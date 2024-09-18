@@ -8,6 +8,8 @@ source ../common/functions-install.sh
 arg_finish "$@"
 
 create_pod_service_unit gongt/mariadb
+unit_unit After nginx.pod.service
+
 unit_podman_image registry.gongt.me/gongt/mariadb
 unit_podman_hostname mysql
 unit_data danger

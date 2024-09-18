@@ -17,7 +17,7 @@ dnf_install_step "mariadb" scripts/deps.lst scripts/clean-install.sh
 merge_local_fs "mariadb"
 
 setup_systemd "mariadb" \
-	enable "UNITS=mariadb.service logrotate.timer nginx.service php-fpm.service backup.timer" \
+	enable "REQUIRE=mariadb.service" "WANT=logrotate.timer nginx.service php-fpm.service backup.timer" \
 	nginx_attach "NGINX_CONFIG=/opt/phpmyadmin.conf"
 
 buildah_config "mariadb" \
