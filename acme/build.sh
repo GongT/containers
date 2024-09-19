@@ -25,7 +25,7 @@ do_acme() {
 	MNT=$(create_temp_dir "acme")
 
 	download_github "$REPO" "$BRANCH"
-	download_git_result_copy "$MNT" "$REPO" "origin/$BRANCH"
+	download_git_result_copy "$MNT" "$REPO" "$BRANCH"
 
 	buildah run "--volume=$MNT:/mnt" "$1" bash <scripts/build-acme.sh
 }

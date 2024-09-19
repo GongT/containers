@@ -25,28 +25,15 @@ dnf_install_step "nginx-build" scripts/build-requirements.lst
 
 ### 编译!
 STEP="下载Nginx源码"
-NGX_COMMIT_ID_LIST=()
 hash_nginx() {
 	# 下载代码
 	control_ci group "download and hash source code"
-	local INDEX REPO BRANCH NAME COMMID
+	local INDEX REPO BRANCH 
 	for INDEX in "${!NGX_SRC_REPO[@]}"; do
 		REPO="${NGX_SRC_REPO[$INDEX]}"
 		BRANCH="${NGX_SRC_BRANCH[$INDEX]}"
-		NAME="${NGX_SRC_PATH[$INDEX]}"
-		NAME="${NAME////_}"
-		COMMID=""
-		if [[ ${BRANCH} == '@@'* ]]; then
-			BRANCH=${BRANCH#@@}
-			COMMID=$(http_get_github_tag_commit "$REPO")
-		fi
-		NGX_COMMIT_ID_LIST+=("$COMMID")
-		download_github "$REPO" "$NAME" "$BRANCH" >&2
-		if [[ -n ${COMMID} ]]; then
-			echo "${COMMID}"
-		else
-			hash_git_result "$NAME" "$BRANCH"
-		fi
+		download_github "$REPO" "$BRANCH" >&2
+		hash_git_result "$REPO" "$BRANCH"
 	done
 	control_ci groupEnd
 }
@@ -54,18 +41,14 @@ build_nginx() {
 	local BUILDER="$1" SOURCE_DIRECTORY
 
 	SOURCE_DIRECTORY=$(create_temp_dir "build-source-nginx")
-	local INDEX BRANCH NAME COMMID
+	local INDEX BRANCH NAME
 	for INDEX in "${!NGX_SRC_REPO[@]}"; do
+		REPO="${NGX_SRC_REPO[$INDEX]}"
 		BRANCH="${NGX_SRC_BRANCH[$INDEX]}"
 		CPATH="${NGX_SRC_PATH[$INDEX]}"
-		COMMID="${NGX_COMMIT_ID_LIST[$INDEX]}"
 		NAME="${CPATH////_}"
 
-		if [[ -z ${COMMID} ]]; then
-			COMMID="origin/${BRANCH}"
-		fi
-
-		download_git_result_copy "$SOURCE_DIRECTORY/$CPATH" "$NAME" "$COMMID"
+		download_git_result_copy "$SOURCE_DIRECTORY/$CPATH" "$REPO" "$BRANCH"
 	done
 
 	buildah copy --quiet "$BUILDER" "$SOURCE_DIRECTORY" "/opt/projects/nginx"

@@ -27,7 +27,7 @@ download_src() {
 	local BUILDER="$1" SOURCE_DIRECTORY
 
 	SOURCE_DIRECTORY=$(create_temp_dir "opentracker")
-	download_git_result_copy "$SOURCE_DIRECTORY/opentracker" "opentracker" "origin/master"
+	download_git_result_copy "$SOURCE_DIRECTORY/opentracker" "opentracker" "master"
 
 	control_ci group " * cvs download libowfat..."
 	pushd "$SOURCE_DIRECTORY" &>/dev/null
