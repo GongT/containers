@@ -53,6 +53,7 @@ if ! [[ $DISABLE_SSL ]]; then
 fi
 shared_sockets_provide http https nginx.reload
 unit_body RestartPreventExitStatus 127
+unit_body RestartSec 30s
 
 unit_finish
 
