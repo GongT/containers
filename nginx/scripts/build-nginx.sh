@@ -2,52 +2,48 @@
 
 set -Eeuo pipefail
 
-cd "$SOURCE/luajit2"
-info "=== install '$(pwd)'..."
-indent
-export LUAJIT_LIB=/usr/lib64
-export LUAJIT_INC=/usr/include/luajit-2.1
-indent_stream make clean
-indent_stream make MULTILIB=lib64 PREFIX=/usr -j
-indent_stream make MULTILIB=lib64 PREFIX=/usr "INSTALL_INC=$LUAJIT_INC" "INSTALL_JITLIB=$ARTIFACT_PREFIX/usr/share/lua/5.1" install
-dedent
+# cd "$SOURCE/luajit2"
+# info "=== install '$(pwd)'..."
+# indent
+# export LUAJIT_LIB=/usr/lib64
+# export LUAJIT_INC=/usr/include/luajit-2.1
+# indent_stream make clean
+# indent_stream make MULTILIB=lib64 PREFIX=/usr -j
+# indent_stream make MULTILIB=lib64 PREFIX=/usr "INSTALL_INC=$LUAJIT_INC" "INSTALL_JITLIB=$ARTIFACT_PREFIX/usr/share/lua/5.1" install
+# dedent
 
+# ## BEGIN of resty libs
+# rm -f /usr/bin/lua
+# ln -s luajit /usr/bin/lua # for following build steps
 
-## BEGIN of resty libs
-rm -f /usr/bin/lua
-ln -s luajit /usr/bin/lua # for following build steps
+# find "$SOURCE/resty/" -maxdepth 1 -mindepth 1 -type d | while read -r LIB_P; do
+# 	cd "$LIB_P"
+# 	info "=== install '$(pwd)'..."
+# 	indent_stream make "DESTDIR=$ARTIFACT_PREFIX" LUA_LIB_DIR=/usr/share/lua/5.1 "LUA_INCLUDE_DIR=${SOURCE}/luajit2/src" PREFIX=/usr
+# 	indent_stream make "DESTDIR=$ARTIFACT_PREFIX" LUA_LIB_DIR=/usr/share/lua/5.1 "LUA_INCLUDE_DIR=${SOURCE}/luajit2/src" PREFIX=/usr install
+# 	dedent
+# done
 
-mapfile -t LIB_PS < <(find "$SOURCE/resty/" -maxdepth 1 -mindepth 1 -type d)
-for LIB_P in "${LIB_PS[@]}"; do
-	cd "$LIB_P"
-	info "=== install '$(pwd)'..."
-	indent_stream make "DESTDIR=$ARTIFACT_PREFIX" LUA_LIB_DIR=/usr/share/lua/5.1 "LUA_INCLUDE_DIR=${SOURCE}/luajit2/src" PREFIX=/usr
-	indent_stream make "DESTDIR=$ARTIFACT_PREFIX" LUA_LIB_DIR=/usr/share/lua/5.1 "LUA_INCLUDE_DIR=${SOURCE}/luajit2/src" PREFIX=/usr install
-	dedent
-done
+# ### fix path wrong
+# mkdir -p "$ARTIFACT_PREFIX/usr/local/lib/lua/5.1"
+# find "$ARTIFACT_PREFIX/usr/share/lua/5.1/" -name '*.so' | while read -r FILE_PATH; do
+# 	x mv "$FILE_PATH" "$ARTIFACT_PREFIX/usr/local/lib/lua/5.1/$(basename "$FILE_PATH")"
+# done
 
-### fix path wrong
-mkdir -p "$ARTIFACT_PREFIX/usr/local/lib/lua/5.1"
-mapfile -t LIBFILES < <(find "$ARTIFACT_PREFIX/usr/share/lua/5.1/" -name '*.so')
-for FILE_PATH in "${LIBFILES[@]}"; do
-	x mv "$FILE_PATH" "$ARTIFACT_PREFIX/usr/local/lib/lua/5.1/$(basename "$FILE_PATH")"
-done
+# ### END of resty libs
 
-### END of resty libs
-
-cd "$SOURCE/lua/luaposix"
-info "=== install '$(pwd)'..."
-indent
-# LUA_LIBDIR
-./build-aux/luke "LUA_INCDIR=$LUAJIT_INC" "PREFIX=$ARTIFACT_PREFIX/usr/local" LUAVERSION=5.1
-./build-aux/luke "LUA_INCDIR=$LUAJIT_INC" "PREFIX=$ARTIFACT_PREFIX/usr/local" LUAVERSION=5.1 install
-dedent
+# cd "$SOURCE/lua/luaposix"
+# info "=== install '$(pwd)'..."
+# indent
+# # LUA_LIBDIR
+# ./build-aux/luke "LUA_INCDIR=$LUAJIT_INC" "PREFIX=$ARTIFACT_PREFIX/usr/local" LUAVERSION=5.1
+# ./build-aux/luke "LUA_INCDIR=$LUAJIT_INC" "PREFIX=$ARTIFACT_PREFIX/usr/local" LUAVERSION=5.1 install
+# dedent
 
 cd "$SOURCE/nginx"
 
 export CC_OPT='-O2 -g -pipe -Wall -Werror=format-security -Wp,-D_FORTIFY_SOURCE=2 -Wp,-D_GLIBCXX_ASSERTIONS -fexceptions -fstack-protector-strong -grecord-gcc-switches -m64 -mtune=generic -fasynchronous-unwind-tables -fstack-clash-protection -Wno-error'
 export LD_OPT='-lpcre -Wl,-z,defs -Wl,-z,now -Wl,-z,relro -Wl,-E -Wl,-rpath,/path/to/luajit/lib'
-
 
 MODULES=()
 for REL_FOLDER in ../modules/*/; do

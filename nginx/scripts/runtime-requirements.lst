@@ -3,6 +3,4 @@ grep
 curl
 openssl
 busybox
-luarocks
-luajit
 vim-enhanced

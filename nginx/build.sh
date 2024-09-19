@@ -9,10 +9,10 @@ arg_flag FORCE_DNF dnf "force reinstall dependencies"
 arg_flag FORCE f/force "force rebuild nginx source code"
 arg_finish "$@"
 
-declare -a NGX_SRC_PATH=() NGX_SRC_URL=() NGX_SRC_BRANCH=()
+declare -a NGX_SRC_PATH=() NGX_SRC_REPO=() NGX_SRC_BRANCH=()
 source ./scripts/nginx-source-registry.sh
 
-if [[ ${#NGX_SRC_PATH[@]} != "${#NGX_SRC_URL[@]}" ]] || [[ ${#NGX_SRC_BRANCH[@]} != "${#NGX_SRC_URL[@]}" ]]; then
+if [[ ${#NGX_SRC_PATH[@]} != "${#NGX_SRC_REPO[@]}" ]] || [[ ${#NGX_SRC_BRANCH[@]} != "${#NGX_SRC_REPO[@]}" ]]; then
 	die "nginx source settings error"
 fi
 
@@ -25,17 +25,28 @@ dnf_install_step "nginx-build" scripts/build-requirements.lst
 
 ### 编译!
 STEP="下载Nginx源码"
+NGX_COMMIT_ID_LIST=()
 hash_nginx() {
 	# 下载代码
 	control_ci group "download and hash source code"
-	local INDEX URL BRANCH NAME
-	for INDEX in "${!NGX_SRC_URL[@]}"; do
-		URL="${NGX_SRC_URL[$INDEX]}"
+	local INDEX REPO BRANCH NAME COMMID
+	for INDEX in "${!NGX_SRC_REPO[@]}"; do
+		REPO="${NGX_SRC_REPO[$INDEX]}"
 		BRANCH="${NGX_SRC_BRANCH[$INDEX]}"
 		NAME="${NGX_SRC_PATH[$INDEX]}"
 		NAME="${NAME////_}"
-		download_git "$URL" "$NAME" "$BRANCH" >&2
-		hash_git_result "$NAME" "$BRANCH"
+		COMMID=""
+		if [[ ${BRANCH} == '@@'* ]]; then
+			BRANCH=${BRANCH#@@}
+			COMMID=$(http_get_github_tag_commit "$REPO")
+		fi
+		NGX_COMMIT_ID_LIST+=("$COMMID")
+		download_github "$REPO" "$NAME" "$BRANCH" >&2
+		if [[ -n ${COMMID} ]]; then
+			echo "${COMMID}"
+		else
+			hash_git_result "$NAME" "$BRANCH"
+		fi
 	done
 	control_ci groupEnd
 }
@@ -43,12 +54,18 @@ build_nginx() {
 	local BUILDER="$1" SOURCE_DIRECTORY
 
 	SOURCE_DIRECTORY=$(create_temp_dir "build-source-nginx")
-	local INDEX BRANCH NAME
-	for INDEX in "${!NGX_SRC_URL[@]}"; do
+	local INDEX BRANCH NAME COMMID
+	for INDEX in "${!NGX_SRC_REPO[@]}"; do
 		BRANCH="${NGX_SRC_BRANCH[$INDEX]}"
 		CPATH="${NGX_SRC_PATH[$INDEX]}"
+		COMMID="${NGX_COMMIT_ID_LIST[$INDEX]}"
 		NAME="${CPATH////_}"
-		download_git_result_copy "$SOURCE_DIRECTORY/$CPATH" "$NAME" "$BRANCH"
+
+		if [[ -z ${COMMID} ]]; then
+			COMMID="origin/${BRANCH}"
+		fi
+
+		download_git_result_copy "$SOURCE_DIRECTORY/$CPATH" "$NAME" "$COMMID"
 	done
 
 	buildah copy --quiet "$BUILDER" "$SOURCE_DIRECTORY" "/opt/projects/nginx"
