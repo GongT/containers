@@ -18,7 +18,7 @@ unit_body Restart no
 unit_start_notify output "Login successful"
 
 network_use_nat 56080:80/tcp # this for debug only
-systemd_slice_type normal +1
+systemd_slice_type normal
 
 unit_fs_bind config/qqbot /mirai/config
 unit_fs_bind data/qqbot/data /mirai/data

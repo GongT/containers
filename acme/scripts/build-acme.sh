@@ -3,6 +3,8 @@
 set -Eeuo pipefail
 
 cd /mnt
+echo "Install acme.sh!"
+
 bash acme.sh --install --nocron --no-profile \
 	--home /opt/acme.sh \
 	--config-home "/opt/data" \

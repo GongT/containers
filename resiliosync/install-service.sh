@@ -14,7 +14,7 @@ function common() {
 	# unit_data danger
 
 	network_use_auto "$PORT"
-	systemd_slice_type idle -100
+	systemd_slice_type idle
 
 	unit_start_notify output 'My PeerID:'
 	# unit_body Restart always

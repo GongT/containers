@@ -10,7 +10,7 @@ unit_unit Description qbittorrent
 unit_data danger
 
 network_use_manual --network=bridge0 --mac-address=4A:E1:A2:4E:D5:6E
-systemd_slice_type idle -100
+systemd_slice_type idle
 add_network_privilege
 
 unit_using_systemd

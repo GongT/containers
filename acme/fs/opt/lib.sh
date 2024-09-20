@@ -13,7 +13,7 @@ function info() {
 
 function die() {
 	info "$@"
-	exit 66
+	exit 233
 }
 
 function logfile_name() {
@@ -88,7 +88,7 @@ function create_nginx_lagacy_load() {
 function try_nslookup() {
 	local HOST=$1
 	echo "try resolve $HOST" >&2
-	while ! nslookup "$HOST"; do
+	while ! nslookup "$HOST" >/dev/null; do
 		echo "failed." >&2
 		sleep 5
 	done

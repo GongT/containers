@@ -17,7 +17,7 @@ create_it() {
 	add_network_privilege
 	use_full_system_privilege
 	network_use_manual --network=bridge0 "--mac-address=$MAC_ADDRESS"
-	systemd_slice_type idle -101
+	systemd_slice_type idle
 
 	environment_variable "INSTANCE_NAME=$INSTANCE_NAME"
 	# unit_body ExecStop '/usr/bin/podman exec $CONTAINER_ID /usr/bin/bash /opt/scripts/stop.sh'
@@ -32,7 +32,6 @@ create_it() {
 	unit_fs_bind "data/transmission.$INSTANCE_NAME" /opt/data
 	unit_fs_bind config/transmission /opt/config
 	unit_fs_bind "$TARGET" /data
-	
 
 	unit_finish
 }

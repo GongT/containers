@@ -56,6 +56,9 @@ cf)
 	info "check dns work for api.cloudflare.com"
 	try_nslookup api.cloudflare.com
 	;;
+*)
+	die "unsupport dns server ${DNS_SERVER}"
+	;;
 esac
 
 case "$SERVER" in
@@ -69,6 +72,9 @@ zerossl)
 	acme --update-account --server zerossl || acme --register-account --server zerossl \
 		--eab-kid "$EABID" \
 		--eab-hmac-key "$EABKEY"
+	;;
+*)
+	die "unsupport cert server ${SERVER}"
 	;;
 esac
 

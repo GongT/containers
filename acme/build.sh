@@ -22,12 +22,20 @@ hash_acme() {
 }
 do_acme() {
 	local MNT
-	MNT=$(create_temp_dir "acme")
+	MNT=$(create_temp_dir "acme.install.source")
 
 	download_github "$REPO" "$BRANCH"
 	download_git_result_copy "$MNT" "$REPO" "$BRANCH"
 
-	buildah run "--volume=$MNT:/mnt" "$1" bash <scripts/build-acme.sh
+	buildah run "--volume=$MNT:/mnt" \
+		"--volume=$(pwd)/scripts/build-acme.sh:/_tmp/script.sh:ro" \
+		"$1" bash /_tmp/script.sh
+
+	local NEW_VER=$(buildah run "$1" /opt/acme.sh/acme.sh --version 2>&1 | sed -E 's/^/> /g')
+	control_ci summary "
+${NEW_VER}
+
+"
 }
 buildah_cache "acme" hash_acme do_acme
 ### 安装acme END
@@ -38,7 +46,9 @@ merge_local_fs "acme"
 ### 安装acme END
 
 STEP="配置镜像信息"
-buildah_config "acme" --entrypoint "$(json_array /opt/entrypoint.sh)" --stop-signal=SIGINT \
+buildah_config "acme" \
+	"--entrypoint=$(json_array /usr/bin/bash)" \
+	"--cmd=$(json_array /opt/entrypoint.sh)" --stop-signal=SIGINT \
 	--volume /opt/data --volume /etc/ACME \
 	"--label=${LABELID_USE_NGINX_ATTACH}=yes"
 info "settings updated..."
