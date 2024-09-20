@@ -11,4 +11,4 @@ dnf_install_step "systemd" scripts/dependencies.lst
 
 setup_systemd "systemd"
 
-buildah_finalize_image "systemd" gongt/systemd
+buildah_finalize_image "systemd" gongt/systemd-base-image
