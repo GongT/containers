@@ -1,21 +1,28 @@
 #!/usr/bin/env bash
 set -uo pipefail
+shopt -s extglob nullglob globstar shift_verbose
+
+if [[ -z ${EFFECTIVE_DIR-} ]]; then
+	echo "missing EFFECTIVE_DIR" >&2
+	exit 1
+fi
 
 declare -r CROOT_DIR="/run/nginx/contribute"
 declare -r MASTER_CONTROL_DIR="${CROOT_DIR}/.master"
-mkdir -p "${MASTER_CONTROL_DIR}"
-
+declare -r FIFO="${MASTER_CONTROL_DIR}/request.fifo"
 declare -r INDEX_DIR="/tmp/testing/effective"
 
-cd "${MASTER_CONTROL_DIR}"
-rm -f "request.fifo"
-mkfifo "request.fifo"
+mkdir -p "${MASTER_CONTROL_DIR}"
+cd "${CROOT_DIR}"
+
+rm -f "${FIFO}"
+mkfifo "${FIFO}"
 
 log() {
-	printf "\e[2m[reload] %s\e[0m" "$*"
+	printf "\e[2m[reload] %s\e[0m\n" "$*"
 }
 err() {
-	printf "\e[38;5;9m[reload] %s\e[0m" "$*" >&2
+	printf "\e[38;5;9m[reload] %s\e[0m\n" "$*" >&2
 }
 
 function recreate_dir() {
@@ -24,7 +31,7 @@ function recreate_dir() {
 	mkdir -p "${DIR}"
 }
 function empty_dir() {
-	local FILE DIR=$1
+	local DIR=$1
 	if [[ ! -d ${DIR} ]]; then
 		mkdir -p "${DIR}"
 		return
@@ -42,7 +49,7 @@ function build_directory() {
 	done
 }
 
-while cat "request.fifo" >/dev/null; do
+while cat "${FIFO}" >/dev/null; do
 	log "someone notify update:"
 	if ! nginx -t &>/dev/null; then
 		err "already in failed state, ignore reloading."
@@ -55,16 +62,18 @@ while cat "request.fifo" >/dev/null; do
 		ITEM=${STATE_FILE%%/*}
 
 		if [[ ${STATE} == "active" ]]; then
-			UNCHANGE+=("${I}")
-			log "  - ${I}"
+			UNCHANGE+=("${ITEM}")
+			log "  - ${ITEM}"
 		elif [[ ${STATE} == "pending" ]]; then
-			CHANGE+=("${I}")
-			log "  * ${I}"
-		elif [[ ${STATE} == "delete" || ${STATE} == "error"* ]]; then
-			DELETED+=("${I}")
-			log "  x ${I}"
+			CHANGE+=("${ITEM}")
+			log "  * ${ITEM}"
+		elif [[ ${STATE} == "delete" ]]; then
+			DELETED+=("${ITEM}")
+			log "  x ${ITEM} (delete)"
+		elif [[ ${STATE} == "error"* ]]; then
+			log "  x ${ITEM}"
 		else
-			log "  ? ${I} (invalid: ${STATE})"
+			log "  ? ${ITEM} (invalid: ${STATE})"
 		fi
 	done
 
@@ -92,7 +101,7 @@ while cat "request.fifo" >/dev/null; do
 
 		ensure-sslcfg "/tmp/testing/nginx.conf" || true
 		if nginx -t -c "/tmp/testing/nginx.conf" &>/tmp/merge.test.output.txt; then
-			echo "  + success"
+			log "  + success"
 			echo "active" >"${ITEM}/.control/state"
 			UNCHANGE+=("${ITEM}")
 		else
@@ -109,7 +118,8 @@ while cat "request.fifo" >/dev/null; do
 
 	log "test complete"
 	rm -rf "${EFFECTIVE_DIR}.new"
-	mv "${INDEX_DIR}" "${EFFECTIVE_DIR}.new"
+	cp -r "${INDEX_DIR}" "${EFFECTIVE_DIR}.new"
+	rm -rf "${EFFECTIVE_DIR}"
 	mv "${EFFECTIVE_DIR}.new" "${EFFECTIVE_DIR}"
 
 	if nginx -t && nginx -s reload; then

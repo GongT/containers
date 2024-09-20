@@ -68,7 +68,7 @@ indent_stream ./auto/configure \
 	'--http-fastcgi-temp-path=/tmp/fastcgi' \
 	'--http-uwsgi-temp-path=/tmp/uwsgi' \
 	'--http-scgi-temp-path=/tmp/scgi' \
-	'--pid-path=/run/nginx/config.pid' \
+	'--pid-path=/run/nginx.pid' \
 	'--lock-path=/run/lock/subsys/nginx' \
 	'--user=nginx' \
 	'--with-compat' \
