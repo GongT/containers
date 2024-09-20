@@ -76,11 +76,9 @@ dnf_install_step "nginx" scripts/runtime-requirements.lst
 STEP="复制Nginx到镜像中"
 hash_program_files() {
 	cat "scripts/prepare-run.sh"
-	cat common/staff/systemd-filesystem/nginx_attach/fs/usr/libexec/nginx.reload.sh
 }
 copy_program_files() {
 	run_install "$BUILT_RESULT" "$1" "nginx" "scripts/prepare-run.sh"
-	buildah copy "$1" common/staff/systemd-filesystem/nginx_attach/fs/usr/libexec/nginx.reload.sh /usr/libexec/nginx.reload.sh
 }
 buildah_cache "nginx" hash_program_files copy_program_files
 ### 编译好的nginx END
