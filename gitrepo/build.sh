@@ -11,7 +11,7 @@ buildah_cache_start "ghcr.io/gongt/systemd-base-image"
 dnf_use_environment
 dnf_install_step "gitrepo" scripts/requirements.lst
 
-setup_systemd \
+setup_systemd "gitrepo" \
 	enable "REQUIRE=fcgiwrap.socket" \
 	nginx_attach
 
