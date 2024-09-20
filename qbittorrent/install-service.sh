@@ -7,25 +7,25 @@ source ../common/functions-install.sh
 
 create_pod_service_unit gongt/qbittorrent
 unit_unit Description qbittorrent
-unit_data danger
+for I in /data/Volumes/*; do
+	unit_unit RequiresMountsFor "${I}"
+done
 
-network_use_manual --network=bridge0 --mac-address=4A:E1:A2:4E:D5:6E
-systemd_slice_type idle
+network_use_veth bridge0
+podman_engine_params --mac-address=4A:E1:A2:4E:D5:6E
 add_network_privilege
 
-unit_using_systemd
-unit_start_notify output 'Started qbittorrent.service'
+unit_data danger
+systemd_slice_type idle
 # unit_body Restart always
+
 unit_fs_bind config/qbittorrent /opt/qBittorrent/config
 unit_fs_bind data/qbittorrent /opt/qBittorrent/data
 unit_fs_bind data/qbittorrent/HOME /home/media_rw
 unit_fs_bind /data/Volumes /data/Volumes
 
-
-unit_unit RequiresMountsFor /data/Volumes/H /data/Volumes/Anime
-
 unit_body TimeoutStartSec 2min
-unit_podman_arguments --env="LANG=zh_CN.utf8"
+podman_engine_params --env="LANG=zh_CN.utf8"
 shared_sockets_provide qbittorrent-admin
 
 unit_finish

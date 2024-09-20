@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+
+set -Eeuo pipefail
+
+cd "$(dirname "$(realpath "${BASH_SOURCE[0]}")")"
+source ../common/functions-build.sh
+
+buildah_cache_start "registry.fedoraproject.org/fedora-minimal"
+dnf_use_environment
+dnf_install_step "systemd" scripts/dependencies.lst
+
+setup_systemd "systemd"
+
+buildah_finalize_image "systemd" gongt/systemd
