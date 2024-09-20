@@ -101,20 +101,20 @@ jobs:
         run: _scripts_/ci-single-build.sh
         timeout-minutes: 5
       - env:
-          _BUILDSCRIPT_RUN_STEP_: enable:1
-        id: enable_step_1
-        name: '运行构建过程: 配置镜像中的systemd'
-        run: _scripts_/ci-single-build.sh
-        timeout-minutes: 5
-      - env:
           _BUILDSCRIPT_RUN_STEP_: gitrepo:2
         id: gitrepo_step_2
-        name: '运行构建过程: 复制文件'
+        name: '运行构建过程: 配置镜像中的systemd'
         run: _scripts_/ci-single-build.sh
         timeout-minutes: 5
       - env:
           _BUILDSCRIPT_RUN_STEP_: gitrepo:3
         id: gitrepo_step_3
+        name: '运行构建过程: 复制文件'
+        run: _scripts_/ci-single-build.sh
+        timeout-minutes: 5
+      - env:
+          _BUILDSCRIPT_RUN_STEP_: gitrepo:4
+        id: gitrepo_step_4
         name: '运行构建过程: Finalize'
         run: _scripts_/ci-single-build.sh
         timeout-minutes: 5
