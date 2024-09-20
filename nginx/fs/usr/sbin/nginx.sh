@@ -34,17 +34,6 @@ fi
 echo "create htpassword file..." >&2
 htpasswd -bc "/config/htpasswd" "$USERNAME" "$PASSWORD"
 
-for i in conf.d vhost.d stream.d rtmp.d; do
-	if ! [[ -e "/config/$i" ]]; then
-		echo "create /config/$i folder..." >&2
-		mkdir -p "/config/$i"
-	fi
-	if ! [[ -e "/run/nginx/config/$i" ]]; then
-		echo "create /run/nginx/config/$i folder..." >&2
-		mkdir -p "/run/nginx/config/$i"
-	fi
-done
-
 if [[ -e /etc/resolv.conf ]]; then
 	SYSTEM_RESOLVERS="$(
 		cat /etc/resolv.conf | grep -v '^#' | grep -v '127.0.0.1' | grep nameserver | sed -E 's/^nameserver\s+//g'
@@ -72,8 +61,6 @@ mapfile -t SYSTEM_RESOLVERS_ARR < <(echo "$SYSTEM_RESOLVERS")
 	echo "resolver ${RES[*]};"
 ) >/config/conf.d/resolver.conf
 
-cat /usr/sbin/reload-nginx.sh >/run/sockets/nginx.reload.sh
-
 if [[ -e /config/selfsigned.key ]] && [[ -e /config/selfsigned.crt ]]; then
 	echo "use exists openssl cert..."
 else
@@ -99,12 +86,12 @@ download one using:
 fi
 
 if [[ $DISABLE_SSL ]]; then
-	sed -i "s#\$DISABLE_SSL#$DISABLE_SSL#g" /usr/bin/remove-ssl
+	sed -i "s#\$DISABLE_SSL#$DISABLE_SSL#g" /usr/bin/ensure-sslcfg
 else
-	echo '#''!/usr/bin/bash' >/usr/bin/remove-ssl
+	echo '#''!/usr/bin/bash' >/usr/bin/ensure-sslcfg
 fi
 
-remove-ssl
+ensure-sslcfg || true
 
 if [[ -e /config/conf.d/default_server.conf ]]; then
 	echo "using provided default server."
@@ -125,6 +112,18 @@ for FILE in /etc/nginx/basic/listen.conf /etc/nginx/conf.d/90-default_server.con
 	fi
 done
 
+for i in conf.d vhost.d stream.d rtmp.d; do
+	if ! [[ -e "/config/$i" ]]; then
+		echo "create /config/$i folder..." >&2
+		mkdir -p "/config/$i"
+	fi
+done
+declare -xr EFFECTIVE_DIR="/run/nginx/config"
+mkdir -p "${EFFECTIVE_DIR}"
+if [[ ! -L /etc/nginx/effective ]]; then
+	ln -s "${EFFECTIVE_DIR}" /etc/nginx/effective
+fi
+
 /usr/sbin/nginx -t || {
 	echo "===================================="
 	echo "!! Failed test nginx config files !!"
@@ -134,7 +133,6 @@ done
 
 sleep 1
 
-bash /usr/sbin/auto-reloader.sh &
+bash /opt/reload-server.sh &
 
-echo "[***] running nginx." >&2
 exec /usr/sbin/nginx

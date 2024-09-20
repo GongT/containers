@@ -12,18 +12,13 @@ arg_finish "$@"
 
 info "starting..."
 
+
+
 ### 编译时依赖项目
 STEP="编译时依赖项目"
-hash_compile_deps() {
-	dnf_list_version scripts/compile.lst
-}
-install_compile_deps() {
-	info "dnf install..."
-	local TARGET="$1" RESULT
-	run_dnf_with_list_file "$TARGET" scripts/compile.lst
-	info "dnf install complete..."
-}
-BUILDAH_FORCE="$FORCE_DNF" buildah_cache "qbittorrent-build" hash_compile_deps install_compile_deps
+buildah_cache_start "registry.fedoraproject.org/fedora"
+dnf_use_environment
+dnf_install_step "qbittorrent-build" scripts/compile.lst
 ### 编译时依赖项目 END
 
 # ### 编译libtorrent
@@ -41,10 +36,11 @@ STEP="编译remote-shell"
 BUILDAH_FORCE="$FORCE_RSHELL" perfer_proxy download_and_build_github qbittorrent-build broadcaster GongT/remote-shell master
 ### 编译remote-shell END
 
-COMPILE_RESULT_IMAGE="$BUILDAH_LAST_IMAGE"
+COMPILE_RESULT_IMAGE=$(get_last_image_id)
 
 ### 运行时依赖项目
 STEP="运行时依赖项目"
+buildah_cache_start "registry.fedoraproject.org/fedora-minimal"
 dnf_use_environment
 dnf_install_step "qbittorrent" scripts/runtime.lst scripts/post-install-cleanup.sh
 ### 运行时依赖项目 END
@@ -61,16 +57,18 @@ copy_program_files() {
 buildah_cache "qbittorrent" hash_program_files copy_program_files
 ### 编译好的qbt END
 
-setup_systemd "qbittorrent"
-
 ### 配置文件等
 STEP="复制配置文件"
 merge_local_fs "qbittorrent" "scripts/prepare-run.sh"
 ### 配置文件等 END
 
-STEP="配置镜像信息"
-buildah_config qbittorrent --author "GongT <admin@gongt.me>" --created-by "#MAGIC!" --label name=gongt/qbittorrent
-info "settings update..."
+setup_systemd "qbittorrent" \
+	basic DEFAULT_TARGET=graphical.target \
+	enable "WANT=qbittorrent.service" "REQUIRE=i3.service"
+
+# STEP="配置镜像信息"
+# buildah_config qbittorrent --author "GongT <admin@gongt.me>" --created-by "#MAGIC!" --label name=gongt/qbittorrent
+# info "settings update..."
 
 buildah_finalize_image "qbittorrent" gongt/qbittorrent
 info "Done!"

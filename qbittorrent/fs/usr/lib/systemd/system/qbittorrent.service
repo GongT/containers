@@ -1,10 +1,10 @@
 [Unit]
 Description=qBittorrent
-Requires=xvnc0.service i3.service
-After=xvnc0.service i3.service
+Requires=i3.service
+After=i3.service
 
 [Service]
-Type=simple
+Type=exec
 Environment=DISPLAY=:0 LC_ALL=C.UTF-8
 ExecStartPre=+/bin/bash /opt/scripts/prestart.sh
 ExecStart=/usr/bin/qbittorrent --profile=/opt

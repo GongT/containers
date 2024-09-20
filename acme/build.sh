@@ -39,8 +39,8 @@ merge_local_fs "acme"
 
 STEP="配置镜像信息"
 buildah_config "acme" --entrypoint "$(json_array /opt/entrypoint.sh)" --stop-signal=SIGINT \
-	--volume /opt/data --volume /log --volume /etc/ACME \
-	--author "GongT <admin@gongt.me>" --created-by "#MAGIC!" --label name=gongt/acme
+	--volume /opt/data --volume /etc/ACME \
+	"--label=${LABELID_USE_NGINX_ATTACH}=yes"
 info "settings updated..."
 
 buildah_finalize_image "acme" gongt/acme

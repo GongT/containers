@@ -28,7 +28,7 @@ STEP="下载Nginx源码"
 hash_nginx() {
 	# 下载代码
 	control_ci group "download and hash source code"
-	local INDEX REPO BRANCH 
+	local INDEX REPO BRANCH
 	for INDEX in "${!NGX_SRC_REPO[@]}"; do
 		REPO="${NGX_SRC_REPO[$INDEX]}"
 		BRANCH="${NGX_SRC_BRANCH[$INDEX]}"
@@ -76,9 +76,11 @@ dnf_install_step "nginx" scripts/runtime-requirements.lst
 STEP="复制Nginx到镜像中"
 hash_program_files() {
 	cat "scripts/prepare-run.sh"
+	cat common/staff/systemd-filesystem/nginx_attach/fs/usr/libexec/nginx.reload.sh
 }
 copy_program_files() {
 	run_install "$BUILT_RESULT" "$1" "nginx" "scripts/prepare-run.sh"
+	buildah copy "$1" common/staff/systemd-filesystem/nginx_attach/fs/usr/libexec/nginx.reload.sh /usr/libexec/nginx.reload.sh
 }
 buildah_cache "nginx" hash_program_files copy_program_files
 ### 编译好的nginx END
@@ -98,10 +100,9 @@ custom_reload_command bash /usr/bin/safe-reload
 custom_stop_command bash /usr/sbin/graceful-shutdown.sh
 
 STEP="配置容器"
-buildah_config "nginx" --cmd '/usr/sbin/nginx.sh' --port 80 --port 443 --port 80/udp --port 443/udp \
+buildah_config "nginx" --cmd '/usr/sbin/nginx.sh' --port 80 --port 443 --port 443/udp \
 	--volume /config --volume /etc/ACME --stop-signal=SIGQUIT \
-	"--label=${LABELID_USE_NGINX_ATTACH}=yes" "--volume=/run/nginx" "--volume=/run/sockets" \
-	--author "GongT <admin@gongt.me>" --created-by "#MAGIC!" --label name=gongt/nginx
+	"--label=${LABELID_USE_NGINX_ATTACH}=yes"
 
 buildah_finalize_image nginx gongt/nginx
 info_log "Done."

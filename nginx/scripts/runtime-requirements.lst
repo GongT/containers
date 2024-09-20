@@ -4,3 +4,4 @@ curl
 openssl
 busybox
 vim-enhanced
+fcgiwrap

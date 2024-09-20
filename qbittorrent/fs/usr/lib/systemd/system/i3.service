@@ -4,7 +4,7 @@ After=xvnc0.service
 Requires=xvnc0.service
 
 [Service]
-Type=simple
+Type=exec
 Environment=DISPLAY=:0
 ExecStart=/usr/bin/i3
 Restart=on-abort

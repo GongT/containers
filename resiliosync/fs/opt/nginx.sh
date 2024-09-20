@@ -11,7 +11,7 @@ apply_gateway() {
 	else
 		sed "s#__PROFILE__#$PROFILE#g" "/opt/${F}.conf" >"${T}"
 	fi
-	echo 'GET /' | ncat --unixsock /run/sockets/nginx.reload.sock
+	echo 'GET /' | ncat --unixsock /run/sockets/.reload/server.sock
 }
 trap 'echo "got SIGINT"' INT
 

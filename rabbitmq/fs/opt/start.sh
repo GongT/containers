@@ -29,11 +29,11 @@ echo "Startup complete!"
 echo "PID=$(<"$RABBITMQ_PID_FILE")"
 
 cp /opt/nginx-server.conf /etc/nginx/vhost.d/rabbitmq-management.conf
-bash /run/sockets/nginx.reload.sh
+bash /run/sockets/.reload/request.sh
 
 function quitfn() {
 	rm -f /etc/nginx/vhost.d/rabbitmq-management.conf
-	bash /run/sockets/nginx.reload.sh
+	bash /run/sockets/.reload/request.sh
 	rm -f /run/sockets/rabbitmq-management.sock
 	rabbitmqctl shutdown
 }

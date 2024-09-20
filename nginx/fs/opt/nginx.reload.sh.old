@@ -1,0 +1,58 @@
+#!/usr/bin/env bash
+
+set -u
+
+declare -r CONFIG_FILE=$2
+
+make_http() {
+	printf 'POST %s HTTP/1.1\r
+Host: nginx-control:12345\r
+User-Agent: curl/8.6.0\r
+Accept: */*\r
+\r
+\r
+' 
+}
+
+apply_gateway() {
+	local CFG_FNAME="/run/nginx/config/vhost.d/${PROJECT}.conf"
+	if [[ $1 -eq 0 ]]; then
+		echo "remove config file: $CFG_FNAME"
+		rm -v "${CFG_FNAME}"
+	else
+		echo "copy config file: $CONFIG_FILE (to $CFG_FNAME)"
+		mkdir -p "$(dirname "${CFG_FNAME}")"
+		cp -v "$CONFIG_FILE" "${CFG_FNAME}"
+	fi
+	if command -v curl &>/dev/null; then
+		echo "notify using curl"
+		curl --unix-socket /run/sockets/.reload/server.sock http://_/
+	elif command -v socat &>/dev/null; then
+		echo "notify using socat"
+		make_http | socat - UNIX-CONNECT:/run/sockets/.reload/server.sock
+	elif command -v ncat &>/dev/null; then
+		echo "notify using ncat"
+		make_http | ncat -U /run/sockets/.reload/server.sock
+	elif command -v nc &>/dev/null; then
+		echo "notify using nc"
+		make_http | nc -U /run/sockets/.reload/server.sock
+	else
+		echo "no supported communication tool" >&2
+		return 1
+	fi
+}
+
+if [[ ! -d /run/nginx ]]; then
+	echo "missing mounted folder: /run/nginx" >&2
+	exit 66
+fi
+
+if [[ ! -e $CONFIG_FILE ]]; then
+	echo "missing CONFIG_FILE: $CONFIG_FILE" >&2
+	exit 66
+fi
+
+apply_gateway "$1" || {
+	apply_gateway "0" || true
+	exit 1
+}

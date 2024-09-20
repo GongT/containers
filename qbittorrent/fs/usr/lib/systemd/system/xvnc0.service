@@ -1,9 +1,10 @@
 [Unit]
 Description=XVNC Daemon
-After=dhclient.service
+After=systemd-networkd.service
+Requires=systemd-networkd.service
 
 [Service]
-Type=simple
+Type=exec
 ExecStart=/usr/bin/Xvnc :0 -verbose 2 -listen tcp -geometry 1600x1024 -ac -SecurityTypes=None
 User=media_rw
 Group=users

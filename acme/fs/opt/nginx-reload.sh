@@ -6,8 +6,10 @@ if [[ "$TEMP_DISABLE_RELOAD" ]]; then
 fi
 
 echo '======================================' >&2
-echo "try reload nginx..."
-curl -v --unix-socket /run/sockets/nginx.reload.sock http://_/ >&2
-
-true
+if [[ -e /run/nginx/contribute/.master/request.fifo ]]; then
+	echo "notify nginx to reload."
+	echo "acme" >/run/nginx/contribute/.master/request.fifo
+else
+	echo "not able to notify"
+fi
 echo '======================================' >&2

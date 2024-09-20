@@ -30,19 +30,6 @@ chown media_rw:users /home/media_rw
 
 echo 'LANG="zh_CN.utf8"' >/etc/locale.conf
 
-systemctl enable dhclient dhclient6 xvnc0 i3 privoxy nginx update-self-ip update-self-ip.timer
-systemctl enable qbittorrent
-systemctl set-default graphical.target
-
-mkdir -p /etc/systemd/system/console-getty.service.d
-echo '[Service]
-Type=simple
-ExecStart=
-ExecStart=-/usr/bin/bash --login
-StandardInput=tty
-StandardOutput=tty
-' >/etc/systemd/system/console-getty.service.d/override.conf
-
 echo '[Journal]
 Storage=volatile
 RuntimeMaxUse=10M

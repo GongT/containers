@@ -1,25 +1,25 @@
-make
-cmake
-gcc-c++
-pkgconf-pkg-config
-autoconf
-automake
-libtool
-qt-devel
-crypto-devel
-boost-b2
-boost-build
-boost-system
-boost-devel
-openssl-devel
-qt5-qtbase-devel
-qt5-linguist
-qt5-qtsvg-devel
+# make
+# cmake
+# gcc-c++
+# pkgconf-pkg-config
+# autoconf
+# automake
+# libtool
+# qt-devel
+# crypto-devel
+# boost-b2
+# boost-build
+# boost-system
+# boost-devel
+# openssl-devel
+# qt5-qtbase-devel
+# qt5-linguist
+# qt5-qtsvg-devel
 golang
-python3-devel
+# python3-devel
 tar
 git
 bash
-ccache
-diffutils
-python3-setuptools
+# ccache
+# diffutils
+# python3-setuptools

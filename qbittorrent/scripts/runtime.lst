@@ -5,10 +5,8 @@ tigervnc-server
 qbittorrent
 wqy-zenhei-fonts
 bind-utils
-privoxy
 nginx
 systemd
 bash
-dhcp-client
 iproute
 curl

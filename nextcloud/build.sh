@@ -19,7 +19,7 @@ merge_local_fs "nextcloud"
 
 setup_systemd "nextcloud" \
 	enable "REQUIRE=nginx.service php-fpm.service" "WANT=nextcloud-clean.timer redis.service" \
-	nginx_attach "NGINX_CONFIG=/opt/nextcloud.conf"
+	nginx_attach "CONFIG_FILE=/opt/nextcloud.conf"
 
 buildah_config "nextcloud" \
 	--author "GongT <admin@gongt.me>" \

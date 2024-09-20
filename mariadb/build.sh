@@ -18,7 +18,7 @@ merge_local_fs "mariadb"
 
 setup_systemd "mariadb" \
 	enable "REQUIRE=mariadb.service" "WANT=logrotate.timer nginx.service php-fpm.service backup.timer" \
-	nginx_attach "NGINX_CONFIG=/opt/phpmyadmin.conf"
+	nginx_attach "CONFIG_FILE=/opt/phpmyadmin.conf"
 
 buildah_config "mariadb" \
 	--volume /var/lib/mysql --volume /var/log --port 3306 --stop-signal SIGINT \

@@ -1,0 +1,185 @@
+name: "qbittorrent"
+on:
+  workflow_dispatch:
+    inputs:
+      brandNew:
+        type: boolean
+        description: 跳过拉取上次构建结果
+        required: false
+        default: false
+      forceDnf:
+        type: boolean
+        description: 强制运行dnf
+        required: false
+        default: false
+      forceRebuild:
+        type: boolean
+        description: 强制全部重新构建，无视缓存
+        required: false
+        default: false
+  schedule:
+    - cron:  '47 4 1 * *'
+  push:
+    paths:
+      - "qbittorrent/**"
+      - "!qbittorrent/install-service.sh"
+      - ".github/workflows/generated-build-qbittorrent.yaml"
+    #  - common
+    branches:
+      - master
+env:
+
+  SOURCE_FILE: qbittorrent/build.sh
+  PROJECT_DIR: qbittorrent
+  BUILDAH_FORCE: ${{ github.event.inputs.forceRebuild }}
+  FORCE_DNF: ${{ github.event.inputs.forceDnf }}
+  AUTHOR: GongT <admin@gongt.me>
+  NODE_ENV: production
+  PROJECT_NAME: "qbittorrent"
+  GITHUB_ACTOR: ${{ github.actor }}
+  REWRITE_IMAGE_NAME: build.local/dist/qbittorrent
+jobs:
+  cancel:
+    name: Cancel Previous Runs
+    runs-on: ubuntu-24.04
+    needs: build
+    steps:
+      - name: cancel running workflows
+        timeout-minutes: 5
+        uses: GongT/cancel-previous-workflows@6dd7af8389c9434cc893fd33b58609e73db49fbe
+        env:
+          DELETE: "yes"
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  build:
+    name: "生成镜像"
+    runs-on: ubuntu-24.04
+    container:
+      image: ghcr.io/gongt/buildbase:latest
+      options: --privileged --tmpfs /run --tmpfs /tmp --pull=always
+    defaults:
+      run:
+        shell: bash
+    outputs:
+      DOMAIN_ARRAY: ${{ steps.result.outputs.DOMAIN_ARRAY }}
+    steps:
+      - name: "获取代码"
+        uses: actions/checkout@v4
+        timeout-minutes: 1
+        with:
+          submodules: "recursive"
+          clean: true
+          fetch-depth: 2
+
+      - name: "初始化登录信息和基本环境"
+        timeout-minutes: 2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SECRET_PASSWORD: ${{ secrets.SECRET_PASSWORD }}
+        run: bash _scripts_/prepare-secrets.sh ghcr.io
+
+      # - name: "缓存下载和软件包数据"
+      #   uses: pat-s/always-upload-cache@v3.0.11
+      #   with:
+      #     path: |
+      #       ${{ env.SYSTEM_COMMON_CACHE }}/Download
+      #     key: common-cache-qbittorrent-${{ hashFiles('qbittorrent') }}
+      #     restore-keys: |
+      #       common-cache-qbittorrent
+      #       common-cache-
+
+      # - name: "从ghcr.io获取上次生成的镜像"
+      #   if: github.event.inputs.brandNew == ''
+      #   timeout-minutes: 1
+      #   run: ./_scripts_/retry.sh podman pull "docker://ghcr.io/gongt/$PROJECT_NAME"
+
+
+      - env:
+          _BUILDSCRIPT_RUN_STEP_: qbittorrent-build:1
+        id: qbittorrent_build_step_1
+        name: '运行构建过程: 编译时依赖项目'
+        run: _scripts_/ci-single-build.sh
+        timeout-minutes: 5
+      - env:
+          _BUILDSCRIPT_RUN_STEP_: qbittorrent-build:2
+        id: qbittorrent_build_step_2
+        name: '运行构建过程: 编译remote-shell（下载）'
+        run: _scripts_/ci-single-build.sh
+        timeout-minutes: 5
+      - env:
+          _BUILDSCRIPT_RUN_STEP_: qbittorrent-build:3
+        id: qbittorrent_build_step_3
+        name: '运行构建过程: 编译remote-shell（编译）'
+        run: _scripts_/ci-single-build.sh
+        timeout-minutes: 5
+      - env:
+          _BUILDSCRIPT_RUN_STEP_: qbittorrent:1
+        id: qbittorrent_step_1
+        name: '运行构建过程: 运行时依赖项目'
+        run: _scripts_/ci-single-build.sh
+        timeout-minutes: 5
+      - env:
+          _BUILDSCRIPT_RUN_STEP_: qbittorrent:2
+        id: qbittorrent_step_2
+        name: '运行构建过程: 复制编译结果文件'
+        run: _scripts_/ci-single-build.sh
+        timeout-minutes: 5
+      - env:
+          _BUILDSCRIPT_RUN_STEP_: qbittorrent:3
+        id: qbittorrent_step_3
+        name: '运行构建过程: 复制配置文件'
+        run: _scripts_/ci-single-build.sh
+        timeout-minutes: 5
+      - env:
+          _BUILDSCRIPT_RUN_STEP_: qbittorrent:4
+        id: qbittorrent_step_4
+        name: '运行构建过程: 配置镜像中的systemd'
+        run: _scripts_/ci-single-build.sh
+        timeout-minutes: 5
+      - env:
+          _BUILDSCRIPT_RUN_STEP_: qbittorrent:5
+        id: qbittorrent_step_5
+        name: '运行构建过程: Finalize'
+        run: _scripts_/ci-single-build.sh
+        timeout-minutes: 5
+
+      - id: result
+        name: "输出状态"
+        env:
+          SECRET_PASSWORD: ${{ secrets.SECRET_PASSWORD }}
+        run: bash _scripts_/publish_create_index.sh
+
+  publish:
+    runs-on: ubuntu-24.04
+    needs: build
+    strategy:
+      matrix:
+        domain: ${{ fromJson(needs.build.outputs.DOMAIN_ARRAY) }}
+      fail-fast: false
+    container:
+      image: ghcr.io/gongt/buildbase:latest
+      options: --privileged --tmpfs /run --tmpfs /tmp --pull=always
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - name: "获取代码"
+        uses: actions/checkout@v4
+        timeout-minutes: 1
+        with:
+          submodules: "recursive"
+          clean: true
+          fetch-depth: 2
+
+      - name: "初始化登录信息和基本环境"
+        timeout-minutes: 2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SECRET_PASSWORD: ${{ secrets.SECRET_PASSWORD }}
+        run: bash _scripts_/prepare-secrets.sh ${{ matrix.domain }}
+
+      - name: "发布镜像"
+        timeout-minutes: 5
+        env:
+          SECRET_PASSWORD: ${{ secrets.SECRET_PASSWORD }}
+        run: bash _scripts_/publish_all_targets.sh ${{ matrix.domain }}

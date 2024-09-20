@@ -2,7 +2,7 @@
 
 export PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/xbin
 
-remove-ssl
+ensure-sslcfg
 
 TEMPF=$(mktemp)
 if nginx -t &>"$TEMPF"; then
