@@ -12,6 +12,9 @@ if [[ ! ${GITHUB_ENV-} ]]; then
 	exit 1
 fi
 
+git config --system --add safe.directory "$(pwd)"
+chown root:root . -R
+
 # sudo cp "./_scripts_/80-myregistry.conf" /etc/containers/registries.conf.d/
 
 JSON=$(gpg --quiet --batch --yes --passphrase "$SECRET_PASSWORD" --decrypt build-secrets.json.gpg)
