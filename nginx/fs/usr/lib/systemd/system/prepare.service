@@ -1,0 +1,14 @@
+[Unit]
+AssertPathIsMountPoint=/run/nginx
+AssertPathIsMountPoint=/run/sockets
+RefuseManualStop=yes
+FailureAction=exit
+FailureActionExitStatus=233
+
+[Install]
+WantedBy=multi-user.target
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+ExecStart=/usr/bin/bash /opt/nginx-prestart.sh

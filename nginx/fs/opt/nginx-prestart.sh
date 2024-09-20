@@ -130,9 +130,3 @@ fi
 	echo "===================================="
 	exit 127
 }
-
-sleep 1
-
-bash /opt/reload-server.sh &
-
-exec /usr/sbin/nginx

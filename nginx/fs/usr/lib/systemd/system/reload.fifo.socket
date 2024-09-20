@@ -1,0 +1,10 @@
+[Unit]
+After=nginx.service
+Requires=nginx.service
+
+[Install]
+WantedBy=multi-user.target
+
+[Socket]
+ListenFIFO=/run/nginx/contribute/.master/request.fifo
+Service=reload-handler.service

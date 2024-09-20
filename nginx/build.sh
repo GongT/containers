@@ -70,9 +70,10 @@ buildah_cache "nginx-build" hash_build run_build
 BUILT_RESULT=$(get_last_image_id)
 
 ### 编译好的nginx
-buildah_cache_start "registry.fedoraproject.org/fedora-minimal"
+buildah_cache_start "ghcr.io/gongt/systemd-base-image"
 dnf_use_environment
 dnf_install_step "nginx" scripts/runtime-requirements.lst
+
 STEP="复制Nginx到镜像中"
 hash_program_files() {
 	cat "scripts/prepare-run.sh"
@@ -87,6 +88,9 @@ buildah_cache "nginx" hash_program_files copy_program_files
 STEP="复制配置文件"
 merge_local_fs "nginx"
 ### 配置文件等 END
+
+setup_systemd \
+	enable "REQUIRE=nginx.service reload.http.socket reload.fifo.socket reload.timer"
 
 healthcheck /usr/sbin/healthcheck.sh
 healthcheck_interval 60s

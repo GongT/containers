@@ -1,0 +1,11 @@
+[Unit]
+After=nginx.service
+Requires=nginx.service
+
+[Install]
+WantedBy=multi-user.target
+
+[Timer]
+OnUnitInactiveSec=30min
+OnBootSec=1s
+Service=reload-handler.service

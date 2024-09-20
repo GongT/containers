@@ -49,84 +49,84 @@ function build_directory() {
 	done
 }
 
-while cat "${FIFO}" >/dev/null; do
-	log "someone notify update:"
-	if ! nginx -t &>/dev/null; then
-		err "already in failed state, ignore reloading."
-		continue
-	fi
+log "someone notify update:"
+if ! nginx -t &>/dev/null; then
+	err "already in failed state, ignore reloading."
+	return 0
+fi
 
-	declare -a CHANGE=() UNCHANGE=() DELETED=()
-	for STATE_FILE in */.control/state; do
-		STATE=$(<"${STATE_FILE}")
-		ITEM=${STATE_FILE%%/*}
+declare -a CHANGE=() UNCHANGE=() DELETED=()
+for STATE_FILE in */.control/state; do
+	STATE=$(<"${STATE_FILE}")
+	ITEM=${STATE_FILE%%/*}
 
-		if [[ ${STATE} == "active" ]]; then
-			UNCHANGE+=("${ITEM}")
-			log "  - ${ITEM}"
-		elif [[ ${STATE} == "pending" ]]; then
-			CHANGE+=("${ITEM}")
-			log "  * ${ITEM}"
-		elif [[ ${STATE} == "delete" ]]; then
-			DELETED+=("${ITEM}")
-			log "  x ${ITEM} (delete)"
-		elif [[ ${STATE} == "error"* ]]; then
-			log "  x ${ITEM}"
-		else
-			log "  ? ${ITEM} (invalid: ${STATE})"
-		fi
-	done
-
-	if [[ ${#CHANGE[@]} -eq 0 && ${#DELETED[@]} -eq 0 ]]; then
-		log "not found pending or delete."
-		continue
-	fi
-	log "found ${#CHANGE[@]} pending, ${#DELETED[@]} delete."
-
-	recreate_dir "/tmp/testing"
-	cp -r /etc/nginx/. /tmp/testing
-	unlink "${INDEX_DIR}"
-
-	__recreate() {
-		recreate_dir "${INDEX_DIR}"
-		if [[ ${#UNCHANGE[@]} -gt 0 ]]; then
-			build_directory "${INDEX_DIR}" "${UNCHANGE[@]}"
-		fi
-	}
-
-	__recreate
-	for ITEM in "${CHANGE[@]}"; do
-		log "testing ${ITEM}:"
-		build_directory "${INDEX_DIR}" "${ITEM}"
-
-		ensure-sslcfg "/tmp/testing/nginx.conf" || true
-		if nginx -t -c "/tmp/testing/nginx.conf" &>/tmp/merge.test.output.txt; then
-			log "  + success"
-			echo "active" >"${ITEM}/.control/state"
-			UNCHANGE+=("${ITEM}")
-		else
-			cat /tmp/merge.test.output.txt
-			err "  ! failed"
-			{
-				echo "error"
-				cat /tmp/merge.test.output.txt
-			} >"${ITEM}/.control/state"
-
-			__recreate
-		fi
-	done
-
-	log "test complete"
-	rm -rf "${EFFECTIVE_DIR}.new"
-	cp -r "${INDEX_DIR}" "${EFFECTIVE_DIR}.new"
-	rm -rf "${EFFECTIVE_DIR}"
-	mv "${EFFECTIVE_DIR}.new" "${EFFECTIVE_DIR}"
-
-	if nginx -t && nginx -s reload; then
-		log "reload complete"
+	if [[ ${STATE} == "active" ]]; then
+		UNCHANGE+=("${ITEM}")
+		log "  - ${ITEM}"
+	elif [[ ${STATE} == "pending" ]]; then
+		CHANGE+=("${ITEM}")
+		log "  * ${ITEM}"
+	elif [[ ${STATE} == "delete" ]]; then
+		DELETED+=("${ITEM}")
+		log "  x ${ITEM} (delete)"
+	elif [[ ${STATE} == "error"* ]]; then
+		log "  x ${ITEM}"
 	else
-		err "result can not pass test"
+		log "  ? ${ITEM} (invalid: ${STATE})"
 	fi
-
-	sleep 5
 done
+
+if [[ ${#CHANGE[@]} -eq 0 && ${#DELETED[@]} -eq 0 ]]; then
+	log "not found pending or delete."
+	return 0
+fi
+log "found ${#CHANGE[@]} pending, ${#DELETED[@]} delete."
+
+recreate_dir "/tmp/testing"
+cp -r /etc/nginx/. /tmp/testing
+unlink "${INDEX_DIR}"
+
+__recreate() {
+	recreate_dir "${INDEX_DIR}"
+	if [[ ${#UNCHANGE[@]} -gt 0 ]]; then
+		build_directory "${INDEX_DIR}" "${UNCHANGE[@]}"
+	fi
+}
+
+__recreate
+for ITEM in "${CHANGE[@]}"; do
+	log "testing ${ITEM}:"
+	build_directory "${INDEX_DIR}" "${ITEM}"
+
+	ensure-sslcfg "/tmp/testing/nginx.conf" || true
+	if nginx -t -c "/tmp/testing/nginx.conf" &>/tmp/merge.test.output.txt; then
+		log "  + success"
+		echo "active" >"${ITEM}/.control/state"
+		UNCHANGE+=("${ITEM}")
+	else
+		cat /tmp/merge.test.output.txt
+		err "  ! failed"
+		{
+			echo "error"
+			cat /tmp/merge.test.output.txt
+		} >"${ITEM}/.control/state"
+
+		__recreate
+	fi
+done
+
+log "test complete"
+rm -rf "${EFFECTIVE_DIR}.new"
+cp -r "${INDEX_DIR}" "${EFFECTIVE_DIR}.new"
+rm -rf "${EFFECTIVE_DIR}"
+mv "${EFFECTIVE_DIR}.new" "${EFFECTIVE_DIR}"
+
+for ITEM in "${DELETED[@]}"; do
+	rm -rf "${ITEM}"
+done
+
+if nginx -t && nginx -s reload; then
+	log "reload complete"
+else
+	err "result can not pass test"
+fi
