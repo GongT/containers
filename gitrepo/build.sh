@@ -11,11 +11,11 @@ buildah_cache_start "ghcr.io/gongt/systemd-base-image"
 dnf_use_environment
 dnf_install_step "gitrepo" scripts/requirements.lst
 
+merge_local_fs "gitrepo"
+
 setup_systemd "gitrepo" \
 	enable "REQUIRE=fcgiwrap.socket" \
 	nginx_attach
-
-merge_local_fs "gitrepo"
 
 buildah_finalize_image gitrepo gongt/gitrepo
 info_log "Done."
