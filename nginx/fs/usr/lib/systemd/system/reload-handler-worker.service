@@ -1,0 +1,11 @@
+[Unit]
+After=prepare.service
+Requires=prepare.service
+StartLimitIntervalSec=infinity
+CollectMode=inactive-or-failed
+
+[Service]
+Type=exec
+RemainAfterExit=no
+ExecStart=/bin/bash /opt/reload-once.sh
+PrivateTmp=yes

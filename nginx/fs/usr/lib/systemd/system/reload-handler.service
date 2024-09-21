@@ -1,13 +1,10 @@
 [Unit]
 After=prepare.service
 Requires=prepare.service
-StartLimitBurst=infinity
 
 [Service]
-Type=oneshot
-RemainAfterExit=no
-ExecStart=/usr/bin/flock --verbose --no-fork --nonblock --conflict-exit-code 0  /tmp/reload-request.lock /bin/bash /opt/reload-server.sh
-ExecStopPost=-/usr/bin/sleep 5s
+Type=exec
+ExecStart=/bin/bash /opt/reload-waiter.sh
 StandardInput=socket
 StandardOutput=socket
 StandardError=journal

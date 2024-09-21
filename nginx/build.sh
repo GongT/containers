@@ -91,7 +91,7 @@ merge_local_fs "nginx"
 ### 配置文件等 END
 
 setup_systemd nginx \
-	enable "REQUIRE=nginx.service reload.fifo.socket reload.timer"
+	enable "WANT=nginx.service reload.fifo.socket reload.timer"
 
 healthcheck /usr/sbin/healthcheck.sh
 healthcheck_interval 60s
