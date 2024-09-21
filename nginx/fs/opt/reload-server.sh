@@ -122,6 +122,7 @@ rm -rf "${EFFECTIVE_DIR}"
 mv "${EFFECTIVE_DIR}.new" "${EFFECTIVE_DIR}"
 
 for ITEM in "${DELETED[@]}"; do
+	log "remove: ${ITEM}"
 	rm -rf "${ITEM}"
 done
 
