@@ -7,5 +7,7 @@ DefaultDependencies=no
 WantedBy=multi-user.target
 
 [Socket]
+ExecStartPre=-/usr/bin/rm -f /run/nginx/contribute/.master/request.fifo
 ListenFIFO=/run/nginx/contribute/.master/request.fifo
+ExecStopPost=-/usr/bin/rm -f /run/nginx/contribute/.master/request.fifo
 Service=reload-handler.service
