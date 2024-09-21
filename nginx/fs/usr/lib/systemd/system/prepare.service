@@ -1,4 +1,7 @@
 [Unit]
+DefaultDependencies=no
+Requires=local-fs.target
+After=local-fs.target
 AssertPathIsMountPoint=/run/nginx
 AssertPathIsMountPoint=/run/sockets
 RefuseManualStop=yes

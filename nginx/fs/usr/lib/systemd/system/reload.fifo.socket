@@ -1,6 +1,7 @@
 [Unit]
 After=nginx.service
 Requires=nginx.service
+DefaultDependencies=no
 
 [Install]
 WantedBy=multi-user.target
