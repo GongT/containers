@@ -8,7 +8,7 @@ source ../common/functions-build.sh
 arg_flag FORCE_DNF dnf "force dnf install"
 arg_finish "$@"
 
-buildah_cache_start "registry.fedoraproject.org/fedora-minimal"
+buildah_cache_start "quay.io/fedora/fedora-minimal"
 
 ### TGTD
 STEP="安装 iscsi-tgtd"

@@ -18,7 +18,7 @@ BUILT_IMAGE="$BUILDAH_LAST_IMAGE"
 ### 下载&编译 END
 
 ### 复制文件
-buildah_cache_start "registry.fedoraproject.org/fedora-minimal"
+buildah_cache_start "quay.io/fedora/fedora-minimal"
 
 STEP="复制编译结果和依赖文件到目标容器"
 hash_program_files() {

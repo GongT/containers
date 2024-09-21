@@ -7,7 +7,7 @@ source ../common/functions-build.sh
 
 arg_finish "$@"
 
-buildah_cache_start "registry.fedoraproject.org/fedora-minimal"
+buildah_cache_start "quay.io/fedora/fedora-minimal"
 
 ### 依赖项目
 STEP="依赖项目"

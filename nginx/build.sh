@@ -18,7 +18,7 @@ fi
 
 ### 编译时依赖项目
 STEP="安装编译时依赖项目"
-buildah_cache_start "registry.fedoraproject.org/fedora"
+buildah_cache_start "quay.io/fedora/fedora"
 dnf_use_environment
 dnf_install_step "nginx-build" scripts/build-requirements.lst
 ### 编译时依赖项目 END

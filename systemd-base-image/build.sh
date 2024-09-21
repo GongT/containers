@@ -5,7 +5,7 @@ set -Eeuo pipefail
 cd "$(dirname "$(realpath "${BASH_SOURCE[0]}")")"
 source ../common/functions-build.sh
 
-buildah_cache_start "registry.fedoraproject.org/fedora-minimal"
+buildah_cache_start "quay.io/fedora/fedora-minimal"
 dnf_use_environment
 dnf_install_step "systemd" scripts/dependencies.lst
 

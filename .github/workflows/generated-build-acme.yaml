@@ -31,6 +31,7 @@ env:
 
   SOURCE_FILE: acme/build.sh
   PROJECT_DIR: acme
+  KNOWN_BASE_IMAGES: quay.io/fedora/fedora-minimal:40
   BUILDAH_FORCE: ${{ github.event.inputs.forceRebuild }}
   FORCE_DNF: ${{ github.event.inputs.forceDnf }}
   AUTHOR: GongT <admin@gongt.me>
@@ -88,10 +89,14 @@ jobs:
       #       common-cache-acme
       #       common-cache-
 
-      # - name: "从ghcr.io获取上次生成的镜像"
-      #   if: github.event.inputs.brandNew == ''
-      #   timeout-minutes: 1
-      #   run: ./_scripts_/retry.sh podman pull "docker://ghcr.io/gongt/$PROJECT_NAME"
+      - name: "预取基础镜像"
+        if: github.event.inputs.brandNew == ''
+        timeout-minutes: 1
+        run: |
+          if [[ -n ${KNOWN_BASE_IMAGES} ]] ; then
+            bash ./_scripts_/retry.sh podman pull $KNOWN_BASE_IMAGES || exit 1
+          fi
+          exit 0
 
 
       - env:

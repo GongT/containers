@@ -18,7 +18,7 @@ on:
         required: false
         default: false
   schedule:
-    - cron:  '47 4 1 * *'
+    - cron:  '47 4 2 * *'
   push:
     paths:
       - "gamedisk/**"
@@ -31,6 +31,7 @@ env:
 
   SOURCE_FILE: gamedisk/build.sh
   PROJECT_DIR: gamedisk
+  KNOWN_BASE_IMAGES: quay.io/fedora/fedora-minimal:40
   BUILDAH_FORCE: ${{ github.event.inputs.forceRebuild }}
   FORCE_DNF: ${{ github.event.inputs.forceDnf }}
   AUTHOR: GongT <admin@gongt.me>
@@ -88,10 +89,14 @@ jobs:
       #       common-cache-gamedisk
       #       common-cache-
 
-      # - name: "从ghcr.io获取上次生成的镜像"
-      #   if: github.event.inputs.brandNew == ''
-      #   timeout-minutes: 1
-      #   run: ./_scripts_/retry.sh podman pull "docker://ghcr.io/gongt/$PROJECT_NAME"
+      - name: "预取基础镜像"
+        if: github.event.inputs.brandNew == ''
+        timeout-minutes: 1
+        run: |
+          if [[ -n ${KNOWN_BASE_IMAGES} ]] ; then
+            bash ./_scripts_/retry.sh podman pull $KNOWN_BASE_IMAGES || exit 1
+          fi
+          exit 0
 
 
       - env:
@@ -103,13 +108,13 @@ jobs:
       - env:
           _BUILDSCRIPT_RUN_STEP_: fedora-tgtd:2
         id: fedora_tgtd_step_2
-        name: '运行构建过程: 配置镜像中的systemd'
+        name: '运行构建过程: 复制文件'
         run: _scripts_/ci-single-build.sh
         timeout-minutes: 5
       - env:
           _BUILDSCRIPT_RUN_STEP_: fedora-tgtd:3
         id: fedora_tgtd_step_3
-        name: '运行构建过程: 复制文件'
+        name: '运行构建过程: 配置镜像中的systemd'
         run: _scripts_/ci-single-build.sh
         timeout-minutes: 5
       - env:

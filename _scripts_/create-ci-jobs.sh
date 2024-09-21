@@ -21,7 +21,7 @@ for i in "${BUILD_FILES[@]}"; do
 	fi
 	export PROJECT_NAME=$(basename "$(dirname "$i")")
 
-	if [[ ${1-} != '' && $1 != "${PROJECT_NAME}" ]]; then
+	if [[ $# -gt 0 && " $* " != *" ${PROJECT_NAME} "* ]]; then
 		continue
 	fi
 

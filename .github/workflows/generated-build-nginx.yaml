@@ -31,7 +31,7 @@ env:
 
   SOURCE_FILE: nginx/build.sh
   PROJECT_DIR: nginx
-  KNOWN_BASE_IMAGES: registry.fedoraproject.org/fedora:40 ghcr.io/gongt/systemd-base-image:latest
+  KNOWN_BASE_IMAGES: quay.io/fedora/fedora:40 ghcr.io/gongt/systemd-base-image:latest
   BUILDAH_FORCE: ${{ github.event.inputs.forceRebuild }}
   FORCE_DNF: ${{ github.event.inputs.forceDnf }}
   AUTHOR: GongT <admin@gongt.me>

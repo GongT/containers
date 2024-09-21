@@ -16,7 +16,7 @@ info "starting..."
 
 ### 编译时依赖项目
 STEP="编译时依赖项目"
-buildah_cache_start "registry.fedoraproject.org/fedora"
+buildah_cache_start "quay.io/fedora/fedora"
 dnf_use_environment
 dnf_install_step "qbittorrent-build" scripts/compile.lst
 ### 编译时依赖项目 END
@@ -40,7 +40,7 @@ COMPILE_RESULT_IMAGE=$(get_last_image_id)
 
 ### 运行时依赖项目
 STEP="运行时依赖项目"
-buildah_cache_start "registry.fedoraproject.org/fedora-minimal"
+buildah_cache_start "quay.io/fedora/fedora-minimal"
 dnf_use_environment
 dnf_install_step "qbittorrent" scripts/runtime.lst scripts/post-install-cleanup.sh
 ### 运行时依赖项目 END

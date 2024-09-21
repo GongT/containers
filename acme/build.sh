@@ -7,7 +7,7 @@ source ../common/functions-build.sh
 
 ### 依赖项目
 STEP="安装系统依赖"
-buildah_cache_start "registry.fedoraproject.org/fedora-minimal"
+buildah_cache_start "quay.io/fedora/fedora-minimal"
 dnf_use_environment
 dnf_install_step "acme" scripts/deps.lst
 ### 依赖项目 END
