@@ -28,6 +28,7 @@ fi
 
 create_pod_service_unit nginx
 unit_podman_image registry.gongt.me/gongt/nginx
+unit_podman_cmdline --systemd
 unit_unit Description nginx - high performance web server
 unit_unit After gateway-network.pod.service
 
@@ -39,8 +40,6 @@ environment_variable \
 	"PASSWORD=$PASSWORD" \
 	"CENSORSHIP=$CENSORSHIP" \
 	"DISABLE_SSL=$DISABLE_SSL"
-
-unit_start_notify socket
 
 unit_fs_bind /data/DevelopmentRoot /data/DevelopmentRoot
 unit_fs_bind data/nginx /data

@@ -133,12 +133,18 @@ jobs:
       - env:
           _BUILDSCRIPT_RUN_STEP_: nginx:4
         id: nginx_step_4
-        name: '运行构建过程: 配置容器'
+        name: '运行构建过程: 配置镜像中的systemd'
         run: _scripts_/ci-single-build.sh
         timeout-minutes: 5
       - env:
           _BUILDSCRIPT_RUN_STEP_: nginx:5
         id: nginx_step_5
+        name: '运行构建过程: 配置容器'
+        run: _scripts_/ci-single-build.sh
+        timeout-minutes: 5
+      - env:
+          _BUILDSCRIPT_RUN_STEP_: nginx:6
+        id: nginx_step_6
         name: '运行构建过程: Finalize'
         run: _scripts_/ci-single-build.sh
         timeout-minutes: 5

@@ -89,8 +89,8 @@ STEP="复制配置文件"
 merge_local_fs "nginx"
 ### 配置文件等 END
 
-setup_systemd \
-	enable "REQUIRE=nginx.service reload.http.socket reload.fifo.socket reload.timer"
+setup_systemd nginx \
+	enable "REQUIRE=nginx.service reload.fifo.socket reload.timer"
 
 healthcheck /usr/sbin/healthcheck.sh
 healthcheck_interval 60s
@@ -102,7 +102,7 @@ custom_reload_command bash /usr/bin/safe-reload
 custom_stop_command bash /usr/sbin/graceful-shutdown.sh
 
 STEP="配置容器"
-buildah_config "nginx" --cmd '/usr/sbin/nginx.sh' --port 80 --port 443 --port 443/udp \
+buildah_config "nginx" --port 80 --port 443 --port 443/udp \
 	--volume /config --volume /etc/ACME --stop-signal=SIGQUIT \
 	"--label=${LABELID_USE_NGINX_ATTACH}=yes"
 
