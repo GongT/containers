@@ -1,0 +1,13 @@
+[Unit]
+Description=Sync repo %I to github
+StartLimitBurst=infinity
+CollectMode=inactive-or-failed
+
+[Service]
+Type=oneshot
+RemainAfterExit=no
+ExecStart=/usr/bin/bash /opt/sync-single.sh "/repos/%I"
+WorkingDirectory=/repos/%I
+Restart=on-failure
+RestartSec=5s
+RestartPreventExitStatus=233 200

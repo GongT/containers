@@ -19,4 +19,7 @@ unit_fs_bind data/gitrepos /repos
 shared_sockets_provide gitrepo
 unit_body RestartSec 30s
 
+environment_variable \
+	"PROXY=${PROXY-}"
+
 unit_finish

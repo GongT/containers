@@ -1,0 +1,10 @@
+#!/usr/bin/bash
+
+echo "+ $*" >&2
+while ! "$@"; do
+	RET=$?
+	echo "[${RET}] will retry after 2s" >&2
+	sleep 2
+done
+
+exit 0

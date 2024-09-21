@@ -1,0 +1,80 @@
+#!/usr/bin/bash
+set -Eeuo pipefail
+shopt -s inherit_errexit extglob nullglob globstar lastpipe shift_verbose
+
+usage() {
+	echo "$*" >&2
+	echo '' >&2
+	echo 'Usage:
+	clone <https://github.com/xxx>
+' >&2
+	exit 1
+}
+die() {
+	printf '\e[38;5;9m%s\e[0m\n' "$*" >&2
+	exit 1
+}
+
+if [[ $# -gt 0 ]]; then
+	REMOTE_REPO=$1
+	if [[ ${REMOTE_REPO} != *.git ]]; then
+		REMOTE_REPO+=".git"
+	fi
+
+	readonly REMOTE_REPO
+fi
+if [[ $# -eq 3 ]]; then
+	declare -r USERNAME=$2 PASSWORD=$3
+elif [[ $# -ne 1 ]]; then
+	usage "invalid option count"
+fi
+
+LOCAL_PATH=${REMOTE_REPO#http*://}
+LOCAL_PATH=${LOCAL_PATH,,}
+LOCAL_PATH="/repos/${LOCAL_PATH}"
+readonly LOCAL_PATH
+
+printf "clone \e[38;5;14m%s\e[0m into directory: \e[38;5;14m%s\e[0m\n" "${REMOTE_REPO}" "${LOCAL_PATH}"
+
+echo "  - with proxy: ${PROXY:=}"
+export HTTP_PROXY="$PROXY" HTTPS_PROXY="$PROXY" ALL_PROXY="$PROXY"
+export http_proxy="$PROXY" https_proxy="$PROXY" all_proxy="$PROXY"
+# export GIT_ASKPASS="askpass"
+
+if [[ ! -e ${LOCAL_PATH} ]]; then
+	echo "  - clone new repo"
+	TMPF=$(mktemp /tmp/XXXXXX.txt)
+	git config --global credential.helper "store --file ${TMPF}"
+
+	always_retry git clone --bare --mirror "${REMOTE_REPO}" "${LOCAL_PATH}"
+else
+	echo "  - setup existing repo"
+fi
+
+cd "${LOCAL_PATH}"
+for CFILE in "${LOCAL_PATH}/credential" "${LOCAL_PATH}/../credential" "${LOCAL_PATH}/../../credential"; do
+	if [[ -e ${CFILE} ]]; then
+		CFILE=$(realpath "${CFILE}")
+		printf "  - using credential file at \e[38;5;10m%s\e[0m\n" "${CFILE}"
+	else
+		CFILE=''
+	fi
+done
+
+if [[ -z ${CFILE} ]]; then
+	printf "  - create new credential file at \e[38;5;11m%s\e[0m\n" "${CFILE}"
+	CFILE="${LOCAL_PATH}/credential"
+fi
+
+printf -v OPT 'store --file=%q' "${CFILE}"
+git config credential.helper "${OPT}"
+
+cp -r /opt/hooks ./
+
+if git push; then
+	echo "complete!"
+	exit
+else
+	echo "can not setup credential, try again!"
+	exit 1
+fi

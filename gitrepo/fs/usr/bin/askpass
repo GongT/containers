@@ -1,0 +1,11 @@
+#!/usr/bin/bash
+set -Eeuo pipefail
+shopt -s inherit_errexit extglob nullglob globstar lastpipe shift_verbose
+
+log() {
+	echo "[askpass] $*" >&2
+}
+
+REQUEST=$1
+
+read -e -i "${REQUEST}" -r INPUT
