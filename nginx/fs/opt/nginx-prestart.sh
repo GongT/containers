@@ -118,11 +118,6 @@ for i in conf.d vhost.d stream.d rtmp.d; do
 		mkdir -p "/config/$i"
 	fi
 done
-declare -xr EFFECTIVE_DIR="/run/nginx/config"
-mkdir -p "${EFFECTIVE_DIR}"
-if [[ ! -L /etc/nginx/effective ]]; then
-	ln -s "${EFFECTIVE_DIR}" /etc/nginx/effective
-fi
 
 /usr/sbin/nginx -t || {
 	echo "===================================="

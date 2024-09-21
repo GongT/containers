@@ -2,9 +2,10 @@
 set -uo pipefail
 shopt -s extglob nullglob globstar shift_verbose
 
-if [[ -z ${EFFECTIVE_DIR-} ]]; then
-	echo "missing EFFECTIVE_DIR" >&2
-	exit 1
+declare -xr EFFECTIVE_DIR="/run/nginx/config"
+mkdir -p "${EFFECTIVE_DIR}"
+if [[ ! -L /etc/nginx/effective ]]; then
+	ln -s "${EFFECTIVE_DIR}" /etc/nginx/effective
 fi
 
 declare -r CROOT_DIR="/run/nginx/contribute"
@@ -52,7 +53,7 @@ function build_directory() {
 log "someone notify update:"
 if ! nginx -t &>/dev/null; then
 	err "already in failed state, ignore reloading."
-	return 0
+	exit 0
 fi
 
 declare -a CHANGE=() UNCHANGE=() DELETED=()
@@ -78,7 +79,7 @@ done
 
 if [[ ${#CHANGE[@]} -eq 0 && ${#DELETED[@]} -eq 0 ]]; then
 	log "not found pending or delete."
-	return 0
+	exit 0
 fi
 log "found ${#CHANGE[@]} pending, ${#DELETED[@]} delete."
 

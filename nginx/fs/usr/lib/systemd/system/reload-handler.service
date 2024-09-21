@@ -2,13 +2,10 @@
 After=prepare.service
 Requires=prepare.service
 
-[Install]
-WantedBy=multi-user.target
-
 [Service]
 Type=oneshot
 RemainAfterExit=no
-ExecStart=/usr/bin/flock --verbose --no-fork /tmp/reload-request.lock --nonblock --conflict-exit-code 0 /bin/bash /opt/reload-server.sh
+ExecStart=/usr/bin/flock --verbose --no-fork --nonblock --conflict-exit-code 0  /tmp/reload-request.lock /bin/bash /opt/reload-server.sh
 StandardInput=socket
 StandardOutput=socket
 StandardError=journal

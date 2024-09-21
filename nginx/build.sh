@@ -76,6 +76,7 @@ dnf_install_step "nginx" scripts/runtime-requirements.lst
 
 STEP="复制Nginx到镜像中"
 hash_program_files() {
+	echo "source-image: ${BUILT_RESULT}"
 	cat "scripts/prepare-run.sh"
 }
 copy_program_files() {
@@ -103,7 +104,7 @@ custom_stop_command bash /usr/sbin/graceful-shutdown.sh
 
 STEP="配置容器"
 buildah_config "nginx" --port 80 --port 443 --port 443/udp \
-	--volume /config --volume /etc/ACME --stop-signal=SIGQUIT \
+	--volume /config --volume /etc/ACME \
 	"--label=${LABELID_USE_NGINX_ATTACH}=yes"
 
 buildah_finalize_image nginx gongt/nginx
