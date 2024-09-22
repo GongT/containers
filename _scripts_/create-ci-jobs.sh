@@ -1,46 +1,55 @@
 #!/usr/bin/env bash
 
-set -Eeuo pipefail
+printf '\ec'
 
 export PROJECT_NAME=''
 
 cd "$(dirname "$(realpath "${BASH_SOURCE[0]}")")"
 cd ..
 source common/package/include.sh
-printf '\ec'
 
 declare -xi cron_day=1
 declare -r TEMPLATE="_scripts_/template.yaml"
 declare -r TMPOUT="/tmp/thisfile.txt"
+declare -a PROJS=()
 
-mapfile -d '' -t BUILD_FILES < <(find . -maxdepth 2 -name build.sh -print0 | sort --zero-terminated --dictionary-order)
+if [[ $# -eq 0 ]]; then
+	NARGS=()
+	find .github/workflows -maxdepth 1 -type f -name '*.yaml' -print0 | sort --zero-terminated | while read -d '' -r FILE; do
+		NAME=$(basename "${FILE}" .yaml)
+		NAME=${NAME#generated-build-}
+		NARGS+=("${NAME}")
+	done
+	set -- "${NARGS[@]}"
+fi
 
-for i in "${BUILD_FILES[@]}"; do
-	if [[ -e $(realpath -m "$i/../disabled") ]]; then
-		continue
-	fi
-	export PROJECT_NAME=$(basename "$(dirname "$i")")
-
-	if [[ $# -gt 0 && " $* " != *" ${PROJECT_NAME} "* ]]; then
-		continue
-	fi
-
+echo "generate $# projects."
+for PROJECT_NAME; do
 	export thisfile=".github/workflows/generated-build-$PROJECT_NAME.yaml"
+
+	if [[ ! -e "${PROJECT_NAME}/build.sh" ]]; then
+		printf " ❌ %s: missing.\n" "${PROJECT_NAME}" >&2
+		rm -f "${thisfile}"
+		continue
+	fi
+	if [[ -e "${PROJECT_NAME}/disabled" ]]; then
+		printf " ⛔ %s: disabled.\n" "${PROJECT_NAME}" >&2
+		rm -f "${thisfile}"
+		continue
+	fi
+
+	CMDS=(bash "common/split-into-steps.sh" "${PROJECT_NAME}/build.sh" "$TEMPLATE" "$thisfile")
 
 	save_cursor_position
 	printf "\e[?1049h\e[1;1H 🔶 %s\n" "${PROJECT_NAME}" >&2
-	trap 'printf "\e[?1049l\n\e[J"; restore_cursor_position' EXIT
-	CMDS=(bash "common/split-into-steps.sh" "$i" "$TEMPLATE" "$thisfile")
 	if "${CMDS[@]}" &> >(tee "${TMPOUT}" >&2); then
 		printf '\e[?1049l\e[J' >&2
 		restore_cursor_position
-		trap - EXIT
 		printf " ✅ %s: ok.\n" "${PROJECT_NAME}" >&2
 		printf "     \e[2m%s\n\n" "${CMDS[*]}"
 	else
 		printf '\e[?1049l\e[J' >&2
 		restore_cursor_position
-		trap - EXIT
 
 		MESG=""
 		printf -v MESG "\e[38;5;9m ❌ %s failed! \e[2m(%s)\e[0m" "${PROJECT_NAME}" "${CMDS[*]}"

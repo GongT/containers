@@ -17,8 +17,8 @@ on:
         description: 强制全部重新构建，无视缓存
         required: false
         default: false
-  schedule:
-    - cron:  '47 4 4 * *'
+  # schedule:
+  #   - cron:  '47 4 4 * *'
   push:
     paths:
       - "gitrepo/**"
