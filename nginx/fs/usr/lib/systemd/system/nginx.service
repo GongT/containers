@@ -1,6 +1,4 @@
 [Unit]
-After=prepare.service
-Requires=prepare.service
 FailureAction=exit
 
 [Install]

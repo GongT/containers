@@ -91,7 +91,7 @@ merge_local_fs "nginx"
 ### 配置文件等 END
 
 setup_systemd nginx \
-	enable "WANT=nginx.service reload-cgi.service force-reload-once.timer"
+	enable "WANT=reload-cgi.service force-reload-once.timer" "REQUIRE=nginx.service"
 
 healthcheck /usr/sbin/healthcheck.sh
 healthcheck_interval 60s

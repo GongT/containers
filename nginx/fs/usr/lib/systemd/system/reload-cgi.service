@@ -1,6 +1,8 @@
 [Unit]
-After=prepare.service
-Requires=prepare.service
+Before=nginx.service
+
+[Install]
+WantedBy=multi-user.target
 
 [Service]
 Type=exec
