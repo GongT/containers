@@ -1,5 +1,7 @@
 #!/usr/bin/bash
 
-source /etc/environment
+if [[ -z ${CONFIG_FILE_LOCK-} ]]; then
+	source /etc/environment
+fi
 # touch "${CONFIG_FILE_LOCK}"
 flock --shared "${CONFIG_FILE_LOCK}" "$@"
