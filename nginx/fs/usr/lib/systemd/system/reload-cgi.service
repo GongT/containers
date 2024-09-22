@@ -8,7 +8,6 @@ WantedBy=multi-user.target
 Type=exec
 ExecStartPre=/usr/bin/rm -f /run/reload-cgi.sock
 ExecStart=/usr/sbin/fcgiwrap -s unix:/run/reload-cgi.sock
-PrivateTmp=yes
 StandardInput=null
 StandardOutput=journal+console
 StandardError=journal+console

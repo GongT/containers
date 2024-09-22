@@ -9,6 +9,10 @@ erun() {
 	"$@"
 }
 
+lock-config &
+WPID=$!
+
+link-effective main
 config-file-macro /etc/nginx
 
 ## todo: dynamic parsed
@@ -21,4 +25,8 @@ rm -f "${SHARED_SOCKET_PATH}/http.sock" "${SHARED_SOCKET_PATH}/http.sock" "${SHA
 	exit 127
 }
 
+kill "${WPID}"
+wait "${WPID}"
+
+echo "start /usr/sbin/nginx"
 exec /usr/sbin/nginx

@@ -1,0 +1,8 @@
+#!/usr/bin/bash
+
+if [[ -z ${CONFIG_FILE_LOCK-} ]]; then
+	source /etc/environment
+fi
+# touch "${CONFIG_FILE_LOCK}"
+echo "write lock ${CONFIG_FILE_LOCK}"
+flock "${CONFIG_FILE_LOCK}" sleep infinity

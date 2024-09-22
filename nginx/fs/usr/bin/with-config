@@ -4,4 +4,6 @@ if [[ -z ${CONFIG_FILE_LOCK-} ]]; then
 	source /etc/environment
 fi
 # touch "${CONFIG_FILE_LOCK}"
+# echo "aquire ${CONFIG_FILE_LOCK}"
 flock --shared "${CONFIG_FILE_LOCK}" "$@"
+# echo "release ${CONFIG_FILE_LOCK}"

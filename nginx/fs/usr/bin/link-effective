@@ -1,0 +1,20 @@
+#!/usr/bin/bash
+
+if [[ $1 == 'main' ]]; then
+	declare -r TARGET="${CONFIG_ROOT}"
+elif [[ $1 == 'test' ]]; then
+	declare -r TARGET="${TESTING_DIR}"
+else
+	echo "Usage: link-effective <main|test>"
+fi
+
+LINK_FILE=/etc/nginx/effective
+
+if [[ -L ${LINK_FILE} ]]; then
+	if [[ "$(readlink "${LINK_FILE}")" == "${TARGET}" ]]; then
+		exit 0
+	fi
+fi
+
+rm -f "${LINK_FILE}"
+ln -s "${TARGET}" "${LINK_FILE}"

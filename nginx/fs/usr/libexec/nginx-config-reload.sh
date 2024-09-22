@@ -2,6 +2,9 @@
 
 export PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/xbin
 
+link-effective main
+config-file-macro /etc/nginx
+
 if DATA=$(nginx -t 2>&1); then
 	echo "========================="
 	echo "== config test success =="
