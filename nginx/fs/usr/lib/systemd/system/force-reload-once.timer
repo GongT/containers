@@ -6,5 +6,4 @@ After=nginx.service
 WantedBy=timers.target
 
 [Timer]
-OnUnitInactiveSec=5min
-OnActiveSec=5min
+OnUnitInactiveSec=30min

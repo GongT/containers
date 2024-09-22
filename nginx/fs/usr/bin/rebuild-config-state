@@ -1,4 +1,3 @@
 #!/usr/bin/bash
 
-echo "need impl"
-exit 1
+lock-config nginx/fs/usr/libexec/rebuild-config-folder.sh

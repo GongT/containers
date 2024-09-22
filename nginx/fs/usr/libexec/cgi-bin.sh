@@ -2,8 +2,8 @@
 set -Euo pipefail
 shopt -s extglob nullglob globstar shift_verbose
 
-# CONFIG_ROOT = /run/nginx
-# STORE_ROOT = /run/contributed
+# CONFIG_ROOT = /run/nginx/config
+# STORE_ROOT = /run/nginx/contributed
 # TESTING_DIR = /tmp/testing
 
 function log() {
@@ -23,6 +23,7 @@ Connection: close\r
 X-Doge: wow, such doge!\r
 \r
 %s" "${CODE}" "${#BODY}" "${BODY}"
+	exit
 }
 
 declare -r HTTP200='200 OK'
@@ -44,11 +45,6 @@ function collect() {
 	return ${RETURN}
 }
 
-function recreate_dir() {
-	local DIR=$1
-	rm -rf "${DIR}"
-	mkdir -p "${DIR}"
-}
 function empty_dir() {
 	local DIR=$1
 	if [[ ! -d ${DIR} ]]; then
@@ -57,13 +53,7 @@ function empty_dir() {
 	fi
 	find "${DIR}" -mindepth 1 -maxdepth 1 -exec rm -rf '{}' \;
 }
-# local WHICH_CONFIG=$1 CFG
-# if [[ $WHICH_CONFIG == 'main' ]]; then
-# 	CFG=/etc/nginx/nginx.conf
-# else
-# 	CFG="${TESTING_DIR}/nginx.conf"
-# fi
-function test_config() {
+function apply_new_config() {
 	local -r NAME=$1 TARF=$2
 
 	if ! collect tar -tf "${TARF}"; then
@@ -101,18 +91,42 @@ log "http request: $ACTION + $WHAT"
 
 case $ACTION in
 test)
-	if test-config /etc/nginx/nginx.conf; then
+	if collect /usr/libexec/nginx-config-test.sh /etc/nginx/nginx.conf; then
 		response "${HTTP200}" "${OUTPUT}"
 	else
 		response "${HTTP503}" "${OUTPUT}"
 	fi
 	;;
-reload) ;;
-status) ;;
+reload)
+	if collect /usr/libexec/nginx-config-reload.sh /etc/nginx/nginx.conf; then
+		response "${HTTP200}" "${OUTPUT}"
+	else
+		response "${HTTP503}" "${OUTPUT}"
+	fi
+	;;
+delete)
+	if [[ -z ${WHAT} ]]; then
+		response "${HTTP400}" "missing operate"
+	fi
+	if [[ -e "${STORE_ROOT}/${WHAT}.tar" ]]; then
+		log "remove file ${WHAT}.tar"
+		rm -f "${STORE_ROOT}/${WHAT}.tar"
+		if ! collect /usr/libexec/rebuild-config-folder.sh; then
+			log "failed rebuild config!!!"
+		fi
+	else
+		log "nothing to remove"
+		OUTPUT="not exists"
+	fi
+	response "${HTTP200}" "${OUTPUT}"
+	;;
 config)
+	if [[ -z ${WHAT} ]]; then
+		response "${HTTP400}" "missing operate"
+	fi
 	TMPF=$(mktemp --tmpdir "config-${WHAT}-XXXXX.tar")
 	cat >"${TMPF}"
-	if test_config "${WHAT}" "${TMPF}"; then
+	if apply_new_config "${WHAT}" "${TMPF}"; then
 		log "signal nginx to reload"
 		O=$(nginx -s reload 2>&1)
 		response "${HTTP200}" "${O}"

@@ -45,6 +45,7 @@ unit_fs_bind /data/DevelopmentRoot /data/DevelopmentRoot
 unit_fs_bind data/nginx /data
 unit_fs_bind config/nginx /config
 unit_fs_bind logs/nginx /var/log/nginx
+unit_volume nginx-config-runtime /run/nginx
 unit_fs_tempfs 64M /run
 unit_fs_tempfs 2G /tmp
 if ! [[ $DISABLE_SSL ]]; then

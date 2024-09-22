@@ -5,4 +5,4 @@ Description=force rebuild nginx config files
 Type=oneshot
 RemainAfterExit=no
 Restart=no
-ExecStart=/usr/bin/curl --unix-socket /run/nginx/reload.sock http://nginx.reload/reload
+ExecStart=/usr/bin/bash /usr/libexec/rebuild-config-folder.sh
