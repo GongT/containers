@@ -1,12 +1,16 @@
 [Unit]
 After=prepare.service
 Requires=prepare.service
+FailureAction=exit
 
 [Install]
 WantedBy=multi-user.target
 
 [Service]
 Type=exec
-ExecStart=/usr/sbin/nginx
-ExecReload=/usr/sbin/nginx -s reload
-ExecStop=/usr/sbin/nginx -s stop
+ExecStart=/usr/bin/bash /usr/libexec/nginx-loader.sh
+ExecReload=/usr/bin/safe-reload
+ExecStop=/usr/sbin/graceful-shutdown.sh
+StandardInput=null
+StandardOutput=journal+console
+StandardError=journal+console

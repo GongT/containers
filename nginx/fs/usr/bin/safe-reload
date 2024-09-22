@@ -1,21 +1,5 @@
 #!/usr/bin/bash
 
-export PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/xbin
-
-ensure-sslcfg
-
-TEMPF=$(mktemp)
-if nginx -t &>"$TEMPF"; then
-	echo "========================="
-	echo "== config test success =="
-	echo "========================="
-	nginx -s reload
-else
-	echo "========================"
-	echo "== config test FAILED =="
-	cat "$TEMPF"
-	echo "========================"
-fi
-rm -f "$TEMPF"
+with-config /usr/bin/bash /usr/libexec/nginx-config-reload.sh
 
 true

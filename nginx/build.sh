@@ -91,7 +91,7 @@ merge_local_fs "nginx"
 ### 配置文件等 END
 
 setup_systemd nginx \
-	enable "WANT=nginx.service reload.fifo.socket reload.timer"
+	enable "WANT=nginx.service reload-cgi.service force-reload-once.timer"
 
 healthcheck /usr/sbin/healthcheck.sh
 healthcheck_interval 60s
@@ -99,12 +99,9 @@ healthcheck_retry 2
 healthcheck_startup 30s
 healthcheck_timeout 5s
 
-custom_reload_command bash /usr/bin/safe-reload
-custom_stop_command bash /usr/sbin/graceful-shutdown.sh
-
 STEP="配置容器"
 buildah_config "nginx" --port 80 --port 443 --port 443/udp \
-	--volume /config --volume /etc/ACME \
+	--volume /config --volume /run/contributed --volume /etc/ACME \
 	"--label=${LABELID_USE_NGINX_ATTACH}=yes"
 
 buildah_finalize_image nginx gongt/nginx

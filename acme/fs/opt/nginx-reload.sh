@@ -5,11 +5,9 @@ if [[ "$TEMP_DISABLE_RELOAD" ]]; then
 	exit 0
 fi
 
-echo '======================================' >&2
-if [[ -e /run/nginx/contribute/.master/request.fifo ]]; then
-	echo "notify nginx to reload."
-	echo "acme" >/run/nginx/contribute/.master/request.fifo
+if [[ -e /run/sockets/.nginx.reload.sh ]]; then
+	source /run/sockets/.nginx.reload.sh
 else
-	echo "not able to notify"
+	echo "nginx not started."
+	exit 0
 fi
-echo '======================================' >&2

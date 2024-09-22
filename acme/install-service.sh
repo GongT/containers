@@ -65,4 +65,6 @@ unit_fs_bind share/ssl /etc/ACME
 unit_fs_bind data/acme /opt/data
 unit_fs_bind logs/acme /log
 
+shared_sockets_use
+
 unit_finish

@@ -1,0 +1,5 @@
+#!/bin/bash
+
+CFG=${1-/etc/nginx/nginx.conf}
+
+with-config /usr/sbin/nginx -t -c "$CFG"

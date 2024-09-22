@@ -2,17 +2,6 @@
 set -uo pipefail
 shopt -s extglob nullglob globstar shift_verbose
 
-declare -xr EFFECTIVE_DIR="/run/nginx/config"
-mkdir -p "${EFFECTIVE_DIR}"
-if [[ ! -L /etc/nginx/effective ]]; then
-	ln -s "${EFFECTIVE_DIR}" /etc/nginx/effective
-fi
-
-declare -r CROOT_DIR="/run/nginx/contribute"
-declare -r MASTER_CONTROL_DIR="${CROOT_DIR}/.master"
-declare -r FIFO="${MASTER_CONTROL_DIR}/request.fifo"
-declare -r INDEX_DIR="/tmp/testing/effective"
-
 mkdir -p "${MASTER_CONTROL_DIR}"
 cd "${CROOT_DIR}"
 

@@ -1,0 +1,8 @@
+[Unit]
+Description=force rebuild nginx config files
+
+[Service]
+Type=oneshot
+RemainAfterExit=no
+Restart=no
+ExecStart=/usr/bin/curl --unix-socket /run/nginx/reload.sock http://nginx.reload/reload

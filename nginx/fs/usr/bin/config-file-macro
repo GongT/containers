@@ -1,0 +1,24 @@
+#!/usr/bin/bash
+
+declare -r FOLDER=$1
+
+echo "replace variables in ${FOLDER}"
+
+REPLACE=''
+if [[ $CENSORSHIP ]]; then
+	REPLACE='s#$out_port_https#:59443#g'
+else
+	REPLACE='s#$out_port_https##g'
+fi
+REPLACE+="; s#\$SHARED_SOCKET_PATH#${SHARED_SOCKET_PATH}#g"
+
+find -L "${FOLDER}" -name '*.conf' -print0 | while read -r -d '' FILE; do
+	sed -i "${REPLACE}" "${FILE}"
+
+	if grep -qF SED_THEM_WITH_IPV6 "${FILE}"; then
+		# generating lines, -i not work
+		DATA=$(sed -E '/SED_THEM_WITH_IPV6/d; /^\s*listen ([[:digit:]]+) /{p; s/listen /listen [::]:/}' "${FILE}")
+		echo "$DATA" >"${FILE}"
+	fi
+done
+echo "replace finished."

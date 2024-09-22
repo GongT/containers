@@ -1,0 +1,10 @@
+[Unit]
+Description=force rebuild nginx config files
+After=nginx.service
+
+[Install]
+WantedBy=timers.target
+
+[Timer]
+OnUnitInactiveSec=5min
+OnActiveSec=5min
