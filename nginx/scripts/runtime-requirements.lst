@@ -2,6 +2,6 @@ sed
 grep
 curl
 openssl
-busybox
+busybox-shared
 vim-enhanced
 fcgiwrap

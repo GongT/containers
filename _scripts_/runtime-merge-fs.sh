@@ -11,7 +11,13 @@ if [[ -z ${WHAT} ]]; then
 	echo 'Usage: $0 <container id>'
 	exit 1
 fi
-SERVICE_NAME=$(podman container inspect '--format={{index .Config.Annotations "systemd.unit.name"}}' "${WHAT}")
+CONTAINER_ID=$(podman container list '--format={{.Names}}' | grep "${WHAT}" | head -n1)
+if [[ -z ${CONTAINER_ID} ]]; then
+	echo "no container have ${WHAT} in name"
+	exit 1
+fi
+
+SERVICE_NAME=$(podman container inspect '--format={{index .Config.Annotations "systemd.unit.name"}}' "${CONTAINER_ID}")
 if [[ -z ${SERVICE_NAME} ]]; then
 	echo 'service (container) not found.'
 	exit 1
@@ -30,7 +36,7 @@ if [[ ! -d "${CURRENT_DIR}/fs" ]]; then
 	exit 1
 fi
 
-TGT=$(podman container mount "${WHAT}")
+TGT=$(podman container mount "${CONTAINER_ID}")
 
 if [[ ! -d ${TGT} ]]; then
 	echo "???? ${TGT}"

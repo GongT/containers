@@ -1,14 +1,16 @@
 #!/usr/bin/bash
 #
-# An example hook script to prepare a packed repository for use over
-# dumb transports.
-#
-# To enable this hook, rename this file to "post-update".
+# This is c
 
 git update-server-info
 
-DIR=${GIT_DIR#/repos}
-EDIR=$(systemd-escape "${DIR}")
+ABS_GIT_DIR=$(realpath --canonicalize-missing --no-symlinks "${GIT_DIR}")
+DIR=${ABS_GIT_DIR#/repos}
+DIR=$(systemd-escape "${DIR}")
+SRV="sync@${DIR}.service"
 
-echo "starting sync to the remote!"
-systemctl start --no-block "sync@${EDIR}.service"
+echo "=========================================" >&2
+echo "starting sync to the remote as ${SRV}" >&2
+git remote get-url origin >&2
+systemctl start --no-block "$SRV"
+echo "=========================================" >&2

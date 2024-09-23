@@ -5,8 +5,7 @@ for i in conf.d vhost.d stream.d rtmp.d; do
 	fi
 done
 
-if [[ -e "/config/htpasswd" ]]; then
-	rm -f "/config/htpasswd"
+if [[ ! -e "/config/htpasswd" ]]; then
+	touch "/config/htpasswd"
 fi
-echo "create htpassword file..." >&2
-htpasswd -bc "/config/htpasswd" "$USERNAME" "$PASSWORD"
+chmod 0600 /config/htpasswd

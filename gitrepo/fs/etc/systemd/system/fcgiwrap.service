@@ -1,0 +1,15 @@
+[Unit]
+Description=fcgiwrap single socket
+
+[Install]
+WantedBy=multi-user.target
+
+[Service]
+Type=exec
+ExecStartPre=/usr/bin/rm -f /run/sockets/gitrepo.sock
+ExecStart=/usr/sbin/fcgiwrap ${DAEMON_OPTS} -c ${DAEMON_PROCS} -s unix:/run/sockets/gitrepo.sock
+ExecStopPost=-/usr/bin/rm -f /run/sockets/gitrepo.sock
+StandardInput=null
+StandardOutput=journal
+StandardError=journal+console
+EnvironmentFile=/etc/sysconfig/fcgiwrap
