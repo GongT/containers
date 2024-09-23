@@ -9,5 +9,5 @@ Type=exec
 ExecStartPre=/usr/bin/rm -f /run/reload-cgi.sock
 ExecStart=/usr/sbin/fcgiwrap -s unix:/run/reload-cgi.sock
 StandardInput=null
-StandardOutput=journal+console
+StandardOutput=journal
 StandardError=journal+console

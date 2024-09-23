@@ -1,13 +1,9 @@
 #!/usr/bin/bash
 
-if [[ -z ${CONFIG_FILE_LOCK-} ]]; then
-	source /etc/environment
-fi
-
 if [[ $# -eq 0 ]]; then
-	set -- sleep infinity
+	set - --exclusive -- sleep infinity
+else
+	set - --exclusive -- "$@"
 fi
 
-# touch "${CONFIG_FILE_LOCK}"
-# echo "write lock ${CONFIG_FILE_LOCK}"
-exec flock "${CONFIG_FILE_LOCK}" "$@"
+source /usr/libexec/execute-with-lock.sh

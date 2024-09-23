@@ -2,7 +2,7 @@
 
 declare -r FOLDER=$1
 
-echo "replace variables in ${FOLDER}"
+echo "replace variables in ${FOLDER}" >&2
 
 REPLACE=''
 if [[ $CENSORSHIP ]]; then
@@ -13,6 +13,7 @@ fi
 REPLACE+="; s#\$SHARED_SOCKET_PATH#${SHARED_SOCKET_PATH}#g"
 
 find -L "${FOLDER}" -name '*.conf' -print0 | while read -r -d '' FILE; do
+	# echo "  - ${FILE}" >&2
 	sed -i "${REPLACE}" "${FILE}"
 
 	if grep -qF SED_THEM_WITH_IPV6 "${FILE}"; then
@@ -21,4 +22,4 @@ find -L "${FOLDER}" -name '*.conf' -print0 | while read -r -d '' FILE; do
 		echo "$DATA" >"${FILE}"
 	fi
 done
-echo "replace finished."
+echo "replace finished." >&2
