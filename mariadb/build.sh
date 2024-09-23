@@ -5,8 +5,7 @@ set -Eeuo pipefail
 cd "$(dirname "$(realpath "${BASH_SOURCE[0]}")")"
 source ../common/functions-build.sh
 
-info "starting..."
-buildah_cache_start "quay.io/fedora/fedora-minimal"
+buildah_cache_start "ghcr.io/gongt/systemd-base-image"
 
 ### 依赖项目
 STEP="安装系统依赖"
