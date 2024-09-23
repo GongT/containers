@@ -78,6 +78,6 @@ if git push; then
 	echo "complete!"
 	exit
 else
-	echo "can not setup credential, try again!"
+	echo "can not setup credential, try again! (ignore network error!)"
 	exit 1
 fi

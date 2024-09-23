@@ -7,7 +7,7 @@ source ../common/functions-build.sh
 
 info "starting..."
 
-buildah_cache_start "quay.io/fedora/fedora-minimal"
+buildah_cache_start "ghcr.io/gongt/systemd-base-image"
 
 ### 依赖项目
 STEP="安装系统依赖"
@@ -18,7 +18,7 @@ dnf_install_step "nextcloud" scripts/deps.lst scripts/clean-install.sh
 merge_local_fs "nextcloud"
 
 setup_systemd "nextcloud" \
-	enable "REQUIRE=nginx.service php-fpm.service" "WANT=nextcloud-clean.timer redis.service" \
+	enable "REQUIRE=nginx.service php-fpm.service redis.service nextcloud-clean.timer" \
 	nginx_attach "CONFIG_FILE=/opt/nextcloud.conf"
 
 buildah_config "nextcloud" \
