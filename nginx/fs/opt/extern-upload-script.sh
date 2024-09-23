@@ -9,7 +9,7 @@ declare -r SOCKET="${SHARED_SOCKET_PATH}/.nginx.control.sock"
 declare -r CONTAINER_ID=$1 CONFIG_FILE=$2
 
 echo "========================================================"
-curl --fail-with-body -i --unix-socket "${SOCKET}" \
+curl -s --fail-with-body -i --unix-socket "${SOCKET}" \
 	--data-binary "@${CONFIG_FILE}" \
 	--header "Content-Type: application/x-tar" \
 	"http://_/config/${CONTAINER_ID}"

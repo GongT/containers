@@ -14,8 +14,6 @@ unit_podman_image registry.gongt.me/gongt/mariadb
 unit_podman_hostname mysql
 unit_data danger
 
-unit_start_notify socket
-
 unit_body OOMScoreAdjust -600
 unit_body Environment "TZ=Asia/Shanghai"
 unit_body LimitNOFILE 16364

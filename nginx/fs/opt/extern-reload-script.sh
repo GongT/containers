@@ -13,7 +13,7 @@ declare -i RET=0
 if command -v curl &>/dev/null; then
 	echo "notify nginx to reload."
 	echo '======================================' >&2
-	curl --fail-with-body -i --unix-socket "${SOCKET}" http://_/reload
+	curl -s --fail-with-body -i --unix-socket "${SOCKET}" http://_/reload
 	RET=$?
 	echo '======================================' >&2
 else
