@@ -18,7 +18,7 @@ on:
         required: false
         default: false
   # schedule:
-  #   - cron:  '47 4 {{cron_day}} * *'
+  #   - cron:  '47 4 {{__cron_day__}} * *'
   push:
     paths:
       - "{{PROJECT_NAME}}/**"

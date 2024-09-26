@@ -18,7 +18,7 @@ on:
         required: false
         default: false
   # schedule:
-  #   - cron:  '47 4 2 * *'
+  #   - cron:  '47 4 {{__cron_day__}} * *'
   push:
     paths:
       - "gamedisk/**"
@@ -120,12 +120,6 @@ jobs:
       - env:
           _BUILDSCRIPT_RUN_STEP_: fedora-tgtd:4
         id: fedora_tgtd_step_4
-        name: '运行构建过程: 配置镜像信息'
-        run: _scripts_/ci-single-build.sh
-        timeout-minutes: 5
-      - env:
-          _BUILDSCRIPT_RUN_STEP_: fedora-tgtd:5
-        id: fedora_tgtd_step_5
         name: '运行构建过程: Finalize'
         run: _scripts_/ci-single-build.sh
         timeout-minutes: 5
