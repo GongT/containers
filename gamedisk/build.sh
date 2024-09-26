@@ -22,6 +22,7 @@ merge_local_fs "fedora-tgtd"
 ### 安装acme END
 
 setup_systemd "fedora-tgtd" \
+	network ONLINE=no \
 	enable REQUIRE="tgtd.service" WANT="iperf3-server@33233.service"
 
 buildah_finalize_image "fedora-tgtd" gongt/gamedisk
