@@ -24,8 +24,5 @@ merge_local_fs "fedora-tgtd"
 setup_systemd "fedora-tgtd" \
 	enable REQUIRE="tgtd.service" WANT="iperf3-server@33233.service"
 
-STEP="配置镜像信息"
-buildah_config "fedora-tgtd" --label name=gongt/gamedisk
-
 buildah_finalize_image "fedora-tgtd" gongt/gamedisk
 info "Done!"
