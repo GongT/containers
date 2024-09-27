@@ -31,7 +31,7 @@ env:
 
   SOURCE_FILE: qbittorrent/build.sh
   PROJECT_DIR: qbittorrent
-  KNOWN_BASE_IMAGES: quay.io/fedora/fedora:40 quay.io/fedora/fedora-minimal:40
+  KNOWN_BASE_IMAGES: quay.io/fedora/fedora:40 ghcr.io/gongt/systemd-base-image:latest
   BUILDAH_FORCE: ${{ github.event.inputs.forceRebuild }}
   FORCE_DNF: ${{ github.event.inputs.forceDnf }}
   AUTHOR: GongT <admin@gongt.me>

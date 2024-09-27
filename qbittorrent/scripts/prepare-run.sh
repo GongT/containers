@@ -29,8 +29,3 @@ mkdir -p /home/media_rw
 chown media_rw:users /home/media_rw
 
 echo 'LANG="zh_CN.utf8"' >/etc/locale.conf
-
-echo '[Journal]
-Storage=volatile
-RuntimeMaxUse=10M
-' >/etc/systemd/journald.conf

@@ -30,7 +30,7 @@ function common() {
 	shared_sockets_provide "resiliosync.$PROFILE"
 	
 
-	unit_podman_arguments --env="LANG=zh_CN.utf8" --env="PORT=$PORT" --env="PROFILE=$PROFILE"
+	podman_engine_params --env="LANG=zh_CN.utf8" --env="PORT=$PORT" --env="PROFILE=$PROFILE"
 }
 
 create_pod_service_unit beatsaber-music-sync

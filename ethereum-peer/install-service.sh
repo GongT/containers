@@ -18,6 +18,6 @@ unit_body TimeoutStopSec 1min
 shared_sockets_provide ethereum-tracker
 
 add_capability SYS_ADMIN
-unit_podman_arguments --device=/dev/mapper/cryptocurrency-ethereum:/dev/xvda1:rw
+podman_engine_params --device=/dev/mapper/cryptocurrency-ethereum:/dev/xvda1:rw
 
 unit_finish

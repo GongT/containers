@@ -12,8 +12,6 @@ arg_finish "$@"
 
 info "starting..."
 
-
-
 ### 编译时依赖项目
 STEP="编译时依赖项目"
 buildah_cache_start "quay.io/fedora/fedora"
@@ -40,9 +38,9 @@ COMPILE_RESULT_IMAGE=$(get_last_image_id)
 
 ### 运行时依赖项目
 STEP="运行时依赖项目"
-buildah_cache_start "quay.io/fedora/fedora-minimal"
+buildah_cache_start "ghcr.io/gongt/systemd-base-image"
 dnf_use_environment
-dnf_install_step "qbittorrent" scripts/runtime.lst scripts/post-install-cleanup.sh
+dnf_install_step "qbittorrent" scripts/runtime.lst
 ### 运行时依赖项目 END
 
 ### 编译好的qbt
@@ -64,11 +62,7 @@ merge_local_fs "qbittorrent" "scripts/prepare-run.sh"
 
 setup_systemd "qbittorrent" \
 	basic DEFAULT_TARGET=graphical.target \
-	enable "WANT=qbittorrent.service" "REQUIRE=i3.service"
-
-# STEP="配置镜像信息"
-# buildah_config qbittorrent --author "GongT <admin@gongt.me>" --created-by "#MAGIC!" --label name=gongt/qbittorrent
-# info "settings update..."
+	nginx_attach \
+	enable "WANT=qbittorrent.service" "REQUIRE=i3.service socket-proxy.socket"
 
 buildah_finalize_image "qbittorrent" gongt/qbittorrent
-info "Done!"

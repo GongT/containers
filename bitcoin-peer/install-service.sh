@@ -25,6 +25,6 @@ add_capability SYS_ADMIN
 environment_variable \
 	"USERNAME=$USERNAME" \
 	"PASSWORD=$PASSWORD"
-unit_podman_arguments --device=/dev/mapper/cryptocurrency-bitcoin:/dev/xvda1:rw
+podman_engine_params --device=/dev/mapper/cryptocurrency-bitcoin:/dev/xvda1:rw
 
 unit_finish

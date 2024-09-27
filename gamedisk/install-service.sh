@@ -8,7 +8,6 @@ source ../common/functions-install.sh
 auto_create_pod_service_unit
 unit_podman_image registry.gongt.me/gongt/gamedisk
 unit_unit Description "iSCSI target daemon for game disk"
-unit_start_notify pass
 
 unit_unit After 'dev-mapper-game\x2dscsi.device'
 unit_unit Requires 'dev-mapper-game\x2dscsi.device'

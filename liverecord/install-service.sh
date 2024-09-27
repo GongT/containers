@@ -18,7 +18,7 @@ done
 
 systemd_slice_type normal
 environment_variable "LIVE_ROOMS=$LIVE_ROOMS" "${PROXY[@]}" "BREC_HTTP_OPEN_ACCESS=yes"
-unit_podman_arguments '--dns-env=p.a.s.s'
+podman_engine_params '--dns-env=p.a.s.s'
 
 unit_body Restart on-failure
 unit_body TimeoutStartSec 2min
