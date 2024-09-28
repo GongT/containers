@@ -62,7 +62,7 @@ merge_local_fs "qbittorrent" "scripts/prepare-run.sh"
 
 setup_systemd "qbittorrent" \
 	basic DEFAULT_TARGET=graphical.target \
-	nginx_attach \
+	nginx_attach CONFIG_FILE=/opt/scripts/nginx.conf \
 	enable "WANT=qbittorrent.service" "REQUIRE=i3.service socket-proxy.socket"
 
 buildah_finalize_image "qbittorrent" gongt/qbittorrent
