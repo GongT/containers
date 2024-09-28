@@ -1,6 +1,4 @@
 [Unit]
-Requires=deluge-web.service
-After=deluge-web.service
 FailureAction=exit
 FailureActionExitStatus=233
 
