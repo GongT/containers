@@ -10,7 +10,8 @@ Type=oneshot
 RemainAfterExit=no
 ExecStart=/bin/bash "/opt/ddns/run.sh"
 EnvironmentFile=/run/.userenvironments
-
+StandardOutput=journal+console
+StandardError=journal+console
 RestartPreventExitStatus=66
 Restart=on-failure
 RestartSec=10s

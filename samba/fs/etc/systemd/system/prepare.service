@@ -10,6 +10,8 @@ RemainAfterExit=yes
 EnvironmentFile=/run/.userenvironments
 EnvironmentFile=-/opt/config/environments
 ExecStart=/opt/scripts/start.sh
+StandardOutput=journal+console
+StandardError=journal+console
 
 [Install]
 WantedBy=multi-user.target
