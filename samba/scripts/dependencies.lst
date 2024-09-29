@@ -2,5 +2,4 @@ samba
 samba-client
 samba-tools
 samba-winbind
-iproute2
-iputils
+iproute
