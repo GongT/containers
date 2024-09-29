@@ -2,7 +2,7 @@
 Description=Create samba config file
 Before=nmb.service
 Requires=systemd-networkd.service
-After=systemd-networkd.service
+After=systemd-networkd.service systemd-networkd-wait-online.service
 
 [Service]
 Type=oneshot

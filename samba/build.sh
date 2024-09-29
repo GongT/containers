@@ -9,13 +9,16 @@ arg_flag FORCE_DNF dnf "force dnf install"
 arg_finish
 
 ### 依赖项目
-fork_archlinux "samba" scripts/dependencies.lst
+buildah_cache_start "ghcr.io/gongt/systemd-base-image"
+dnf_use_environment
+dnf_install_step "network" scripts/dependencies.lst
 ### 依赖项目 END
 
 STEP="复制配置文件"
 merge_local_fs "samba" "scripts/prepare.sh"
 
 setup_systemd "samba" \
+	networkd \
 	enable REQUIRE="smb.service" WANT="nmb.service"
 
 buildah_config "samba" \
