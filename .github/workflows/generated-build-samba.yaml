@@ -31,7 +31,7 @@ env:
 
   SOURCE_FILE: samba/build.sh
   PROJECT_DIR: samba
-  KNOWN_BASE_IMAGES: docker.io/library/archlinux:latest
+  KNOWN_BASE_IMAGES: ghcr.io/gongt/systemd-base-image:latest
   BUILDAH_FORCE: ${{ github.event.inputs.forceRebuild }}
   FORCE_DNF: ${{ github.event.inputs.forceDnf }}
   AUTHOR: GongT <admin@gongt.me>
@@ -40,18 +40,6 @@ env:
   GITHUB_ACTOR: ${{ github.actor }}
   REWRITE_IMAGE_NAME: build.local/dist/samba
 jobs:
-  cancel:
-    name: Cancel Previous Runs
-    runs-on: ubuntu-24.04
-    needs: build
-    steps:
-      - name: cancel running workflows
-        timeout-minutes: 5
-        uses: GongT/cancel-previous-workflows@6dd7af8389c9434cc893fd33b58609e73db49fbe
-        env:
-          DELETE: "yes"
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
   build:
     name: "生成镜像"
     runs-on: ubuntu-24.04
@@ -100,32 +88,32 @@ jobs:
 
 
       - env:
+          _BUILDSCRIPT_RUN_STEP_: network:1
+        id: network_step_1
+        name: '运行构建过程: 安装系统依赖'
+        run: _scripts_/ci-single-build.sh
+        timeout-minutes: 5
+      - env:
           _BUILDSCRIPT_RUN_STEP_: samba:1
         id: samba_step_1
-        name: '运行构建过程: 安装系统依赖:'
+        name: '运行构建过程: 复制配置文件'
         run: _scripts_/ci-single-build.sh
         timeout-minutes: 5
       - env:
           _BUILDSCRIPT_RUN_STEP_: samba:2
         id: samba_step_2
-        name: '运行构建过程: 复制配置文件'
+        name: '运行构建过程: 配置镜像中的systemd'
         run: _scripts_/ci-single-build.sh
         timeout-minutes: 5
       - env:
           _BUILDSCRIPT_RUN_STEP_: samba:3
         id: samba_step_3
-        name: '运行构建过程: 配置镜像中的systemd'
+        name: '运行构建过程: 配置容器'
         run: _scripts_/ci-single-build.sh
         timeout-minutes: 5
       - env:
           _BUILDSCRIPT_RUN_STEP_: samba:4
         id: samba_step_4
-        name: '运行构建过程: 配置容器'
-        run: _scripts_/ci-single-build.sh
-        timeout-minutes: 5
-      - env:
-          _BUILDSCRIPT_RUN_STEP_: samba:5
-        id: samba_step_5
         name: '运行构建过程: Finalize'
         run: _scripts_/ci-single-build.sh
         timeout-minutes: 5
