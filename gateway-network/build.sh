@@ -8,7 +8,9 @@ source ../common/functions-build.sh
 info "starting..."
 
 ### 依赖项目
-fork_archlinux "network" curl iperf3 systemd jq ipcalc vim
+buildah_cache_start "ghcr.io/gongt/systemd-base-image"
+dnf_use_environment
+dnf_install_step "network" scripts/requirements.lst
 ### 依赖项目 END
 
 ### 配置文件等
@@ -17,6 +19,7 @@ merge_local_fs "network"
 ### 配置文件等 END
 
 setup_systemd "network" \
+	networkd \
 	enable REQUIRE="systemd-networkd.service systemd-resolved.service ddns.timer"
 
 buildah_config "network" --author "GongT <admin@gongt.me>" --label name=gongt/gateway-network
