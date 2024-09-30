@@ -7,14 +7,13 @@ if ! mountpoint /data/records; then
 	exit 233
 fi
 
-touch /opt/app/bin/ERROR.txt
-mkdir -p /opt/app/bin/Config /data/debug /data/records
-CONFIG="/opt/app/bin/Config/DDTV_Config.ini"
+touch /opt/app/bin/ERROR.TXT
+mkdir -p /opt/app/bin/Config /data/debug /data/records /opt/app/bin/Temporary
+
+declare -r CONFIG="/opt/app/bin/Config/DDTV_Config.ini"
 if [[ ! -e ${CONFIG} ]]; then
 	touch "${CONFIG}"
 fi
-chown -R 100:100 /opt/app/bin/Config /opt/app/bin/ERROR.txt
-chown 100:100 /data /data/records /data/debug
 
 function fill_config_field() {
 	local -r NAME=$1 VALUE=$2
@@ -28,11 +27,19 @@ function fill_config_field() {
 		echo "${DATA}" | sed -E "s#.*${NAME}=.*#${LINE}#g" >"${CONFIG}"
 	else
 		echo "[config] create ${NAME}"
-		echo "${DATA}"
-		echo "${LINE}" >>"${CONFIG}"
+		{
+			echo "${DATA}"
+			echo "${LINE}"
+		} >"${CONFIG}"
 	fi
 }
 
 fill_config_field RecFileDirectory /data/records
 fill_config_field DebugFileDirectory /data/debug
 fill_config_field Port 11419
+fill_config_field UseAgree True
+
+chown -R 100:100 /opt/app/bin/Config /opt/app/bin/Temporary /opt/app/bin/ERROR.TXT
+chown 100:100 /data /data/records /data/debug
+
+echo "prestart complete!"
