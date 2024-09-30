@@ -7,39 +7,42 @@ source ../common/functions-build.sh
 
 arg_finish "$@"
 
-buildah_cache_start ghcr.io/bililiverecorder/bililiverecorder
+buildah_cache_start "ghcr.io/gongt/systemd-base-image"
+dnf_use_environment \
+	"--repo=https://mirrors.rpmfusion.org/free/fedora/rpmfusion-free-release-${FEDORA_VERSION}.noarch.rpm" \
+	"--repo=https://mirrors.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-${FEDORA_VERSION}.noarch.rpm" \
+	"--enable=fedora-cisco-openh264"
+dnf_install_step "liverecord" scripts/dependencies.lst
 
-STEP="安装系统依赖"
-function hash_deps() {
-	cat scripts/install-deps.sh
-}
-function install_deps() {
-	perfer_proxy buildah run $(use_apt_cache liverecord) "$1" bash <scripts/install-deps.sh
-}
-buildah_cache liverecord hash_deps install_deps
-
-# 安装依赖
-STEP="下载init"
-REPO=GongT/init
+### 安装
+STEP="安装DDTV"
+REPO="CHKZL/DDTV"
 RELEASE_URL=
-_hash_init() {
+hash_download() {
 	http_get_github_release_id "$REPO"
-	RELEASE_URL=$(github_release_asset_download_url linux_amd64)
-}
-_download_init() {
-	local TGT=$1 DOWNLOADED FILE_NAME="gongt-init"
-	DOWNLOADED=$(FORCE_DOWNLOAD=yes download_file "$RELEASE_URL" "$FILE_NAME")
-	buildah copy "$TGT" "$DOWNLOADED" "/usr/sbin/init"
-	buildah run "$TGT" chmod 0777 "/usr/sbin/init"
-}
-buildah_cache liverecord _hash_init _download_init
-# 安装依赖 END
+	RELEASE_URL=$(github_release_asset_download_url_regex linux-x64)
 
-STEP="复制文件系统"
+	cat scripts/after-copy.sh
+}
+do_download() {
+	local TGT=$1 DOWNLOADED TMPD
+	TMPD=$(create_temp_dir ddtv.download)
+	DOWNLOADED=$(download_file "$RELEASE_URL")
+	decompression_file "$DOWNLOADED" 0 "$TMPD"
+	buildah copy "$1" "$TMPD" "/opt/app"
+
+	TMPF=$(create_temp_file ddtv.install.sh)
+	construct_child_shell_script "${TMPF}" "scripts/after-copy.sh"
+	buildah_run_shell_script "$1" "${TMPF}"
+}
+buildah_cache "liverecord" hash_download do_download
+### 安装 END
+
 merge_local_fs liverecord
 
-STEP="更新配置"
-buildah_config liverecord --entrypoint '["/bin/bash", "-c"]' --cmd '/entrypoint.sh' \
-	--volume=/data/records
+setup_systemd liverecord \
+	socket_proxy PORTS=11419 \
+	nginx_attach CONFIG_FILE=/opt/liverecord.nginx.gateway.conf \
+	enable "REQUIRE=ddtv.service"
 
 buildah_finalize_image "liverecord" gongt/liverecord

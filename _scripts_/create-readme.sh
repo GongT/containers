@@ -12,11 +12,11 @@ mapfile -d '' -t BUILD_FILES < <(find . -maxdepth 2 -name build.sh -print0 | sor
 TABLE="| Container | Link | Build Status |
 |----:|:----|:----:|
 "
-for i in "${BUILD_FILES[@]}"; do
-	if [[ -e $(realpath -m "$i/../disabled") ]]; then
+for PROJ in "${BUILD_FILES[@]}"; do
+	if [[ -e $(realpath -m "$PROJ/../disabled") ]]; then
 		continue
 	fi
-	export PROJECT_NAME=$(basename "$(dirname "$i")")
+	export PROJECT_NAME=$(basename "$(dirname "$PROJ")")
 
 	TABLE+="| $PROJECT_NAME "
 	TABLE+="| https://github.com/GongT/containers/pkgs/container/$PROJECT_NAME "

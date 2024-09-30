@@ -1,0 +1,16 @@
+[Unit]
+Description=bilibili livestream record
+After=network-online.target network.target
+
+[Install]
+WantedBy=multi-user.target
+
+[Service]
+Type=exec
+WorkingDirectory=/opt/app/bin
+ExecStartPre=+/usr/bin/bash /opt/app/start.sh
+ExecStart=/opt/app/bin/Server
+StandardOutput=journal+console
+StandardError=journal+console
+User=media_rw
+Group=users
