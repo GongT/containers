@@ -23,6 +23,8 @@ if [[ $CONTENT == *"successful patched"* ]]; then
 	exit 0
 fi
 
+cp -rf /opt/app/plugins/. /opt/loader_data/plugins
+
 echo "patching loader: ${LOADER_MAIN}"
 {
 	echo "require('/opt/loader');"

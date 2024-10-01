@@ -13,17 +13,18 @@ dnf_install_step "qqbot" scripts/requirements.lst
 ### 安装QQNT
 STEP=安装QQNT
 ## curl 'https://im.qq.com/linuxqq/index.shtml' | grep linuxQQDownload
-rainbowConfigUrl="https://cdn-go.cn/qq-web/im.qq.com_new/latest/rainbow/linuxQQDownload.js"
+# rainbowConfigUrl="https://cdn-go.cn/qq-web/im.qq.com_new/latest/rainbow/linuxQQDownload.js"
 QQNT_DOWNLOAD_URL="https://dldir1.qq.com/qqfile/qq/QQNT/2b82dc28/linuxqq_3.2.12-26909_x86_64.rpm" # this is example
 hash_qqnt() {
-	QQNT_DOWNLOAD_URL=$(curl -sL "$rainbowConfigUrl" \
-		| grep -oP '"rpm"\s*:\s*".+?"' \
-		| grep -F x86 \
-		| grep -oE 'http.+\.rpm')
+	# QQNT_DOWNLOAD_URL=$(curl -sL "$rainbowConfigUrl" \
+	# 	| grep -oP '"rpm"\s*:\s*".+?"' \
+	# 	| grep -F x86 \
+	# 	| grep -oE 'http.+\.rpm')
 	info_note " * download url: $QQNT_DOWNLOAD_URL"
 	control_ci summary "## QQNT
-$(echo "$QQNT_DOWNLOAD_URL" | sed -E 's#^.*_#_x86_64.rpm#; s#$##')
-$QQNT_DOWNLOAD_URL"
+* $(echo "${QQNT_DOWNLOAD_URL#*_}" | sed -e 's#_x86_64\.rpm$##')
+* ${QQNT_DOWNLOAD_URL}
+"
 	echo "${QQNT_DOWNLOAD_URL}"
 }
 download_qqnt() {
@@ -35,19 +36,31 @@ download_qqnt() {
 buildah_cache "qqbot" hash_qqnt download_qqnt
 ### 安装QQNT END
 
-STEP=安装LiteLoaderQQNT
-REPO=LiteLoaderQQNT/LiteLoaderQQNT
+STEP=安装LiteLoaderQQNT和插件
 RELEASE_URL=
+PLUGINS_URL=()
 check_LiteLoaderQQNT() {
-	http_get_github_release_id "$REPO"
+	http_get_github_release_id "LiteLoaderQQNT/LiteLoaderQQNT"
 	RELEASE_URL=$(github_release_asset_download_url LiteLoaderQQNT.zip)
 	info_note " * RELEASE_URL=$RELEASE_URL"
+
+	http_get_github_release_id "ltxhhz/LL-plugin-list-viewer"
+	PLUGINS_URL+=("$(github_release_asset_download_url list-viewer.zip)")
+
+	http_get_github_release_id "NapNeko/NapCatQQ"
+	PLUGINS_URL+=("$(github_release_asset_download_url NapCat.Framework.zip)")
 }
 download_LiteLoaderQQNT() {
-	local DOWNLOADED SOURCE_DIRECTORY TMPD
+	local DOWNLOADED SOURCE_DIRECTORY TMPD PLUGIN
 	DOWNLOADED=$(perfer_proxy download_file_force "$RELEASE_URL")
 	TMPD=$(create_temp_dir LiteLoaderQQNT.decompress)
 	decompression_file "$DOWNLOADED" 0 "${TMPD}"
+
+	mkdir -p "${TMPD}/plugins"
+	for PLUGIN in "${PLUGINS_URL[@]}"; do
+		DOWNLOADED=$(perfer_proxy download_file_force "$PLUGIN")
+		cp "${DOWNLOADED}" "${TMPD}/plugins"
+	done
 
 	buildah copy "$1" "${TMPD}" "/opt/app"
 }

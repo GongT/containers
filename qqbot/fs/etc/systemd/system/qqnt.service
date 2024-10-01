@@ -7,7 +7,7 @@ After=i3.service
 Type=exec
 Environment=DISPLAY=:0 LC_ALL=C.UTF-8
 ExecStartPre=+/usr/bin/bash /opt/prestart.sh
-ExecStart=/usr/bin/qq
+ExecStart=/opt/QQ/qq
 Restart=no
 User=qq
 Group=qq
