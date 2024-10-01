@@ -70,7 +70,7 @@ fi
 printf -v OPT 'store --file=%q' "${CFILE}"
 git config credential.helper "${OPT}"
 git config http.receivepack true
-git config core.hooksPath /repos
+git config core.hooksPath /opt/hooks
 
 rm -rf hooks
 

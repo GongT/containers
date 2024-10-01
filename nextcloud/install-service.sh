@@ -23,7 +23,7 @@ unit_fs_bind logs/nextcloud /var/log/nextcloud
 unit_fs_bind /data/NextCloud /data
 unit_fs_bind /data/Volumes /drives
 shared_sockets_provide next-cloud
-network_use_veth bridge0
+# network_use_veth bridge0
 systemd_slice_type normal
 unit_finish
 

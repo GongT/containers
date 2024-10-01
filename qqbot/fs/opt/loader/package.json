@@ -1,0 +1,7 @@
+{
+	"name": "my-loader",
+	"version": "1.0.0",
+	"private": true,
+	"main": "./loader.js",
+	"type": "commonjs"
+}

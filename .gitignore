@@ -1,5 +1,5 @@
 temp
-environment
+/environment
 .download
 /test*
 *.bak
@@ -10,6 +10,7 @@ github_token
 /lib
 /temp
 node_modules
+.BUILD.md
 
 ### builder
 .github/secrets.json

@@ -1,0 +1,23 @@
+[Unit]
+Description=qBittorrent
+Requires=i3.service
+After=i3.service
+
+[Service]
+Type=exec
+Environment=DISPLAY=:0 LC_ALL=C.UTF-8
+ExecStartPre=+/usr/bin/bash /opt/prestart.sh
+ExecStart=/usr/bin/qq
+Restart=no
+User=qq
+Group=qq
+# KillSignal=SIGINT
+TimeoutStopSec=20s
+ProtectSystem=strict
+PrivateTmp=yes
+ReadWritePaths=/home/qq
+StandardOutput=journal+console
+StandardError=inherit
+
+[Install]
+WantedBy=graphical.target

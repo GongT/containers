@@ -1,4 +1,6 @@
-coreutils
-bash
-java-latest-openjdk-headless
-busybox-shared
+mesa-libgbm
+alsa-lib
+libgcrypt
+wqy-zenhei-fonts
+diffutils
+patch

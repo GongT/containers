@@ -1,0 +1,14 @@
+[Unit]
+Description=i3 window manager
+After=xvnc0.service
+Requires=xvnc0.service
+
+[Service]
+Type=exec
+ExecStart=/usr/bin/i3
+Restart=on-abort
+User=vnc
+Group=vnc
+
+[Install]
+WantedBy=graphical.target

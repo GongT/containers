@@ -4,54 +4,63 @@ set -Eeuo pipefail
 
 cd "$(dirname "$(realpath "${BASH_SOURCE[0]}")")"
 source ../common/functions-build.sh
+source ../systemd-base-image/include.sh
 
-### 安装依赖
-STEP=安装依赖
-dnf_use_environment
-dnf_install_step "qqbot" "scripts/requirements.lst"
-### 安装依赖 END
+image_base graphical
 
-### 运行MCL安装mirai END
-STEP=运行MCL安装mirai
-REPO=iTXTech/mirai-console-loader
-check_mcl() {
-	cat scripts/run-mcl.sh
-	http_get_github_unstable_release_id "mamoe/mirai"
-	http_get_github_release "$REPO"
-	RELEASE_URL=$(github_release_asset_download_url_regex '.*\.zip')
-	info_note "       * RELEASE_URL=$RELEASE_URL"
+dnf_install_step "qqbot" scripts/requirements.lst
+
+### 安装QQNT
+STEP=安装QQNT
+## curl 'https://im.qq.com/linuxqq/index.shtml' | grep linuxQQDownload
+rainbowConfigUrl="https://cdn-go.cn/qq-web/im.qq.com_new/latest/rainbow/linuxQQDownload.js"
+QQNT_DOWNLOAD_URL=
+hash_qqnt() {
+	QQNT_DOWNLOAD_URL=$(curl -sL "$rainbowConfigUrl" \
+		| grep -oP '"rpm"\s*:\s*".+?"' \
+		| grep -F x86 \
+		| grep -oE 'http.+\.rpm')
+	info_note " * download url: $QQNT_DOWNLOAD_URL"
+	echo "${QQNT_DOWNLOAD_URL}"
 }
-download_run_mcl() {
-	local DOWNLOADED SOURCE_DIRECTORY
+download_qqnt() {
+	local CONTAINER="$1" TMPF
+	TMPF=$(create_temp_file)
+	echo "${QQNT_DOWNLOAD_URL}" >"${TMPF}"
+	call_dnf_install "$1" "${TMPF}"
+}
+buildah_cache "qqbot" hash_qqnt download_qqnt
+### 安装QQNT END
+
+STEP=安装LiteLoaderQQNT
+REPO=LiteLoaderQQNT/LiteLoaderQQNT
+RELEASE_URL=
+check_LiteLoaderQQNT() {
+	http_get_github_release_id "$REPO"
+	RELEASE_URL=$(github_release_asset_download_url LiteLoaderQQNT.zip)
+	info_note " * RELEASE_URL=$RELEASE_URL"
+}
+download_LiteLoaderQQNT() {
+	local DOWNLOADED SOURCE_DIRECTORY TMPD
 	DOWNLOADED=$(perfer_proxy download_file_force "$RELEASE_URL")
-	SOURCE_DIRECTORY="$(create_temp_dir "mcl")"
-	extract_zip "$DOWNLOADED" "0" "$SOURCE_DIRECTORY"
+	TMPD=$(create_temp_dir LiteLoaderQQNT.decompress)
+	decompression_file "$DOWNLOADED" 0 "${TMPD}"
 
-	local DATA
-	if [[ -e "$SOURCE_DIRECTORY/config.json" ]]; then
-		DATA=$(<"$SOURCE_DIRECTORY/config.json")
-	else
-		DATA='{}'
-	fi
-	DATA=$(echo "$DATA" | jq --arg URL "https://raw.githubusercontent.com/project-mirai/mirai-repo-mirror/master" '.mirai_repo = $URL')
-	DATA=$(echo "$DATA" | jq --arg URL "https://repo1.maven.org/maven2" '.maven_repo = [$URL]')
-	DATA=$(echo "$DATA" | jq '.disabled_modules = ["announcement"]')
-	echo "$DATA" >"$SOURCE_DIRECTORY/config.json"
-
-	buildah copy "$1" "$SOURCE_DIRECTORY" "/mirai"
-	buildah config --workingdir /mirai "$1"
-	buildah run --network=host "$1" bash <scripts/run-mcl.sh
+	buildah copy "$1" "${TMPD}" "/opt/app"
 }
-buildah_cache "qqbot" check_mcl download_run_mcl
-### 运行MCL安装mirai END
+buildah_cache "qqbot" check_LiteLoaderQQNT download_LiteLoaderQQNT
+### 安装LiteLoaderQQNT END
 
-STEP=复制文件
-merge_local_fs "qqbot"
+merge_local_fs "qqbot" scripts/prepare.sh
 
-STEP=配置容器
-buildah_config "qqbot" --cmd "/mirai/start.sh" --stop-signal=SIGINT \
-	--volume /mirai/config --volume /mirai/data --volume /mirai/logs --volume /mirai/bots \
-	--author "GongT <admin@gongt.me>" --created-by "#MAGIC!" --label name=gongt/acme
+setup_systemd "qqbot" \
+	networkd ONLINE=no \
+	nginx_attach \
+	enable "REQUIRE=qqnt.service"
+
+buildah_config "qqbot" \
+	--env=LITELOADERQQNT_PROFILE=/opt/loader_data \
+	--volume=/opt/loader_data \
+	--volume=/home/qq/.cache
 
 buildah_finalize_image "qqbot" gongt/qqbot
-info "Done!"

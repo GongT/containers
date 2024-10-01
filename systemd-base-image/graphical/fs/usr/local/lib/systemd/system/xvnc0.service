@@ -1,0 +1,16 @@
+[Unit]
+Description=XVNC (TigerVNC) Daemon
+After=systemd-networkd.service
+Requires=systemd-networkd.service
+
+[Service]
+Type=exec
+ExecStart=/usr/bin/Xvnc :0 -verbose 2 -listen tcp -geometry 1600x1024 -ac -SecurityTypes=None
+User=vnc
+Group=vnc
+Restart=always
+ExecStartPost=/usr/bin/sleep 5
+UMask=0
+
+[Install]
+WantedBy=graphical.target

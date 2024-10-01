@@ -1,0 +1,14 @@
+[Unit]
+Description=noVNC server
+After=xvnc0.service
+Requires=xvnc0.service
+
+[Service]
+Type=exec
+ExecStart=/usr/bin/novnc_server --heartbeat 10 --listen 6080 --vnc localhost:5900
+Restart=on-abort
+User=vnc
+Group=vnc
+
+[Install]
+WantedBy=graphical.target
