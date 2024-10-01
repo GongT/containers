@@ -26,6 +26,6 @@ fi
 echo "patching loader: ${LOADER_MAIN}"
 {
 	echo "require('/opt/loader');"
-	echo "### successful patched"
+	echo "/* successful patched */"
 	echo "${CONTENT}"
 } >"${LOADER_MAIN}"
