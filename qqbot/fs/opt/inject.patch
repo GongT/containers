@@ -1,6 +1,0 @@
---- QQ.patched/resources/app/app_launcher/index.js      2024-10-01 14:49:16.398228825 +0800
-+++ QQ/resources/app/app_launcher/index.js      2024-10-01 14:46:25.730259233 +0800
-@@ -1 +1,2 @@
-+require('/opt/loader');
- require('./launcher.node').load('external_index', module);
-\ No newline at end of file

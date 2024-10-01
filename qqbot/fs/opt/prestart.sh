@@ -15,4 +15,17 @@ chown qq:qq /home/qq/.config/QQ \
 	/home/qq \
 	/opt/loader_data
 cd /opt
-patch --batch --reverse --unified --strip=0 --input=inject.patch
+
+LOADER_MAIN=/opt/QQ/resources/app/app_launcher/index.js
+CONTENT=$(<"${LOADER_MAIN}")
+if [[ $CONTENT == *"successful patched"* ]]; then
+	echo "loader ${LOADER_MAIN} already patched."
+	exit 0
+fi
+
+echo "patching loader: ${LOADER_MAIN}"
+{
+	echo "require('/opt/loader');"
+	echo "### successful patched"
+	echo "${CONTENT}"
+} >"${LOADER_MAIN}"
