@@ -47,8 +47,8 @@ check_LiteLoaderQQNT() {
 	http_get_github_release_id "ltxhhz/LL-plugin-list-viewer"
 	PLUGINS_URL+=("$(github_release_asset_download_url list-viewer.zip)")
 
-	http_get_github_release_id "NapNeko/NapCatQQ"
-	PLUGINS_URL+=("$(github_release_asset_download_url NapCat.Framework.zip)")
+	# http_get_github_release_id "NapNeko/NapCatQQ"
+	# PLUGINS_URL+=("$(github_release_asset_download_url NapCat.Framework.zip)")
 }
 download_LiteLoaderQQNT() {
 	local DOWNLOADED SOURCE_DIRECTORY TMPD PLUGIN
@@ -59,7 +59,7 @@ download_LiteLoaderQQNT() {
 	mkdir -p "${TMPD}/plugins"
 	for PLUGIN in "${PLUGINS_URL[@]}"; do
 		DOWNLOADED=$(perfer_proxy download_file_force "$PLUGIN")
-		cp "${DOWNLOADED}" "${TMPD}/plugins"
+		decompression_file "$DOWNLOADED" 0 "${TMPD}/plugins/$(basename "${PLUGIN%.zip}" .tar.gz)"
 	done
 
 	buildah copy "$1" "${TMPD}" "/opt/app"

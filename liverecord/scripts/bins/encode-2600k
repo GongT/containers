@@ -1,0 +1,37 @@
+#!/bin/bash
+set -Eeuo pipefail
+
+TARGET_BITRATE=2600K
+
+
+declare INPUT_FILE=$1
+INPUT_FILE=$(realpath "${INPUT_FILE}")
+cd "$(dirname "${INPUT_FILE}")"
+
+INPUT_FILE=$(basename "${INPUT_FILE}")
+OUTPUT_FILE="${INPUT_FILE%.*}.${TARGET_BITRATE}.mp4"
+
+printf "\e[38;5;14mCompress %s to %s target %s/s\e[0m\n" "${INPUT_FILE}" "${OUTPUT_FILE}" "${TARGET_BITRATE}"
+
+ARGS=(
+	-hide_banner
+	-loglevel warning
+	-i "${INPUT_FILE}"
+	-c:v libx264
+	-profile:v high
+	-preset veryslow
+	-tune animation
+	-b:v "${TARGET_BITRATE}"
+	-fps_mode:v cfr
+	-c:a copy
+)
+
+printf "\e[38;5;14mFirst pass\e[0m\n"
+ffmpeg "${ARGS[@]}" -pass 1 -f null /dev/null
+
+printf "\e[38;5;14mSecond pass\e[0m\n"
+ffmpeg "${ARGS[@]}" -pass 2 "${OUTPUT_FILE}"
+
+printf "\e[38;5;10mComplete.\e[0m\n"
+ls -lh "${OUTPUT_FILE}"
+

@@ -8,12 +8,10 @@ source ../common/functions-install.sh
 arg_string + SMTP_PASSWORD smtp_pass "SMTP config (pass)"
 arg_finish "$@"
 
-unit_start_notify socket
-
 create_pod_service_unit nextcloud
 unit_podman_image registry.gongt.me/gongt/nextcloud
 unit_unit After mariadb.pod.service
-unit_data danger
+# unit_data danger
 environment_variable \
 	"PROXY=$PROXY" \
 	"SMTP_PASSWORD=$SMTP_PASSWORD"
