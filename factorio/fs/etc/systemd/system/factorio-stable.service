@@ -1,0 +1,14 @@
+[Unit]
+Description=Factorio is a game in which you build and maintain factories
+Documentation=https://wiki.factorio.com/Application_directory
+
+[Install]
+WantedBy=multi-user.target
+
+[Service]
+Type=exec
+ExecStart=/usr/bin/bash /opt/scripts/start.sh
+
+RestartPreventExitStatus=233
+Environment=DIST_TAG=stable
+Environment=GAME_INST=/opt/factorio/stable

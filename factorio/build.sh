@@ -7,10 +7,12 @@ source ../common/functions-build.sh
 
 arg_finish "$@"
 
+buildah_cache_start "ghcr.io/gongt/systemd-base-image"
+
 ### 依赖项目
-STEP="安装系统依赖"
-dnf_use_environment
-dnf_install_step "factorio" source/dependencies.lst
+# STEP="安装系统依赖"
+# dnf_use_environment
+# dnf_install_step "factorio" source/dependencies.lst
 ### 依赖项目 END
 
 ### 下载安装
@@ -46,8 +48,10 @@ DIST_TAG="stable" buildah_cache "factorio" hash_factorio build_factorio
 
 merge_local_fs "factorio"
 
-buildah_config "factorio" --cmd '/opt/scripts/start.sh' --port 34197 --stop-signal SIGINT \
-	--author "GongT <admin@gongt.me>" --created-by "#MAGIC!" --label name=gongt/factorio
+setup_systemd "factorio" \
+	enable REQUIRE=factorio-stable.service
+
+buildah_config factorio --port 34197
 info "settings update..."
 
 buildah_finalize_image "factorio" gongt/factorio
