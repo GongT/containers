@@ -47,7 +47,7 @@ function replace_config() {
 		exit 1
 	fi
 	echo "override config value ${REPLACE}"
-	sed -Ei "s#${MATCH}#${REPLACE}#" "${SETTINGS_FILE}"
+	sed -i -E "s#${MATCH}#${REPLACE}#" "${SETTINGS_FILE}"
 }
 
 replace_config "read-data" "__PATH__executable__/../../data"
