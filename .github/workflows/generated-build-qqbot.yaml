@@ -31,7 +31,7 @@ env:
 
   SOURCE_FILE: qqbot/build.sh
   PROJECT_DIR: qqbot
-  KNOWN_BASE_IMAGES: ghcr.io/gongt/systemd-base-image:latest
+  KNOWN_BASE_IMAGES: quay.io/fedora/fedora-minimal:40
   BUILDAH_FORCE: ${{ github.event.inputs.forceRebuild }}
   FORCE_DNF: ${{ github.event.inputs.forceDnf }}
   AUTHOR: GongT <admin@gongt.me>
@@ -88,20 +88,32 @@ jobs:
 
 
       - env:
-          _BUILDSCRIPT_RUN_STEP_: base_graphical:1
-        id: base_graphical_step_1
+          _BUILDSCRIPT_RUN_STEP_: systemd:1
+        id: systemd_step_1
         name: '运行构建过程: 安装系统依赖'
         run: _scripts_/ci-single-build.sh
         timeout-minutes: 5
       - env:
-          _BUILDSCRIPT_RUN_STEP_: base_graphical:2
-        id: base_graphical_step_2
+          _BUILDSCRIPT_RUN_STEP_: systemd:2
+        id: systemd_step_2
+        name: '运行构建过程: 配置镜像中的systemd'
+        run: _scripts_/ci-single-build.sh
+        timeout-minutes: 5
+      - env:
+          _BUILDSCRIPT_RUN_STEP_: systemd-graphical:1
+        id: systemd_graphical_step_1
+        name: '运行构建过程: 安装系统依赖'
+        run: _scripts_/ci-single-build.sh
+        timeout-minutes: 5
+      - env:
+          _BUILDSCRIPT_RUN_STEP_: systemd-graphical:2
+        id: systemd_graphical_step_2
         name: '运行构建过程: 复制文件'
         run: _scripts_/ci-single-build.sh
         timeout-minutes: 5
       - env:
-          _BUILDSCRIPT_RUN_STEP_: base_graphical:3
-        id: base_graphical_step_3
+          _BUILDSCRIPT_RUN_STEP_: systemd-graphical:3
+        id: systemd_graphical_step_3
         name: '运行构建过程: 配置镜像中的systemd'
         run: _scripts_/ci-single-build.sh
         timeout-minutes: 5
@@ -120,7 +132,7 @@ jobs:
       - env:
           _BUILDSCRIPT_RUN_STEP_: qqbot:3
         id: qqbot_step_3
-        name: '运行构建过程: 安装LiteLoaderQQNT'
+        name: '运行构建过程: 安装LiteLoaderQQNT和插件'
         run: _scripts_/ci-single-build.sh
         timeout-minutes: 5
       - env:

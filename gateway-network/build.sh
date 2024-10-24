@@ -5,11 +5,14 @@ set -Eeuo pipefail
 cd "$(dirname "$(realpath "${BASH_SOURCE[0]}")")"
 source ../common/functions-build.sh
 
-info "starting..."
+arg_finish "$@"
+
+### Runtime Base
+source ../systemd-base-image/include.sh
+image_base
+### Runtime Base END
 
 ### 依赖项目
-buildah_cache_start "ghcr.io/gongt/systemd-base-image"
-dnf_use_environment
 dnf_install_step "network" scripts/requirements.lst
 ### 依赖项目 END
 

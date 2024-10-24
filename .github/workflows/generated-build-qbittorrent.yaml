@@ -31,7 +31,7 @@ env:
 
   SOURCE_FILE: qbittorrent/build.sh
   PROJECT_DIR: qbittorrent
-  KNOWN_BASE_IMAGES: quay.io/fedora/fedora:40 ghcr.io/gongt/systemd-base-image:latest
+  KNOWN_BASE_IMAGES: quay.io/fedora/fedora:40 quay.io/fedora/fedora-minimal:40
   BUILDAH_FORCE: ${{ github.event.inputs.forceRebuild }}
   FORCE_DNF: ${{ github.event.inputs.forceDnf }}
   AUTHOR: GongT <admin@gongt.me>
@@ -103,6 +103,18 @@ jobs:
           _BUILDSCRIPT_RUN_STEP_: qbittorrent-build:3
         id: qbittorrent_build_step_3
         name: '运行构建过程: 编译remote-shell（编译）'
+        run: _scripts_/ci-single-build.sh
+        timeout-minutes: 5
+      - env:
+          _BUILDSCRIPT_RUN_STEP_: systemd:1
+        id: systemd_step_1
+        name: '运行构建过程: 安装系统依赖'
+        run: _scripts_/ci-single-build.sh
+        timeout-minutes: 5
+      - env:
+          _BUILDSCRIPT_RUN_STEP_: systemd:2
+        id: systemd_step_2
+        name: '运行构建过程: 配置镜像中的systemd'
         run: _scripts_/ci-single-build.sh
         timeout-minutes: 5
       - env:

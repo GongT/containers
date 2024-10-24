@@ -36,9 +36,13 @@ BUILDAH_FORCE="$FORCE_RSHELL" perfer_proxy download_and_build_github qbittorrent
 
 COMPILE_RESULT_IMAGE=$(get_last_image_id)
 
+### Runtime Base
+source ../systemd-base-image/include.sh
+image_base
+### Runtime Base END
+
 ### 运行时依赖项目
 STEP="运行时依赖项目"
-buildah_cache_start "ghcr.io/gongt/systemd-base-image"
 dnf_use_environment
 dnf_install_step "qbittorrent" scripts/runtime.lst
 ### 运行时依赖项目 END

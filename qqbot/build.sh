@@ -4,9 +4,13 @@ set -Eeuo pipefail
 
 cd "$(dirname "$(realpath "${BASH_SOURCE[0]}")")"
 source ../common/functions-build.sh
-source ../systemd-base-image/include.sh
 
+arg_finish "$@"
+
+### Runtime Base
+source ../systemd-base-image/include.sh
 image_base graphical
+### Runtime Base END
 
 dnf_install_step "qqbot" scripts/requirements.lst
 

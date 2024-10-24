@@ -7,7 +7,11 @@ source ../common/functions-build.sh
 
 arg_finish "$@"
 
-buildah_cache_start "ghcr.io/gongt/systemd-base-image"
+### Runtime Base
+source ../systemd-base-image/include.sh
+image_base
+### Runtime Base END
+
 dnf_use_environment \
 	"--repo=https://mirrors.rpmfusion.org/free/fedora/rpmfusion-free-release-${FEDORA_VERSION}.noarch.rpm" \
 	"--repo=https://mirrors.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-${FEDORA_VERSION}.noarch.rpm" \

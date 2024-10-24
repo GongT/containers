@@ -1,0 +1,7 @@
+systemd
+systemd-networkd
+systemd-resolved
+less
+curl
+tar
+busybox-shared

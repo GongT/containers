@@ -21,13 +21,14 @@ declare -i RCON_PORT="$PORT - 34197 + 27015"
 LOGIN_USER=${LOGIN%%:*}
 LOGIN_PASS=${LOGIN#*:}
 
-create_pod_service_unit factorio
-unit_podman_image registry.gongt.me/gongt/factorio
+auto_create_pod_service_unit
+# unit_podman_image registry.gongt.me/gongt/factorio
 unit_unit Description factorio server
+
+# unit_podman_image_pull never
 unit_data danger
 unit_body TimeoutStartSec 300s
-unit_body RestartPreventExitStatus 66
-unit_start_notify output "Obtained serverPadlock for serverHash"
+# unit_start_notify output "Obtained serverPadlock for serverHash"
 
 network_use_pod gateway "$PORT/udp" "$RCON_PORT/tcp"
 systemd_slice_type entertainment

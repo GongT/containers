@@ -69,8 +69,12 @@ buildah_cache "nginx-build" hash_build run_build
 
 BUILT_RESULT=$(get_last_image_id)
 
+### Runtime Base
+source ../systemd-base-image/include.sh
+image_base
+### Runtime Base END
+
 ### 编译好的nginx
-buildah_cache_start "ghcr.io/gongt/systemd-base-image"
 dnf_use_environment
 dnf_install_step "nginx" scripts/runtime-requirements.lst
 
