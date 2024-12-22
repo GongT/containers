@@ -11,6 +11,7 @@ WantedBy=multi-user.target
 Type=exec
 ExecStart=/usr/bin/rslsync --nodaemon --config "/tmp/config.json"
 KillSignal=SIGINT
+TimeoutStopSec=5min
 User=media_rw
 Group=users
 StandardOutput=journal+console

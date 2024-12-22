@@ -16,6 +16,8 @@ function common() {
 	systemd_slice_type idle
 
 	# unit_body Restart always
+	unit_data danger
+	unit_body TimeoutStartSec 1min
 
 	unit_fs_bind "config/resiliosync/$PROFILE" /data/config
 	unit_fs_bind "data/resiliosync/$PROFILE" /data/state
@@ -29,6 +31,7 @@ function common() {
 	shared_sockets_provide "resiliosync.$PROFILE"
 
 	podman_engine_params \
+		--ulimit=nofile=1048576:1048576 \
 		--env="PORT=$PORT" \
 		--env="PROFILE=$PROFILE" \
 		--env="SERVER_NAME=$TITLE"

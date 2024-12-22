@@ -42,7 +42,7 @@ fi
 if [[ -e "/data/config/license.key" ]]; then
 	echo "apply new license key"
 	x /usr/bin/rslsync --nodaemon --config "/tmp/config.json" "--license" "/data/config/license.key"
-	rm -f /data/config/license.key
+	mv /data/config/license.key /data/config/license.key.current
 else
 	echo "no new license file, it can be at /data/config/license.key"
 fi
