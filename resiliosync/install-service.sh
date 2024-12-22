@@ -12,7 +12,7 @@ function common() {
 	local -i PORT=$3
 	unit_podman_image registry.gongt.me/gongt/resiliosync
 
-	network_use_auto "${PORT}/tcp"
+	network_use_pod gateway "${PORT}/tcp"
 	systemd_slice_type idle
 
 	# unit_body Restart always

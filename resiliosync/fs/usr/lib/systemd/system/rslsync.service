@@ -1,13 +1,15 @@
 [Unit]
 Description=resiliosync server
 Before=nginx-attach.service
+After=prepare.service
+Requires=prepare.service
 
 [Install]
 WantedBy=multi-user.target
 
 [Service]
 Type=exec
-ExecStart=/usr/bin/bash /opt/start.sh
+ExecStart=/usr/bin/rslsync --nodaemon --config "/tmp/config.json"
 KillSignal=SIGINT
 User=media_rw
 Group=users

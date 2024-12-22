@@ -1,0 +1,8 @@
+[Unit]
+Description=prepare for resiliosync server
+
+[Service]
+Type=oneshot
+ExecStart=/usr/bin/bash /opt/prestart.sh
+StandardOutput=journal+console
+StandardError=journal+console
