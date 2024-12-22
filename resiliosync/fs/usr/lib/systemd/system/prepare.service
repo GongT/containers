@@ -3,6 +3,6 @@ Description=prepare for resiliosync server
 
 [Service]
 Type=oneshot
-ExecStart=/usr/bin/bash /opt/prestart.sh
+ExecStart=/usr/bin/bash /opt/prepare-start.sh
 StandardOutput=journal+console
 StandardError=journal+console
