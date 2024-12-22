@@ -12,5 +12,5 @@ FILES=(
 )
 
 for F in "${FILES[@]}"; do
-	sed -i "s#__PROFILE__#$PROFILE#g; s#__UIPORT__#$UIPORT#g; s#__PORT__#$PORT#g" "${F}"
+	sed -i "s#__PROFILE__#$PROFILE#g; s#__UIPORT__#$UIPORT#g; s#__PORT__#$PORT#g; s#__SERVER_NAME__#$SERVER_NAME#g" "${F}"
 done

@@ -9,6 +9,7 @@ WantedBy=multi-user.target
 Type=exec
 ExecStart=/usr/bin/bash /opt/start.sh
 KillSignal=SIGINT
-
+User=media_rw
+Group=users
 StandardOutput=journal+console
 StandardError=journal+console
