@@ -38,7 +38,7 @@ COMPILE_RESULT_IMAGE=$(get_last_image_id)
 
 ### Runtime Base
 source ../systemd-base-image/include.sh
-image_base
+image_base graphical
 ### Runtime Base END
 
 ### 运行时依赖项目
@@ -68,6 +68,6 @@ setup_systemd "qbittorrent" \
 	basic DEFAULT_TARGET=graphical.target \
 	networkd ONLINE=yes \
 	nginx_attach CONFIG_FILE=/opt/scripts/nginx.conf \
-	enable "WANT=qbittorrent.service" "REQUIRE=i3.service socket-proxy.socket"
+	enable "WANT=qbittorrent.service" "REQUIRE=socket-proxy.socket"
 
 buildah_finalize_image "qbittorrent" gongt/qbittorrent
