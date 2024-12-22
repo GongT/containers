@@ -8,7 +8,7 @@ source ../common/functions-install.sh
 arg_finish
 
 create_pod_service_unit "teamspeak"
-# unit_podman_image registry.gongt.me/gongt/teamspeak
+unit_podman_image registry.gongt.me/gongt/teamspeak
 # unit_podman_image_pull never
 unit_unit Description TeamSpeak
 

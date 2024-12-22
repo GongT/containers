@@ -17,13 +17,13 @@ dnf_install_step "qqbot" scripts/requirements.lst
 ### 安装QQNT
 STEP=安装QQNT
 ## curl 'https://im.qq.com/linuxqq/index.shtml' | grep linuxQQDownload
-# rainbowConfigUrl="https://cdn-go.cn/qq-web/im.qq.com_new/latest/rainbow/linuxQQDownload.js"
-QQNT_DOWNLOAD_URL="https://dldir1.qq.com/qqfile/qq/QQNT/2b82dc28/linuxqq_3.2.12-26909_x86_64.rpm" # this is example
+rainbowConfigUrl="https://cdn-go.cn/qq-web/im.qq.com_new/latest/rainbow/linuxQQDownload.js"
+# QQNT_DOWNLOAD_URL="https://dldir1.qq.com/qqfile/qq/QQNT/2b82dc28/linuxqq_3.2.12-26909_x86_64.rpm" # this is example
 hash_qqnt() {
-	# QQNT_DOWNLOAD_URL=$(curl -sL "$rainbowConfigUrl" \
-	# 	| grep -oP '"rpm"\s*:\s*".+?"' \
-	# 	| grep -F x86 \
-	# 	| grep -oE 'http.+\.rpm')
+	QQNT_DOWNLOAD_URL=$(curl -sL "$rainbowConfigUrl" \
+		| grep -oP '"rpm"\s*:\s*".+?"' \
+		| grep -F x86 \
+		| grep -oE 'http.+\.rpm')
 	info_note " * download url: $QQNT_DOWNLOAD_URL"
 	control_ci summary "## QQNT
 * $(echo "${QQNT_DOWNLOAD_URL#*_}" | sed -e 's#_x86_64\.rpm$##')
