@@ -10,9 +10,7 @@ arg_finish "$@"
 function common() {
 	local PROFILE=$1
 	local -i PORT=$2
-	# unit_podman_image registry.gongt.me/gongt/resiliosync
-	unit_podman_image resiliosync
-	# unit_data danger
+	unit_podman_image registry.gongt.me/gongt/resiliosync
 
 	network_use_auto "${PORT}/tcp"
 	systemd_slice_type idle
@@ -41,6 +39,6 @@ unit_finish
 
 create_pod_service_unit resiliosync
 unit_unit Description 'My personal resiliosync server'
-common "personal" 35516
+common "resiliosync" 35516
 unit_fs_bind /data/Volumes/UserData/ResilioSync /data/content
 unit_finish
