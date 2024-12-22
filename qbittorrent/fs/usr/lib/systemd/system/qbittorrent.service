@@ -5,7 +5,7 @@ After=i3.service
 
 [Service]
 Type=exec
-Environment=DISPLAY=:0 LC_ALL=C.UTF-8
+Environment=DISPLAY=:0
 ExecStartPre=+/bin/bash /opt/scripts/prestart.sh
 ExecStart=/usr/bin/qbittorrent --profile=/opt
 Restart=on-abort

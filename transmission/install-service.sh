@@ -15,7 +15,6 @@ create_it() {
 
 	unit_data danger
 
-	unit_using_systemd
 	add_network_privilege
 	
 	network_use_manual --network=bridge0 "--mac-address=$MAC_ADDRESS"

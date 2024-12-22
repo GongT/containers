@@ -1,0 +1,23 @@
+[Unit]
+Description=TeamSpeak 3 server
+
+[Service]
+Type=exec
+Environment=TS3SERVER_LICENSE=accept
+WorkingDirectory=/opt/server
+ExecStartPre=/usr/bin/bash /opt/scripts/init.sh
+ExecStart=/opt/server/ts3server \
+		inifile=/etc/teamspeak/ts3server.ini \
+		dbplugin=ts3db_mariadb \
+		dbsqlcreatepath=create_mariadb/ \
+		dbpluginparameter=/etc/teamspeak/ts3db_mariadb.ini \
+		logpath=/var/log/teamspeak \
+		query_ip_allowlist=/etc/teamspeak/query_ip_allowlist.txt \
+		query_ip_denylist=/etc/teamspeak/query_ip_denylist.txt
+								
+								
+StandardOutput=journal+console
+StandardError=journal+console
+
+[Install]
+WantedBy=multi-user.target

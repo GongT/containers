@@ -23,7 +23,6 @@ unit_fs_bind data/qbittorrent/HOME /home/media_rw
 unit_fs_bind /data/Volumes /data/Volumes
 
 unit_body TimeoutStartSec 2min
-podman_engine_params --env="LANG=zh_CN.utf8"
 shared_sockets_provide qbittorrent-admin
 
 for I in /data/Volumes/*; do
