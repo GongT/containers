@@ -1,0 +1,19 @@
+// rslsync --dump-sample-config
+{
+	"device_name": "__DEVICE_NAME__",
+	"listening_port": __PORT__,
+	"storage_path": "/data/state",
+	"pid_file": "/var/run/resilio.pid",
+	"send_statistics": true,
+	"use_upnp": false,
+	"download_limit": 5000,
+	"upload_limit": 5000,
+	"directory_root": "/data/content/",
+	"directory_root_policy": "all",
+	"webui": {
+		"listen": "127.0.0.1:__UIPORT__", 
+		"login": "admin",
+		"password": "admin",
+		"allow_empty_password": false
+	}
+}

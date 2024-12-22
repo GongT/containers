@@ -1,0 +1,14 @@
+[Unit]
+Description=resiliosync server
+Before=nginx-attach.service
+
+[Install]
+WantedBy=multi-user.target
+
+[Service]
+Type=exec
+ExecStart=/usr/bin/bash /opt/start.sh
+KillSignal=SIGINT
+
+StandardOutput=journal+console
+StandardError=journal+console

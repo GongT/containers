@@ -1,9 +1,0 @@
-[nginx]
-arg[]:/bin/bash
-arg[]:/opt/nginx.sh
-signal:SIGINT
-
-[rlsync]
-arg[]:/bin/bash
-arg[]:/opt/start.sh
-signal:SIGINT

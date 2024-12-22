@@ -8,19 +8,19 @@ source ../common/functions-build.sh
 arg_flag FORCE f/force "force rebuild"
 arg_finish "$@"
 
-info "starting..."
+### Runtime Base
+source ../systemd-base-image/include.sh
+image_base
+### Runtime Base END
 
 ### 运行时依赖项目
 STEP="运行时依赖项目"
-dnf_use_environment --repo=scripts/resilio.repo
+dnf_use_environment
 dnf_install_step "resiliosync" scripts/runtime.lst scripts/post-install.sh
 ### 运行时依赖项目 END
 
-### sbin/init
-download_and_install_x64_init "resiliosync"
-### sbin/init END
-
-### hjson
+### 下载hjson
+STEP="下载hjson"
 REPO="hjson/hjson-go"
 get_download() {
 	http_get_github_release_id "$REPO"
@@ -34,15 +34,33 @@ do_download() {
 	xbuildah copy --chmod 0777 "$CONTAIENR" "$TMPD/hjson" "/usr/bin/hjson"
 }
 buildah_cache "resiliosync" get_download do_download
-### hjson END
+### 下载hjson END
+
+### 下载
+STEP="下载resilio-sync"
+DOWNLOAD_URL=https://download-cdn.resilio.com/stable/linux/x64/0/resilio-sync_x64.tar.gz
+get_download() {
+	echo "${DOWNLOAD_URL}"
+	perfer_proxy http_get_etag "$DOWNLOAD_URL"
+}
+do_download() {
+	local URL DOWNLOADED CONTAIENR="$1" TMPD
+	DOWNLOADED=$(perfer_proxy download_file "${DOWNLOAD_URL}")
+	TMPD=$(create_temp_dir unzip)
+	decompression_file "${DOWNLOADED}" 0 "${TMPD}"
+	buildah copy "$CONTAIENR" "$TMPD/rslsync" "/usr/bin/rslsync"
+}
+buildah_cache "resiliosync" get_download do_download
+### 下载 END
 
 ### 配置文件等
 STEP="复制配置文件"
 merge_local_fs "resiliosync"
 ### 配置文件等 END
 
-buildah_config "resiliosync" --cmd '/opt/init.sh' --stop-signal SIGINT \
-	--author "GongT <admin@gongt.me>" --created-by "#MAGIC!" --label name=gongt/resiliosync
+setup_systemd "resiliosync" \
+	nginx_attach CONFIG_FILE=/opt/nginx-attach.conf \
+	enable "REQUIRE=nginx.service rslsync.service"
 
 buildah_finalize_image "resiliosync" gongt/resiliosync
 info "Done!"

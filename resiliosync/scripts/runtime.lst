@@ -1,10 +1,6 @@
-bash
-resilio-sync
 nginx
 nmap-ncat
 jq
-gawk
 curl
-grep
-procps-ng
-psmisc
+sed
+libxcrypt-compat

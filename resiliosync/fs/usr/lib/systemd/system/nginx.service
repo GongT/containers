@@ -1,0 +1,15 @@
+[Unit]
+Description=proxy server for resiliosync
+Before=nginx-attach.service
+
+[Install]
+WantedBy=multi-user.target
+
+[Service]
+Type=exec
+ExecStartPre=/usr/bin/rm -f /run/sockets/resiliosync.__PROFILE__.sock
+ExecStartPre=/usr/bin/mkdir -p /run/nginx
+ExecStart=/usr/sbin/nginx
+ExecReload=/usr/sbin/nginx -s reload
+ExecStop=/usr/sbin/nginx -s stop
+ExecStopPost=/usr/bin/rm -f /run/sockets/resiliosync.__PROFILE__.sock

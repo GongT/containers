@@ -2,17 +2,7 @@
 
 set -Eeuo pipefail
 
-function build_json_line() {
-	local TITLE=$1
-	local SECRET=$2
-	local DIR
-
-	DIR=$(echo -n "/data/content/$TITLE" | jq --raw-input --compact-output --monochrome-output '.')
-	cat <<-JSON | sed ""
-		{ "dir": $DIR, "use_relay_server": true, "use_tracker": true, "search_lan": true, "use_sync_trash": false, "overwrite_changes": true, "selective_sync": false, "secret": "$SECRET" }
-	JSON
-}
-
+echo '['
 TMPF=$(mktemp)
 SIGFOUND=
 while IFS= read -r line; do
@@ -33,9 +23,17 @@ while IFS= read -r line; do
 		echo "===================================" >&2
 	fi
 
-	build_json_line "$TITLE_LINK" "$TITLE_SECRET" >>"$TMPF"
-done < <(curl 'https://bs.wgzeyu.com/songs/readme.md' | sed -n '/^#/,$p' | grep -E '^\s*\|' | grep -E '\|\s*$' | grep -v '不含曲包')
-# build_json_line a b
+	TITLE_ESCAPE=$(echo "${TITLE_LINK}" | sed 's#[\\\/:*?"<>|]##g' )
 
-jq --join-output --monochrome-output --slurp '.' <"$TMPF"
-rm -f "$TMPF"
+	echo "{"
+	echo "dir: /data/content/$TITLE_LINK"
+	echo "use_relay_server: false"
+	echo "use_tracker: true"
+	echo "search_lan: true"
+	echo "use_sync_trash: false"
+	echo "overwrite_changes: true"
+	echo "selective_sync: false"
+	echo "secret: $TITLE_SECRET"
+	echo "}"
+done < <(curl 'https://bs.wgzeyu.com/songs/readme.md' | sed -n '/^#/,$p' | grep -E '^\s*\|' | grep -E '\|\s*$' | grep -v '不含曲包')
+echo ']'

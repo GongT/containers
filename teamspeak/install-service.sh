@@ -12,7 +12,7 @@ unit_podman_image registry.gongt.me/gongt/teamspeak
 # unit_podman_image_pull never
 unit_unit Description TeamSpeak
 
-network_use_default 9987/udp 30033/tcp 10022/tcp 10080/tcp
+network_use_pod gateway 9987/udp 30033/tcp 10022/tcp 10080/tcp
 systemd_slice_type entertainment
 
 # podman_engine_params --env="LANG=zh_CN.utf8"
