@@ -102,13 +102,13 @@ jobs:
       - env:
           _BUILDSCRIPT_RUN_STEP_: systemd-graphical:1
         id: systemd_graphical_step_1
-        name: '运行构建过程: 安装系统依赖'
+        name: '运行构建过程: 安装图形界面'
         run: _scripts_/ci-single-build.sh
         timeout-minutes: 5
       - env:
           _BUILDSCRIPT_RUN_STEP_: systemd-graphical:2
         id: systemd_graphical_step_2
-        name: '运行构建过程: 复制文件'
+        name: '运行构建过程: 复制图形界面配置文件'
         run: _scripts_/ci-single-build.sh
         timeout-minutes: 5
       - env:
@@ -120,7 +120,7 @@ jobs:
       - env:
           _BUILDSCRIPT_RUN_STEP_: qqbot:1
         id: qqbot_step_1
-        name: '运行构建过程: 安装系统依赖'
+        name: '运行构建过程: 配置vnc服务'
         run: _scripts_/ci-single-build.sh
         timeout-minutes: 5
       - env:

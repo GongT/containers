@@ -118,6 +118,24 @@ jobs:
         run: _scripts_/ci-single-build.sh
         timeout-minutes: 5
       - env:
+          _BUILDSCRIPT_RUN_STEP_: systemd-graphical:1
+        id: systemd_graphical_step_1
+        name: '运行构建过程: 安装图形界面'
+        run: _scripts_/ci-single-build.sh
+        timeout-minutes: 5
+      - env:
+          _BUILDSCRIPT_RUN_STEP_: systemd-graphical:2
+        id: systemd_graphical_step_2
+        name: '运行构建过程: 复制图形界面配置文件'
+        run: _scripts_/ci-single-build.sh
+        timeout-minutes: 5
+      - env:
+          _BUILDSCRIPT_RUN_STEP_: systemd-graphical:3
+        id: systemd_graphical_step_3
+        name: '运行构建过程: 配置镜像中的systemd'
+        run: _scripts_/ci-single-build.sh
+        timeout-minutes: 5
+      - env:
           _BUILDSCRIPT_RUN_STEP_: qbittorrent:1
         id: qbittorrent_step_1
         name: '运行构建过程: 运行时依赖项目'
