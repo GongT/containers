@@ -1,51 +1,45 @@
 #!/usr/bin/env bash
+
 set -Eeuo pipefail
-shopt -s inherit_errexit extglob nullglob globstar lastpipe shift_verbose
 
-x() {
-	echo "$*" >&2
-	"$@"
-}
+MENU_DIR='/data/content/00 目录'
+rm -rf "${MENU_DIR}"
+mkdir -p "${MENU_DIR}"
 
-ARGS=("")
+echo '['
+SIGFOUND=
+while IFS= read -r line; do
+	TITLE_LINK=$(echo "$line" | awk -F ' *\\| *' '{print $2}' | sed -E 's#^.*\[(.+)].*$#\1#g')
 
-if [[ -e "/data/config/license.key" ]]; then
-	ARGS+=()
-fi
+	if [[ $TITLE_LINK =~ ^-+$ ]]; then
+		SIGFOUND=yes
+		continue
+	elif [[ ! $SIGFOUND ]]; then
+		continue
+	fi
 
-hjson -j /opt/base-config.jsonc >/tmp/config.json
+	TITLE_SECRET=$(echo "$line" | awk -F ' *\\| *' '{print $5}' | sed -E 's#[^0-9a-zA-Z]##g')
+	if [[ $(echo -n "$TITLE_SECRET" | wc -c) -ne 33 ]]; then
+		echo "===================================" >&2
+		echo "Invalid Line: hash not equals to 33" >&2
+		echo "$line" >&2
+		echo "===================================" >&2
+	fi
 
-if [[ -e "/data/config/profile.sh" ]]; then
-	echo "using profile!"
-	PROFILE_JSON=$(bash /data/config/profile.sh | hjson -j)
-	jq --join-output --monochrome-output '.shared_folders = $ARGS.named.folders' --argjson folders "${PROFILE_JSON}" /tmp/config.json >/tmp/config-static.json
+	TITLE_ESCAPE=$(echo "${TITLE_LINK}" | sed 's#[\\\/:*?"<>|]##g')
 
-	echo "starting settings update..."
-	x /usr/bin/rslsync --nodaemon --config /tmp/config-static.json &
+	echo "[${TITLE_SECRET}] ${TITLE_LINK}" >&2
+	ln -s "../$TITLE_SECRET" "${MENU_DIR}/${TITLE_ESCAPE}"
 
-	sleep 10
-
-	echo "ending settings update..."
-	PID=$(</tmp/resilio.pid)
-	kill -s SIGINT "${PID}"
-
-	echo "wait shutdown"
-	wait
-
-	rm -f /tmp/config-static.json
-
-	echo "complete!"
-else
-	echo "profile not exists"
-fi
-
-if [[ -e "/data/config/license.key" ]]; then
-	echo "apply new license key"
-	x /usr/bin/rslsync --nodaemon --config "/tmp/config.json" "--license" "/data/config/license.key"
-	mv /data/config/license.key /data/config/license.key.current
-else
-	echo "no new license file, it can be at /data/config/license.key"
-fi
-
-rm -f /tmp/resilio.pid
-chown media_rw:users /data/state -R
+	echo "{"
+	echo "dir: /data/content/$TITLE_SECRET"
+	echo "use_relay_server: false"
+	echo "use_tracker: true"
+	echo "search_lan: true"
+	echo "use_sync_trash: false"
+	echo "overwrite_changes: true"
+	echo "selective_sync: false"
+	echo "secret: $TITLE_SECRET"
+	echo "}"
+done < <(curl 'https://bs.wgzeyu.com/songs/readme.md' | sed -n '/^#/,$p' | grep -E '^\s*\|' | grep -E '\|\s*$' | grep -v '不含曲包')
+echo ']'

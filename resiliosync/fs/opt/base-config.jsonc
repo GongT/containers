@@ -12,6 +12,10 @@
 	"net.udp_ipv6_mtu": 1400,
 	"directory_root": "/data/content/",
 	"directory_root_policy": "all",
+	"disk_low_priority": true,
+	"worker_threads_count": true,
+	"show_service_disk_thread": true,
+	"folder_defaults.use_relay": true,
 	"webui": {
 		"listen": "127.0.0.1:__UIPORT__", 
 		"login": "admin",

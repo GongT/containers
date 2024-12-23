@@ -2,8 +2,11 @@
 
 set -Eeuo pipefail
 
+MENU_DIR='/data/content/00 目录'
+rm -rf "${MENU_DIR}"
+mkdir -p "${MENU_DIR}"
+
 echo '['
-TMPF=$(mktemp)
 SIGFOUND=
 while IFS= read -r line; do
 	TITLE_LINK=$(echo "$line" | awk -F ' *\\| *' '{print $2}' | sed -E 's#^.*\[(.+)].*$#\1#g')
@@ -23,10 +26,13 @@ while IFS= read -r line; do
 		echo "===================================" >&2
 	fi
 
-	TITLE_ESCAPE=$(echo "${TITLE_LINK}" | sed 's#[\\\/:*?"<>|]##g' )
+	TITLE_ESCAPE=$(echo "${TITLE_LINK}" | sed 's#[\\\/:*?"<>|]##g')
+
+	echo "[${TITLE_SECRET}] ${TITLE_LINK}"
+	ln -s "../$TITLE_SECRET" "${MENU_DIR}/${TITLE_ESCAPE}"
 
 	echo "{"
-	echo "dir: /data/content/$TITLE_LINK"
+	echo "dir: /data/content/$TITLE_SECRET"
 	echo "use_relay_server: false"
 	echo "use_tracker: true"
 	echo "search_lan: true"
