@@ -16,3 +16,4 @@ User=media_rw
 Group=users
 StandardOutput=journal+console
 StandardError=journal+console
+LimitNOFILE=20480
