@@ -5,3 +5,4 @@ less
 curl
 tar
 busybox-shared
+glibc-langpack-zh
