@@ -9,7 +9,7 @@ WantedBy=multi-user.target
 
 [Service]
 Type=exec
-ExecStart=/usr/bin/rslsync --nodaemon --config "/tmp/config.json"
+ExecStart=/usr/bin/rslsync --nodaemon --config "/etc/rslsync/config.json"
 KillSignal=SIGINT
 TimeoutStopSec=5min
 User=media_rw
