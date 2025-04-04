@@ -7,4 +7,4 @@ rm -rf "${MENU_DIR}"
 mkdir -p "${MENU_DIR}"
 
 mkdir -p "/etc/rslsync"
-bash /opt/prepare-start-inner.sh | sed 's/}{/},{/g' /tmp/xxx.json | jq >/etc/rslsync/config.json
+bash /opt/prepare-start-inner.sh | sed 's/}{/},{/g' | jq >/etc/rslsync/config.json
