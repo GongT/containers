@@ -2,7 +2,6 @@
 
 set -Eeuo pipefail
 
-echo '['
 SIGFOUND=
 while IFS= read -r line; do
 	TITLE_LINK=$(echo "$line" | awk -F ' *\\| *' '{print $2}' | sed -E 's#^.*\[(.+)].*$#\1#g')
@@ -30,7 +29,7 @@ while IFS= read -r line; do
 		:
 	else
 		unlink "${LINK_FILE}" 2>/dev/null || true
-		ln -s "../$TITLE_SECRET" "${LINK_FILE}"
+		ln -sT "../$TITLE_SECRET" "${LINK_FILE}"
 	fi
 
 	printf "{\n"
@@ -42,6 +41,5 @@ while IFS= read -r line; do
 	printf '\t"overwrite_changes": true,\n'
 	printf '\t"selective_sync": false,\n'
 	printf '\t"secret": "%s"\n' "$TITLE_SECRET"
-	printf "}" # no new line here
+	printf "}\n"
 done < <(curl 'https://bs.wgzeyu.com/songs/readme.md' | sed -n '/^#/,$p' | grep -E '^\s*\|' | grep -E '\|\s*$' | grep -v '不含曲包')
-echo ']'

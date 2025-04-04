@@ -13,13 +13,14 @@
 	"directory_root": "/data/content/",
 	"directory_root_policy": "all",
 	"disk_low_priority": true,
-	"worker_threads_count": true,
+	"worker_threads_count": 4,
 	"show_service_disk_thread": true,
-	"folder_defaults.use_relay": true,
+	"folder_defaults.use_relay": false,
 	"webui": {
 		"listen": "127.0.0.1:__UIPORT__", 
 		"login": "admin",
 		"password": "admin",
 		"allow_empty_password": false
 	}
+	// "shared_folders" : [.........]
 }
