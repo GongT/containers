@@ -1,8 +1,6 @@
 [Unit]
 Description=resiliosync server
 Before=nginx-attach.service
-After=prepare.service
-Requires=prepare.service
 
 [Install]
 WantedBy=multi-user.target
@@ -10,6 +8,7 @@ WantedBy=multi-user.target
 [Service]
 Type=exec
 ExecStart=/usr/bin/rslsync --nodaemon --config "/etc/rslsync/config.json"
+ExecStartPost=/bin/sleep 1
 KillSignal=SIGINT
 TimeoutStopSec=5min
 User=media_rw

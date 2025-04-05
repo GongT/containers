@@ -1,0 +1,12 @@
+[Unit]
+Description=resiliosync server
+ConditionPathExists=/etc/rslsync/boot.json
+
+[Service]
+Type=oneshot
+ExecStart=/usr/bin/rslsync --nodaemon --config "/etc/rslsync/boot.json"
+TimeoutStartSec=30s
+TimeoutStopSec=5min
+User=media_rw
+Group=users
+LimitNOFILE=20480

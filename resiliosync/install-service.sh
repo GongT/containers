@@ -15,17 +15,17 @@ function common() {
 	network_use_pod gateway "${PORT}/tcp"
 	systemd_slice_type idle
 
-	# unit_body Restart always
+	unit_body Restart no
 	unit_data danger
 	unit_body TimeoutStartSec 1min
 
-	unit_fs_bind "config/resiliosync/$PROFILE" /data/config
 	unit_fs_bind "data/resiliosync/$PROFILE" /data/state
 	unit_fs_bind "logs/resiliosync/$PROFILE" /var/log
 
 	if [[ -e "profiles/$PROFILE.sh" ]]; then
 		mkdir -p "$CONTAINERS_DATA_PATH/config/resiliosync/$PROFILE"
 		cp "profiles/$PROFILE.sh" "$CONTAINERS_DATA_PATH/config/resiliosync/$PROFILE/profile.sh"
+		unit_fs_bind "config/resiliosync/$PROFILE" /data/config
 	fi
 
 	shared_sockets_provide "resiliosync.$PROFILE"
