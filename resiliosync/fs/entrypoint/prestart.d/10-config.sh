@@ -9,6 +9,9 @@ FILES=(
 	/etc/nginx/nginx.conf
 	/etc/nginx/pass.conf
 	/opt/nginx-attach.conf
+	/usr/lib/systemd/system/nginx.service
+	/usr/lib/systemd/system/boot.service
+	/usr/lib/systemd/system/rslsync.service
 )
 
 for F in "${FILES[@]}"; do
