@@ -40,7 +40,7 @@ function common() {
 create_pod_service_unit beatsaber-music-sync
 unit_unit Description 'BeatSaber Music Packs Sync'
 common "beatsaber" "初绎的光剑游戏谱面镜像" 35515
-unit_fs_bind /data/Volumes/GameDisk/Download/BeatSaber /data/content
+unit_fs_bind /data/Volumes/GameDisk/BeatSaber/MusicSync /data/content
 unit_finish
 
 create_pod_service_unit resiliosync
