@@ -14,17 +14,17 @@ function create_config() {
 
 	echo "netbios name = $(</etc/hostname)"
 
-	for I in /mountpoints/*/; do
-		create_section "$I"
+	for I1 in /mountpoints/*/; do
+		create_section "$I1"
 	done
-	for I in /drives/*/; do
-		create_section "$I"
+	for I2 in /drives/*/; do
+		create_section "$I2"
 	done
 }
 
 function create_section() {
 	local T_PATH="$(realpath "$1")" OPTIONS LABEL
-	local LABEL_FILE="${I}/.\$samba/disk label.txt"
+	local LABEL_FILE="${T_PATH}/.\$samba/disk label.txt"
 	if [[ -e $LABEL_FILE ]]; then
 		LABEL=$(<"$LABEL_FILE")
 	else
@@ -36,7 +36,7 @@ function create_section() {
 		echo "$LABEL" >"$LABEL_FILE"
 	fi
 
-	local OPTIONS_FILE="${I}/.\$samba/samba options.txt"
+	local OPTIONS_FILE="${T_PATH}/.\$samba/samba options.txt"
 	if [[ -e $OPTIONS_FILE ]]; then
 		OPTIONS="$(echo $(<"$OPTIONS_FILE"))"
 	else
@@ -44,12 +44,12 @@ function create_section() {
 		echo "" >"$OPTIONS_FILE"
 		OPTIONS=''
 	fi
+	mkdir -p "${T_PATH}/.\$samba/recycle"
 
 	echo "
 [$(basename "${T_PATH}")]
 comment = ${LABEL}
 path = ${T_PATH}/
-recycle:repository = ${T_PATH}/.\$samba/recycle/%U
 $OPTIONS
 "
 	cat /opt/scripts/section.txt

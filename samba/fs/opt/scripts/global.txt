@@ -6,31 +6,44 @@ workgroup = WORKGROUP
 server string = shabao's SAMBA share server
 min protocol = SMB2
 security = user
-map archive = no
-map hidden = no
-map read only = yes
-map system = no
-# idmap config * : backend = tdb
-# idmap config * : range = 1000-6999
-# template shell = /bin/bash
-# template homedir = /home/%U
-vfs objects = full_audit btrfs recycle streams_xattr acl_xattr
-map acl inherit = yes
-store dos attributes = yes
-passdb backend = tdbsam
+
 load printers = no
 name resolve order = bcast lmhosts wins host
 local master = yes
 wins support = no
 preferred master = yes
-valid users = +smbusers media_rw
-admin users = +smbusers media_rw
-write list = +smbusers media_rw
-username map = /etc/samba/username.map.generate
+
+map acl inherit = yes 
+map archive = no
+map hidden = no
+map read only = no
+map system = no
+store dos attributes = yes
+inherit permissions = yes
+nt acl support = yes
 acl allow execute always = yes
+
+full_audit:failure = all
+# full_audit:success =
+full_audit:prefix = %S|%u|%U
+
+# template shell = /bin/bash
+# template homedir = /home/%U
+vfs objects = full_audit btrfs recycle
+
+passdb backend = tdbsam
+
+valid users = +smbusers media_rw
+; admin users = +smbusers media_rw
+write list = +smbusers media_rw
+
+idmap config * : backend = tdb
+idmap config * : range = 1000-6999
+username map = /etc/samba/username.map.generate
 ntlm auth = yes
 
-recycle:touch = no
+recycle:repository = .$samba/recycle/%U
+recycle:touch = yes
 recycle:keeptree = yes
 recycle:versions = no
 recycle:excludedir = .$samba

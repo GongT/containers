@@ -1,7 +1,5 @@
 writable = yes
 read only = no
 read list = guest, nobody
-nt acl support = yes
 public = yes
-inherit acls = yes
 browseable = yes
