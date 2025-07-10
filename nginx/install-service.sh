@@ -33,6 +33,8 @@ unit_unit After gateway-network.pod.service
 network_use_pod gateway
 systemd_slice_type normal
 
+# network_use_dns 'p.a.s.s'
+
 environment_variable \
 	"CENSORSHIP=$CENSORSHIP" \
 	"DISABLE_SSL=$DISABLE_SSL"

@@ -63,7 +63,7 @@ function process_line() {
 	printf '\t"dir": "%s",\n' "/data/content/$TITLE_SECRET"
 	printf '\t"use_relay_server": false,\n'
 	printf '\t"use_tracker": true,\n'
-	printf '\t"search_lan": true,\n'
+	printf '\t"search_lan": false,\n'
 	printf '\t"use_sync_trash": false,\n'
 	printf '\t"overwrite_changes": true,\n'
 	printf '\t"selective_sync": false,\n'

@@ -19,16 +19,6 @@ dnf_use_environment
 dnf_install_step "qbittorrent-build" scripts/compile.lst
 ### 编译时依赖项目 END
 
-# ### 编译libtorrent
-# STEP="编译libtorrent"
-# download_and_build_github qbittorrent-build libtorrent arvidn/libtorrent RC_1_2
-# ### 编译libtorrent END
-
-# ### 编译qbittorrent!
-# STEP="编译qbittorrent"
-# download_and_build_github qbittorrent-build qbittorrent qbittorrent/qBittorrent
-# ### 编译qbittorrent! END
-
 ### 编译remote-shell
 STEP="编译remote-shell"
 BUILDAH_FORCE="$FORCE_RSHELL" perfer_proxy download_and_build_github qbittorrent-build broadcaster GongT/remote-shell master

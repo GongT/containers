@@ -7,12 +7,12 @@ PASSWD="$2"
 echo "Ensure user $USER:"
 if ! grep -q -- "$USER" "/etc/passwd"; then
 	echo "  linux user does not exists. create it now..."
-	useradd "$USER" --gid 100 --groups users,root,smbusers --no-user-group --no-create-home
+	useradd "$USER" --gid 100 --groups users,smbusers --no-user-group --no-create-home
 fi
 
-echo "  set linux password to $PASSWD."
+echo " --> set linux password to $PASSWD."
 echo -e "$PASSWD\n$PASSWD\n" | passwd "$USER"
 
-echo "  set pdb password."
+echo " --> set pdb password."
 echo -e "$PASSWD\n$PASSWD\n" | pdbedit "--user=$USER" "--fullname=$USER" --create
 echo "User $USER created."
