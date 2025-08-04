@@ -13,7 +13,7 @@ function __prepare() {
 	## todo: dynamic parsed
 	rm -f "${SHARED_SOCKET_PATH}/http.sock" "${SHARED_SOCKET_PATH}/http.sock" "${SHARED_SOCKET_PATH}/reload.sock"
 
-	/usr/sbin/nginx -t || {
+	/usr/bin/nginx -t || {
 		echo "===================================="
 		echo "!! Failed test nginx config files !!"
 		echo "===================================="
@@ -25,5 +25,5 @@ export -f __prepare
 lock-config __prepare
 unset __prepare
 
-echo "start /usr/sbin/nginx"
-exec /usr/sbin/nginx
+echo "start /usr/bin/nginx"
+exec /usr/bin/nginx

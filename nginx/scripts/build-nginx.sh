@@ -58,7 +58,7 @@ indent
 ### TODO: 通过安装系统自带的nginx，运行nginx -V看原本的编译参数
 indent_stream ./auto/configure \
 	'--prefix=/usr/' \
-	'--sbin-path=/usr/sbin' \
+	'--sbin-path=/usr/bin' \
 	'--modules-path=/usr/nginx/modules' \
 	'--conf-path=/etc/nginx/nginx.conf' \
 	'--error-log-path=/var/log/error.log' \
@@ -120,7 +120,7 @@ dedent
 
 info "=== install nginx"
 indent
-mkdir -p "$ARTIFACT_PREFIX/usr/sbin"
+mkdir -p "$ARTIFACT_PREFIX/usr/bin"
 
 indent_stream make "DESTDIR=$ARTIFACT_PREFIX" install
 

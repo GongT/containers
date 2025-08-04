@@ -7,7 +7,7 @@ WantedBy=multi-user.target
 [Service]
 Type=exec
 ExecStartPre=/usr/bin/rm -f /run/reload-cgi.sock
-ExecStart=/usr/sbin/fcgiwrap -s unix:/run/reload-cgi.sock
+ExecStart=/usr/bin/fcgiwrap -s unix:/run/reload-cgi.sock
 ExecStopPost=-/usr/bin/rm -f /run/reload-cgi.sock
 StandardInput=null
 StandardOutput=journal

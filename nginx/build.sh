@@ -97,7 +97,7 @@ merge_local_fs "nginx"
 setup_systemd nginx \
 	enable "WANT=reload-cgi.service force-reload-once.timer" "REQUIRE=nginx.service"
 
-healthcheck /usr/sbin/healthcheck.sh
+healthcheck /usr/bin/healthcheck.sh
 healthcheck_interval 60s
 healthcheck_retry 2
 healthcheck_startup 30s

@@ -1,6 +1,6 @@
 #!/usr/bin/bash
 
-export PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/xbin
+export PATH=/usr/local/bin:/usr/local/bin:/usr/bin:/usr/bin:/bin:/bin:/usr/xbin
 
 link-effective main
 config-file-macro /etc/nginx
