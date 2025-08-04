@@ -1,0 +1,10 @@
+[Unit]
+Description=listening socket proxy
+FailureAction=exit
+FailureActionExitStatus=233
+
+[Install]
+WantedBy=sockets.target
+
+[Socket]
+ListenStream=/run/sockets/auto-bangumi-qbittorrent.sock

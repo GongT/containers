@@ -1,0 +1,7 @@
+[Unit]
+FailureAction=exit
+FailureActionExitStatus=233
+
+[Service]
+Type=notify
+ExecStart=/usr/lib/systemd/systemd-socket-proxyd 127.0.0.1:7892

@@ -2,7 +2,7 @@
 
 set -Eeuo pipefail
 
-declare -r FEDORA_VERSION=40
+declare -r FEDORA_VERSION=42
 
 cd "$(dirname "$(realpath "${BASH_SOURCE[0]}")")"
 source ../common/functions-build.sh

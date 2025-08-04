@@ -1,0 +1,14 @@
+[Unit]
+Description=Auto Bangumi Service
+After=network.target systemd-networkd.service
+Requires=systemd-networkd.service
+
+[Install]
+WantedBy=multi-user.target
+
+[Service]
+Type=exec
+User=media_rw
+Group=users
+WorkingDirectory=/app
+ExecStart=/usr/bin/python3 main.py

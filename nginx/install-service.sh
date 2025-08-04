@@ -29,6 +29,7 @@ unit_podman_image registry.gongt.me/gongt/nginx
 unit_podman_cmdline --systemd
 unit_unit Description nginx - high performance web server
 unit_unit After gateway-network.pod.service
+unit_depend devenv.service
 
 network_use_pod gateway
 systemd_slice_type normal
