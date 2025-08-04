@@ -6,17 +6,17 @@ on:
         type: boolean
         description: 跳过拉取上次构建结果
         required: false
-        default: false
+        default: 
       forceDnf:
         type: boolean
         description: 强制运行dnf
         required: false
-        default: false
+        default: 
       forceRebuild:
         type: boolean
         description: 强制全部重新构建，无视缓存
         required: false
-        default: false
+        default: 
   # schedule:
   #   - cron:  '47 4 {{__cron_day__}} * *'
   push:
@@ -31,7 +31,7 @@ env:
 
   SOURCE_FILE: teamspeak/build.sh
   PROJECT_DIR: teamspeak
-  KNOWN_BASE_IMAGES: quay.io/fedora/fedora-minimal:40
+  KNOWN_BASE_IMAGES: quay.io/fedora/fedora-minimal:42
   BUILDAH_FORCE: ${{ github.event.inputs.forceRebuild }}
   FORCE_DNF: ${{ github.event.inputs.forceDnf }}
   AUTHOR: GongT <admin@gongt.me>
@@ -65,7 +65,12 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SECRET_PASSWORD: ${{ secrets.SECRET_PASSWORD }}
-        run: bash _scripts_/prepare-secrets.sh ghcr.io
+        run: |
+          bash _scripts_/prepare-secrets.sh ghcr.io
+
+          echo "brandNew = ${{ github.event.inputs.brandNew }}"
+          echo "forceDnf = ${{ github.event.inputs.forceDnf }}"
+          echo "forceRebuild = ${{ github.event.inputs.forceRebuild }}"
 
       # - name: "缓存下载和软件包数据"
       #   uses: pat-s/always-upload-cache@v3.0.11
@@ -78,11 +83,13 @@ jobs:
       #       common-cache-
 
       - name: "预取基础镜像"
-        if: github.event.inputs.brandNew == ''
+        if: ${{ github.event.inputs.brandNew == '' }}
         timeout-minutes: 1
         run: |
           if [[ -n ${KNOWN_BASE_IMAGES} ]] ; then
             bash ./_scripts_/retry.sh podman pull $KNOWN_BASE_IMAGES || exit 1
+          else
+            echo "No known base images to pull"
           fi
           exit 0
 
