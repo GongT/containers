@@ -51,7 +51,7 @@ buildah_cache "qbittorrent" hash_program_files copy_program_files
 
 ### 配置文件等
 STEP="复制配置文件"
-merge_local_fs "qbittorrent" "scripts/prepare-run.sh"
+merge_local_fs "qbittorrent"
 ### 配置文件等 END
 
 setup_systemd "qbittorrent" \

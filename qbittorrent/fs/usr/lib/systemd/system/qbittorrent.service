@@ -3,13 +3,14 @@ Description=qBittorrent
 Requires=i3.service
 After=i3.service
 
+[Install]
+WantedBy=graphical.target
+
 [Service]
 Type=exec
 Environment=DISPLAY=:0
-ExecStartPre=+/bin/bash /opt/scripts/prestart.sh
 ExecStart=/usr/bin/qbittorrent --profile=/opt
 Restart=on-abort
-User=media_rw
 Group=users
 LimitAS=infinity
 LimitRSS=infinity
@@ -17,6 +18,3 @@ LimitCORE=infinity
 LimitNOFILE=65536
 KillSignal=SIGINT
 TimeoutStopSec=10min
-
-[Install]
-WantedBy=graphical.target
