@@ -7,7 +7,7 @@ After=systemd-networkd.service systemd-networkd-wait-online.service
 [Service]
 Type=oneshot
 RemainAfterExit=yes
-EnvironmentFile=/run/.userenvironments
+# EnvironmentFile=/run//
 EnvironmentFile=-/opt/config/environments
 ExecStart=/opt/scripts/prepare.sh
 StandardOutput=journal+console

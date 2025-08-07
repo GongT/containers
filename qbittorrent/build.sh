@@ -27,6 +27,7 @@ BUILDAH_FORCE="$FORCE_RSHELL" perfer_proxy download_and_build_github qbittorrent
 COMPILE_RESULT_IMAGE=$(get_last_image_id)
 
 ### Runtime Base
+record_last_base_name "ghcr.io/gongt/systemd-base-image:latest"
 source ../systemd-base-image/include.sh
 image_base graphical
 ### Runtime Base END
