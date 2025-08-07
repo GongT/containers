@@ -5,6 +5,6 @@ set -Eeuo pipefail
 cd /usr/share/nextcloud
 
 set -a
-source /run/.userenvironments
+eval "$(load_env)"
 
 sudo --preserve-env -u media_rw php -d memory_limit=2G occ "$@"

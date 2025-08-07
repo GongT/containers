@@ -7,17 +7,24 @@ unset http_proxy https_proxy all_proxy HTTP_PROXY HTTPS_PROXY ALL_PROXY
 export SKIP_REMOVE=yes
 IMAGES=()
 
+function add_to_set() {
+	local IMAGE=$1
+	if [[ " ${IMAGES[*]} " != *" ${IMAGE} "* ]]; then
+		IMAGES+=("${IMAGE}")
+	fi
+}
+
 if [[ $# -eq 0 ]]; then
 	mapfile -t _IMAGES < <(podman images | grep gongt/ | grep latest | awk '{print $1}')
 	for I in "${_IMAGES[@]}"; do
-		IMAGES+=("${I#*\/}")
+		add_to_set "${I#*\/}"
 	done
 else
 	for IMAGE in "${@}"; do
 		if [[ $IMAGE != gongt/* ]]; then
 			IMAGE="gongt/$IMAGE"
 		fi
-		IMAGES+=("$IMAGE")
+		add_to_set "$IMAGE"
 	done
 fi
 

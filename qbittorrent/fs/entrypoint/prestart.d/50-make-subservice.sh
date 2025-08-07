@@ -8,4 +8,5 @@ function make_sub() {
 if [[ "${SUBSERVICE-}" ]]; then
 	make_sub "${SUBSERVICE}"
 	exportenv PROJECT_NAME "qbittorrent-${SUBSERVICE}"
+	export PROJECT_NAME="qbittorrent-${SUBSERVICE}"
 fi

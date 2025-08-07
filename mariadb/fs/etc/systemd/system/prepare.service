@@ -5,4 +5,3 @@ Description=prepare mariadb data folder if not exists
 Type=oneshot
 RemainAfterExit=yes
 ExecStart=/usr/bin/bash /opt/prepare-database-folder.sh
-# EnvironmentFile=/run/.userenvironments
