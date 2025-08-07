@@ -95,36 +95,42 @@ jobs:
 
 
       - env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           _BUILDSCRIPT_RUN_STEP_: systemd:1
         id: systemd_step_1
         name: '运行构建过程: 安装系统依赖'
         run: _scripts_/ci-single-build.sh
         timeout-minutes: 5
       - env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           _BUILDSCRIPT_RUN_STEP_: systemd:2
         id: systemd_step_2
         name: '运行构建过程: 配置镜像中的systemd'
         run: _scripts_/ci-single-build.sh
         timeout-minutes: 5
       - env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           _BUILDSCRIPT_RUN_STEP_: gitrepo:1
         id: gitrepo_step_1
         name: '运行构建过程: 安装系统依赖'
         run: _scripts_/ci-single-build.sh
         timeout-minutes: 5
       - env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           _BUILDSCRIPT_RUN_STEP_: gitrepo:2
         id: gitrepo_step_2
         name: '运行构建过程: 复制文件'
         run: _scripts_/ci-single-build.sh
         timeout-minutes: 5
       - env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           _BUILDSCRIPT_RUN_STEP_: gitrepo:3
         id: gitrepo_step_3
         name: '运行构建过程: 配置镜像中的systemd'
         run: _scripts_/ci-single-build.sh
         timeout-minutes: 5
       - env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           _BUILDSCRIPT_RUN_STEP_: gitrepo:4
         id: gitrepo_step_4
         name: '运行构建过程: Finalize'

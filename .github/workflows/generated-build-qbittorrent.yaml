@@ -95,78 +95,91 @@ jobs:
 
 
       - env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           _BUILDSCRIPT_RUN_STEP_: qbittorrent-build:1
         id: qbittorrent_build_step_1
         name: '运行构建过程: 编译时依赖项目'
         run: _scripts_/ci-single-build.sh
         timeout-minutes: 5
       - env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           _BUILDSCRIPT_RUN_STEP_: qbittorrent-build:2
         id: qbittorrent_build_step_2
         name: '运行构建过程: 编译remote-shell（下载）'
         run: _scripts_/ci-single-build.sh
         timeout-minutes: 5
       - env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           _BUILDSCRIPT_RUN_STEP_: qbittorrent-build:3
         id: qbittorrent_build_step_3
         name: '运行构建过程: 编译remote-shell（编译）'
         run: _scripts_/ci-single-build.sh
         timeout-minutes: 5
       - env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           _BUILDSCRIPT_RUN_STEP_: systemd:1
         id: systemd_step_1
         name: '运行构建过程: 安装系统依赖'
         run: _scripts_/ci-single-build.sh
         timeout-minutes: 5
       - env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           _BUILDSCRIPT_RUN_STEP_: systemd:2
         id: systemd_step_2
         name: '运行构建过程: 配置镜像中的systemd'
         run: _scripts_/ci-single-build.sh
         timeout-minutes: 5
       - env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           _BUILDSCRIPT_RUN_STEP_: systemd-graphical:1
         id: systemd_graphical_step_1
         name: '运行构建过程: 安装图形界面'
         run: _scripts_/ci-single-build.sh
         timeout-minutes: 5
       - env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           _BUILDSCRIPT_RUN_STEP_: systemd-graphical:2
         id: systemd_graphical_step_2
         name: '运行构建过程: 复制图形界面配置文件'
         run: _scripts_/ci-single-build.sh
         timeout-minutes: 5
       - env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           _BUILDSCRIPT_RUN_STEP_: systemd-graphical:3
         id: systemd_graphical_step_3
         name: '运行构建过程: 配置镜像中的systemd'
         run: _scripts_/ci-single-build.sh
         timeout-minutes: 5
       - env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           _BUILDSCRIPT_RUN_STEP_: qbittorrent:1
         id: qbittorrent_step_1
         name: '运行构建过程: 运行时依赖项目'
         run: _scripts_/ci-single-build.sh
         timeout-minutes: 5
       - env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           _BUILDSCRIPT_RUN_STEP_: qbittorrent:2
         id: qbittorrent_step_2
         name: '运行构建过程: 复制编译结果文件'
         run: _scripts_/ci-single-build.sh
         timeout-minutes: 5
       - env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           _BUILDSCRIPT_RUN_STEP_: qbittorrent:3
         id: qbittorrent_step_3
         name: '运行构建过程: 复制配置文件'
         run: _scripts_/ci-single-build.sh
         timeout-minutes: 5
       - env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           _BUILDSCRIPT_RUN_STEP_: qbittorrent:4
         id: qbittorrent_step_4
         name: '运行构建过程: 配置镜像中的systemd'
         run: _scripts_/ci-single-build.sh
         timeout-minutes: 5
       - env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           _BUILDSCRIPT_RUN_STEP_: qbittorrent:5
         id: qbittorrent_step_5
         name: '运行构建过程: Finalize'

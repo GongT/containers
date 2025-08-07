@@ -95,48 +95,56 @@ jobs:
 
 
       - env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           _BUILDSCRIPT_RUN_STEP_: systemd:1
         id: systemd_step_1
         name: '运行构建过程: 安装系统依赖'
         run: _scripts_/ci-single-build.sh
         timeout-minutes: 5
       - env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           _BUILDSCRIPT_RUN_STEP_: systemd:2
         id: systemd_step_2
         name: '运行构建过程: 配置镜像中的systemd'
         run: _scripts_/ci-single-build.sh
         timeout-minutes: 5
       - env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           _BUILDSCRIPT_RUN_STEP_: resiliosync:1
         id: resiliosync_step_1
         name: '运行构建过程: 运行时依赖项目'
         run: _scripts_/ci-single-build.sh
         timeout-minutes: 5
       - env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           _BUILDSCRIPT_RUN_STEP_: resiliosync:2
         id: resiliosync_step_2
         name: '运行构建过程: 下载hjson'
         run: _scripts_/ci-single-build.sh
         timeout-minutes: 5
       - env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           _BUILDSCRIPT_RUN_STEP_: resiliosync:3
         id: resiliosync_step_3
         name: '运行构建过程: 下载resilio-sync'
         run: _scripts_/ci-single-build.sh
         timeout-minutes: 5
       - env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           _BUILDSCRIPT_RUN_STEP_: resiliosync:4
         id: resiliosync_step_4
         name: '运行构建过程: 复制配置文件'
         run: _scripts_/ci-single-build.sh
         timeout-minutes: 5
       - env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           _BUILDSCRIPT_RUN_STEP_: resiliosync:5
         id: resiliosync_step_5
         name: '运行构建过程: 配置镜像中的systemd'
         run: _scripts_/ci-single-build.sh
         timeout-minutes: 5
       - env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           _BUILDSCRIPT_RUN_STEP_: resiliosync:6
         id: resiliosync_step_6
         name: '运行构建过程: Finalize'

@@ -95,66 +95,77 @@ jobs:
 
 
       - env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           _BUILDSCRIPT_RUN_STEP_: nginx-build:1
         id: nginx_build_step_1
         name: '运行构建过程: 安装编译时依赖项目'
         run: _scripts_/ci-single-build.sh
         timeout-minutes: 5
       - env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           _BUILDSCRIPT_RUN_STEP_: nginx-build:2
         id: nginx_build_step_2
         name: '运行构建过程: 下载Nginx源码'
         run: _scripts_/ci-single-build.sh
         timeout-minutes: 5
       - env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           _BUILDSCRIPT_RUN_STEP_: nginx-build:3
         id: nginx_build_step_3
         name: '运行构建过程: 编译Nginx源码'
         run: _scripts_/ci-single-build.sh
         timeout-minutes: 5
       - env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           _BUILDSCRIPT_RUN_STEP_: systemd:1
         id: systemd_step_1
         name: '运行构建过程: 安装系统依赖'
         run: _scripts_/ci-single-build.sh
         timeout-minutes: 5
       - env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           _BUILDSCRIPT_RUN_STEP_: systemd:2
         id: systemd_step_2
         name: '运行构建过程: 配置镜像中的systemd'
         run: _scripts_/ci-single-build.sh
         timeout-minutes: 5
       - env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           _BUILDSCRIPT_RUN_STEP_: nginx:1
         id: nginx_step_1
         name: '运行构建过程: 安装系统依赖'
         run: _scripts_/ci-single-build.sh
         timeout-minutes: 5
       - env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           _BUILDSCRIPT_RUN_STEP_: nginx:2
         id: nginx_step_2
         name: '运行构建过程: 复制Nginx到镜像中'
         run: _scripts_/ci-single-build.sh
         timeout-minutes: 5
       - env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           _BUILDSCRIPT_RUN_STEP_: nginx:3
         id: nginx_step_3
         name: '运行构建过程: 复制配置文件'
         run: _scripts_/ci-single-build.sh
         timeout-minutes: 5
       - env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           _BUILDSCRIPT_RUN_STEP_: nginx:4
         id: nginx_step_4
         name: '运行构建过程: 配置镜像中的systemd'
         run: _scripts_/ci-single-build.sh
         timeout-minutes: 5
       - env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           _BUILDSCRIPT_RUN_STEP_: nginx:5
         id: nginx_step_5
         name: '运行构建过程: 配置容器'
         run: _scripts_/ci-single-build.sh
         timeout-minutes: 5
       - env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           _BUILDSCRIPT_RUN_STEP_: nginx:6
         id: nginx_step_6
         name: '运行构建过程: Finalize'

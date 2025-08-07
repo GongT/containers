@@ -93,7 +93,7 @@ jobs:
       - name: "运行构建过程"
         timeout-minutes: 5
         env:
-          # GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: _scripts_/ci-single-build.sh
       ### BUILD_SCTION END ###
 

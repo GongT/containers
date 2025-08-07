@@ -95,24 +95,28 @@ jobs:
 
 
       - env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           _BUILDSCRIPT_RUN_STEP_: fedora-tgtd:1
         id: fedora_tgtd_step_1
         name: '运行构建过程: 安装 iscsi-tgtd'
         run: _scripts_/ci-single-build.sh
         timeout-minutes: 5
       - env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           _BUILDSCRIPT_RUN_STEP_: fedora-tgtd:2
         id: fedora_tgtd_step_2
         name: '运行构建过程: 复制文件'
         run: _scripts_/ci-single-build.sh
         timeout-minutes: 5
       - env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           _BUILDSCRIPT_RUN_STEP_: fedora-tgtd:3
         id: fedora_tgtd_step_3
         name: '运行构建过程: 配置镜像中的systemd'
         run: _scripts_/ci-single-build.sh
         timeout-minutes: 5
       - env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           _BUILDSCRIPT_RUN_STEP_: fedora-tgtd:4
         id: fedora_tgtd_step_4
         name: '运行构建过程: Finalize'
