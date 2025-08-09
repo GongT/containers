@@ -19,7 +19,7 @@ add_network_privilege
 network_use_veth bridge0
 podman_engine_params --mac-address=3E:F4:F3:CE:1D:75
 
-unit_body Restart no
+# unit_body Restart no
 unit_data danger
 systemd_slice_type infrastructure
 unit_body TimeoutStartSec 1min

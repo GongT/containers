@@ -8,7 +8,7 @@ source ../common/functions-install.sh
 arg_finish "$@"
 
 create_pod_service_unit gongt/liverecord
-unit_unit After nginx.pod.service
+unit_depend nginx.pod.service
 
 unit_podman_image registry.gongt.me/gongt/liverecord
 

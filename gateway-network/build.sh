@@ -23,7 +23,7 @@ merge_local_fs "network"
 
 setup_systemd "network" \
 	networkd \
-	enable REQUIRE="systemd-networkd.service systemd-resolved.service ddns.timer"
+	enable REQUIRE="systemd-networkd.service ddns.timer"
 
 buildah_config "network" --author "GongT <admin@gongt.me>" --label name=gongt/gateway-network
 info "settings update..."

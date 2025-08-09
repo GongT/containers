@@ -28,8 +28,8 @@ create_pod_service_unit nginx
 unit_podman_image registry.gongt.me/gongt/nginx
 unit_podman_cmdline --systemd
 unit_unit Description nginx - high performance web server
-unit_unit After gateway-network.pod.service
-unit_depend devenv.service
+unit_unit After gateway-network.pod.service devenv.service samba.pod.service gamedisk.pod.service
+unit_unit Wants devenv.service
 
 network_use_pod gateway
 systemd_slice_type normal

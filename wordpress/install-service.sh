@@ -9,7 +9,7 @@ arg_finish "$@"
 
 create_pod_service_unit wordpress
 unit_podman_image registry.gongt.me/gongt/wordpress
-unit_unit After mariadb.pod.service
+unit_depend nginx.pod.service mariadb.pod.service
 
 if [[ -n ${PROXY} ]]; then
 	environment_variable \

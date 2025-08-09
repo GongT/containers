@@ -8,6 +8,8 @@ source ../common/functions-install.sh
 create_pod_service_unit gongt/qbittorrent
 unit_podman_image registry.gongt.me/gongt/qbittorrent
 unit_unit Description qbittorrent
+unit_depend nginx.pod.service
+unit_body After nextcloud.pod.service
 
 # unit_body Restart always
 unit_data danger
@@ -30,6 +32,7 @@ for I in /data/Volumes/*; do
 done
 
 unit_finish
+LAST_SERVICE=qbittorrent.pod.service
 
 
 function create() {
@@ -39,6 +42,10 @@ function create() {
 	create_pod_service_unit "qbittorrent-${NAME}"
 	unit_podman_image registry.gongt.me/gongt/qbittorrent
 	unit_unit Description "qbittorrent @ ${DATA_DIR}"
+	unit_depend nginx.pod.service
+
+	unit_body After "${LAST_SERVICE}"
+	LAST_SERVICE="qbittorrent-${NAME}.pod.service"
 
 	# unit_body Restart always
 	unit_data danger
