@@ -27,6 +27,6 @@ setup_systemd "nextcloud" \
 buildah_config "nextcloud" \
 	--author "GongT <admin@gongt.me>" \
 	--created-by "#MAGIC!!" \
-	--label name=gongt/cloud
+	--label name=gongt/nextcloud
 
-buildah_finalize_image "cloud" gongt/cloud
+buildah_finalize_image "nextcloud" gongt/nextcloud
