@@ -10,7 +10,7 @@ arg_finish
 auto_create_pod_service_unit
 unit_podman_image gongt/qqbot
 unit_unit Description QQ bot
-unit_depend nginx.pod.service
+unit_want nginx.pod.service
 
 systemd_slice_type normal
 

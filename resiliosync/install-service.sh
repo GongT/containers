@@ -18,7 +18,7 @@ function common() {
 	unit_body Restart no
 	unit_data danger
 	unit_body TimeoutStartSec 1min
-	unit_depend nginx.pod.service
+	unit_want nginx.pod.service
 
 	unit_fs_bind "data/resiliosync/$PROFILE" /data/state
 	unit_fs_bind "logs/resiliosync/$PROFILE" /var/log

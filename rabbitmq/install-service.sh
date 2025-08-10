@@ -18,7 +18,7 @@ arg_finish "$@"
 
 create_pod_service_unit gongt/rabbitmq
 unit_unit Description "rabbit mq"
-unit_depend nginx.pod.service
+unit_want nginx.pod.service
 
 # unit_podman_image_pull never
 

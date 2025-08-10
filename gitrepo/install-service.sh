@@ -12,7 +12,7 @@ unit_podman_image registry.gongt.me/gongt/gitrepo
 
 unit_unit Description simple git repos
 unit_unit After gateway-network.pod.service
-unit_depend nginx.pod.service
+unit_want nginx.pod.service
 
 network_use_void
 systemd_slice_type idle
