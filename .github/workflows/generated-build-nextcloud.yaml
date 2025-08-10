@@ -112,14 +112,14 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           _BUILDSCRIPT_RUN_STEP_: nextcloud:1
         id: nextcloud_step_1
-        name: '运行构建过程: 安装系统依赖'
+        name: '运行构建过程: 安装nextcloud依赖'
         run: _scripts_/ci-single-build.sh
         timeout-minutes: 5
       - env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           _BUILDSCRIPT_RUN_STEP_: nextcloud:2
         id: nextcloud_step_2
-        name: '运行构建过程: 复制文件'
+        name: '运行构建过程: 安装nextcloud依赖'
         run: _scripts_/ci-single-build.sh
         timeout-minutes: 5
       - env:
@@ -138,8 +138,8 @@ jobs:
         timeout-minutes: 5
       - env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          _BUILDSCRIPT_RUN_STEP_: cloud:1
-        id: cloud_step_1
+          _BUILDSCRIPT_RUN_STEP_: nextcloud:5
+        id: nextcloud_step_5
         name: '运行构建过程: Finalize'
         run: _scripts_/ci-single-build.sh
         timeout-minutes: 5

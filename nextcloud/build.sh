@@ -13,11 +13,12 @@ image_base
 ### Runtime Base END
 
 ### 依赖项目
-STEP="安装系统依赖"
+STEP="安装nextcloud依赖"
 dnf_use_environment
 dnf_install_step "nextcloud" scripts/deps.lst scripts/clean-install.sh
 ### 依赖项目 END
 
+STEP="安装nextcloud依赖"
 merge_local_fs "nextcloud"
 
 setup_systemd "nextcloud" \
