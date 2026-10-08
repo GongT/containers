@@ -1,0 +1,10 @@
+#!/bin/bash
+set -Eeuo pipefail
+shopt -s inherit_errexit extglob nullglob globstar lastpipe shift_verbose
+
+# shellcheck source=../opt/lib.sh
+source /opt/lib.sh
+
+export PATH="/opt:$PATH"
+
+exec bash /opt/acme.sh/acme.sh "$@"

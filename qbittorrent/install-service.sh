@@ -70,3 +70,5 @@ function create() {
 }
 
 create animation "3a:e7:97:ca:b6:16" /data/Volumes/Anime
+create everything "3a:e7:97:ca:b6:18" /data/Volumes/UserData/Bittorrent
+

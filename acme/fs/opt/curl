@@ -1,18 +1,31 @@
 #!/bin/bash
 
-echo -ne "\x1B[2m>> curl" >&2
-for I in "${@}"; do
-	echo -n " '$I'" >&2
-done
-echo -e "\x1B[0m" >&2
+declare -a ARGS=("${@}")
 
+if [[ -n "$https_proxy" ]]; then
+	ARGS=("--proxy" "$https_proxy" "${ARGS[@]}")
+fi
+
+printf "\e[2m>> curl" >&2
+for I in "${ARGS[@]}"; do
+	printf " %q" "$I" >&2
+done
+printf "\e[0m\n" "$https_proxy" >&2
+
+
+declare -i RETRY=5
 while true; do
-	/usr/bin/curl "$@"
+	env -i /usr/bin/curl "$@"
 	R=$?
-	echo -e "\x1B[2mcurl return $R\x1B[0m" >&2
+	echo -e "\e[2mcurl return $R\e[0m" >&2
 	if [[ $R -eq 35 ]]; then
+		RETRY=$((RETRY-1))
+		if [[ $RETRY -le 0 ]]; then
+			exit $R
+		fi
+
 		continue
 	fi
 
-	break
+	exit $R
 done

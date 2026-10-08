@@ -6,6 +6,18 @@ STIME=$(date '+%F.%T')
 export LE_WORKING_DIR=/opt/home
 export ACCOUNT_CONF_PATH="$LE_WORKING_DIR/account.conf"
 export NO_TIMESTAMP=1
+export CA_HOME="/opt/data/ca"
+export CERT_HOME="/opt/data/certs"
+
+export HTTP_PROXY="$PROXY" HTTPS_PROXY="$PROXY" ALL_PROXY="$PROXY"
+export http_proxy="$PROXY" https_proxy="$PROXY" all_proxy="$PROXY"
+
+if [[ ${SMTP_TO+found} == found ]] && [[ $SMTP_TO ]]; then
+	export SMTP_FROM="$SMTP_USERNAME"
+	export SMTP_SECURE='tls'
+	export SMTP_TIMEOUT='30'
+	export SMTP_BIN='/usr/bin/python3'
+fi
 
 function info() {
 	echo "$@" >&2
@@ -65,7 +77,7 @@ function create_nginx_config() {
 	mkdir -p "/etc/ACME/nginx"
 	local CFG="/etc/ACME/nginx/${DOMAIN_TXT}.conf"
 
-	info "create nginx config: $CFG"
+	info "创建nginx配置文件: $CFG"
 	cat <<-NGX_CFG >"$CFG"
 		ssl_certificate "/etc/ACME/$DOMAIN/fullchain.pem";
 		ssl_certificate_key "/etc/ACME/$DOMAIN/privkey.pem";
@@ -81,21 +93,16 @@ function create_nginx_lagacy_load() {
 
 	mkdir -p "/etc/ACME/nginx"
 	local CFG="/etc/ACME/nginx/load.conf"
-	info "create nginx config: $CFG"
+	info "创建nginx配置文件: $CFG"
 	echo "include \"/etc/ACME/nginx/${DOMAIN}.conf\";" >"$CFG"
 }
 
 function try_nslookup() {
 	local HOST=$1
-	echo "try resolve $HOST" >&2
+	echo "尝试解析dns: $HOST" >&2
 	while ! nslookup "$HOST" >/dev/null; do
-		echo "failed." >&2
+		echo "失败." >&2
 		sleep 5
 	done
-	echo "success." >&2
-}
-
-function acme() {
-	echo -e "\x1B[2m>> acme.sh $*\x1B[0m" >&2
-	PATH="/opt:$PATH" bash /opt/acme.sh/acme.sh "$@"
+	echo "成功." >&2
 }
