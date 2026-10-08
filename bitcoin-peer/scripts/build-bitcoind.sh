@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/bash
 
 ./autogen.sh
 ./configure CXX=clang++ CC=clang --config-cache \

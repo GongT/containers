@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/bash
 set -Eeuo pipefail
 
 TARGET_BITRATE=2600K
@@ -34,4 +34,3 @@ ffmpeg "${ARGS[@]}" -pass 2 "${OUTPUT_FILE}"
 
 printf "\e[38;5;10mComplete.\e[0m\n"
 ls -lh "${OUTPUT_FILE}"
-

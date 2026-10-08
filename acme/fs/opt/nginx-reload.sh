@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/bash
 
 if [[ "$TEMP_DISABLE_RELOAD" ]]; then
 	echo "reload行为已被临时禁用"

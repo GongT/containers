@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/bash
 
 tmpf=$(mktemp --tmpdir "XXXXXXXXXXXXX.txt")
 env | grep -E '^GITHUB_.*=|^^RUNNER_.*=|^CI=' >"${tmpf}"
