@@ -43,7 +43,7 @@ echo "options timeout:99" >>/etc/resolv.conf
 
 if [[ ${1} == shell ]]; then
 	echo "启动 shell..."
-	exec /bin/bash --login -i
+	exec /usr/bin/bash --login -i
 fi
 if [[ ${1} == bash ]]; then
 	echo "启动 bash..."

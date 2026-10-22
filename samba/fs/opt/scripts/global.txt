@@ -29,7 +29,7 @@ full_audit:failure = all
 # full_audit:success =
 full_audit:prefix = %S|%u|%U
 
-# template shell = /bin/bash
+# template shell = /usr/bin/bash
 # template homedir = /home/%U
 vfs objects = full_audit btrfs recycle
 

@@ -28,8 +28,8 @@ do_acme() {
 	download_git_result_copy "$MNT" "$REPO" "$BRANCH"
 
 	buildah run "--volume=$MNT:/mnt" \
-		"--volume=$(pwd)/scripts/build-acme.sh:/_tmp/script.sh:ro" \
-		"$1" bash /_tmp/script.sh
+		"--volume=$(pwd)/scripts/build-acme.sh:/tmp/_script.sh:ro" \
+		"$1" bash /tmp/_script.sh
 
 	local NEW_VER=$(buildah run "$1" /opt/acme.sh/acme.sh --version 2>&1 | sed -E 's/^/> /g')
 	control_ci summary "

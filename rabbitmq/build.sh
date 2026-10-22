@@ -33,7 +33,7 @@ info_log ""
 buildah_config "rabbitmq" \
 	--env=RABBITMQ_CONSOLE_LOG=new \
 	--volume=/var/lib/rabbitmq/mnesia \
-	"--entrypoint=$(json_array /bin/bash)" \
+	"--entrypoint=$(json_array /usr/bin/bash)" \
 	--cmd="/opt/start.sh" \
 	--stop-signal=SIGUSR1 \
 	--author "GongT <admin@gongt.me>" --created-by "#MAGIC!" --label name=gongt/rabbitmq
