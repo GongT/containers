@@ -15,7 +15,9 @@ STEP="运行时依赖项目"
 fork_archlinux "transmission" scripts/dependencies.lst
 ### 依赖项目 END
 
-setup_systemd "transmission" nginx_attach "CONFIG_FILE=/opt/nginx.attach.conf"
+setup_systemd "transmission" \
+	nginx_attach "CONFIG_FILE=/opt/nginx.attach.conf" \
+	enable "REQUIRE=transmission.service"
 
 STEP="复制文件"
 merge_local_fs "transmission" scripts/prepare-run.sh
