@@ -15,12 +15,12 @@ STEP="运行时依赖项目"
 fork_archlinux "transmission" scripts/dependencies.lst
 ### 依赖项目 END
 
+STEP="复制文件"
+merge_local_fs "transmission" scripts/prepare-run.sh
+
 setup_systemd "transmission" \
 	nginx_attach "CONFIG_FILE=/opt/nginx.attach.conf" \
 	enable "REQUIRE=transmission.service"
-
-STEP="复制文件"
-merge_local_fs "transmission" scripts/prepare-run.sh
 
 buildah_config "transmission" \
 	--volume /opt/data \
