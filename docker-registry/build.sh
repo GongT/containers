@@ -13,13 +13,13 @@ make_base_image_by_apk "docker.io/registry" "docker-registry" libstdc++
 ### 依赖 END
 
 ### sbin/init
-STEP="复制$PODMAN_MY_REGISTRY/gongt/init"
+STEP="复制 gongt/init"
 hash_init() {
-	perfer_proxy podman pull $PODMAN_MY_REGISTRY/gongt/init
+	perfer_proxy podman pull gongt/init
 }
 download_init() {
 	local RESULT="$1"
-	buildah copy "--from=$PODMAN_MY_REGISTRY/gongt/init" "$RESULT" "/sbin/init" "/sbin/init"
+	buildah copy "--from=gongt/init" "$RESULT" "/sbin/init" "/sbin/init"
 }
 buildah_cache "docker-registry" hash_init download_init
 ### sbin/init END

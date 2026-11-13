@@ -10,7 +10,7 @@ arg_finish "$@"
 create_pod_service_unit gongt/liverecord
 unit_want nginx.pod.service
 
-unit_podman_image $PODMAN_MY_REGISTRY/gongt/liverecord
+unit_podman_image gongt/liverecord
 
 systemd_slice_type entertainment
 # environment_variable "LIVE_ROOMS=$LIVE_ROOMS" "${PROXY[@]}" "BREC_HTTP_OPEN_ACCESS=yes"

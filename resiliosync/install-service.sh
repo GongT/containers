@@ -10,7 +10,7 @@ arg_finish "$@"
 function common() {
 	local PROFILE=$1 TITLE="$2"
 	local -i PORT=$3
-	unit_podman_image $PODMAN_MY_REGISTRY/gongt/resiliosync
+	unit_podman_image gongt/resiliosync
 
 	network_use_pod gateway "${PORT}/tcp"
 	systemd_slice_type idle

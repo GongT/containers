@@ -42,8 +42,8 @@ set -Eeuo pipefail
 
 cd "$SOURCE/nginx"
 
-export CC_OPT='-O2 -g -pipe -Wall -Werror=format-security -Wp,-D_FORTIFY_SOURCE=2 -Wp,-D_GLIBCXX_ASSERTIONS -fexceptions -fstack-protector-strong -grecord-gcc-switches -m64 -mtune=generic -fasynchronous-unwind-tables -fstack-clash-protection -Wno-error'
-export LD_OPT='-lpcre -Wl,-z,defs -Wl,-z,now -Wl,-z,relro -Wl,-E -Wl,-rpath,/path/to/luajit/lib'
+export CC_OPT='-O2 -flto=auto -ffat-lto-objects -fexceptions -g -grecord-gcc-switches -pipe -Wall -Wno-complain-wrong-lang -Werror=format-security -Wp,-U_FORTIFY_SOURCE,-D_FORTIFY_SOURCE=3 -Wp,-D_GLIBCXX_ASSERTIONS -specs=/usr/lib/rpm/redhat/redhat-hardened-cc1 -fstack-protector-strong -specs=/usr/lib/rpm/redhat/redhat-annobin-cc1 -m64 -march=x86-64 -mtune=generic -fasynchronous-unwind-tables -fstack-clash-protection -fcf-protection -mtls-dialect=gnu2 -fno-omit-frame-pointer -mno-omit-leaf-frame-pointer'
+export LD_OPT='-Wl,-z,relro -Wl,--as-needed -Wl,-z,pack-relative-relocs -Wl,-z,now -specs=/usr/lib/rpm/redhat/redhat-hardened-ld -specs=/usr/lib/rpm/redhat/redhat-hardened-ld-errors -specs=/usr/lib/rpm/redhat/redhat-annobin-cc1 -Wl,--build-id=sha1'
 
 MODULES=()
 for REL_FOLDER in ../modules/*/; do
@@ -52,6 +52,12 @@ done
 
 OTHER_MODULES=()
 OTHER_MODULES+=("--add-module=../special-modules/njs/nginx")
+
+{
+	echo '------------------------------------'
+	./auto/configure --help || true
+	echo '------------------------------------'
+} >&2
 
 info "=== configure nginx"
 indent
@@ -87,7 +93,6 @@ indent_stream ./auto/configure \
 	'--with-http_geoip_module' \
 	'--with-http_sub_module' \
 	'--with-http_dav_module' \
-	'--with-http_flv_module' \
 	'--with-http_mp4_module' \
 	'--with-http_gunzip_module' \
 	'--with-http_gzip_static_module' \
@@ -96,6 +101,7 @@ indent_stream ./auto/configure \
 	'--with-http_secure_link_module' \
 	'--with-http_degradation_module' \
 	'--with-http_slice_module' \
+	'--with-http_json_module' \
 	'--with-http_stub_status_module' \
 	'--with-stream' \
 	'--with-stream_ssl_module' \
@@ -103,8 +109,6 @@ indent_stream ./auto/configure \
 	'--with-stream_geoip_module' \
 	'--with-stream_ssl_preread_module' \
 	'--with-google_perftools_module' \
-	'--with-pcre' \
-	'--with-pcre-jit' \
 	'--with-libatomic' \
 	'--with-debug' \
 	"--with-cc-opt=$CC_OPT" \
@@ -123,6 +127,8 @@ indent
 mkdir -p "$ARTIFACT_PREFIX/usr/bin"
 
 indent_stream make "DESTDIR=$ARTIFACT_PREFIX" install
+
+"$ARTIFACT_PREFIX/usr/bin/nginx" -V
 
 rm -rf "$ARTIFACT_PREFIX/etc"
 dedent

@@ -6,7 +6,7 @@ cd "$(dirname "$(realpath "${BASH_SOURCE[0]}")")"
 source ../common/functions-install.sh
 
 create_pod_service_unit gongt/qbittorrent
-unit_podman_image $PODMAN_MY_REGISTRY/gongt/qbittorrent
+unit_podman_image gongt/qbittorrent
 unit_unit Description qbittorrent
 unit_want nginx.pod.service
 unit_unit After nextcloud.pod.service
@@ -40,7 +40,7 @@ function create() {
 	ensure_user "qbt-${NAME}" 
 
 	create_pod_service_unit "qbittorrent-${NAME}"
-	unit_podman_image $PODMAN_MY_REGISTRY/gongt/qbittorrent
+	unit_podman_image gongt/qbittorrent
 	unit_unit Description "qbittorrent @ ${DATA_DIR}"
 	unit_want nginx.pod.service
 

@@ -1,7 +1,6 @@
 gcc
 gcc-c++
 make
-bash
 which
 openssl
 httpd-tools
@@ -9,7 +8,7 @@ libuuid-devel
 libatomic_ops-devel
 libmaxminddb-devel
 libaio-devel
-pcre-devel
+pcre2-devel
 openssl-devel
 libxml2-devel
 libxslt-devel
@@ -18,10 +17,7 @@ GeoIP-devel
 gperftools-devel
 brotli-devel
 ccache
-tar
-curl
-findutils
 zlib-devel
 unzip
-rpm
 luarocks
+redhat-rpm-config

@@ -8,7 +8,7 @@ source ../common/functions-install.sh
 arg_finish "$@"
 
 create_pod_service_unit cloudflared@
-unit_podman_image $PODMAN_MY_REGISTRY/gongt/cloudflared '%i'
+unit_podman_image gongt/cloudflared '%i'
 unit_unit Description "cloudflared - Argo Tunnel"
 network_use_nat 40983
 systemd_slice_type normal

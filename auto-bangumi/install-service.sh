@@ -8,7 +8,7 @@ source ../common/functions-install.sh
 arg_finish "$@"
 
 create_pod_service_unit auto-bangumi
-unit_podman_image $PODMAN_MY_REGISTRY/gongt/auto-bangumi
+unit_podman_image gongt/auto-bangumi
 unit_unit Description "AutoBangumi 是基于 RSS 的全自动追番整理下载工具"
 
 unit_data danger

@@ -22,7 +22,7 @@ LOGIN_USER=${LOGIN%%:*}
 LOGIN_PASS=${LOGIN#*:}
 
 auto_create_pod_service_unit
-unit_podman_image $PODMAN_MY_REGISTRY/gongt/factorio
+unit_podman_image gongt/factorio
 unit_unit Description factorio server
 
 # unit_podman_image_pull never

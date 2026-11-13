@@ -7,7 +7,7 @@ source ../common/functions-build.sh
 
 buildah_cache_start "quay.io/fedora/fedora-minimal"
 dnf_use_environment
-dnf_install_step "systemd" scripts/dependencies.lst
+dnf_install_step "systemd" base/scripts/dependencies.lst
 
 setup_systemd "systemd" basic
 

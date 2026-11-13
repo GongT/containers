@@ -6,7 +6,7 @@ cd "$(dirname "$(realpath "${BASH_SOURCE[0]}")")"
 source ../common/functions-install.sh
 
 auto_create_pod_service_unit
-unit_podman_image $PODMAN_MY_REGISTRY/gongt/gamedisk
+unit_podman_image gongt/gamedisk
 unit_unit Description "iSCSI target daemon for game disk"
 
 # unit_podman_image_pull never

@@ -8,7 +8,7 @@ source ../common/functions-install.sh
 arg_finish "$@"
 
 create_pod_service_unit wordpress
-unit_podman_image $PODMAN_MY_REGISTRY/gongt/wordpress
+unit_podman_image gongt/wordpress
 unit_depend nginx.pod.service mariadb.pod.service
 
 if [[ -n ${PROXY} ]]; then
