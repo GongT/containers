@@ -35,6 +35,7 @@ env:
   PROJECT_NAME: "{{PROJECT_NAME}}"
   GITHUB_ACTOR: ${{ github.actor }}
   REWRITE_IMAGE_NAME: build.local/dist/{{PROJECT_NAME}}
+  PODMAN_IMAGE_REGISTRY: registry.gongt.me
 jobs:
   build:
     name: "生成镜像"

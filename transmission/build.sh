@@ -10,7 +10,6 @@ arg_finish "$@"
 
 info "starting..."
 
-
 ### Runtime Base
 record_last_base_name "ghcr.io/gongt/systemd-base-image:latest"
 source ../systemd-base-image/include.sh

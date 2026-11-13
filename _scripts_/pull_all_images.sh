@@ -36,8 +36,8 @@ for IMAGE in "${IMAGES[@]}"; do
 	if [[ "$EXIT" ]]; then
 		exit 0
 	fi
-	echo -e "\e[38;5;10m * pull image $IMAGE...\e[0m"
-	bash ../common/tools/pull-image.sh "registry.gongt.me/$IMAGE" always || {
-		echo -e "\e[38;5;9mFailed pull image $IMAGE\e[0m" >&2
+	echo -e "\e[38;5;10m * 拉取镜像 $IMAGE...\e[0m"
+	bash ../common/tools/pull-image.sh "$IMAGE" always || {
+		echo -e "\e[38;5;9m无法拉取镜像 $IMAGE\e[0m" >&2
 	}
 done

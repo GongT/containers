@@ -31,8 +31,8 @@ unit_unit Description nginx - high performance web server
 unit_unit After gateway-network.pod.service devenv.service samba.pod.service gamedisk.pod.service
 unit_unit Wants devenv.service
 
-unit_body Restart no
-unit_podman_image_pull never
+# unit_body Restart no
+# unit_podman_image_pull never
 
 network_use_pod gateway
 systemd_slice_type normal

@@ -49,13 +49,13 @@ environment_variable \
 unit_podman_image gongt/acme
 unit_podman_cmdline "${DOMAINS[@]}"
 
-# unit_podman_image_pull never
-# unit_body Restart no
+unit_body Restart no
+unit_podman_image_pull never
 
 network_use_auto
 systemd_slice_type normal
 
-unit_start_notify output "everything works well"
+start_notify output "everything works well"
 unit_body RestartSec 10s
 unit_body TimeoutStartSec 30min
 

@@ -7,7 +7,7 @@ export LDFLAGS="${LDFLAGS:-} -lpthread"
 ldconfig
 
 function die() {
-	echo "$*" >&2
+	printf "%s\n\n" "$*" >&2
 	exit 1
 }
 function x() {

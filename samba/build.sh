@@ -9,13 +9,14 @@ arg_flag FORCE_DNF dnf "force dnf install"
 arg_finish
 
 ### Runtime Base
+record_last_base_name "ghcr.io/gongt/systemd-base-image:latest"
 source ../systemd-base-image/include.sh
 image_base
 ### Runtime Base END
 
 ### 依赖项目
 dnf_use_environment
-dnf_install_step "network" scripts/dependencies.lst
+dnf_install_step "samba" scripts/dependencies.lst
 ### 依赖项目 END
 
 STEP="复制配置文件"
