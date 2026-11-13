@@ -70,6 +70,7 @@ buildah_cache "nginx-build" hash_build run_build
 BUILT_RESULT=$(get_last_image_id)
 
 ### Runtime Base
+record_last_base_name "ghcr.io/gongt/systemd-base-image:latest"
 source ../systemd-base-image/include.sh
 image_base
 ### Runtime Base END

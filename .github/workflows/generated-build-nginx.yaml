@@ -31,7 +31,7 @@ env:
 
   SOURCE_FILE: nginx/build.sh
   PROJECT_DIR: nginx
-  KNOWN_BASE_IMAGES: quay.io/fedora/fedora:45 quay.io/fedora/fedora-minimal:45
+  KNOWN_BASE_IMAGES: quay.io/fedora/fedora:45 ghcr.io/gongt/systemd-base-image:latest quay.io/fedora/fedora-minimal:45
   BUILDAH_FORCE: ${{ github.event.inputs.forceRebuild }}
   FORCE_DNF: ${{ github.event.inputs.forceDnf }}
   AUTHOR: GongT <admin@gongt.me>

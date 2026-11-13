@@ -9,6 +9,7 @@ arg_flag FORCE f/force "force re-download binary"
 arg_finish "$@"
 
 ### Runtime Base
+record_last_base_name "ghcr.io/gongt/systemd-base-image:latest"
 source ../systemd-base-image/include.sh
 image_base
 ### Runtime Base END
