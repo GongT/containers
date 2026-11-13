@@ -39,6 +39,7 @@ env:
   PROJECT_NAME: "systemd-base-image"
   GITHUB_ACTOR: ${{ github.actor }}
   REWRITE_IMAGE_NAME: build.local/dist/systemd-base-image
+  PODMAN_IMAGE_REGISTRY: registry.gongt.me
 jobs:
   build:
     name: "生成镜像"

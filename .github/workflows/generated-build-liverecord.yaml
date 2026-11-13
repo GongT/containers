@@ -39,6 +39,7 @@ env:
   PROJECT_NAME: "liverecord"
   GITHUB_ACTOR: ${{ github.actor }}
   REWRITE_IMAGE_NAME: build.local/dist/liverecord
+  PODMAN_IMAGE_REGISTRY: registry.gongt.me
 jobs:
   build:
     name: "生成镜像"
