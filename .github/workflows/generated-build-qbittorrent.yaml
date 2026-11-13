@@ -31,7 +31,7 @@ env:
 
   SOURCE_FILE: qbittorrent/build.sh
   PROJECT_DIR: qbittorrent
-  KNOWN_BASE_IMAGES: quay.io/fedora/fedora:42 ghcr.io/gongt/systemd-base-image:latest quay.io/fedora/fedora-minimal:42
+  KNOWN_BASE_IMAGES: quay.io/fedora/fedora:45 ghcr.io/gongt/systemd-base-image:latest quay.io/fedora/fedora-minimal:45
   BUILDAH_FORCE: ${{ github.event.inputs.forceRebuild }}
   FORCE_DNF: ${{ github.event.inputs.forceDnf }}
   AUTHOR: GongT <admin@gongt.me>
@@ -105,14 +105,14 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           _BUILDSCRIPT_RUN_STEP_: qbittorrent-build:2
         id: qbittorrent_build_step_2
-        name: '运行构建过程: 编译remote-shell（下载）'
+        name: '运行构建过程: 编译remote-shell（下载GitHub项目）'
         run: _scripts_/ci-single-build.sh
         timeout-minutes: 5
       - env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           _BUILDSCRIPT_RUN_STEP_: qbittorrent-build:3
         id: qbittorrent_build_step_3
-        name: '运行构建过程: 编译remote-shell（编译）'
+        name: '运行构建过程: 编译remote-shell（编译GitHub项目）'
         run: _scripts_/ci-single-build.sh
         timeout-minutes: 5
       - env:

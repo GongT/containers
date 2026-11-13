@@ -9,7 +9,7 @@ arg_string + SMTP_PASSWORD smtp_pass "SMTP config (pass)"
 arg_finish "$@"
 
 create_pod_service_unit nextcloud
-unit_podman_image registry.gongt.me/gongt/nextcloud
+unit_podman_image $PODMAN_MY_REGISTRY/gongt/nextcloud
 
 unit_depend nginx.pod.service mariadb.pod.service
 unit_data danger

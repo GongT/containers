@@ -6,10 +6,10 @@ cd "$(dirname "$(realpath "${BASH_SOURCE[0]}")")"
 source ../common/functions-install.sh
 
 create_pod_service_unit gongt/qbittorrent
-unit_podman_image registry.gongt.me/gongt/qbittorrent
+unit_podman_image $PODMAN_MY_REGISTRY/gongt/qbittorrent
 unit_unit Description qbittorrent
 unit_want nginx.pod.service
-unit_body After nextcloud.pod.service
+unit_unit After nextcloud.pod.service
 
 # unit_body Restart always
 unit_data danger
@@ -37,10 +37,10 @@ LAST_SERVICE=qbittorrent.pod.service
 
 function create() {
 	local NAME=$1 MAC_ADDR=$2 DATA_DIR=$3
-	ensure_user_exists "qbt-${NAME}" 
+	ensure_user "qbt-${NAME}" 
 
 	create_pod_service_unit "qbittorrent-${NAME}"
-	unit_podman_image registry.gongt.me/gongt/qbittorrent
+	unit_podman_image $PODMAN_MY_REGISTRY/gongt/qbittorrent
 	unit_unit Description "qbittorrent @ ${DATA_DIR}"
 	unit_want nginx.pod.service
 
@@ -69,6 +69,6 @@ function create() {
 	unit_finish
 }
 
-create animation "3a:e7:97:ca:b6:16" /data/Volumes/Anime
-create everything "3a:e7:97:ca:b6:18" /data/Volumes/UserData/Bittorrent
-
+# create animation "3a:e7:97:ca:b6:16" /data/Volumes/Anime
+# create everything "3a:e7:97:ca:b6:18" /data/Volumes/UserData/Bittorrent
+# 

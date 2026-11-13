@@ -8,9 +8,6 @@ charset = utf-8
 trim_trailing_whitespace = false
 insert_final_newline = true
 
-shell_variant      = bash
-binary_next_line   = true  # -bn
-
 [*.yaml]
 indent_style = space
 indent_size = 2
@@ -18,3 +15,13 @@ indent_size = 2
 [*.py]
 indent_style = space
 indent_size = 4
+
+[*.sh]
+indent_style = tab
+indent_size = 0
+shell_variant      = bash
+binary_next_line   = true
+switch_case_indent = false 
+space_redirects    = true
+keep_padding       = false
+function_next_line = true

@@ -25,7 +25,7 @@ if [[ -n ${PUBLISH-} ]]; then
 fi
 
 create_pod_service_unit nginx
-unit_podman_image registry.gongt.me/gongt/nginx
+unit_podman_image $PODMAN_MY_REGISTRY/gongt/nginx
 unit_podman_cmdline --systemd
 unit_unit Description nginx - high performance web server
 unit_unit After gateway-network.pod.service devenv.service samba.pod.service gamedisk.pod.service

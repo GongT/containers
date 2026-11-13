@@ -8,7 +8,7 @@ source ../common/functions-install.sh
 arg_finish "$@"
 
 create_pod_service_unit gitrepo
-unit_podman_image registry.gongt.me/gongt/gitrepo
+unit_podman_image $PODMAN_MY_REGISTRY/gongt/gitrepo
 
 unit_unit Description simple git repos
 unit_unit After gateway-network.pod.service

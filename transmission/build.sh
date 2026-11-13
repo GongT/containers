@@ -10,17 +10,26 @@ arg_finish "$@"
 
 info "starting..."
 
+
+### Runtime Base
+record_last_base_name "ghcr.io/gongt/systemd-base-image:latest"
+source ../systemd-base-image/include.sh
+image_base # graphical
+### Runtime Base END
+
 ### 依赖项目
 STEP="运行时依赖项目"
-fork_archlinux "transmission" scripts/dependencies.lst
+dnf_use_environment
+dnf_install_step "transmission" scripts/dependencies.lst
 ### 依赖项目 END
 
-STEP="复制文件"
+STEP="复制配置文件并准备运行环境"
 merge_local_fs "transmission" scripts/prepare-run.sh
 
 setup_systemd "transmission" \
 	nginx_attach "CONFIG_FILE=/opt/nginx.attach.conf" \
-	enable "REQUIRE=transmission.service"
+	networkd \
+	enable "REQUIRE=transmission.service" "BACKGROUND=chown-data.service"
 
 buildah_config "transmission" \
 	--volume /opt/data \

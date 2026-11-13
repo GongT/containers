@@ -31,7 +31,7 @@ env:
 
   SOURCE_FILE: transmission/build.sh
   PROJECT_DIR: transmission
-  KNOWN_BASE_IMAGES: docker.io/library/archlinux:latest
+  KNOWN_BASE_IMAGES: ghcr.io/gongt/systemd-base-image:latest quay.io/fedora/fedora-minimal:45
   BUILDAH_FORCE: ${{ github.event.inputs.forceRebuild }}
   FORCE_DNF: ${{ github.event.inputs.forceDnf }}
   AUTHOR: GongT <admin@gongt.me>
@@ -96,23 +96,37 @@ jobs:
 
       - env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          _BUILDSCRIPT_RUN_STEP_: systemd:1
+        id: systemd_step_1
+        name: '运行构建过程: 安装系统依赖'
+        run: _scripts_/ci-single-build.sh
+        timeout-minutes: 5
+      - env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          _BUILDSCRIPT_RUN_STEP_: systemd:2
+        id: systemd_step_2
+        name: '运行构建过程: 配置镜像中的systemd'
+        run: _scripts_/ci-single-build.sh
+        timeout-minutes: 5
+      - env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           _BUILDSCRIPT_RUN_STEP_: transmission:1
         id: transmission_step_1
-        name: '运行构建过程: 安装系统依赖:'
+        name: '运行构建过程: 运行时依赖项目'
         run: _scripts_/ci-single-build.sh
         timeout-minutes: 5
       - env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           _BUILDSCRIPT_RUN_STEP_: transmission:2
         id: transmission_step_2
-        name: '运行构建过程: 配置镜像中的systemd'
+        name: '运行构建过程: 复制配置文件并准备运行环境'
         run: _scripts_/ci-single-build.sh
         timeout-minutes: 5
       - env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           _BUILDSCRIPT_RUN_STEP_: transmission:3
         id: transmission_step_3
-        name: '运行构建过程: 复制文件'
+        name: '运行构建过程: 配置镜像中的systemd'
         run: _scripts_/ci-single-build.sh
         timeout-minutes: 5
       - env:

@@ -9,7 +9,7 @@ arg_finish
 
 create_it() {
 	create_pod_service_unit "transmission-$INSTANCE_NAME"
-	unit_podman_image registry.gongt.me/gongt/transmission
+	unit_podman_image "gongt/transmission"
 	# unit_podman_image_pull never
 	unit_unit Description transmission
 
@@ -23,12 +23,10 @@ create_it() {
 	environment_variable "INSTANCE_NAME=$INSTANCE_NAME"
 	# unit_body ExecStop '/usr/bin/podman exec $CONTAINER_ID /usr/bin/bash /opt/scripts/stop.sh'
 
-	# podman_engine_params --env="LANG=zh_CN.utf8"
-	shared_sockets_provide "transmission.$INSTANCE_NAME"
-
 	unit_unit After network-online.target
-	# unit_body Restart always
-	unit_start_notify output "SYSTEM_STARTUP_COMPLETE"
+	# unit_body Restart no
+	shared_sockets_provide
+	start_notify socket
 
 	unit_fs_bind "data/transmission.$INSTANCE_NAME" /opt/data
 	unit_fs_bind config/transmission /opt/config
@@ -47,4 +45,3 @@ MAC_ADDRESS=f0:dd:7a:90:46:b8
 INSTANCE_NAME=anime
 TARGET=/data/Volumes/Anime
 create_it
-

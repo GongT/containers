@@ -7,5 +7,5 @@ set -Eeuo pipefail
 
 chmod a+x /opt/app/bin/Server
 
-ensure_group 100 users
-ensure_user 100 media_rw 100
+ensure_group users 100
+ensure_user media_rw 100 100

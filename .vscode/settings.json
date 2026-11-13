@@ -22,4 +22,7 @@
 	"shellformat.flag": "-s -ln=bash -bn",
 	// "json.schemaDownload.enable": false,
 	"bashIde.includeAllWorkspaceSymbols": true,
+	"cSpell.words": [
+		"xpodman"
+	],
 }

@@ -31,7 +31,7 @@ env:
 
   SOURCE_FILE: gamedisk/build.sh
   PROJECT_DIR: gamedisk
-  KNOWN_BASE_IMAGES: quay.io/fedora/fedora-minimal:42
+  KNOWN_BASE_IMAGES: quay.io/fedora/fedora-minimal:45
   BUILDAH_FORCE: ${{ github.event.inputs.forceRebuild }}
   FORCE_DNF: ${{ github.event.inputs.forceDnf }}
   AUTHOR: GongT <admin@gongt.me>

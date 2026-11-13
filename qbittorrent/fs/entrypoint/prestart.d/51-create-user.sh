@@ -11,8 +11,8 @@ fi
 unset USER_NAME USER_ID GROUP_ID
 
 exportenv USER_NAME "${U_NAME}"
-system_ensure_group "$G_ID" users
-system_ensure_user "$U_ID" "$U_NAME" "$G_ID"
+ensure_group users "$G_ID"
+ensure_user "$U_NAME" "$U_ID" "$G_ID"
 
 mkdir -p "/home/${U_NAME}"
 

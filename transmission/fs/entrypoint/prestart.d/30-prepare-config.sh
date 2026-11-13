@@ -4,6 +4,9 @@ set -Eeuo pipefail
 
 chmod a+w /var/run
 
+# /opt/config 是挂载的配置文件目录，其中包含多个instance的配置文件
+# /opt/scripts/config.json 是编进容器的通用模板
+
 if ! [[ -f "/opt/config/$INSTANCE_NAME.json" ]]; then
 	echo "{}" >"/opt/config/$INSTANCE_NAME.json"
 fi
